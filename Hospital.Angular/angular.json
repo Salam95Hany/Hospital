@@ -26,9 +26,11 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+             "styles": [
+                            "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+                            "node_modules/ngx-toastr/toastr.css",
+                            "src/styles.css"
+                        ],
             "scripts": []
           },
           "configurations": {
@@ -92,5 +94,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "4c5c4a42-caca-46de-99c0-999b92342aae"
   }
 }

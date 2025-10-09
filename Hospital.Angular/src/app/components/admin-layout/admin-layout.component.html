@@ -1,0 +1,9 @@
+<main id="admin-wrapper" class="position-relative">
+    <app-admin-header (collapseExpandContent)="isCollapseExpand = !isCollapseExpand" [isCollapseOrExpand]="isCollapseExpand"></app-admin-header>
+    <div class="admin-page-content d-flex">
+        <app-admin-side-menu [isCollapsing]="isCollapseExpand" (closeSideMenuFromOverlayEvent)="isCollapseExpand = false"></app-admin-side-menu>
+        <div class="admin-main-content" [class.expand-content]="isCollapseExpand">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</main>

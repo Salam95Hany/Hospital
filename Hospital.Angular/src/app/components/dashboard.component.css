@@ -1,0 +1,12 @@
+.feature-page {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  padding: 2.5rem 2rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+.feature-page h2 {
+  color: #2C3E50;
+  margin-bottom: 1rem;
+}
