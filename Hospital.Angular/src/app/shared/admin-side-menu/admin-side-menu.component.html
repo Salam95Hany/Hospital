@@ -1,6 +1,8 @@
 <aside id="admin-side-menu" [class.collapse-side-menu]="isCollapsing">
   <div class="admin-side-menu-content h-100">
     <div class="hospital-brand"></div>
+    
+    <!-- User Profile Card -->
     <div class="admin-side-menu-user">
       <div class="side-menu-user-info d-flex flex-column gap-2">
         <div class="d-flex align-items-center gap-2">
@@ -21,15 +23,20 @@
         </div>
       </div>
     </div>
+    
+    <!-- Navigation Menu -->
     <div class="admin-side-menu-list">
+      <!-- Dashboard Section -->
       <ul class="side-menu-list list-unstyled p-0 m-0">
         <li class="side-menu-list-item">
           <a class="side-menu-list-link" routerLink="/dashboard" routerLinkActive="active">
-            <i class="fas fa-hospital"></i>
+            <i class="fas fa-chart-line"></i>
             <span class="side-menu-text">لوحة التحكم</span>
           </a>
         </li>
       </ul>
+      
+      <!-- Hospital Management Section -->
       <div>
         <div class="side-menu-list-title side-menu-text">إدارة المستشفى</div>
         <ul class="side-menu-list list-unstyled p-0 m-0">
@@ -67,13 +74,40 @@
           </ul>
         </ul>
       </div>
+      
+      <!-- Reports Section -->
+      <div>
+        <div class="side-menu-list-title side-menu-text">التقارير</div>
+        <ul class="side-menu-list list-unstyled p-0 m-0">
+          <li class="side-menu-list-item">
+            <a class="side-menu-list-link" routerLink="/reports" routerLinkActive="active">
+              <i class="fas fa-chart-bar"></i>
+              <span class="side-menu-text">تقارير المرضى</span>
+            </a>
+          </li>
+          <li class="side-menu-list-item">
+            <a class="side-menu-list-link" routerLink="/financial-reports" routerLinkActive="active">
+              <i class="fas fa-money-bill-wave"></i>
+              <span class="side-menu-text">التقارير المالية</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Settings Section -->
       <div>
         <div class="side-menu-list-title side-menu-text">الإعدادات</div>
         <ul class="side-menu-list list-unstyled p-0 m-0">
-          <li>
+          <li class="side-menu-list-item">
             <a class="side-menu-list-link" routerLink="/users" routerLinkActive="active">
               <i class="fas fa-user-cog"></i>
               <span class="side-menu-text">المستخدمين</span>
+            </a>
+          </li>
+          <li class="side-menu-list-item">
+            <a class="side-menu-list-link" routerLink="/settings" routerLinkActive="active">
+              <i class="fas fa-cogs"></i>
+              <span class="side-menu-text">إعدادات النظام</span>
             </a>
           </li>
         </ul>
