@@ -1,0 +1,251 @@
+<div class="patient-create-container">
+  <div class="patient-create-header">
+    <h2 class="patient-create-title">اضافة مريض جديد</h2>
+    <button class="btn btn-outline-secondary" (click)="navigateBack()">
+      <i class="fas fa-arrow-right"></i> العودة للقائمة
+    </button>
+  </div>
+
+  <!-- Steps Progress Bar -->
+  <div class="steps-container">
+    <div class="steps-progress">
+      <div class="progress-bar" [style.width.%]="(currentStep / steps.length) * 100"></div>
+    </div>
+    <div class="steps-list">
+      <div *ngFor="let step of steps; let i = index" 
+           class="step-item" 
+           [class.active]="currentStep === i + 1"
+           [class.completed]="currentStep > i + 1">
+        <div class="step-number">{{ i + 1 }}</div>
+        <div class="step-title">{{ step.title }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Steps -->
+  <div class="form-container">
+    <form [formGroup]="patientForm">
+      <!-- Step 1: Personal Information -->
+      <div *ngIf="currentStep === 1" class="step-content">
+        <h3 class="step-heading">المعلومات الشخصية</h3>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="fullName" class="form-label">الاسم الكامل <span class="required">*</span></label>
+            <input type="text" id="fullName" formControlName="fullName" class="form-control" 
+                  [class.is-invalid]="isFieldInvalid('fullName')">
+            <div *ngIf="isFieldInvalid('fullName')" class="invalid-feedback">
+              الاسم الكامل مطلوب
+            </div>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="nationalId" class="form-label">الرقم القومي</label>
+            <input type="text" id="nationalId" formControlName="nationalId" class="form-control">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="gender" class="form-label">الجنس <span class="required">*</span></label>
+            <select id="gender" formControlName="gender" class="form-select"
+                   [class.is-invalid]="isFieldInvalid('gender')">
+              <option value="" disabled selected>اختر الجنس</option>
+              <option value="male">ذكر</option>
+              <option value="female">أنثى</option>
+            </select>
+            <div *ngIf="isFieldInvalid('gender')" class="invalid-feedback">
+              الجنس مطلوب
+            </div>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="birthDate" class="form-label">تاريخ الميلاد <span class="required">*</span></label>
+            <input type="date" id="birthDate" formControlName="birthDate" class="form-control"
+                  [class.is-invalid]="isFieldInvalid('birthDate')">
+            <div *ngIf="isFieldInvalid('birthDate')" class="invalid-feedback">
+              تاريخ الميلاد مطلوب
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="phoneNumber" class="form-label">رقم الهاتف <span class="required">*</span></label>
+            <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control"
+                  [class.is-invalid]="isFieldInvalid('phoneNumber')">
+            <div *ngIf="isFieldInvalid('phoneNumber')" class="invalid-feedback">
+              رقم الهاتف مطلوب
+            </div>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">البريد الإلكتروني</label>
+            <input type="email" id="email" formControlName="email" class="form-control"
+                  [class.is-invalid]="patientForm.get('email')?.invalid && patientForm.get('email')?.touched">
+            <div *ngIf="patientForm.get('email')?.invalid && patientForm.get('email')?.touched" class="invalid-feedback">
+              البريد الإلكتروني غير صحيح
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label for="address" class="form-label">العنوان</label>
+            <textarea id="address" formControlName="address" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 2: Medical Information -->
+      <div *ngIf="currentStep === 2" class="step-content">
+        <h3 class="step-heading">المعلومات الطبية</h3>
+        
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="bloodType" class="form-label">فصيلة الدم</label>
+            <select id="bloodType" formControlName="bloodType" class="form-select">
+              <option value="" disabled selected>اختر فصيلة الدم</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="height" class="form-label">الطول (سم)</label>
+            <input type="number" id="height" formControlName="height" class="form-control">
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="weight" class="form-label">الوزن (كجم)</label>
+            <input type="number" id="weight" formControlName="weight" class="form-control">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">الحساسية</label>
+            <div class="allergies-container">
+              <div *ngFor="let control of allergiesArray.controls; let i = index" class="allergy-item mb-2">
+                <div class="input-group">
+                  <input type="text" [formControl]="control" class="form-control" placeholder="أدخل الحساسية">
+                  <button type="button" class="btn btn-danger" (click)="removeAllergy(i)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="addAllergy()">
+                <i class="fas fa-plus"></i> إضافة حساسية
+              </button>
+            </div>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label class="form-label">الأمراض المزمنة</label>
+            <div class="chronic-diseases-container">
+              <div *ngFor="let control of chronicDiseasesArray.controls; let i = index" class="disease-item mb-2">
+                <div class="input-group">
+                  <input type="text" [formControl]="control" class="form-control" placeholder="أدخل المرض المزمن">
+                  <button type="button" class="btn btn-danger" (click)="removeChronicDisease(i)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="addChronicDisease()">
+                <i class="fas fa-plus"></i> إضافة مرض مزمن
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 3: Insurance Information -->
+      <div *ngIf="currentStep === 3" class="step-content">
+        <h3 class="step-heading">معلومات التأمين</h3>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="insuranceProvider" class="form-label">شركة التأمين</label>
+            <input type="text" id="insuranceProvider" formControlName="insuranceProvider" class="form-control">
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="insuranceNumber" class="form-label">رقم التأمين</label>
+            <input type="text" id="insuranceNumber" formControlName="insuranceNumber" class="form-control">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="insuranceExpiryDate" class="form-label">تاريخ انتهاء التأمين</label>
+            <input type="date" id="insuranceExpiryDate" formControlName="insuranceExpiryDate" class="form-control">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 4: Emergency Contact -->
+      <div *ngIf="currentStep === 4" class="step-content">
+        <h3 class="step-heading">جهة الاتصال في حالات الطوارئ</h3>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="emergencyContactName" class="form-label">اسم جهة الاتصال</label>
+            <input type="text" id="emergencyContactName" formControlName="emergencyContactName" class="form-control">
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="emergencyContactRelation" class="form-label">صلة القرابة</label>
+            <input type="text" id="emergencyContactRelation" formControlName="emergencyContactRelation" class="form-control">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="emergencyContactPhone" class="form-label">رقم الهاتف</label>
+            <input type="tel" id="emergencyContactPhone" formControlName="emergencyContactPhone" class="form-control">
+          </div>
+        </div>
+        
+        <div class="summary-container mt-4">
+          <h4>ملخص المعلومات</h4>
+          <div class="summary-content">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>الاسم:</strong> {{ patientForm.get('fullName')?.value }}</p>
+                <p><strong>الجنس:</strong> {{ getGenderText(patientForm.get('gender')?.value) }}</p>
+                <p><strong>تاريخ الميلاد:</strong> {{ patientForm.get('birthDate')?.value | date:'dd/MM/yyyy' }}</p>
+                <p><strong>رقم الهاتف:</strong> {{ patientForm.get('phoneNumber')?.value }}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>فصيلة الدم:</strong> {{ patientForm.get('bloodType')?.value || 'غير محدد' }}</p>
+                <p><strong>شركة التأمين:</strong> {{ patientForm.get('insuranceProvider')?.value || 'غير محدد' }}</p>
+                <p><strong>جهة اتصال الطوارئ:</strong> {{ patientForm.get('emergencyContactName')?.value || 'غير محدد' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="form-navigation">
+    <button *ngIf="currentStep > 1" class="btn btn-outline-primary" (click)="prevStep()">
+      <i class="fas fa-arrow-right"></i> السابق
+    </button>
+    
+    <button *ngIf="currentStep < steps.length" class="btn btn-primary" (click)="nextStep()">
+      التالي <i class="fas fa-arrow-left"></i>
+    </button>
+    
+    <button *ngIf="currentStep === steps.length" class="btn btn-success" (click)="savePatient()">
+      <i class="fas fa-save"></i> حفظ
+    </button>
+  </div>
+</div>

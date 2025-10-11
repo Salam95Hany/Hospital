@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-admin-side-menu',
   standalone: true,
-  imports: [NgbCollapse],
+  imports: [NgbCollapse, RouterLink, RouterLinkActive],
   templateUrl: './admin-side-menu.component.html',
   styleUrls: ['./admin-side-menu.component.css']
 })
