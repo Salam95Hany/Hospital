@@ -1,0 +1,53 @@
+
+
+<div class="patients-container">
+  <div class="patients-header">
+    <h2 class="patients-title">الأطباء</h2>
+    <button class="btn btn-primary add-patient-btn" (click)="navigateToAddDoctor()">
+      <i class="fas fa-plus-circle"></i> اضافة طبيب
+    </button>
+  </div>
+
+  <div class="search-filter-container">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="بحث عن طبيب..." [(ngModel)]="searchTerm" (input)="applyFilter()">
+    </div>
+  </div>
+
+  <div class="patients-table-container">
+    <table class="table patients-table">
+      <thead>
+        <tr>
+            <th>الاسم</th>
+            <th>التخصص</th>
+            <th>القسم</th>
+            <th>الهاتف</th>
+            <th>إجراءات</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of filteredDoctors">
+            <td>{{ doc.fullName }}</td>
+            <td>{{ doc.specialization }}</td>
+            <td>{{ doc.department }}</td>
+            <td>{{ doc.phoneNumber }}</td>
+          <td class="actions-cell">
+            <button class="btn btn-sm btn-info" (click)="viewDoctor(doc.id)">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-warning" (click)="editDoctor(doc.id)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteDoctor(doc.id)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredDoctors.length === 0">
+          <td colspan="7" class="text-center">لا يوجد سجلات</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

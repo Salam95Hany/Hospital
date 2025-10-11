@@ -63,17 +63,19 @@ export class PatientCreateComponent implements OnInit {
   }
 
   // Form Array Getters
-  get allergiesArray(): FormArray {
-    return this.patientForm.get('allergies') as FormArray;
+  // Use FormArray<FormControl> generics so controls are strongly typed as FormControl
+  get allergiesArray(): FormArray<FormControl> {
+    return this.patientForm.get('allergies') as FormArray<FormControl>;
   }
 
-  get chronicDiseasesArray(): FormArray {
-    return this.patientForm.get('chronicDiseases') as FormArray;
+  get chronicDiseasesArray(): FormArray<FormControl> {
+    return this.patientForm.get('chronicDiseases') as FormArray<FormControl>;
   }
 
   // Add/Remove Form Array Items
   addAllergy(): void {
-    this.allergiesArray.push(new FormControl<string>(''));
+    // create a typed FormControl and push into the typed FormArray
+    this.allergiesArray.push(this.fb.control<string>('') as FormControl);
   }
 
   removeAllergy(index: number): void {
@@ -81,7 +83,7 @@ export class PatientCreateComponent implements OnInit {
   }
 
   addChronicDisease(): void {
-    this.chronicDiseasesArray.push(new FormControl<string>(''));
+    this.chronicDiseasesArray.push(this.fb.control<string>('') as FormControl);
   }
 
   removeChronicDisease(index: number): void {
