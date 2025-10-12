@@ -15,5 +15,32 @@ namespace Hospital.Entities.Models
         : base(options)
         {
         }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Admission> Admissions { get; set; }
+        public DbSet<SurgicalIntervention> SurgicalInterventions { get; set; }
+        public DbSet<FollowUp> FollowUps { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            // Configure relationships
+            modelBuilder.Entity<Patient>()
+                .HasMany(p => p.Admissions)
+                .WithOne(a => a.Patient)
+                .HasForeignKey(a => a.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Admission>()
+                .HasMany(a => a.SurgicalInterventions)
+                .WithOne(s => s.Admission)
+                .HasForeignKey(s => s.AdmissionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SurgicalIntervention>()
+                .HasMany(a => a.FollowUps)
+                .WithOne(f => f.SurgicalInterventions)
+                .HasForeignKey(f => f.SurgicalInterventionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
