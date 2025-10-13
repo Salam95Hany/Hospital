@@ -17,61 +17,61 @@ namespace Hospital.Entities.Models
         public int PatientId { get; set; }
 
         // Admission Data
-        public string HospitalFileNumber { get; set; } // رقم ملف المستشفى
+        public string HospitalFileNumber { get; set; } 
 
-        public DateTime? AdmissionDate { get; set; } // تاريخ الدخول
-        public DateTime? DischargeDate { get; set; } // تاريخ الخروج
+        public DateTime? AdmissionDate { get; set; } 
+        public DateTime? DischargeDate { get; set; } 
 
         // Medical History
-        public string ChiefComplaint { get; set; } // C/O
+        public string ChiefComplaint { get; set; } 
 
 
-        public string Duration { get; set; } // Duration
+        public string Duration { get; set; } 
 
-        public string Course { get; set; } // Course
-
-
-        public string HPI { get; set; } // HPI
+        public string Course { get; set; } 
 
 
-        public string CurrentMedications { get; set; } // Current medications
+        public string HPI { get; set; } 
 
 
-        public string PastHistory { get; set; } // Past history
+        public string CurrentMedications { get; set; } 
 
 
-        public string FamilyHistory { get; set; } // Family history
+        public string PastHistory { get; set; } 
 
-        public string Comorbidities { get; set; } // Current comorbidities
+
+        public string FamilyHistory { get; set; } 
+
+        public string Comorbidities { get; set; } 
 
         // Examination
-        public string BMI { get; set; } // BMI
+        public string BMI { get; set; } 
 
-        public decimal? Temperature { get; set; } // Temp
-        public int? Pulse { get; set; } // Pulse
+        public decimal? Temperature { get; set; } 
+        public int? Pulse { get; set; } 
 
-        public string BloodPressure { get; set; } // BP
+        public string BloodPressure { get; set; } 
 
-        public string GeneralExamination { get; set; } // General Examination
-
-
-        public string AbdominalExamination { get; set; } // Abdominal Examination
+        public string GeneralExamination { get; set; } 
 
 
-        public string GenitalExamination { get; set; } // Genital Examination
-
-        public string DREVaginalExamination { get; set; } // DRE/Vaginal Examination
-
-        public string LabResults { get; set; } // Combined lab results
-
-        public string ImagingResults { get; set; } // Combined imaging results
+        public string AbdominalExamination { get; set; } 
 
 
-        public string ProvisionalDiagnosis { get; set; } // Provisional Diagnosis
+        public string GenitalExamination { get; set; } 
 
-        public string MedicalDecision { get; set; } // Medical Decision
+        public string DREVaginalExamination { get; set; } 
 
-        public DateTime? ScheduledDate { get; set; } // Scheduled date
+        public string LabResults { get; set; } 
+
+        public string ImagingResults { get; set; } 
+
+
+        public string ProvisionalDiagnosis { get; set; } 
+
+        public string MedicalDecision { get; set; } 
+
+        public DateTime? ScheduledDate { get; set; } 
 
         // Navigation properties
         [ForeignKey("PatientId")]

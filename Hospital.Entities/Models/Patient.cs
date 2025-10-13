@@ -13,29 +13,29 @@ namespace Hospital.Entities.Models
         [Key]
         public int PatientId { get; set; }
 
-        public string Name { get; set; } // الاسم
+        public string Name { get; set; } 
 
-        public DateTime? BirthDate { get; set; } // تاريخ الميلاد
+        public DateTime? BirthDate { get; set; } 
 
-        public int? Age { get; set; } // السن
+        public int? Age { get; set; } 
 
-        public string Gender { get; set; } // النوع
+        public string Gender { get; set; } 
 
-        public string NationalId { get; set; } // الرقم القومي
+        public string NationalId { get; set; } 
 
-        public string Address { get; set; } // محل الإقامة
+        public string Address { get; set; } 
 
-        public string Governorate { get; set; } // محافظة الإقامة
+        public string Governorate { get; set; } 
 
-        public string Occupation { get; set; } // العمل
-
-
-        public string MaritalStatus { get; set; } // الحالة الاجتماعية
-
-        public string ChildrenCount { get; set; } // عدد الأبناء
+        public string Occupation { get; set; } 
 
 
-        public string InternalNumber { get; set; } // الرقم الداخلي
+        public string MaritalStatus { get; set; }
+
+        public string ChildrenCount { get; set; } 
+
+
+        public string InternalNumber { get; set; } 
 
         // Navigation property
         public  ICollection<Admission> Admissions { get; set; } = new List<Admission>();

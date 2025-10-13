@@ -18,46 +18,46 @@ namespace Hospital.Entities.Models
         public int AdmissionId { get; set; }
 
 
-        public DateTime? InterventionDate { get; set; } // Date of intervention
+        public DateTime? InterventionDate { get; set; } 
 
-        public string Theater { get; set; } // Theatre
+        public string Theater { get; set; }
 
  
-        public string MainSurgeon { get; set; } // Main Surgeon
+        public string MainSurgeon { get; set; } 
 
   
-        public string Assistants { get; set; } // Assistants
+        public string Assistants { get; set; } 
 
 
-        public string Resident { get; set; } // Resident
+        public string Resident { get; set; } 
 
 
-        public string Anesthesia { get; set; } // Anaesthesia
+        public string Anesthesia { get; set; } 
 
         // Intervention Details
-        public string Intervention { get; set; } // Intervention
+        public string Intervention { get; set; } 
 
-        public string InterventionDetails { get; set; } // Intervention Details
-
-
-        public string TubesFixed { get; set; } // Tubes fixed
+        public string InterventionDetails { get; set; }
 
 
-        public string Category { get; set; } // Category
+        public string TubesFixed { get; set; } 
 
 
-        public string Approach { get; set; } // Approach
+        public string Category { get; set; } 
 
 
-        public string Organ { get; set; } // Organ
+        public string Approach { get; set; }
 
-        // Intra-operative
-        public string IntraOperativeCourse { get; set; } // Intra-operative Course
-        public string IntraOpAdverseEvents { get; set; } // Intra-op adverse events
 
-        public int? BloodTransfusionUnits { get; set; } // Blood transfusion
+        public string Organ { get; set; } 
 
-        public string PostOpRecommendations { get; set; } // Post-op Recommendations
+        
+        public string IntraOperativeCourse { get; set; }
+        public string IntraOpAdverseEvents { get; set; } 
+
+        public int? BloodTransfusionUnits { get; set; } 
+
+        public string PostOpRecommendations { get; set; } 
 
         public string PostOpDay0_1 { get; set; }
 
@@ -65,20 +65,20 @@ namespace Hospital.Entities.Models
 
         public string PostOpDayOver5 { get; set; }
 
-        public string PostOpAdverseEvents { get; set; } // Post-op adverse events
+        public string PostOpAdverseEvents { get; set; } 
 
         // Discharge
-        public DateTime? DischargeDate { get; set; } // Date of discharge
+        public DateTime? DischargeDate { get; set; } 
 
-        public string FinalDiagnosis { get; set; } // Final diagnosis
+        public string FinalDiagnosis { get; set; } 
 
-        public string DischargeInstructions { get; set; } // نصائح مابعد الخروج
+        public string DischargeInstructions { get; set; } 
 
-        public string FollowUpDoctor { get; set; } // اسم الطبيب المختص بالمتابعة
+        public string FollowUpDoctor { get; set; } 
 
-        public string FollowUpDoctorPhone { get; set; } // تليفون الطبيب المختص بالمتابعة
+        public string FollowUpDoctorPhone { get; set; } 
 
-        public DateTime? FollowUpAppointment { get; set; } // الموعد المقرر للمتابعة
+        public DateTime? FollowUpAppointment { get; set; } 
 
         [ForeignKey("AdmissionId")]
         public virtual Admission Admission { get; set; }

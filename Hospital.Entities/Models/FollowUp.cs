@@ -19,30 +19,30 @@ namespace Hospital.Entities.Models
         public DateTime FollowUpDate { get; set; }
 
 
-        public string PatientRemarks { get; set; } // Better, Worse, The same
+        public string PatientRemarks { get; set; } 
 
-        public string PatientRemarksDetails { get; set; } // Details
+        public string PatientRemarksDetails { get; set; } 
 
 
-        public string ExaminationFindings { get; set; } // Examination findings
+        public string ExaminationFindings { get; set; } 
 
-        public string WoundStatus { get; set; } // Wound
+        public string WoundStatus { get; set; } 
 
-        public string Catheters { get; set; } // Catheters
+        public string Catheters { get; set; } 
 
         // Investigations
-        public string LabResults { get; set; } // Lab
+        public string LabResults { get; set; } 
 
-        public string ImagingResults { get; set; } // Imaging
+        public string ImagingResults { get; set; } 
 
-        public string ImagePath { get; set; } // Path to scanned images
+        public string ImagePath { get; set; } 
 
         // Medical Decisions
-        public string Advice { get; set; } // Advice
+        public string Advice { get; set; } 
 
-        public string NewDecision { get; set; } // New decision
+        public string NewDecision { get; set; } 
 
-        public DateTime? NextFollowUpDate { get; set; } // الموعد المقرر للمتابعة
+        public DateTime? NextFollowUpDate { get; set; } 
 
         [ForeignKey("SurgicalInterventionId")]
         public SurgicalIntervention SurgicalInterventions { get; set; }
