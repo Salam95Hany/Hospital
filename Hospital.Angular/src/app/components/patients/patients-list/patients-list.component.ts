@@ -28,8 +28,7 @@ export class PatientsListComponent implements OnInit {
 
   loadPatients(): void {
     this.patientService.getPatients().subscribe(patients => {
-      this.patients = patients;
-      this.filteredPatients = patients;
+
     });
   }
 
@@ -40,11 +39,7 @@ export class PatientsListComponent implements OnInit {
     }
 
     const searchTermLower = this.searchTerm.toLowerCase();
-    this.filteredPatients = this.patients.filter(patient => 
-      patient.fullName.toLowerCase().includes(searchTermLower) ||
-      patient.fileNumber?.toLowerCase().includes(searchTermLower) ||
-      patient.phoneNumber.toLowerCase().includes(searchTermLower)
-    );
+
   }
 
   navigateToAddPatient(): void {

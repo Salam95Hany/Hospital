@@ -23,417 +23,331 @@
   </div>
 
   <!-- Form Steps -->
-  <div class="form-container">
-    <form [formGroup]="patientForm">
-      <!-- Step 1: Patient Information -->
-      <div *ngIf="currentStep === 1" class="step-content" formGroupName="patient">
-        <h3 class="step-heading">Patient Information</h3>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="name" class="form-label">Name <span class="required">*</span></label>
-            <input type="text" id="name" formControlName="name" class="form-control" [class.is-invalid]="isFieldInvalid('name')">
-            <div *ngIf="isFieldInvalid('name')" class="invalid-feedback">Name is required.</div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="nationalId" class="form-label">National ID</label>
-            <input type="text" id="nationalId" formControlName="nationalId" class="form-control">
-          </div>
+<form #patientForm="ngForm" (ngSubmit)="savePatient()">
+    <!-- Step 1: Patient Information -->
+    <div *ngIf="currentStep === 1" class="step-content">
+      <h3 class="step-heading">Patient Information</h3>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Name <span class="required">*</span></label>
+          <input [(ngModel)]="patientData.patient.name" name="name" class="form-control" required />
         </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="birthDate" class="form-label">Birth Date</label>
-            <input type="date" id="birthDate" formControlName="birthDate" class="form-control">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="age" class="form-label">Age</label>
-            <input type="number" id="age" formControlName="age" class="form-control">
-          </div>
+        <div class="col-md-6">
+          <label class="form-label">Birth Date</label>
+          <input type="date" [(ngModel)]="patientData.patient.birthDate" name="birthDate" class="form-control" />
         </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="gender" class="form-label">Gender</label>
-            <select id="gender" formControlName="gender" class="form-select">
-              <option value="" disabled selected>Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="maritalStatus" class="form-label">Marital Status</label>
-            <input type="text" id="maritalStatus" formControlName="maritalStatus" class="form-control">
-          </div>
+        <div class="col-md-6">
+          <label class="form-label">Age</label>
+          <input type="number" [(ngModel)]="patientData.patient.age" name="age" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" id="address" formControlName="address" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="governorate" class="form-label">Governorate</label>
-                <input type="text" id="governorate" formControlName="governorate" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Gender</label>
+          <select [(ngModel)]="patientData.patient.gender" name="gender" class="form-select">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="occupation" class="form-label">Occupation</label>
-                <input type="text" id="occupation" formControlName="occupation" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="childrenCount" class="form-label">Children Count</label>
-                <input type="text" id="childrenCount" formControlName="childrenCount" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">National ID</label>
+          <input [(ngModel)]="patientData.patient.nationalId" name="nationalId" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="internalNumber" class="form-label">Internal Number</label>
-                <input type="text" id="internalNumber" formControlName="internalNumber" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Address</label>
+          <input [(ngModel)]="patientData.patient.address" name="address" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Governorate</label>
+          <input [(ngModel)]="patientData.patient.governorate" name="governorate" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Occupation</label>
+          <input [(ngModel)]="patientData.patient.occupation" name="occupation" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Marital Status</label>
+          <input [(ngModel)]="patientData.patient.maritalStatus" name="maritalStatus" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Number of Children</label>
+          <input [(ngModel)]="patientData.patient.childrenCount" name="childrenCount" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Internal Number</label>
+          <input [(ngModel)]="patientData.patient.internalNumber" name="internalNumber" class="form-control" />
         </div>
       </div>
+    </div>
 
-      <!-- Step 2: Admission Details -->
-      <div *ngIf="currentStep === 2" class="step-content" formGroupName="admission">
-        <h3 class="step-heading">Admission Details</h3>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="hospitalFileNumber" class="form-label">Hospital File Number</label>
-                <input type="text" id="hospitalFileNumber" formControlName="hospitalFileNumber" class="form-control">
-            </div>
+    <!-- Step 2: Admission Details -->
+    <div *ngIf="currentStep === 2" class="step-content">
+      <h3 class="step-heading">Admission Details</h3>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Hospital File Number</label>
+          <input [(ngModel)]="patientData.admission.hospitalFileNumber" name="hospitalFileNumber" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="admissionDate" class="form-label">Admission Date</label>
-                <input type="date" id="admissionDate" formControlName="admissionDate" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="dischargeDate" class="form-label">Discharge Date</label>
-                <input type="date" id="dischargeDate" formControlName="dischargeDate" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Admission Date</label>
+          <input type="date" [(ngModel)]="patientData.admission.admissionDate" name="admissionDate" class="form-control" />
         </div>
-        <h4 class="mt-4">Medical History</h4>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="chiefComplaint" class="form-label">Chief Complaint</label>
-                <textarea id="chiefComplaint" formControlName="chiefComplaint" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Discharge Date</label>
+          <input type="date" [(ngModel)]="patientData.admission.dischargeDate" name="dischargeDate" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="duration" class="form-label">Duration</label>
-                <input type="text" id="duration" formControlName="duration" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="course" class="form-label">Course</label>
-                <input type="text" id="course" formControlName="course" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Chief Complaint</label>
+          <input [(ngModel)]="patientData.admission.chiefComplaint" name="chiefComplaint" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="hpi" class="form-label">History of Present Illness (HPI)</label>
-                <textarea id="hpi" formControlName="hpi" class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Duration</label>
+          <input [(ngModel)]="patientData.admission.duration" name="duration" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="currentMedications" class="form-label">Current Medications</label>
-                <textarea id="currentMedications" formControlName="currentMedications" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="pastHistory" class="form-label">Past History</label>
-                <textarea id="pastHistory" formControlName="pastHistory" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Course</label>
+          <input [(ngModel)]="patientData.admission.course" name="course" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="familyHistory" class="form-label">Family History</label>
-                <textarea id="familyHistory" formControlName="familyHistory" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="comorbidities" class="form-label">Comorbidities</label>
-                <textarea id="comorbidities" formControlName="comorbidities" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-12">
+          <label class="form-label">HPI</label>
+          <textarea [(ngModel)]="patientData.admission.hpi" name="hpi" class="form-control"></textarea>
         </div>
-        <h4 class="mt-4">Examination</h4>
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <label for="bmi" class="form-label">BMI</label>
-                <input type="text" id="bmi" formControlName="bmi" class="form-control">
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="temperature" class="form-label">Temperature (°C)</label>
-                <input type="number" id="temperature" formControlName="temperature" class="form-control">
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="pulse" class="form-label">Pulse (bpm)</label>
-                <input type="number" id="pulse" formControlName="pulse" class="form-control">
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="bloodPressure" class="form-label">Blood Pressure</label>
-                <input type="text" id="bloodPressure" formControlName="bloodPressure" class="form-control">
-            </div>
+        <div class="col-12">
+          <label class="form-label">Current Medications</label>
+          <textarea [(ngModel)]="patientData.admission.currentMedications" name="currentMedications" class="form-control"></textarea>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="generalExamination" class="form-label">General Examination</label>
-                <textarea id="generalExamination" formControlName="generalExamination" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="abdominalExamination" class="form-label">Abdominal Examination</label>
-                <textarea id="abdominalExamination" formControlName="abdominalExamination" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-12">
+          <label class="form-label">Past History</label>
+          <textarea [(ngModel)]="patientData.admission.pastHistory" name="pastHistory" class="form-control"></textarea>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="genitalExamination" class="form-label">Genital Examination</label>
-                <textarea id="genitalExamination" formControlName="genitalExamination" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="dreVaginalExamination" class="form-label">DRE/Vaginal Examination</label>
-                <textarea id="dreVaginalExamination" formControlName="dreVaginalExamination" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-12">
+          <label class="form-label">Family History</label>
+          <textarea [(ngModel)]="patientData.admission.familyHistory" name="familyHistory" class="form-control"></textarea>
         </div>
-        <h4 class="mt-4">Results & Diagnosis</h4>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="labResults" class="form-label">Lab Results</label>
-                <textarea id="labResults" formControlName="labResults" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="imagingResults" class="form-label">Imaging Results</label>
-                <textarea id="imagingResults" formControlName="imagingResults" class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Comorbidities</label>
+          <input [(ngModel)]="patientData.admission.comorbidities" name="comorbidities" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="provisionalDiagnosis" class="form-label">Provisional Diagnosis</label>
-                <textarea id="provisionalDiagnosis" formControlName="provisionalDiagnosis" class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">BMI</label>
+          <input [(ngModel)]="patientData.admission.bmi" name="bmi" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="medicalDecision" class="form-label">Medical Decision</label>
-                <input type="text" id="medicalDecision" formControlName="medicalDecision" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="scheduledDate" class="form-label">Scheduled Date</label>
-                <input type="date" id="scheduledDate" formControlName="scheduledDate" class="form-control">
-            </div>
+        <div class="col-md-4">
+          <label class="form-label">Temperature</label>
+          <input type="number" [(ngModel)]="patientData.admission.temperature" name="temperature" class="form-control" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Pulse</label>
+          <input type="number" [(ngModel)]="patientData.admission.pulse" name="pulse" class="form-control" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Blood Pressure</label>
+          <input [(ngModel)]="patientData.admission.bloodPressure" name="bloodPressure" class="form-control" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">General Examination</label>
+          <textarea [(ngModel)]="patientData.admission.generalExamination" name="generalExamination" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Abdominal Examination</label>
+          <textarea [(ngModel)]="patientData.admission.abdominalExamination" name="abdominalExamination" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Genital Examination</label>
+          <textarea [(ngModel)]="patientData.admission.genitalExamination" name="genitalExamination" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">DRE/Vaginal Examination</label>
+          <textarea [(ngModel)]="patientData.admission.dreVaginalExamination" name="dreVaginalExamination" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Lab Results</label>
+          <textarea [(ngModel)]="patientData.admission.labResults" name="labResults" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Imaging Results</label>
+          <textarea [(ngModel)]="patientData.admission.imagingResults" name="imagingResults" class="form-control"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Provisional Diagnosis</label>
+          <input [(ngModel)]="patientData.admission.provisionalDiagnosis" name="provisionalDiagnosis" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Medical Decision</label>
+          <input [(ngModel)]="patientData.admission.medicalDecision" name="medicalDecision" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Scheduled Date for Intervention/Procedure</label>
+          <input type="date" [(ngModel)]="patientData.admission.scheduledDate" name="scheduledDate" class="form-control" />
         </div>
       </div>
+    </div>
 
-      <!-- Step 3: Surgical Intervention -->
-      <div *ngIf="currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
-        <h3 class="step-heading">Surgical Intervention</h3>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="interventionDate" class="form-label">Intervention Date</label>
-                <input type="date" id="interventionDate" formControlName="interventionDate" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="theater" class="form-label">Theater</label>
-                <input type="text" id="theater" formControlName="theater" class="form-control">
-            </div>
+    <!-- Step 3: Surgical Intervention -->
+    <div *ngIf="currentStep === 3" class="step-content">
+      <h3 class="step-heading">Surgical Intervention</h3>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Date of Intervention</label>
+          <input type="date" [(ngModel)]="patientData.surgicalIntervention.interventionDate" name="interventionDate" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="mainSurgeon" class="form-label">Main Surgeon</label>
-                <input type="text" id="mainSurgeon" formControlName="mainSurgeon" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="assistants" class="form-label">Assistants</label>
-                <input type="text" id="assistants" formControlName="assistants" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Theater</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.theater" name="theater" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="resident" class="form-label">Resident</label>
-                <input type="text" id="resident" formControlName="resident" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="anesthesia" class="form-label">Anesthesia</label>
-                <input type="text" id="anesthesia" formControlName="anesthesia" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Main Surgeon</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.mainSurgeon" name="mainSurgeon" class="form-control" />
         </div>
-        <h4 class="mt-4">Intervention Details</h4>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="intervention" class="form-label">Intervention</label>
-                <textarea id="intervention" formControlName="intervention" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Assistants</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.assistants" name="assistants" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="interventionDetails" class="form-label">Intervention Details</label>
-                <textarea id="interventionDetails" formControlName="interventionDetails" class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Resident</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.resident" name="resident" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <label for="tubesFixed" class="form-label">Tubes Fixed</label>
-                <input type="text" id="tubesFixed" formControlName="tubesFixed" class="form-control">
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="category" class="form-label">Category</label>
-                <input type="text" id="category" formControlName="category" class="form-control">
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="approach" class="form-label">Approach</label>
-                <input type="text" id="approach" formControlName="approach" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Anesthesia</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.anesthesia" name="anesthesia" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="organ" class="form-label">Organ</label>
-                <input type="text" id="organ" formControlName="organ" class="form-control">
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="bloodTransfusionUnits" class="form-label">Blood Transfusion Units</label>
-                <input type="number" id="bloodTransfusionUnits" formControlName="bloodTransfusionUnits" class="form-control">
-            </div>
+        <div class="col-12">
+          <label class="form-label">Intervention</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.intervention" name="intervention" class="form-control"></textarea>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="intraOperativeCourse" class="form-label">Intra-Operative Course</label>
-                <textarea id="intraOperativeCourse" formControlName="intraOperativeCourse" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="intraOpAdverseEvents" class="form-label">Intra-Op Adverse Events</label>
-                <textarea id="intraOpAdverseEvents" formControlName="intraOpAdverseEvents" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-12">
+          <label class="form-label">Details of Intervention</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.interventionDetails" name="interventionDetails" class="form-control"></textarea>
         </div>
-        <h4 class="mt-4">Post-Operative</h4>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="postOpRecommendations" class="form-label">Post-Op Recommendations</label>
-                <textarea id="postOpRecommendations" formControlName="postOpRecommendations" class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Tubes Fixed</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.tubesFixed" name="tubesFixed" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <label for="postOpDay0_1" class="form-label">Post-Op Day 0-1</label>
-                <textarea id="postOpDay0_1" formControlName="postOpDay0_1" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="postOpDay2_5" class="form-label">Post-Op Day 2-5</label>
-                <textarea id="postOpDay2_5" formControlName="postOpDay2_5" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="postOpDayOver5" class="form-label">Post-Op Day >5</label>
-                <textarea id="postOpDayOver5" formControlName="postOpDayOver5" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Category</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.category" name="category" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="postOpAdverseEvents" class="form-label">Post-Op Adverse Events</label>
-                <textarea id="postOpAdverseEvents" formControlName="postOpAdverseEvents" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Approach</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.approach" name="approach" class="form-control" />
         </div>
-        <h4 class="mt-4">Discharge</h4>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="dischargeDate" class="form-label">Discharge Date</label>
-                <input type="date" id="dischargeDate" formControlName="dischargeDate" class="form-control">
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="finalDiagnosis" class="form-label">Final Diagnosis</label>
-                <input type="text" id="finalDiagnosis" formControlName="finalDiagnosis" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Organ</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.organ" name="organ" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="dischargeInstructions" class="form-label">Discharge Instructions</label>
-                <textarea id="dischargeInstructions" formControlName="dischargeInstructions" class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-12">
+          <label class="form-label">Intra-operative Course</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.intraOperativeCourse" name="intraOperativeCourse" class="form-control"></textarea>
         </div>
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <label for="followUpDoctor" class="form-label">Follow-Up Doctor</label>
-                <input type="text" id="followUpDoctor" formControlName="followUpDoctor" class="form-control">
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="followUpDoctorPhone" class="form-label">Doctor's Phone</label>
-                <input type="text" id="followUpDoctorPhone" formControlName="followUpDoctorPhone" class="form-control">
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="followUpAppointment" class="form-label">Follow-Up Appointment</label>
-                <input type="date" id="followUpAppointment" formControlName="followUpAppointment" class="form-control">
-            </div>
+        <div class="col-12">
+          <label class="form-label">Intra-op Adverse Events</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.intraOpAdverseEvents" name="intraOpAdverseEvents" class="form-control"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Blood Transfusion (Units)</label>
+          <input type="number" [(ngModel)]="patientData.surgicalIntervention.bloodTransfusionUnits" name="bloodTransfusionUnits" class="form-control" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Post-op Recommendations</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpRecommendations" name="postOpRecommendations" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Post-op Course (Day 0-1)</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpDay0_1" name="postOpDay0_1" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Post-op Course (Day 2-5)</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpDay2_5" name="postOpDay2_5" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Post-op Course (Day >5)</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpDayOver5" name="postOpDayOver5" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Post-op Adverse Events</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpAdverseEvents" name="postOpAdverseEvents" class="form-control"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Discharge Date</label>
+          <input type="date" [(ngModel)]="patientData.surgicalIntervention.dischargeDate" name="dischargeDate" class="form-control" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Final Diagnosis</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.finalDiagnosis" name="finalDiagnosis" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Discharge Instructions</label>
+          <textarea [(ngModel)]="patientData.surgicalIntervention.dischargeInstructions" name="dischargeInstructions" class="form-control"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Follow-up Doctor</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.followUpDoctor" name="followUpDoctor" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Follow-up Doctor Phone</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.followUpDoctorPhone" name="followUpDoctorPhone" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Follow-up Appointment</label>
+          <input type="date" [(ngModel)]="patientData.surgicalIntervention.followUpAppointment" name="followUpAppointment" class="form-control" />
         </div>
       </div>
+    </div>
 
-      <!-- Step 4: Follow-Up -->
-      <div *ngIf="currentStep === 4" class="step-content" formGroupName="followUp">
-        <h3 class="step-heading">Follow-Up</h3>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="followUpDate" class="form-label">Follow-Up Date <span class="required">*</span></label>
-                <input type="date" id="followUpDate" formControlName="followUpDate" class="form-control" [class.is-invalid]="isFieldInvalid('followUpDate')">
-                <div *ngIf="isFieldInvalid('followUpDate')" class="invalid-feedback">Follow-Up Date is required.</div>
-            </div>
+    <!-- Step 4: Follow-Up -->
+    <div *ngIf="currentStep === 4" class="step-content">
+      <h3 class="step-heading">Follow-Up</h3>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Follow-up Date <span class="required">*</span></label>
+          <input type="date" [(ngModel)]="patientData.followUp.followUpDate" name="followUpDate" class="form-control" required />
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="patientRemarks" class="form-label">Patient Remarks</label>
-                <textarea id="patientRemarks" formControlName="patientRemarks" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="patientRemarksDetails" class="form-label">Patient Remarks Details</label>
-                <textarea id="patientRemarksDetails" formControlName="patientRemarksDetails" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-12">
+          <label class="form-label">Patient Remarks</label>
+          <textarea [(ngModel)]="patientData.followUp.patientRemarks" name="patientRemarks" class="form-control"></textarea>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="examinationFindings" class="form-label">Examination Findings</label>
-                <textarea id="examinationFindings" formControlName="examinationFindings" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="woundStatus" class="form-label">Wound Status</label>
-                <input type="text" id="woundStatus" formControlName="woundStatus" class="form-control">
-            </div>
+        <div class="col-12">
+          <label class="form-label">Details of Patient Remarks</label>
+          <textarea [(ngModel)]="patientData.followUp.patientRemarksDetails" name="patientRemarksDetails" class="form-control"></textarea>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="catheters" class="form-label">Catheters</label>
-                <input type="text" id="catheters" formControlName="catheters" class="form-control">
-            </div>
+        <div class="col-12">
+          <label class="form-label">Examination Findings</label>
+          <textarea [(ngModel)]="patientData.followUp.examinationFindings" name="examinationFindings" class="form-control"></textarea>
         </div>
-        <h4 class="mt-4">Investigations</h4>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="labResults" class="form-label">Lab Results</label>
-                <textarea id="labResults" formControlName="labResults" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="imagingResults" class="form-label">Imaging Results</label>
-                <textarea id="imagingResults" formControlName="imagingResults" class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Wound Status</label>
+          <input [(ngModel)]="patientData.followUp.woundStatus" name="woundStatus" class="form-control" />
         </div>
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label for="imagePath" class="form-label">Image Path</label>
-                <input type="text" id="imagePath" formControlName="imagePath" class="form-control">
-            </div>
+        <div class="col-md-6">
+          <label class="form-label">Catheters</label>
+          <input [(ngModel)]="patientData.followUp.catheters" name="catheters" class="form-control" />
         </div>
-        <h4 class="mt-4">Medical Decisions</h4>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="advice" class="form-label">Advice</label>
-                <textarea id="advice" formControlName="advice" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="newDecision" class="form-label">New Decision</label>
-                <textarea id="newDecision" formControlName="newDecision" class="form-control" rows="2"></textarea>
-            </div>
+        <div class="col-12">
+          <label class="form-label">Lab Results</label>
+          <textarea [(ngModel)]="patientData.followUp.labResults" name="labResults" class="form-control"></textarea>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="nextFollowUpDate" class="form-label">Next Follow-Up Date</label>
-                <input type="date" id="nextFollowUpDate" formControlName="nextFollowUpDate" class="form-control">
-            </div>
+        <div class="col-12">
+          <label class="form-label">Imaging Results</label>
+          <textarea [(ngModel)]="patientData.followUp.imagingResults" name="imagingResults" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Image Path</label>
+          <input [(ngModel)]="patientData.followUp.imagePath" name="imagePath" class="form-control" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Advice</label>
+          <textarea [(ngModel)]="patientData.followUp.advice" name="advice" class="form-control"></textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">New Decision</label>
+          <textarea [(ngModel)]="patientData.followUp.newDecision" name="newDecision" class="form-control"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Next Follow-up Date</label>
+          <input type="date" [(ngModel)]="patientData.followUp.nextFollowUpDate" name="nextFollowUpDate" class="form-control" />
         </div>
       </div>
-    </form>
-  </div>
+    </div> 
+  </form>
 
   <!-- Navigation Buttons -->
    <div class="form-navigation">

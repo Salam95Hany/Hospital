@@ -387,15 +387,14 @@
     margin-bottom: 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
-    height: 60px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
 .hospital-brand::after {
-    content: 'Hospital System';
+    content: '';
     position: absolute;
     bottom: 0.5rem;
     left: 50%;
@@ -405,6 +404,9 @@
     font-size: 1rem;
     letter-spacing: 0.5px;
     opacity: 0.9;
+}
+.logo {
+  max-height: 120px;
 }
 
 @media (max-width: 1000px) {
