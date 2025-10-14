@@ -1,17 +1,15 @@
-
-
 <div class="patients-container">
   <div class="patients-header">
-    <h2 class="patients-title">الأطباء</h2>
+    <h2 class="patients-title">Doctors</h2>
     <button class="btn btn-primary add-patient-btn" (click)="navigateToAddDoctor()">
-      <i class="fas fa-plus-circle"></i> اضافة طبيب
+      <i class="fas fa-plus-circle"></i> Add Doctor
     </button>
   </div>
 
   <div class="search-filter-container">
     <div class="search-box">
       <i class="fas fa-search"></i>
-      <input type="text" placeholder="بحث عن طبيب..." [(ngModel)]="searchTerm" (input)="applyFilter()">
+      <input type="text" placeholder="Search for a doctor..." [(ngModel)]="searchTerm" (input)="applyFilter()">
     </div>
   </div>
 
@@ -19,11 +17,11 @@
     <table class="table patients-table">
       <thead>
         <tr>
-            <th>الاسم</th>
-            <th>التخصص</th>
-            <th>القسم</th>
-            <th>الهاتف</th>
-            <th>إجراءات</th>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Department</th>
+            <th>Phone</th>
+            <th>Actions</th>
           </tr>
       </thead>
       <tbody>
@@ -45,7 +43,7 @@
           </td>
         </tr>
         <tr *ngIf="filteredDoctors.length === 0">
-          <td colspan="7" class="text-center">لا يوجد سجلات</td>
+          <td colspan="7" class="text-center">No records found</td>
         </tr>
       </tbody>
     </table>

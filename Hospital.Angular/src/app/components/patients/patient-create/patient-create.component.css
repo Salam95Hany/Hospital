@@ -15,6 +15,10 @@
   border-bottom: 1px solid #eee;
 }
 
+.patient-create-header button i {
+  margin-right: 5px;
+}
+
 .patient-create-title {
   font-size: 1.8rem;
   color: #2c3e50;
@@ -120,14 +124,16 @@
   margin-bottom: 8px;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
   padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   transition: all 0.3s ease;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #3498db;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
@@ -138,6 +144,15 @@
   justify-content: space-between;
   padding-top: 20px;
   border-top: 1px solid #eee;
+}
+
+.form-navigation button i {
+  margin-right: 5px;
+}
+
+.form-navigation button.btn-primary i {
+  margin-left: 5px;
+  margin-right: 0;
 }
 
 .form-navigation button {

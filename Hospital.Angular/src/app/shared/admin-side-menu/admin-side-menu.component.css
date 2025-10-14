@@ -37,8 +37,8 @@
     to { opacity: 1; }
 }
 
-@keyframes slideInRight {
-    from { transform: translateX(20px); opacity: 0; }
+@keyframes slideInLeft {
+    from { transform: translateX(-20px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
 
@@ -52,10 +52,10 @@
     height: 100vh;
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0; /* Changed from right */
     z-index: 1000;
     background: linear-gradient(165deg, var(--dark) 0%, var(--dark-light) 100%);
-    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.15); /* Changed from -5px */
     transition: all var(--main-transition);
     overflow: hidden;
     width: var(--admin-side-menu-width);
@@ -140,7 +140,7 @@
 .side-menu-user-info .d-flex {
     align-items: center;
     padding: 0.5rem 0;
-    animation: slideInRight 0.4s ease-out forwards;
+    animation: slideInLeft 0.4s ease-out forwards; /* Changed from slideInRight */
     opacity: 0;
     animation-delay: calc(0.1s * var(--animation-order, 1));
 }
@@ -200,10 +200,10 @@
     content: '';
     position: absolute;
     bottom: -1px;
-    right: 0;
+    left: 0; /* Changed from right */
     width: 30%;
     height: 1px;
-    background: linear-gradient(to left, var(--primary), transparent);
+    background: linear-gradient(to right, var(--primary), transparent); /* Changed from to left */
 }
 
 .side-menu-list-link {
@@ -232,7 +232,7 @@
     content: '';
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0; /* Changed from right */
     width: 3px;
     height: 0;
     background: var(--primary);
@@ -249,7 +249,7 @@
 .side-menu-list-link.active {
     color: var(--white);
     background: rgba(255, 255, 255, 0.08);
-    transform: translateX(-5px);
+    transform: translateX(5px); /* Changed from -5px */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -274,7 +274,7 @@
 }
 
 .side-menu-list-link.sub-link {
-    padding: 10px 15px 10px 45px;
+    padding-left: 45px; /* Changed from padding */
     font-size: 0.85rem;
     position: relative;
     margin-bottom: 5px;
@@ -285,7 +285,7 @@
     content: '';
     position: absolute;
     top: 50%;
-    right: 20px;
+    left: 20px; /* Changed from right */
     width: 5px;
     height: 5px;
     background: var(--gray-light);
@@ -305,16 +305,7 @@
     position: relative;
 }
 
-.side-menu-list-link.with-sub-menu::after {
-    content: '\f078';
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    position: absolute;
-    left: 15px;
-    font-size: 0.8rem;
-    transition: all var(--hover-transition);
-    color: var(--gray-light);
-}
+
 
 .side-menu-list-link.with-sub-menu.expanded::after {
     transform: rotate(-180deg);
@@ -323,9 +314,9 @@
 
 .menu-list-collapsed {
     position: relative;
-    padding-right: 15px;
-    border-right: 2px solid rgba(255, 255, 255, 0.1);
-    margin-right: 15px;
+    padding-left: 15px; /* Changed from padding-right */
+    border-left: 2px solid rgba(255, 255, 255, 0.1); /* Changed from border-right */
+    margin-left: 15px; /* Changed from margin-right */
     margin-top: 8px;
     transition: all var(--main-transition);
 }
@@ -402,14 +393,6 @@
     justify-content: center;
 }
 
-.hospital-brand::before {
-    content: '\f0f1';
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 2rem;
-    color: var(--primary);
-    animation: pulse 2s infinite;
-}
 
 .hospital-brand::after {
     content: 'Hospital System';
@@ -426,12 +409,12 @@
 
 @media (max-width: 1000px) {
     #admin-side-menu {
-        right: -280px;
-        transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        left: -280px; /* Changed from right */
+        transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Changed from right */
     }
     
     #admin-side-menu.collapse-side-menu {
-        right: 0;
+        left: 0; /* Changed from right */
         width: var(--admin-side-menu-width);
         min-width: var(--admin-side-menu-width);
     }

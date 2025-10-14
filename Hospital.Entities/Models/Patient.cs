@@ -12,7 +12,7 @@ namespace Hospital.Entities.Models
     {
         [Key]
         public int PatientId { get; set; }
-
+        public string PatientCode { get; set; }
         public string Name { get; set; } 
 
         public DateTime? BirthDate { get; set; } 

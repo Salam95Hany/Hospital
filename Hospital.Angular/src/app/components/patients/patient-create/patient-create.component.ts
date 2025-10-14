@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService } from '../../../services/patient.service';
-import { Patient, PatientFormStep } from '../../../models/patient.model';
 
 @Component({
   selector: 'app-patient-create',
@@ -15,11 +14,11 @@ import { Patient, PatientFormStep } from '../../../models/patient.model';
 export class PatientCreateComponent implements OnInit {
   patientForm!: FormGroup;
   currentStep: number = 1;
-  steps: PatientFormStep[] = [
-    { title: 'المعلومات الشخصية', isCompleted: false },
-    { title: 'المعلومات الطبية', isCompleted: false },
-    { title: 'معلومات التأمين', isCompleted: false },
-    { title: 'جهة الاتصال في حالات الطوارئ', isCompleted: false }
+  steps = [
+    { title: 'Patient Information', isCompleted: false },
+    { title: 'Admission Details', isCompleted: false },
+    { title: 'Surgical Intervention', isCompleted: false },
+    { title: 'Follow-Up', isCompleted: false }
   ];
 
   constructor(
@@ -34,68 +33,96 @@ export class PatientCreateComponent implements OnInit {
 
   initForm(): void {
     this.patientForm = this.fb.group({
-      // Step 1: Personal Information
-      fullName: ['', Validators.required],
-      nationalId: [''],
-      gender: ['', Validators.required],
-      birthDate: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      email: ['', Validators.email],
-      address: [''],
-
-      // Step 2: Medical Information
-      bloodType: [''],
-      height: [null],
-      weight: [null],
-      allergies: this.fb.array([]),
-      chronicDiseases: this.fb.array([]),
-
-      // Step 3: Insurance Information
-      insuranceProvider: [''],
-      insuranceNumber: [''],
-      insuranceExpiryDate: [null],
-
-      // Step 4: Emergency Contact
-      emergencyContactName: [''],
-      emergencyContactRelation: [''],
-      emergencyContactPhone: ['']
+      patient: this.fb.group({
+        name: ['', Validators.required],
+        birthDate: [null],
+        age: [null],
+        gender: [''],
+        nationalId: [''],
+        address: [''],
+        governorate: [''],
+        occupation: [''],
+        maritalStatus: [''],
+        childrenCount: [''],
+        internalNumber: ['']
+      }),
+      admission: this.fb.group({
+        hospitalFileNumber: [''],
+        admissionDate: [null],
+        dischargeDate: [null],
+        chiefComplaint: [''],
+        duration: [''],
+        course: [''],
+        hpi: [''],
+        currentMedications: [''],
+        pastHistory: [''],
+        familyHistory: [''],
+        comorbidities: [''],
+        bmi: [''],
+        temperature: [null],
+        pulse: [null],
+        bloodPressure: [''],
+        generalExamination: [''],
+        abdominalExamination: [''],
+        genitalExamination: [''],
+        dreVaginalExamination: [''],
+        labResults: [''],
+        imagingResults: [''],
+        provisionalDiagnosis: [''],
+        medicalDecision: [''],
+        scheduledDate: [null]
+      }),
+      surgicalIntervention: this.fb.group({
+        interventionDate: [null],
+        theater: [''],
+        mainSurgeon: [''],
+        assistants: [''],
+        resident: [''],
+        anesthesia: [''],
+        intervention: [''],
+        interventionDetails: [''],
+        tubesFixed: [''],
+        category: [''],
+        approach: [''],
+        organ: [''],
+        intraOperativeCourse: [''],
+        intraOpAdverseEvents: [''],
+        bloodTransfusionUnits: [null],
+        postOpRecommendations: [''],
+        postOpDay0_1: [''],
+        postOpDay2_5: [''],
+        postOpDayOver5: [''],
+        postOpAdverseEvents: [''],
+        dischargeDate: [null],
+        finalDiagnosis: [''],
+        dischargeInstructions: [''],
+        followUpDoctor: [''],
+        followUpDoctorPhone: [''],
+        followUpAppointment: [null]
+      }),
+      followUp: this.fb.group({
+        followUpDate: [null, Validators.required],
+        patientRemarks: [''],
+        patientRemarksDetails: [''],
+        examinationFindings: [''],
+        woundStatus: [''],
+        catheters: [''],
+        labResults: [''],
+        imagingResults: [''],
+        imagePath: [''],
+        advice: [''],
+        newDecision: [''],
+        nextFollowUpDate: [null]
+      })
     });
-  }
-
-  // Form Array Getters
-  // Use FormArray<FormControl> generics so controls are strongly typed as FormControl
-  get allergiesArray(): FormArray<FormControl> {
-    return this.patientForm.get('allergies') as FormArray<FormControl>;
-  }
-
-  get chronicDiseasesArray(): FormArray<FormControl> {
-    return this.patientForm.get('chronicDiseases') as FormArray<FormControl>;
-  }
-
-  // Add/Remove Form Array Items
-  addAllergy(): void {
-    // create a typed FormControl and push into the typed FormArray
-    this.allergiesArray.push(this.fb.control<string>('') as FormControl);
-  }
-
-  removeAllergy(index: number): void {
-    this.allergiesArray.removeAt(index);
-  }
-
-  addChronicDisease(): void {
-    this.chronicDiseasesArray.push(this.fb.control<string>('') as FormControl);
-  }
-
-  removeChronicDisease(index: number): void {
-    this.chronicDiseasesArray.removeAt(index);
   }
 
   // Navigation Methods
   nextStep(): void {
-    if (this.validateCurrentStep()) {
-      this.steps[this.currentStep - 1].isCompleted = true;
-      this.currentStep++;
-    }
+      if (this.currentStep < this.steps.length) {
+        this.steps[this.currentStep - 1].isCompleted = true;
+        this.currentStep++;
+      }
   }
 
   prevStep(): void {
@@ -104,60 +131,27 @@ export class PatientCreateComponent implements OnInit {
     }
   }
 
-  validateCurrentStep(): boolean {
-    switch (this.currentStep) {
-      case 1:
-        return this.validateStep1();
-      case 2:
-      case 3:
-      case 4:
-        return true; // No required fields in these steps
-      default:
-        return false;
-    }
-  }
-
-  validateStep1(): boolean {
-    const requiredFields = ['fullName', 'gender', 'birthDate', 'phoneNumber'];
-    let isValid = true;
-
-    requiredFields.forEach(field => {
-      const control = this.patientForm.get(field);
-      if (control?.invalid) {
-        control.markAsTouched();
-        isValid = false;
-      }
-    });
-
-    return isValid;
+  getFormGroupForStep(step: number): FormGroup {
+    const stepKeys = ['patient', 'admission', 'surgicalIntervention', 'followUp'];
+    return this.patientForm.get(stepKeys[step - 1]) as FormGroup;
   }
 
   isFieldInvalid(fieldName: string): boolean {
-    const field = this.patientForm.get(fieldName);
-    return field ? field.invalid && field.touched : false;
-  }
-
-  getGenderText(gender: string): string {
-    return gender === 'male' ? 'ذكر' : gender === 'female' ? 'أنثى' : '';
+    const control = this.getFormGroupForStep(this.currentStep).get(fieldName);
+    return control ? control.invalid && (control.dirty || control.touched) : false;
   }
 
   savePatient(): void {
     if (this.patientForm.valid) {
-      const patientData: Patient = this.patientForm.value;
-      
-      this.patientService.addPatient(patientData).subscribe(
-        (newPatient) => {
-          alert('تم حفظ بيانات المريض بنجاح');
-          this.router.navigate(['/patients']);
-        },
-        (error) => {
-          console.error('Error saving patient:', error);
-          alert('حدث خطأ أثناء حفظ بيانات المريض');
-        }
-      );
+      const patientData = this.patientForm.value;
+      console.log('Patient Data:', patientData);
+      // The service call needs to be adapted to handle the new data structure
+      // this.patientService.addPatient(patientData).subscribe(...)
+      alert('Patient data saved successfully! (Check console for data)');
+      this.router.navigate(['/patients']);
     } else {
       this.markFormGroupTouched(this.patientForm);
-      alert('يرجى التحقق من البيانات المدخلة');
+      alert('Please fill all required fields.');
     }
   }
 

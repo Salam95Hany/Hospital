@@ -1,43 +1,43 @@
 <div class="patient-create-container">
   <div class="patient-create-header">
-    <h2 class="patient-create-title">{{ editingId ? 'تعديل بيانات الطبيب' : 'اضافة طبيب جديد' }}</h2>
+    <h2 class="patient-create-title">{{ editingId ? 'Edit Doctor Information' : 'Add New Doctor' }}</h2>
   </div>
 
   <form [formGroup]="doctorForm" (ngSubmit)="saveDoctor()">
     <div class="row g-3 form-container">
       <div class="col-md-6">
-        <label class="form-label">الاسم الكامل</label>
+        <label class="form-label">Full Name</label>
         <input formControlName="fullName" class="form-control" />
       </div>
       <div class="col-md-6">
-        <label class="form-label">التخصص</label>
+        <label class="form-label">Specialization</label>
         <input formControlName="specialization" class="form-control" />
       </div>
       <div class="col-md-6">
-        <label class="form-label">القسم</label>
+        <label class="form-label">Department</label>
         <input formControlName="department" class="form-control" />
       </div>
       <div class="col-md-6">
-        <label class="form-label">الهاتف</label>
+        <label class="form-label">Phone</label>
         <input formControlName="phoneNumber" class="form-control" />
       </div>
       <div class="col-md-6">
-        <label class="form-label">البريد الإلكتروني</label>
+        <label class="form-label">Email</label>
         <input formControlName="email" class="form-control" />
       </div>
       <div class="col-md-6">
-        <label class="form-label">رقم الترخيص</label>
+        <label class="form-label">License Number</label>
         <input formControlName="licenseNumber" class="form-control" />
       </div>
       <div class="col-12">
-        <label class="form-label">العنوان</label>
+        <label class="form-label">Address</label>
         <input formControlName="address" class="form-control" />
       </div>
     </div>
 
     <div class="form-navigation">
-      <button type="submit" class="btn btn-success">حفظ</button>
-      <button type="button" class="btn btn-secondary" (click)="cancel()">إلغاء</button>
+      <button type="submit" class="btn btn-success">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
     </div>
   </form>
 </div>

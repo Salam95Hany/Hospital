@@ -13,7 +13,7 @@ export class AdminSideMenuComponent {
   @Input() isCollapsing = false;
   @Output() closeSideMenuFromOverlayEvent = new EventEmitter<void>();
   isCollapsed_1 = true;
-  UserModel = { userName: 'مدير المستشفى', loginDateAr: '2025-10-09', loginTimeAr: '10:00' };
-  RoleName = 'مدير النظام';
+  UserModel = { userName: 'Admin ', loginDate: '2025-10-09', loginTime: '10:00' };
+  RoleName = 'Administrator';
   onCloseSidemenuFromOverlay() { this.closeSideMenuFromOverlayEvent.emit(); }
 }

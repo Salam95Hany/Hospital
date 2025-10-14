@@ -4,7 +4,7 @@
   box-shadow: var(--shadow-lg);
   padding: var(--spacing-xl);
   margin: var(--spacing-xl) auto;
-  text-align: center;
+  text-align: left;
   max-width: 1200px;
   animation: fadeIn 0.8s ease-in-out;
   position: relative;

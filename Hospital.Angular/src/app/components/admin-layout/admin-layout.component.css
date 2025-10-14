@@ -17,7 +17,7 @@
     top: 70px;
     width: calc(100vw - 250px);
     min-height: calc(100vh - 70px);
-    margin-right: 250px;
+    margin-left: 250px; /* Changed from margin-right */
     padding: 32px 24px 24px 24px;
     background: var(--light);
     border-radius: var(--border-radius-lg) 0 0 0;
@@ -28,7 +28,7 @@
 
 .admin-main-content.expand-content {
     width: calc(100vw - 70px);
-    margin-right: 70px;
+    margin-left: 70px; /* Changed from margin-right */
 }
 
 .admin-main-content::before {
@@ -116,7 +116,7 @@
     .admin-main-content,
     .admin-main-content.expand-content {
         width: 100%;
-        margin-right: 0;
+        margin-left: 0; /* Changed from margin-right */
         padding: var(--spacing-md);
         border-radius: 0;
     }

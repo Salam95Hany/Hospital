@@ -1,15 +1,15 @@
 <div class="patients-container">
   <div class="patients-header">
-    <h2 class="patients-title">المرضى</h2>
+    <h2 class="patients-title">Patients</h2>
     <button class="btn btn-primary add-patient-btn" (click)="navigateToAddPatient()">
-      <i class="fas fa-plus-circle"></i> اضافة مريض
+      <i class="fas fa-plus-circle"></i> Add Patient
     </button>
   </div>
 
   <div class="search-filter-container">
     <div class="search-box">
       <i class="fas fa-search"></i>
-      <input type="text" placeholder="بحث عن مريض..." [(ngModel)]="searchTerm" (input)="applyFilter()">
+      <input type="text" placeholder="Search for a patient..." [(ngModel)]="searchTerm" (input)="applyFilter()">
     </div>
   </div>
 
@@ -17,13 +17,13 @@
     <table class="table patients-table">
       <thead>
         <tr>
-          <th>رقم الملف</th>
-          <th>الاسم</th>
-          <th>رقم الهاتف</th>
-          <th>تاريخ الميلاد</th>
-          <th>فصيلة الدم</th>
-          <th>تاريخ التسجيل</th>
-          <th>الإجراءات</th>
+          <th>File Number</th>
+          <th>Name</th>
+          <th>Phone Number</th>
+          <th>Birth Date</th>
+          <th>Blood Type</th>
+          <th>Registration Date</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -32,7 +32,7 @@
           <td>{{ patient.fullName }}</td>
           <td>{{ patient.phoneNumber }}</td>
           <td>{{ patient.birthDate | date:'dd/MM/yyyy' }}</td>
-          <td>{{ patient.bloodType || 'غير محدد' }}</td>
+          <td>{{ patient.bloodType || 'Not Specified' }}</td>
           <td>{{ patient.createdAt | date:'dd/MM/yyyy' }}</td>
           <td class="actions-cell">
             <button class="btn btn-sm btn-info" (click)="viewPatient(patient.id)">
@@ -47,7 +47,7 @@
           </td>
         </tr>
         <tr *ngIf="filteredPatients.length === 0">
-          <td colspan="7" class="text-center">لا يوجد مرضى</td>
+          <td colspan="7" class="text-center">No patients found</td>
         </tr>
       </tbody>
     </table>

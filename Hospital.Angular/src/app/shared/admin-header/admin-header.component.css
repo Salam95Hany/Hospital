@@ -1,4 +1,3 @@
-/* Header animations */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -212,7 +211,7 @@ header#admin-header {
 
 .header-search input {
     width: 100%;
-    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    padding: 0.6rem 2.5rem 0.6rem 1rem; /* Adjusted padding for LTR */
     border: none;
     border-radius: 50px;
     background: rgba(0, 0, 0, 0.03);
@@ -227,7 +226,7 @@ header#admin-header {
 
 .header-search i {
     position: absolute;
-    left: 12px;
+    right: 12px; /* Changed from left */
     top: 50%;
     transform: translateY(-50%);
     color: var(--gray);
@@ -269,6 +268,7 @@ header#admin-header {
 .header-user-info {
     display: flex;
     flex-direction: column;
+    align-items: flex-start; /* Align text to the left */
 }
 
 .header-user-name {

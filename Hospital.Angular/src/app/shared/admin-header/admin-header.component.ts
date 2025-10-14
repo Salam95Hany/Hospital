@@ -18,14 +18,14 @@ export class AdminHeaderComponent {
   isUserDropdownOpen = false;
   SearchText = '';
   PagesList = [
-    { name: 'الرئيسية', pageUrl: '/dashboard' },
-    { name: 'المرضى', pageUrl: '/patients' },
-    { name: 'الأطباء', pageUrl: '/doctors' },
-    { name: 'المواعيد', pageUrl: '/appointments' },
-    { name: 'الأقسام', pageUrl: '/departments' },
-    { name: 'المستخدمين', pageUrl: '/users' }
+    { name: 'dashboard', pageUrl: '/dashboard' },
+    { name: 'patients', pageUrl: '/patients' },
+    { name: 'doctors', pageUrl: '/doctors' },
+    { name: 'appointments', pageUrl: '/appointments' },
+    { name: 'departments', pageUrl: '/departments' },
+    { name: 'users', pageUrl: '/users' }
   ];
-  UserModel = { userName: 'مدير المستشفى' };
+  UserModel = { userName: 'Admin' };
 
   goToWebsite() {}
   onCollapseExpandMenu() { this.collapseExpandContent.emit(); }

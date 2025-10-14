@@ -1,21 +1,21 @@
 <div class="patient-create-container">
   <div class="patient-create-header">
-    <h2 class="patient-create-title">اضافة مريض جديد</h2>
+    <h2 class="patient-create-title">Add New Patient</h2>
     <button class="btn btn-outline-secondary" (click)="navigateBack()">
-      <i class="fas fa-arrow-right"></i> العودة للقائمة
+      <i class="fas fa-arrow-left"></i> Back to List
     </button>
   </div>
 
   <!-- Steps Progress Bar -->
   <div class="steps-container">
     <div class="steps-progress">
-      <div class="progress-bar" [style.width.%]="(currentStep / steps.length) * 100"></div>
+      <div class="progress-bar" [style.width.%]="((currentStep - 1) / (steps.length - 1)) * 100"></div>
     </div>
     <div class="steps-list">
-      <div *ngFor="let step of steps; let i = index" 
-           class="step-item" 
+      <div *ngFor="let step of steps; let i = index"
+           class="step-item"
            [class.active]="currentStep === i + 1"
-           [class.completed]="currentStep > i + 1">
+           [class.completed]="step.isCompleted">
         <div class="step-number">{{ i + 1 }}</div>
         <div class="step-title">{{ step.title }}</div>
       </div>
@@ -25,227 +25,428 @@
   <!-- Form Steps -->
   <div class="form-container">
     <form [formGroup]="patientForm">
-      <!-- Step 1: Personal Information -->
-      <div *ngIf="currentStep === 1" class="step-content">
-        <h3 class="step-heading">المعلومات الشخصية</h3>
-        
+      <!-- Step 1: Patient Information -->
+      <div *ngIf="currentStep === 1" class="step-content" formGroupName="patient">
+        <h3 class="step-heading">Patient Information</h3>
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="fullName" class="form-label">الاسم الكامل <span class="required">*</span></label>
-            <input type="text" id="fullName" formControlName="fullName" class="form-control" 
-                  [class.is-invalid]="isFieldInvalid('fullName')">
-            <div *ngIf="isFieldInvalid('fullName')" class="invalid-feedback">
-              الاسم الكامل مطلوب
-            </div>
+            <label for="name" class="form-label">Name <span class="required">*</span></label>
+            <input type="text" id="name" formControlName="name" class="form-control" [class.is-invalid]="isFieldInvalid('name')">
+            <div *ngIf="isFieldInvalid('name')" class="invalid-feedback">Name is required.</div>
           </div>
-          
           <div class="col-md-6 mb-3">
-            <label for="nationalId" class="form-label">الرقم القومي</label>
+            <label for="nationalId" class="form-label">National ID</label>
             <input type="text" id="nationalId" formControlName="nationalId" class="form-control">
           </div>
         </div>
-        
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="gender" class="form-label">الجنس <span class="required">*</span></label>
-            <select id="gender" formControlName="gender" class="form-select"
-                   [class.is-invalid]="isFieldInvalid('gender')">
-              <option value="" disabled selected>اختر الجنس</option>
-              <option value="male">ذكر</option>
-              <option value="female">أنثى</option>
-            </select>
-            <div *ngIf="isFieldInvalid('gender')" class="invalid-feedback">
-              الجنس مطلوب
-            </div>
+            <label for="birthDate" class="form-label">Birth Date</label>
+            <input type="date" id="birthDate" formControlName="birthDate" class="form-control">
           </div>
-          
           <div class="col-md-6 mb-3">
-            <label for="birthDate" class="form-label">تاريخ الميلاد <span class="required">*</span></label>
-            <input type="date" id="birthDate" formControlName="birthDate" class="form-control"
-                  [class.is-invalid]="isFieldInvalid('birthDate')">
-            <div *ngIf="isFieldInvalid('birthDate')" class="invalid-feedback">
-              تاريخ الميلاد مطلوب
-            </div>
+            <label for="age" class="form-label">Age</label>
+            <input type="number" id="age" formControlName="age" class="form-control">
           </div>
         </div>
-        
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="phoneNumber" class="form-label">رقم الهاتف <span class="required">*</span></label>
-            <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control"
-                  [class.is-invalid]="isFieldInvalid('phoneNumber')">
-            <div *ngIf="isFieldInvalid('phoneNumber')" class="invalid-feedback">
-              رقم الهاتف مطلوب
-            </div>
-          </div>
-          
-          <div class="col-md-6 mb-3">
-            <label for="email" class="form-label">البريد الإلكتروني</label>
-            <input type="email" id="email" formControlName="email" class="form-control"
-                  [class.is-invalid]="patientForm.get('email')?.invalid && patientForm.get('email')?.touched">
-            <div *ngIf="patientForm.get('email')?.invalid && patientForm.get('email')?.touched" class="invalid-feedback">
-              البريد الإلكتروني غير صحيح
-            </div>
-          </div>
-        </div>
-        
-        <div class="row">
-          <div class="col-12 mb-3">
-            <label for="address" class="form-label">العنوان</label>
-            <textarea id="address" formControlName="address" class="form-control" rows="3"></textarea>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Step 2: Medical Information -->
-      <div *ngIf="currentStep === 2" class="step-content">
-        <h3 class="step-heading">المعلومات الطبية</h3>
-        
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <label for="bloodType" class="form-label">فصيلة الدم</label>
-            <select id="bloodType" formControlName="bloodType" class="form-select">
-              <option value="" disabled selected>اختر فصيلة الدم</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" formControlName="gender" class="form-select">
+              <option value="" disabled selected>Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
           </div>
-          
-          <div class="col-md-4 mb-3">
-            <label for="height" class="form-label">الطول (سم)</label>
-            <input type="number" id="height" formControlName="height" class="form-control">
-          </div>
-          
-          <div class="col-md-4 mb-3">
-            <label for="weight" class="form-label">الوزن (كجم)</label>
-            <input type="number" id="weight" formControlName="weight" class="form-control">
+          <div class="col-md-6 mb-3">
+            <label for="maritalStatus" class="form-label">Marital Status</label>
+            <input type="text" id="maritalStatus" formControlName="maritalStatus" class="form-control">
           </div>
         </div>
-        
         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">الحساسية</label>
-            <div class="allergies-container">
-              <div *ngFor="let control of allergiesArray.controls; let i = index" class="allergy-item mb-2">
-                <div class="input-group">
-                  <input type="text" [formControl]="control" class="form-control" placeholder="أدخل الحساسية">
-                  <button type="button" class="btn btn-danger" (click)="removeAllergy(i)">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="addAllergy()">
-                <i class="fas fa-plus"></i> إضافة حساسية
-              </button>
+            <div class="col-md-6 mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" id="address" formControlName="address" class="form-control">
             </div>
-          </div>
-          
-          <div class="col-md-6 mb-3">
-            <label class="form-label">الأمراض المزمنة</label>
-            <div class="chronic-diseases-container">
-              <div *ngFor="let control of chronicDiseasesArray.controls; let i = index" class="disease-item mb-2">
-                <div class="input-group">
-                  <input type="text" [formControl]="control" class="form-control" placeholder="أدخل المرض المزمن">
-                  <button type="button" class="btn btn-danger" (click)="removeChronicDisease(i)">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="addChronicDisease()">
-                <i class="fas fa-plus"></i> إضافة مرض مزمن
-              </button>
+            <div class="col-md-6 mb-3">
+                <label for="governorate" class="form-label">Governorate</label>
+                <input type="text" id="governorate" formControlName="governorate" class="form-control">
             </div>
-          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="occupation" class="form-label">Occupation</label>
+                <input type="text" id="occupation" formControlName="occupation" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="childrenCount" class="form-label">Children Count</label>
+                <input type="text" id="childrenCount" formControlName="childrenCount" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="internalNumber" class="form-label">Internal Number</label>
+                <input type="text" id="internalNumber" formControlName="internalNumber" class="form-control">
+            </div>
         </div>
       </div>
-      
-      <!-- Step 3: Insurance Information -->
-      <div *ngIf="currentStep === 3" class="step-content">
-        <h3 class="step-heading">معلومات التأمين</h3>
-        
+
+      <!-- Step 2: Admission Details -->
+      <div *ngIf="currentStep === 2" class="step-content" formGroupName="admission">
+        <h3 class="step-heading">Admission Details</h3>
         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="insuranceProvider" class="form-label">شركة التأمين</label>
-            <input type="text" id="insuranceProvider" formControlName="insuranceProvider" class="form-control">
-          </div>
-          
-          <div class="col-md-6 mb-3">
-            <label for="insuranceNumber" class="form-label">رقم التأمين</label>
-            <input type="text" id="insuranceNumber" formControlName="insuranceNumber" class="form-control">
-          </div>
+            <div class="col-md-6 mb-3">
+                <label for="hospitalFileNumber" class="form-label">Hospital File Number</label>
+                <input type="text" id="hospitalFileNumber" formControlName="hospitalFileNumber" class="form-control">
+            </div>
         </div>
-        
         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="insuranceExpiryDate" class="form-label">تاريخ انتهاء التأمين</label>
-            <input type="date" id="insuranceExpiryDate" formControlName="insuranceExpiryDate" class="form-control">
-          </div>
+            <div class="col-md-6 mb-3">
+                <label for="admissionDate" class="form-label">Admission Date</label>
+                <input type="date" id="admissionDate" formControlName="admissionDate" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="dischargeDate" class="form-label">Discharge Date</label>
+                <input type="date" id="dischargeDate" formControlName="dischargeDate" class="form-control">
+            </div>
+        </div>
+        <h4 class="mt-4">Medical History</h4>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="chiefComplaint" class="form-label">Chief Complaint</label>
+                <textarea id="chiefComplaint" formControlName="chiefComplaint" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="duration" class="form-label">Duration</label>
+                <input type="text" id="duration" formControlName="duration" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="course" class="form-label">Course</label>
+                <input type="text" id="course" formControlName="course" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="hpi" class="form-label">History of Present Illness (HPI)</label>
+                <textarea id="hpi" formControlName="hpi" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="currentMedications" class="form-label">Current Medications</label>
+                <textarea id="currentMedications" formControlName="currentMedications" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="pastHistory" class="form-label">Past History</label>
+                <textarea id="pastHistory" formControlName="pastHistory" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="familyHistory" class="form-label">Family History</label>
+                <textarea id="familyHistory" formControlName="familyHistory" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="comorbidities" class="form-label">Comorbidities</label>
+                <textarea id="comorbidities" formControlName="comorbidities" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <h4 class="mt-4">Examination</h4>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <label for="bmi" class="form-label">BMI</label>
+                <input type="text" id="bmi" formControlName="bmi" class="form-control">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="temperature" class="form-label">Temperature (°C)</label>
+                <input type="number" id="temperature" formControlName="temperature" class="form-control">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="pulse" class="form-label">Pulse (bpm)</label>
+                <input type="number" id="pulse" formControlName="pulse" class="form-control">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="bloodPressure" class="form-label">Blood Pressure</label>
+                <input type="text" id="bloodPressure" formControlName="bloodPressure" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="generalExamination" class="form-label">General Examination</label>
+                <textarea id="generalExamination" formControlName="generalExamination" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="abdominalExamination" class="form-label">Abdominal Examination</label>
+                <textarea id="abdominalExamination" formControlName="abdominalExamination" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="genitalExamination" class="form-label">Genital Examination</label>
+                <textarea id="genitalExamination" formControlName="genitalExamination" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="dreVaginalExamination" class="form-label">DRE/Vaginal Examination</label>
+                <textarea id="dreVaginalExamination" formControlName="dreVaginalExamination" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <h4 class="mt-4">Results & Diagnosis</h4>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="labResults" class="form-label">Lab Results</label>
+                <textarea id="labResults" formControlName="labResults" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="imagingResults" class="form-label">Imaging Results</label>
+                <textarea id="imagingResults" formControlName="imagingResults" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="provisionalDiagnosis" class="form-label">Provisional Diagnosis</label>
+                <textarea id="provisionalDiagnosis" formControlName="provisionalDiagnosis" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="medicalDecision" class="form-label">Medical Decision</label>
+                <input type="text" id="medicalDecision" formControlName="medicalDecision" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="scheduledDate" class="form-label">Scheduled Date</label>
+                <input type="date" id="scheduledDate" formControlName="scheduledDate" class="form-control">
+            </div>
         </div>
       </div>
-      
-      <!-- Step 4: Emergency Contact -->
-      <div *ngIf="currentStep === 4" class="step-content">
-        <h3 class="step-heading">جهة الاتصال في حالات الطوارئ</h3>
-        
+
+      <!-- Step 3: Surgical Intervention -->
+      <div *ngIf="currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
+        <h3 class="step-heading">Surgical Intervention</h3>
         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="emergencyContactName" class="form-label">اسم جهة الاتصال</label>
-            <input type="text" id="emergencyContactName" formControlName="emergencyContactName" class="form-control">
-          </div>
-          
-          <div class="col-md-6 mb-3">
-            <label for="emergencyContactRelation" class="form-label">صلة القرابة</label>
-            <input type="text" id="emergencyContactRelation" formControlName="emergencyContactRelation" class="form-control">
-          </div>
-        </div>
-        
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="emergencyContactPhone" class="form-label">رقم الهاتف</label>
-            <input type="tel" id="emergencyContactPhone" formControlName="emergencyContactPhone" class="form-control">
-          </div>
-        </div>
-        
-        <div class="summary-container mt-4">
-          <h4>ملخص المعلومات</h4>
-          <div class="summary-content">
-            <div class="row">
-              <div class="col-md-6">
-                <p><strong>الاسم:</strong> {{ patientForm.get('fullName')?.value }}</p>
-                <p><strong>الجنس:</strong> {{ getGenderText(patientForm.get('gender')?.value) }}</p>
-                <p><strong>تاريخ الميلاد:</strong> {{ patientForm.get('birthDate')?.value | date:'dd/MM/yyyy' }}</p>
-                <p><strong>رقم الهاتف:</strong> {{ patientForm.get('phoneNumber')?.value }}</p>
-              </div>
-              <div class="col-md-6">
-                <p><strong>فصيلة الدم:</strong> {{ patientForm.get('bloodType')?.value || 'غير محدد' }}</p>
-                <p><strong>شركة التأمين:</strong> {{ patientForm.get('insuranceProvider')?.value || 'غير محدد' }}</p>
-                <p><strong>جهة اتصال الطوارئ:</strong> {{ patientForm.get('emergencyContactName')?.value || 'غير محدد' }}</p>
-              </div>
+            <div class="col-md-6 mb-3">
+                <label for="interventionDate" class="form-label">Intervention Date</label>
+                <input type="date" id="interventionDate" formControlName="interventionDate" class="form-control">
             </div>
-          </div>
+            <div class="col-md-6 mb-3">
+                <label for="theater" class="form-label">Theater</label>
+                <input type="text" id="theater" formControlName="theater" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="mainSurgeon" class="form-label">Main Surgeon</label>
+                <input type="text" id="mainSurgeon" formControlName="mainSurgeon" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="assistants" class="form-label">Assistants</label>
+                <input type="text" id="assistants" formControlName="assistants" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="resident" class="form-label">Resident</label>
+                <input type="text" id="resident" formControlName="resident" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="anesthesia" class="form-label">Anesthesia</label>
+                <input type="text" id="anesthesia" formControlName="anesthesia" class="form-control">
+            </div>
+        </div>
+        <h4 class="mt-4">Intervention Details</h4>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="intervention" class="form-label">Intervention</label>
+                <textarea id="intervention" formControlName="intervention" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="interventionDetails" class="form-label">Intervention Details</label>
+                <textarea id="interventionDetails" formControlName="interventionDetails" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="tubesFixed" class="form-label">Tubes Fixed</label>
+                <input type="text" id="tubesFixed" formControlName="tubesFixed" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" id="category" formControlName="category" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="approach" class="form-label">Approach</label>
+                <input type="text" id="approach" formControlName="approach" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="organ" class="form-label">Organ</label>
+                <input type="text" id="organ" formControlName="organ" class="form-control">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="bloodTransfusionUnits" class="form-label">Blood Transfusion Units</label>
+                <input type="number" id="bloodTransfusionUnits" formControlName="bloodTransfusionUnits" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="intraOperativeCourse" class="form-label">Intra-Operative Course</label>
+                <textarea id="intraOperativeCourse" formControlName="intraOperativeCourse" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="intraOpAdverseEvents" class="form-label">Intra-Op Adverse Events</label>
+                <textarea id="intraOpAdverseEvents" formControlName="intraOpAdverseEvents" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <h4 class="mt-4">Post-Operative</h4>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="postOpRecommendations" class="form-label">Post-Op Recommendations</label>
+                <textarea id="postOpRecommendations" formControlName="postOpRecommendations" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="postOpDay0_1" class="form-label">Post-Op Day 0-1</label>
+                <textarea id="postOpDay0_1" formControlName="postOpDay0_1" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="postOpDay2_5" class="form-label">Post-Op Day 2-5</label>
+                <textarea id="postOpDay2_5" formControlName="postOpDay2_5" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="postOpDayOver5" class="form-label">Post-Op Day >5</label>
+                <textarea id="postOpDayOver5" formControlName="postOpDayOver5" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="postOpAdverseEvents" class="form-label">Post-Op Adverse Events</label>
+                <textarea id="postOpAdverseEvents" formControlName="postOpAdverseEvents" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <h4 class="mt-4">Discharge</h4>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="dischargeDate" class="form-label">Discharge Date</label>
+                <input type="date" id="dischargeDate" formControlName="dischargeDate" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="finalDiagnosis" class="form-label">Final Diagnosis</label>
+                <input type="text" id="finalDiagnosis" formControlName="finalDiagnosis" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="dischargeInstructions" class="form-label">Discharge Instructions</label>
+                <textarea id="dischargeInstructions" formControlName="dischargeInstructions" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="followUpDoctor" class="form-label">Follow-Up Doctor</label>
+                <input type="text" id="followUpDoctor" formControlName="followUpDoctor" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="followUpDoctorPhone" class="form-label">Doctor's Phone</label>
+                <input type="text" id="followUpDoctorPhone" formControlName="followUpDoctorPhone" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="followUpAppointment" class="form-label">Follow-Up Appointment</label>
+                <input type="date" id="followUpAppointment" formControlName="followUpAppointment" class="form-control">
+            </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Follow-Up -->
+      <div *ngIf="currentStep === 4" class="step-content" formGroupName="followUp">
+        <h3 class="step-heading">Follow-Up</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="followUpDate" class="form-label">Follow-Up Date <span class="required">*</span></label>
+                <input type="date" id="followUpDate" formControlName="followUpDate" class="form-control" [class.is-invalid]="isFieldInvalid('followUpDate')">
+                <div *ngIf="isFieldInvalid('followUpDate')" class="invalid-feedback">Follow-Up Date is required.</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="patientRemarks" class="form-label">Patient Remarks</label>
+                <textarea id="patientRemarks" formControlName="patientRemarks" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="patientRemarksDetails" class="form-label">Patient Remarks Details</label>
+                <textarea id="patientRemarksDetails" formControlName="patientRemarksDetails" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="examinationFindings" class="form-label">Examination Findings</label>
+                <textarea id="examinationFindings" formControlName="examinationFindings" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="woundStatus" class="form-label">Wound Status</label>
+                <input type="text" id="woundStatus" formControlName="woundStatus" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="catheters" class="form-label">Catheters</label>
+                <input type="text" id="catheters" formControlName="catheters" class="form-control">
+            </div>
+        </div>
+        <h4 class="mt-4">Investigations</h4>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="labResults" class="form-label">Lab Results</label>
+                <textarea id="labResults" formControlName="labResults" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="imagingResults" class="form-label">Imaging Results</label>
+                <textarea id="imagingResults" formControlName="imagingResults" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="imagePath" class="form-label">Image Path</label>
+                <input type="text" id="imagePath" formControlName="imagePath" class="form-control">
+            </div>
+        </div>
+        <h4 class="mt-4">Medical Decisions</h4>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="advice" class="form-label">Advice</label>
+                <textarea id="advice" formControlName="advice" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="newDecision" class="form-label">New Decision</label>
+                <textarea id="newDecision" formControlName="newDecision" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="nextFollowUpDate" class="form-label">Next Follow-Up Date</label>
+                <input type="date" id="nextFollowUpDate" formControlName="nextFollowUpDate" class="form-control">
+            </div>
         </div>
       </div>
     </form>
   </div>
 
   <!-- Navigation Buttons -->
-  <div class="form-navigation">
+   <div class="form-navigation">
     <button *ngIf="currentStep > 1" class="btn btn-outline-primary" (click)="prevStep()">
-      <i class="fas fa-arrow-right"></i> السابق
+      <i class="fas fa-arrow-left"></i> Previous
     </button>
     
     <button *ngIf="currentStep < steps.length" class="btn btn-primary" (click)="nextStep()">
-      التالي <i class="fas fa-arrow-left"></i>
+      Next <i class="fas fa-arrow-right"></i>
     </button>
     
     <button *ngIf="currentStep === steps.length" class="btn btn-success" (click)="savePatient()">
-      <i class="fas fa-save"></i> حفظ
+      <i class="fas fa-save"></i> Save
     </button>
   </div>
 </div>
