@@ -4,6 +4,7 @@ export class Patient {
     age: number | null = null;
     gender: string = '';
     nationalId: string = '';
+    nationalIdImagePath: string = ''; // NEW: For scanned national ID pictures
     address: string = '';
     governorate: string = '';
     occupation: string = '';
@@ -32,8 +33,38 @@ export class Admission {
     abdominalExamination: string = '';
     genitalExamination: string = '';
     dreVaginalExamination: string = '';
-    labResults: string = '';
-    imagingResults: string = '';
+    
+    // NEW: Lab Investigations
+    urineAnalysis: string = '';
+    cultureAndSensitivity: string = '';
+    serumCreatinine: number | null = null;
+    hemoglobin: number | null = null;
+    totalLeukocyteCount: number | null = null;
+    platelets: number | null = null;
+    ptPttInr: string = '';
+    liverEnzymes: string = '';
+    
+    // NEW: Blood Sugar sub-values
+    fastingBloodSugar: number | null = null;
+    postPrandialBloodSugar: number | null = null;
+    hbA1c: number | null = null;
+    
+    // NEW: PSA sub-values
+    psaTotal: number | null = null;
+    psaFree: number | null = null;
+    psaRatio: number | null = null;
+    
+    otherLabResults: string = '';
+    
+    // NEW: Imaging Investigations
+    put: string = '';
+    ultrasound: string = '';
+    trus: string = '';
+    ct: string = '';
+    mri: string = '';
+    isotopeStudies: string = '';
+    otherImaging: string = '';
+    
     provisionalDiagnosis: string = '';
     medicalDecision: string = '';
     scheduledDate: Date | null = null;
@@ -45,6 +76,11 @@ export class SurgicalIntervention {
     mainSurgeon: string = '';
     assistants: string = '';
     resident: string = '';
+    
+    // NEW: Missing properties
+    otherSurgeons: string = '';
+    offFieldSupervisor: string = '';
+    
     anesthesia: string = '';
     intervention: string = '';
     interventionDetails: string = '';
@@ -70,8 +106,11 @@ export class SurgicalIntervention {
 
 export class FollowUp {
     followUpDate: Date | null = null;
-    patientRemarks: string = '';
+    
+    // NEW: Structured patient remarks
+    patientRemarksStatus: string = ''; // Better, Worse, The same
     patientRemarksDetails: string = '';
+    
     examinationFindings: string = '';
     woundStatus: string = '';
     catheters: string = '';

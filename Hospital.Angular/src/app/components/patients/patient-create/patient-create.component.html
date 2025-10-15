@@ -58,7 +58,9 @@
         </div>
         <div class="col-md-6">
           <label class="form-label">Governorate</label>
-          <input [(ngModel)]="patientData.patient.governorate" name="governorate" class="form-control" />
+          <select [(ngModel)]="patientData.patient.governorate" name="governorate" class="form-select">
+            <option *ngFor="let gov of governorates" [value]="gov">{{gov}}</option>
+          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">Occupation</label>
@@ -66,7 +68,9 @@
         </div>
         <div class="col-md-6">
           <label class="form-label">Marital Status</label>
-          <input [(ngModel)]="patientData.patient.maritalStatus" name="maritalStatus" class="form-control" />
+          <select [(ngModel)]="patientData.patient.maritalStatus" name="maritalStatus" class="form-select">
+            <option *ngFor="let status of maritalStatuses" [value]="status">{{status}}</option>
+          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">Number of Children</label>
@@ -105,7 +109,9 @@
         </div>
         <div class="col-md-6">
           <label class="form-label">Course</label>
-          <input [(ngModel)]="patientData.admission.course" name="course" class="form-control" />
+          <select [(ngModel)]="patientData.admission.course" name="course" class="form-select">
+            <option *ngFor="let course of courses" [value]="course">{{course}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">HPI</label>
@@ -124,12 +130,22 @@
           <textarea [(ngModel)]="patientData.admission.familyHistory" name="familyHistory" class="form-control"></textarea>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Comorbidities</label>
-          <input [(ngModel)]="patientData.admission.comorbidities" name="comorbidities" class="form-control" />
+          <label class="form-label">Current comorbidities</label>
+          <select [(ngModel)]="patientData.admission.comorbidities" name="comorbidities" class="form-select">
+            <option *ngFor="let comorbidity  of comorbidities" [value]="comorbidity.name ">{{comorbidity.name}}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Urine Analysis</label>
+          <select [(ngModel)]="patientData.admission.urineAnalysis" name="UrineAnalysis" class="form-select">
+            <option *ngFor="let analysis   of urineAnalyses" [value]="analysis.name ">{{analysis.name}}</option>
+          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">BMI</label>
-          <input [(ngModel)]="patientData.admission.bmi" name="bmi" class="form-control" />
+          <select [(ngModel)]="patientData.admission.bmi" name="bmi" class="form-select">
+            <option *ngFor="let bmi of bmis" [value]="bmi">{{bmi}}</option>
+          </select>
         </div>
         <div class="col-md-4">
           <label class="form-label">Temperature</label>
@@ -160,13 +176,10 @@
           <textarea [(ngModel)]="patientData.admission.dreVaginalExamination" name="dreVaginalExamination" class="form-control"></textarea>
         </div>
         <div class="col-12">
-          <label class="form-label">Lab Results</label>
-          <textarea [(ngModel)]="patientData.admission.labResults" name="labResults" class="form-control"></textarea>
+          <label class="form-label">Other Lab Results</label>
+          <textarea [(ngModel)]="patientData.admission.otherLabResults" name="labResults" class="form-control"></textarea>
         </div>
-        <div class="col-12">
-          <label class="form-label">Imaging Results</label>
-          <textarea [(ngModel)]="patientData.admission.imagingResults" name="imagingResults" class="form-control"></textarea>
-        </div>
+        
         <div class="col-md-6">
           <label class="form-label">Provisional Diagnosis</label>
           <input [(ngModel)]="patientData.admission.provisionalDiagnosis" name="provisionalDiagnosis" class="form-control" />
@@ -174,6 +187,91 @@
         <div class="col-md-6">
           <label class="form-label">Medical Decision</label>
           <input [(ngModel)]="patientData.admission.medicalDecision" name="medicalDecision" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Culture and Sensitivity</label>
+          <input [(ngModel)]="patientData.admission.cultureAndSensitivity" name="cultureAndSensitivity" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Serum Creatinine</label>
+          <input type="number" [(ngModel)]="patientData.admission.serumCreatinine" name="serumCreatinine" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Hemoglobin</label>
+          <input type="number" [(ngModel)]="patientData.admission.hemoglobin" name="hemoglobin" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Total Leukocyte Count</label>
+          <input type="number" [(ngModel)]="patientData.admission.totalLeukocyteCount" name="totalLeukocyteCount" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Platelets</label>
+          <input type="number" [(ngModel)]="patientData.admission.platelets" name="platelets" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">PT/PTT/INR</label>
+          <input [(ngModel)]="patientData.admission.ptPttInr" name="ptPttInr" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Liver Enzymes</label>
+          <input [(ngModel)]="patientData.admission.liverEnzymes" name="liverEnzymes" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Fasting Blood Sugar</label>
+          <input type="number" [(ngModel)]="patientData.admission.fastingBloodSugar" name="fastingBloodSugar" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Post Prandial Blood Sugar</label>
+          <input type="number" [(ngModel)]="patientData.admission.postPrandialBloodSugar" name="postPrandialBloodSugar" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">HbA1c</label>
+          <input type="number" [(ngModel)]="patientData.admission.hbA1c" name="hbA1c" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">PSA Total</label>
+          <input type="number" [(ngModel)]="patientData.admission.psaTotal" name="psaTotal" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">PSA Free</label>
+          <input type="number" [(ngModel)]="patientData.admission.psaFree" name="psaFree" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">PSA Ratio</label>
+          <input type="number" [(ngModel)]="patientData.admission.psaRatio" name="psaRatio" class="form-control" />
+        </div>
+        
+        
+        <div class="col-md-6">
+          <label class="form-label">PUT</label>
+          <input [(ngModel)]="patientData.admission.put" name="put" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Ultrasound</label>
+          <input [(ngModel)]="patientData.admission.ultrasound" name="ultrasound" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">TRUS</label>
+          <input [(ngModel)]="patientData.admission.trus" name="trus" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">CT</label>
+          <input [(ngModel)]="patientData.admission.ct" name="ct" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">MRI</label>
+          <input [(ngModel)]="patientData.admission.mri" name="mri" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Isotope Studies</label>
+          <input [(ngModel)]="patientData.admission.isotopeStudies" name="isotopeStudies" class="form-control" />
+        </div>
+        
+        
+        
+        <div class="col-12">
+          <label class="form-label">Other Imaging</label>
+          <textarea [(ngModel)]="patientData.admission.otherImaging" name="otherImaging" class="form-control"></textarea>
         </div>
         <div class="col-md-6">
           <label class="form-label">Scheduled Date for Intervention/Procedure</label>
@@ -192,7 +290,9 @@
         </div>
         <div class="col-md-6">
           <label class="form-label">Theater</label>
-          <input [(ngModel)]="patientData.surgicalIntervention.theater" name="theater" class="form-control" />
+          <select [(ngModel)]="patientData.surgicalIntervention.theater" name="theater" class="form-select">
+            <option *ngFor="let theater of theatres" [value]="theater">{{theater}}</option>
+          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">Main Surgeon</label>
@@ -207,8 +307,14 @@
           <input [(ngModel)]="patientData.surgicalIntervention.resident" name="resident" class="form-control" />
         </div>
         <div class="col-md-6">
+          <label class="form-label">Off-Field Supervisor</label>
+          <input [(ngModel)]="patientData.surgicalIntervention.offFieldSupervisor" name="offFieldSupervisor" class="form-control" />
+        </div>
+        <div class="col-md-6">
           <label class="form-label">Anesthesia</label>
-          <input [(ngModel)]="patientData.surgicalIntervention.anesthesia" name="anesthesia" class="form-control" />
+          <select [(ngModel)]="patientData.surgicalIntervention.anesthesia" name="anesthesia" class="form-select">
+            <option *ngFor="let an of anaesthesias" [value]="an">{{an}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Intervention</label>
@@ -219,24 +325,34 @@
           <textarea [(ngModel)]="patientData.surgicalIntervention.interventionDetails" name="interventionDetails" class="form-control"></textarea>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Tubes Fixed</label>
-          <input [(ngModel)]="patientData.surgicalIntervention.tubesFixed" name="tubesFixed" class="form-control" />
+          <label class="form-label">Tubes fixed</label>
+          <select [(ngModel)]="patientData.surgicalIntervention.tubesFixed" name="Tubesfixed" class="form-select">
+            <option *ngFor="let tube  of tubesFixed" [value]="tube .name">{{tube.name}}</option>
+          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">Category</label>
-          <input [(ngModel)]="patientData.surgicalIntervention.category" name="category" class="form-control" />
+          <select [(ngModel)]="patientData.surgicalIntervention.category" name="category" class="form-select">
+            <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">Approach</label>
-          <input [(ngModel)]="patientData.surgicalIntervention.approach" name="approach" class="form-control" />
+          <select [(ngModel)]="patientData.surgicalIntervention.approach" name="approach" class="form-select">
+            <option *ngFor="let appr of approaches" [value]="appr">{{appr}}</option>
+          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">Organ</label>
-          <input [(ngModel)]="patientData.surgicalIntervention.organ" name="organ" class="form-control" />
+          <select [(ngModel)]="patientData.surgicalIntervention.organ" name="organ" class="form-select">
+            <option *ngFor="let org of organs" [value]="org">{{org}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Intra-operative Course</label>
-          <textarea [(ngModel)]="patientData.surgicalIntervention.intraOperativeCourse" name="intraOperativeCourse" class="form-control"></textarea>
+          <select [(ngModel)]="patientData.surgicalIntervention.intraOperativeCourse" name="intraOperativeCourse" class="form-select">
+            <option *ngFor="let course of intraOpCourses" [value]="course">{{course}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Intra-op Adverse Events</label>
@@ -252,15 +368,21 @@
         </div>
         <div class="col-12">
           <label class="form-label">Post-op Course (Day 0-1)</label>
-          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpDay0_1" name="postOpDay0_1" class="form-control"></textarea>
+          <select [(ngModel)]="patientData.surgicalIntervention.postOpDay0_1" name="postOpDay0_1" class="form-select">
+            <option *ngFor="let course of postOpCourses" [value]="course">{{course}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Post-op Course (Day 2-5)</label>
-          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpDay2_5" name="postOpDay2_5" class="form-control"></textarea>
+          <select [(ngModel)]="patientData.surgicalIntervention.postOpDay2_5" name="postOpDay2_5" class="form-select">
+            <option *ngFor="let course of postOpCourses" [value]="course">{{course}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Post-op Course (Day >5)</label>
-          <textarea [(ngModel)]="patientData.surgicalIntervention.postOpDayOver5" name="postOpDayOver5" class="form-control"></textarea>
+          <select [(ngModel)]="patientData.surgicalIntervention.postOpDayOver5" name="postOpDayOver5" class="form-select">
+            <option *ngFor="let course of postOpCourses" [value]="course">{{course}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Post-op Adverse Events</label>
@@ -303,7 +425,9 @@
         </div>
         <div class="col-12">
           <label class="form-label">Patient Remarks</label>
-          <textarea [(ngModel)]="patientData.followUp.patientRemarks" name="patientRemarks" class="form-control"></textarea>
+          <select [(ngModel)]="patientData.followUp.patientRemarksStatus" name="patientRemarks" class="form-select">
+            <option *ngFor="let remark of patientRemarks" [value]="remark">{{remark}}</option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Details of Patient Remarks</label>
