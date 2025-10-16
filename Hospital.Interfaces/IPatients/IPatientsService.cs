@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hospital.Entities.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,11 @@ namespace Hospital.Interfaces.IPatients
 {
     public interface IPatientsService
     {
+        Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfoAsync(CancellationToken cancellationToken = default);
+        Task<ApiResponseModel<string>> AddNewPatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default);
+        Task<ApiResponseModel<string>> DeletePatientWithAllData(int patientId, CancellationToken cancellationToken = default);
+        Task<ApiResponseModel<string>> SoftDeletePatientWithAllData(int patientId, CancellationToken cancellationToken = default);
+        Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default);
+        Task<ApiResponseModel<PatientFullDetailsDto>> GetPatientByIdWithIncludeAsync(int patientId, CancellationToken cancellationToken = default);
     }
 }

@@ -18,5 +18,6 @@ namespace Hospital.Entities.Common
         public AdminUser? CreatedBy { get; set; } = default!;
         [ForeignKey(nameof(UpdateUser))]
         public AdminUser? UpdatedBy { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }

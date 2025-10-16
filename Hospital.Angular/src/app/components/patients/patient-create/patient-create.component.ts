@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../services/patient.service';
-import { PatientData } from '../../../models/patient.model';
+import { Admission, FollowUp, Patient, PatientData, SurgicalIntervention } from '../../../models/patient.model';
 
 @Component({
   selector: 'app-patient-create',
@@ -67,15 +67,32 @@ export class PatientCreateComponent implements OnInit {
   intraOpCourses = ['Smooth', 'Minor adv. Events', 'Moderate adv. Events', 'Major dv. events'];
   postOpCourses = ['Smooth', 'Minor adv. Events', 'Moderate adv. Events', 'Major dv. events'];
   patientRemarks = ['Better', 'Worse', 'The same', 'Details'];
-
+  patientId: number | null = null;
+  isEditMode: boolean = false;
   constructor(
     private patientService: PatientService,
-    private router: Router
-  ) { }
+    private router: Router, private route: ActivatedRoute
+  ) {
+        this.patientData.patient = new Patient();
+        this.patientData.admission =new Admission();
+        this.patientData.surgicalIntervention = new SurgicalIntervention();
+        this.patientData.followUp = new FollowUp(); 
+   }
 
   ngOnInit(): void {
+     
   }
+ 
 
+  deletePatient(): void {
+    if (this.isEditMode && this.patientId) {
+      if (confirm('Are you sure you want to delete this patient and all related data?')) {
+        this.patientService.deletePatientWithAllData(this.patientId).subscribe(() => {
+          this.router.navigate(['/patients']);
+        });
+      }
+    }
+  }
   // Navigation Methods
   nextStep(): void {
       if (this.currentStep < this.steps.length) {
@@ -91,12 +108,20 @@ export class PatientCreateComponent implements OnInit {
   }
 
   savePatient(): void {
-    console.log('Patient Data:', this.patientData);
-    // The service call needs to be adapted to handle the new data structure
-    // this.patientService.addPatient(this.patientData).subscribe(...);
-    alert('Patient data saved successfully! (Check console for data)');
-    this.router.navigate(['/patients']);
+    debugger
+    this.patientService.AddNewPatientFull(this.patientData).subscribe({
+      next: (response) => {
+        console.log('Patient added successfully', response);
+        alert('Patient data saved successfully!');
+        this.router.navigate(['/patients']);
+      },
+      error: (error) => {
+        console.error('Error adding patient', error);
+        alert('Error saving patient data. Please try again.');
+      }
+    });
   }
+  
 
   navigateBack(): void {
     this.router.navigate(['/patients']);

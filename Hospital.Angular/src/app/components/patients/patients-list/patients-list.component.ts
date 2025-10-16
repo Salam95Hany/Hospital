@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Patient } from '../../../models/patient.model';
+import { Patient, PatientsList } from '../../../models/patient.model';
 import { PatientService } from '../../../services/patient.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { PatientService } from '../../../services/patient.service';
   styleUrls: ['./patients-list.component.css']
 })
 export class PatientsListComponent implements OnInit {
-  patients: Patient[] = [];
+  patients: PatientsList[] = [];
   filteredPatients: Patient[] = [];
   searchTerm: string = '';
 
@@ -27,21 +27,12 @@ export class PatientsListComponent implements OnInit {
   }
 
   loadPatients(): void {
-    this.patientService.getPatients().subscribe(patients => {
-
+    this.patientService.getAllPatientsBasicInfo().subscribe(response  => {
+      this.patients = response.results;
     });
   }
 
-  applyFilter(): void {
-    if (!this.searchTerm.trim()) {
-      this.filteredPatients = this.patients;
-      return;
-    }
-
-    const searchTermLower = this.searchTerm.toLowerCase();
-
-  }
-
+  
   navigateToAddPatient(): void {
     this.router.navigate(['/patients/add']);
   }
@@ -58,13 +49,13 @@ export class PatientsListComponent implements OnInit {
     }
   }
 
-  deletePatient(id: number | undefined): void {
-    if (id && confirm('هل أنت متأكد من حذف هذا المريض؟')) {
-      this.patientService.deletePatient(id).subscribe(success => {
-        if (success) {
-          this.loadPatients();
-        }
-      });
-    }
+
+  deletePatient(id: number): void {
+      if (confirm('Are you sure you want to delete this patient and all related data?')) {
+        this.patientService.deletePatientWithAllData(id).subscribe(() => {
+          this.router.navigate(['/patients']);
+        });
+      }
+    
   }
 }

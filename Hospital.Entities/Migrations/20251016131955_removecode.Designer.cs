@@ -4,6 +4,7 @@ using Hospital.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Entities.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251016131955_removecode")]
+    partial class removecode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,57 +109,72 @@ namespace Hospital.Entities.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdmissionId"));
 
                     b.Property<string>("AbdominalExamination")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("AdmissionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("BMI")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BloodPressure")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CT")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ChiefComplaint")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Comorbidities")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Course")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CultureAndSensitivity")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CurrentMedications")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DREVaginalExamination")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DischargeDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Duration")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FamilyHistory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("FastingBloodSugar")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("GeneralExamination")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GenitalExamination")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HPI")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("HbA1c")
@@ -166,6 +184,7 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("HospitalFileNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("InsertDate")
@@ -174,25 +193,28 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("InsertUser")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("IsotopeStudies")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LiverEnzymes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MRI")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MedicalDecision")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherImaging")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherLabResults")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("PSAFree")
@@ -205,12 +227,15 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PT_PTT_INR")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PUT")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PastHistory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PatientId")
@@ -223,6 +248,7 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ProvisionalDiagnosis")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Pulse")
@@ -235,6 +261,7 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TRUS")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Temperature")
@@ -244,6 +271,7 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Ultrasound")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdateDate")
@@ -253,6 +281,7 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UrineAnalysis")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AdmissionId");
@@ -275,21 +304,26 @@ namespace Hospital.Entities.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FollowUpId"));
 
                     b.Property<string>("Advice")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Catheters")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExaminationFindings")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("FollowUpDate")
+                    b.Property<DateTime>("FollowUpDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImagePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagingResults")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("InsertDate")
@@ -298,22 +332,23 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("InsertUser")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LabResults")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NewDecision")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("NextFollowUpDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PatientRemarksDetails")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PatientRemarksStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SurgicalInterventionId")
@@ -326,6 +361,7 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("WoundStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FollowUpId");
@@ -379,9 +415,6 @@ namespace Hospital.Entities.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("MaritalStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -429,36 +462,44 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Anesthesia")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Approach")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Assistants")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("BloodTransfusionUnits")
                         .HasColumnType("int");
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DischargeDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DischargeInstructions")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FinalDiagnosis")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("FollowUpAppointment")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FollowUpDoctor")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FollowUpDoctorPhone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("InsertDate")
@@ -468,57 +509,70 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Intervention")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("InterventionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("InterventionDetails")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IntraOpAdverseEvents")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IntraOperativeCourse")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("MainSurgeon")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OffFieldSupervisor")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Organ")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherSurgeons")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostOpAdverseEvents")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostOpDay0_1")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostOpDay2_5")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostOpDayOver5")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostOpRecommendations")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Resident")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Theater")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TubesFixed")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdateDate")

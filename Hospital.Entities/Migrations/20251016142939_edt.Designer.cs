@@ -4,6 +4,7 @@ using Hospital.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Entities.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251016142939_edt")]
+    partial class edt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,9 +177,6 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("InsertUser")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("IsotopeStudies")
                         .HasColumnType("nvarchar(max)");
 
@@ -298,9 +298,6 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("InsertUser")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LabResults")
                         .HasColumnType("nvarchar(max)");
 
@@ -378,9 +375,6 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("InternalNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("MaritalStatus")
                         .IsRequired()
@@ -481,9 +475,6 @@ namespace Hospital.Entities.Migrations
 
                     b.Property<string>("IntraOperativeCourse")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("MainSurgeon")
                         .HasColumnType("nvarchar(max)");

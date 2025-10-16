@@ -9,31 +9,29 @@
   <div class="search-filter-container">
     <div class="search-box">
       <i class="fas fa-search"></i>
-      <input type="text" placeholder="Search for a patient..." [(ngModel)]="searchTerm" (input)="applyFilter()">
+      <input type="text" placeholder="Search for a patient..." [(ngModel)]="searchTerm">
     </div>
   </div>
 
   <div class="patients-table-container">
-    <!-- <table class="table patients-table">
+    <table class="table patients-table">
       <thead>
         <tr>
-          <th>File Number</th>
+          <th>Internal Number</th>
           <th>Name</th>
-          <th>Phone Number</th>
-          <th>Birth Date</th>
-          <th>Blood Type</th>
-          <th>Registration Date</th>
+          <th>Age</th>
+          <th>Governorate</th>
+          <th>Gender</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let patient of filteredPatients">
-          <td>{{ patient.fileNumber }}</td>
-          <td>{{ patient.fullName }}</td>
-          <td>{{ patient.phoneNumber }}</td>
-          <td>{{ patient.birthDate | date:'dd/MM/yyyy' }}</td>
-          <td>{{ patient.bloodType || 'Not Specified' }}</td>
-          <td>{{ patient.createdAt | date:'dd/MM/yyyy' }}</td>
+        <tr *ngFor="let patient of patients">
+          <td>{{ patient.internalNumber }}</td>
+          <td>{{ patient.name }}</td>
+          <td>{{ patient.age }}</td>
+          <td>{{ patient.governorate }}</td>
+          <td>{{ patient.gender }}</td>
           <td class="actions-cell">
             <button class="btn btn-sm btn-info" (click)="viewPatient(patient.id)">
               <i class="fas fa-eye"></i>
@@ -50,6 +48,6 @@
           <td colspan="7" class="text-center">No patients found</td>
         </tr>
       </tbody>
-    </table> -->
+    </table> 
   </div>
 </div>

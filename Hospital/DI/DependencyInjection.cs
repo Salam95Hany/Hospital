@@ -1,22 +1,24 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using QuestPDF.Infrastructure;
-using Hospital.Services.Common;
-using Hospital.Interfaces.Common;
+﻿using Hospital.Entities.Auth;
 using Hospital.Entities.Models;
-using Hospital.Interfaces.Repositories;
-using Hospital.Services.Repositories;
 using Hospital.Interfaces.Auth;
-using Hospital.Services.Auth;
+using Hospital.Interfaces.Common;
+using Hospital.Interfaces.IPatients;
+using Hospital.Interfaces.Repositories;
 using Hospital.Reports.Interface;
 using Hospital.Reports.Service;
-using Hospital.Entities.Auth;
+using Hospital.Services.Auth;
+using Hospital.Services.Common;
+using Hospital.Services.PatientsService;
+using Hospital.Services.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using QuestPDF.Infrastructure;
+using System.Text;
 
 namespace Hospital.DI
 {
@@ -58,6 +60,7 @@ namespace Hospital.DI
             services.AddScoped<ISQLHelper, SQLHelper>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IManageFileService, ManageFileService>();
+            services.AddScoped<IPatientsService, PatientsService>();
 
             #region ReportsDI
 

@@ -114,5 +114,16 @@ namespace Hospital.Services.Repositories
         {
             return await _dbContext.Set<T>().MaxAsync(selector, cancellationToken);
         }
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
+        {
+            return _dbContext.Set<T>().Where(predicate);
+        }
+
+        public async Task<List<T>> WhereAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return await _dbContext.Set<T>()
+                .Where(predicate)
+                .ToListAsync(cancellationToken);
+        }
     }
 }
