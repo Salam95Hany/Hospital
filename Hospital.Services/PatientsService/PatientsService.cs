@@ -114,56 +114,56 @@ namespace Hospital.Services.PatientsService
             return patient.PatientId;
         }
 
-        private async Task<int> AddNewAdmission(Admission admissionModel, int patientId)
+        private async Task<int> AddNewAdmission(Admission Model, int patientId)
         {
             var admission = new Admission
             {
                 PatientId = patientId,
-                HospitalFileNumber = admissionModel.HospitalFileNumber,
-                AdmissionDate = admissionModel.AdmissionDate,
-                DischargeDate = admissionModel.DischargeDate,
-                ChiefComplaint = admissionModel.ChiefComplaint,
-                Duration = admissionModel.Duration,
-                Course = admissionModel.Course,
-                HPI = admissionModel.HPI,
-                Comorbidities = admissionModel.Comorbidities,
-                CurrentMedications = admissionModel.CurrentMedications,
-                PastHistory = admissionModel.PastHistory,
-                FamilyHistory = admissionModel.FamilyHistory,
-                BMI = admissionModel.BMI,
-                Temperature = admissionModel.Temperature,
-                Pulse = admissionModel.Pulse,
-                BloodPressure = admissionModel.BloodPressure,
-                GeneralExamination = admissionModel.GeneralExamination,
-                AbdominalExamination = admissionModel.AbdominalExamination,
-                GenitalExamination = admissionModel.GenitalExamination,
-                DREVaginalExamination = admissionModel.DREVaginalExamination,
-                UrineAnalysis = admissionModel.UrineAnalysis,
-                CultureAndSensitivity = admissionModel.CultureAndSensitivity,
-                SerumCreatinine = admissionModel.SerumCreatinine,
-                Hemoglobin = admissionModel.Hemoglobin,
-                TotalLeukocyteCount = admissionModel.TotalLeukocyteCount,
-                Platelets = admissionModel.Platelets,
-                PT_PTT_INR = admissionModel.PT_PTT_INR,
-                LiverEnzymes = admissionModel.LiverEnzymes,
-                FastingBloodSugar = admissionModel.FastingBloodSugar,
-                PostPrandialBloodSugar = admissionModel.PostPrandialBloodSugar,
-                HbA1c = admissionModel.HbA1c,
-                PSATotal = admissionModel.PSATotal,
-                PSAFree = admissionModel.PSAFree,
-                PSARatio = admissionModel.PSARatio,
-                OtherLabResults = admissionModel.OtherLabResults,
-                PUT = admissionModel.PUT,
-                Ultrasound = admissionModel.Ultrasound,
-                TRUS = admissionModel.TRUS,
-                CT = admissionModel.CT,
-                MRI = admissionModel.MRI,
-                IsotopeStudies = admissionModel.IsotopeStudies,
-                OtherImaging = admissionModel.OtherImaging,
-                ProvisionalDiagnosis = admissionModel.ProvisionalDiagnosis,
-                MedicalDecision = admissionModel.MedicalDecision,
-                ScheduledDate = admissionModel.ScheduledDate,
-                InsertUser = admissionModel.InsertUser,
+                HospitalFileNumber = Model.HospitalFileNumber,
+                AdmissionDate = Model.AdmissionDate,
+                DischargeDate = Model.DischargeDate,
+                ChiefComplaint = Model.ChiefComplaint,
+                Duration = Model.Duration,
+                Course = Model.Course,
+                HPI = Model.HPI,
+                Comorbidities = Model.Comorbidities,
+                CurrentMedications = Model.CurrentMedications,
+                PastHistory = Model.PastHistory,
+                FamilyHistory = Model.FamilyHistory,
+                BMI = Model.BMI,
+                Temperature = Model.Temperature,
+                Pulse = Model.Pulse,
+                BloodPressure = Model.BloodPressure,
+                GeneralExamination = Model.GeneralExamination,
+                AbdominalExamination = Model.AbdominalExamination,
+                GenitalExamination = Model.GenitalExamination,
+                DREVaginalExamination = Model.DREVaginalExamination,
+                UrineAnalysis = Model.UrineAnalysis,
+                CultureAndSensitivity = Model.CultureAndSensitivity,
+                SerumCreatinine = Model.SerumCreatinine,
+                Hemoglobin = Model.Hemoglobin,
+                TotalLeukocyteCount = Model.TotalLeukocyteCount,
+                Platelets = Model.Platelets,
+                PT_PTT_INR = Model.PT_PTT_INR,
+                LiverEnzymes = Model.LiverEnzymes,
+                FastingBloodSugar = Model.FastingBloodSugar,
+                PostPrandialBloodSugar = Model.PostPrandialBloodSugar,
+                HbA1c = Model.HbA1c,
+                PSATotal = Model.PSATotal,
+                PSAFree = Model.PSAFree,
+                PSARatio = Model.PSARatio,
+                OtherLabResults = Model.OtherLabResults,
+                PUT = Model.PUT,
+                Ultrasound = Model.Ultrasound,
+                TRUS = Model.TRUS,
+                CT = Model.CT,
+                MRI = Model.MRI,
+                IsotopeStudies = Model.IsotopeStudies,
+                OtherImaging = Model.OtherImaging,
+                ProvisionalDiagnosis = Model.ProvisionalDiagnosis,
+                MedicalDecision = Model.MedicalDecision,
+                ScheduledDate = Model.ScheduledDate,
+                InsertUser = Model.InsertUser,
                 InsertDate = DateTime.UtcNow
             };
 
@@ -355,60 +355,60 @@ namespace Hospital.Services.PatientsService
             _unitOfWork.Repository<Patient>().Update(existingPatient);
         }
 
-        private async Task UpdateAdmission(Admission admissionModel)
+        private async Task UpdateAdmission(Admission Model)
         {
             var existingAdmission = await _unitOfWork.Repository<Admission>()
-                .GetByIdAsync(admissionModel.AdmissionId);
+                .GetByIdAsync(Model.AdmissionId);
 
             if (existingAdmission == null)
                 throw new ArgumentException("Admission not found");
 
             // Update admission properties
-            existingAdmission.HospitalFileNumber = admissionModel.HospitalFileNumber;
-            existingAdmission.AdmissionDate = admissionModel.AdmissionDate;
-            existingAdmission.DischargeDate = admissionModel.DischargeDate;
-            existingAdmission.ChiefComplaint = admissionModel.ChiefComplaint;
-            existingAdmission.Duration = admissionModel.Duration;
-            existingAdmission.Course = admissionModel.Course;
-            existingAdmission.HPI = admissionModel.HPI;
-            existingAdmission.Comorbidities = admissionModel.Comorbidities;
-            existingAdmission.CurrentMedications = admissionModel.CurrentMedications;
-            existingAdmission.PastHistory = admissionModel.PastHistory;
-            existingAdmission.FamilyHistory = admissionModel.FamilyHistory;
-            existingAdmission.BMI = admissionModel.BMI;
-            existingAdmission.Temperature = admissionModel.Temperature;
-            existingAdmission.Pulse = admissionModel.Pulse;
-            existingAdmission.BloodPressure = admissionModel.BloodPressure;
-            existingAdmission.GeneralExamination = admissionModel.GeneralExamination;
-            existingAdmission.AbdominalExamination = admissionModel.AbdominalExamination;
-            existingAdmission.GenitalExamination = admissionModel.GenitalExamination;
-            existingAdmission.DREVaginalExamination = admissionModel.DREVaginalExamination;
-            existingAdmission.UrineAnalysis = admissionModel.UrineAnalysis;
-            existingAdmission.CultureAndSensitivity = admissionModel.CultureAndSensitivity;
-            existingAdmission.SerumCreatinine = admissionModel.SerumCreatinine;
-            existingAdmission.Hemoglobin = admissionModel.Hemoglobin;
-            existingAdmission.TotalLeukocyteCount = admissionModel.TotalLeukocyteCount;
-            existingAdmission.Platelets = admissionModel.Platelets;
-            existingAdmission.PT_PTT_INR = admissionModel.PT_PTT_INR;
-            existingAdmission.LiverEnzymes = admissionModel.LiverEnzymes;
-            existingAdmission.FastingBloodSugar = admissionModel.FastingBloodSugar;
-            existingAdmission.PostPrandialBloodSugar = admissionModel.PostPrandialBloodSugar;
-            existingAdmission.HbA1c = admissionModel.HbA1c;
-            existingAdmission.PSATotal = admissionModel.PSATotal;
-            existingAdmission.PSAFree = admissionModel.PSAFree;
-            existingAdmission.PSARatio = admissionModel.PSARatio;
-            existingAdmission.OtherLabResults = admissionModel.OtherLabResults;
-            existingAdmission.PUT = admissionModel.PUT;
-            existingAdmission.Ultrasound = admissionModel.Ultrasound;
-            existingAdmission.TRUS = admissionModel.TRUS;
-            existingAdmission.CT = admissionModel.CT;
-            existingAdmission.MRI = admissionModel.MRI;
-            existingAdmission.IsotopeStudies = admissionModel.IsotopeStudies;
-            existingAdmission.OtherImaging = admissionModel.OtherImaging;
-            existingAdmission.ProvisionalDiagnosis = admissionModel.ProvisionalDiagnosis;
-            existingAdmission.MedicalDecision = admissionModel.MedicalDecision;
-            existingAdmission.ScheduledDate = admissionModel.ScheduledDate;
-            existingAdmission.UpdateUser = admissionModel.UpdateUser;
+            existingAdmission.HospitalFileNumber = Model.HospitalFileNumber;
+            existingAdmission.AdmissionDate = Model.AdmissionDate;
+            existingAdmission.DischargeDate = Model.DischargeDate;
+            existingAdmission.ChiefComplaint = Model.ChiefComplaint;
+            existingAdmission.Duration = Model.Duration;
+            existingAdmission.Course = Model.Course;
+            existingAdmission.HPI = Model.HPI;
+            existingAdmission.Comorbidities = Model.Comorbidities;
+            existingAdmission.CurrentMedications = Model.CurrentMedications;
+            existingAdmission.PastHistory = Model.PastHistory;
+            existingAdmission.FamilyHistory = Model.FamilyHistory;
+            existingAdmission.BMI = Model.BMI;
+            existingAdmission.Temperature = Model.Temperature;
+            existingAdmission.Pulse = Model.Pulse;
+            existingAdmission.BloodPressure = Model.BloodPressure;
+            existingAdmission.GeneralExamination = Model.GeneralExamination;
+            existingAdmission.AbdominalExamination = Model.AbdominalExamination;
+            existingAdmission.GenitalExamination = Model.GenitalExamination;
+            existingAdmission.DREVaginalExamination = Model.DREVaginalExamination;
+            existingAdmission.UrineAnalysis = Model.UrineAnalysis;
+            existingAdmission.CultureAndSensitivity = Model.CultureAndSensitivity;
+            existingAdmission.SerumCreatinine = Model.SerumCreatinine;
+            existingAdmission.Hemoglobin = Model.Hemoglobin;
+            existingAdmission.TotalLeukocyteCount = Model.TotalLeukocyteCount;
+            existingAdmission.Platelets = Model.Platelets;
+            existingAdmission.PT_PTT_INR = Model.PT_PTT_INR;
+            existingAdmission.LiverEnzymes = Model.LiverEnzymes;
+            existingAdmission.FastingBloodSugar = Model.FastingBloodSugar;
+            existingAdmission.PostPrandialBloodSugar = Model.PostPrandialBloodSugar;
+            existingAdmission.HbA1c = Model.HbA1c;
+            existingAdmission.PSATotal = Model.PSATotal;
+            existingAdmission.PSAFree = Model.PSAFree;
+            existingAdmission.PSARatio = Model.PSARatio;
+            existingAdmission.OtherLabResults = Model.OtherLabResults;
+            existingAdmission.PUT = Model.PUT;
+            existingAdmission.Ultrasound = Model.Ultrasound;
+            existingAdmission.TRUS = Model.TRUS;
+            existingAdmission.CT = Model.CT;
+            existingAdmission.MRI = Model.MRI;
+            existingAdmission.IsotopeStudies = Model.IsotopeStudies;
+            existingAdmission.OtherImaging = Model.OtherImaging;
+            existingAdmission.ProvisionalDiagnosis = Model.ProvisionalDiagnosis;
+            existingAdmission.MedicalDecision = Model.MedicalDecision;
+            existingAdmission.ScheduledDate = Model.ScheduledDate;
+            existingAdmission.UpdateUser = Model.UpdateUser;
             existingAdmission.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.Repository<Admission>().Update(existingAdmission);

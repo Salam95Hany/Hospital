@@ -1,0 +1,74 @@
+       :host {
+          --primary-color: #0d6efd;
+          --border-color: #dee2e6;
+      }
+      
+      .error-message {
+          color: #e53e3e;
+          font-size: 12px;
+          margin-top: 5px;
+          font-weight: 500;
+      }
+      
+      .input-box.error {
+          border-color: #ef4444 !important;
+          background: #fef2f2 !important;
+      }
+      
+      .input-box.error:focus {
+          border-color: #ef4444 !important;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+      
+      .form-label {
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 0.5rem;
+          font-size: 0.95rem;
+      }
+      
+      .form-control,
+      .form-select {
+          border: 1.5px solid var(--border-color);
+          border-radius: 8px;
+          padding: 0.75rem 1rem;
+          font-size: 0.95rem;
+          transition: all 0.3s ease;
+          background-color: #fafbfc;
+      }
+      
+      .form-control:focus,
+      .form-select:focus {
+          border-color: var(--primary-color);
+          background-color: white;
+          box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+      }
+      
+      .form-control::placeholder {
+          color: #adb5bd;
+          font-style: italic;
+      }
+      
+      textarea.form-control {
+          resize: vertical;
+          min-height: 100px;
+          font-family: 'Segoe UI', sans-serif;
+      }
+      
+      .form-group-label {
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 1rem;
+          display: block;
+      }
+      
+      .form-navigation {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+          margin-top: 2rem;
+          flex-wrap: wrap;
+      }

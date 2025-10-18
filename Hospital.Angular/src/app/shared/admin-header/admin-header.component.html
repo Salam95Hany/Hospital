@@ -1,69 +1,69 @@
 <header id="admin-header">
-  <nav class="navbar navbar-light">
-    <div class="container-fluid d-flex align-items-center justify-content-between">
-      <!-- Logo and Hospital Name -->
-      <div class="logo-menu-area d-flex align-items-center">
-        <div class="img-logo-box" (click)="onCollapseExpandMenu()">
-          <img src="hospital-logo.png" class="logo-img" loading="lazy" alt="Hospital Logo" />
-        </div>
-        <span class="hospital-name d-none d-md-block">Hospital System</span>
-      </div>
-      
-      <!-- Search Bar -->
-      <div class="header-search d-none d-lg-block">
-        <input type="text" placeholder="Search..." (input)="onShowAutoCompleteMenu($event.target)" [(ngModel)]="SearchText">
-        <i class="fas fa-search"></i>
-        
-        <!-- Search Autocomplete -->
-        <div class="dropdown-menu w-100 p-0" [class.show]="showAutoCompleteMenu">
-          <div class="p-2" *ngFor="let page of PagesList; let i = index">
-            <a class="dropdown-item" (click)="HandleSearchEle(i, $event.target)">
-              <i class="fas fa-link"></i> {{page.name}}
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Header Actions -->
-      <div class="d-flex align-items-center">
-        <!-- Notification Icon -->
-        <div class="header-icon">
-          <i class="fas fa-bell"></i>
-        </div>
-        
-        <!-- Settings Icon -->
-        <div class="header-icon" (click)="onCollapseExpandMenu()">
-          <i class="fas fa-bars"></i>
-        </div>
-        
-        <!-- User Profile -->
-        <div class="header-user dropdown">
-          <div class="d-flex align-items-center" role="button" (click)="toggleUserDropdown()">
-            <div class="header-user-avatar">
-              <i class="fas fa-user-md"></i>
+    <nav class="navbar navbar-light">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <!-- Logo and Hospital Name -->
+            <div class="logo-menu-area d-flex align-items-center">
+                <div class="img-logo-box" (click)="onCollapseExpandMenu()">
+                    <img src="logo.png" class="logo-img" loading="lazy" alt="Hospital Logo" />
+                </div>
+                <span class="hospital-name d-none d-md-block">Hospital System</span>
             </div>
-            <div class="header-user-info d-none d-md-flex">
-              <span class="header-user-name">{{UserModel.userName}}</span>
-              <span class="header-user-role">Administrator</span>
+
+            <!-- Search Bar -->
+            <div class="header-search d-none d-lg-block">
+                <input type="text" placeholder="Search..." (input)="onShowAutoCompleteMenu($event.target)" [(ngModel)]="SearchText">
+                <i class="fas fa-search"></i>
+
+                <!-- Search Autocomplete -->
+                <div class="dropdown-menu w-100 p-0" [class.show]="showAutoCompleteMenu">
+                    <div class="p-2" *ngFor="let page of PagesList; let i = index">
+                        <a class="dropdown-item" (click)="HandleSearchEle(i, $event.target)">
+                            <i class="fas fa-link"></i> {{page.name}}
+                        </a>
+                    </div>
+                </div>
             </div>
-            <i class="fas fa-chevron-down dropdown-arrow ml-2" [class.rotate-arrow]="isUserDropdownOpen"></i>
-          </div>
-          
-          <!-- User Dropdown Menu -->
-          <div class="dropdown-menu custom-dropdown" [class.show]="isUserDropdownOpen">
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-user"></i> My Profile
-            </a>
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-cog"></i> Settings
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="Logout()">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-          </div>
+
+            <!-- Header Actions -->
+            <div class="d-flex align-items-center">
+                <!-- Notification Icon -->
+                <div class="header-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+
+                <!-- Settings Icon -->
+                <div class="header-icon" (click)="onCollapseExpandMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
+
+                <!-- User Profile -->
+                <div class="header-user dropdown">
+                    <div class="d-flex align-items-center" role="button" (click)="toggleUserDropdown()">
+                        <div class="header-user-avatar">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="header-user-info d-none d-md-flex">
+                            <span class="header-user-name">{{UserModel.userName}}</span>
+                            <span class="header-user-role">Administrator</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow ml-2" [class.rotate-arrow]="isUserDropdownOpen"></i>
+                    </div>
+
+                    <!-- User Dropdown Menu -->
+                    <div class="dropdown-menu custom-dropdown" [class.show]="isUserDropdownOpen">
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" (click)="Logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </nav>
+    </nav>
 </header>

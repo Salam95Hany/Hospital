@@ -1,0 +1,71 @@
+import { NgIf } from '@angular/common';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+
+@Component({
+  selector: 'app-admin-general-input',
+  standalone: true,
+  imports: [NgIf],
+  templateUrl: './admin-general-input.component.html',
+  styleUrl: './admin-general-input.component.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AdminGeneralInputComponent),
+      multi: true
+    }
+  ]
+})
+export class AdminGeneralInputComponent {
+  @Input() type: 'text' | 'number' | 'date' | 'month' | 'textarea' = 'text';
+  @Input() placeholder: string = '';
+  @Input() label: string = '';
+  @Input() colSize: string = 'col-md-6';
+  @Input() error: string | null = null;
+  @Input() allowNumbersOnly: boolean = false;
+  @Input() allowPaste: boolean = true;
+  @Input() allowCopy: boolean = true;
+  @Input() allowCut: boolean = true;
+  @Input() disabled: boolean = false;
+  @Output() inputChanged = new EventEmitter<string>();
+  value: any = '';
+
+  constructor() {
+
+  }
+
+  writeValue(obj: any): void {
+    this.value = obj;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  onChange = (value: any) => { };
+  onTouched = () => { };
+
+  onInput(event: any) {
+    this.value = event.target.value;
+    this.onChange(this.value);
+    this.inputChanged.emit(this.value);
+  }
+
+  NumbersOnly(key: any) {
+    if (this.allowNumbersOnly) {
+      let patt = /^([0-9\+.])$/;
+      let result = patt.test(key);
+      return result;
+    }
+
+    return true;
+  }
+}

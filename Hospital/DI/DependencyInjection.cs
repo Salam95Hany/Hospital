@@ -1,11 +1,13 @@
 ﻿using Hospital.Entities.Auth;
 using Hospital.Entities.Models;
+using Hospital.Interfaces;
 using Hospital.Interfaces.Auth;
 using Hospital.Interfaces.Common;
 using Hospital.Interfaces.IPatients;
 using Hospital.Interfaces.Repositories;
 using Hospital.Reports.Interface;
 using Hospital.Reports.Service;
+using Hospital.Services;
 using Hospital.Services.Auth;
 using Hospital.Services.Common;
 using Hospital.Services.PatientsService;
@@ -61,6 +63,9 @@ namespace Hospital.DI
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IManageFileService, ManageFileService>();
             services.AddScoped<IPatientsService, PatientsService>();
+            services.AddScoped<IAdmissionsService, AdmissionsService>();
+            services.AddScoped<ISurgicalInterventionsService, SurgicalInterventionsService>();
+            services.AddScoped<IFollowUpsService, FollowUpsService>();
 
             #region ReportsDI
 

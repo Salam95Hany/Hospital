@@ -1,0 +1,48 @@
+<div class="step-content form-card" data-step="1" style="display: block;">
+    <h3 class="step-heading">
+        <i class="fas fa-user"></i> Create Follow Up
+    </h3>
+    <form [formGroup]="ItemForm" autocomplete="off">
+        <div class="row g-3">
+            <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">
+            </app-admin-general-input>
+
+            <app-admin-drop-down [data]="patientRemarks" [placeholder]="'Select Patient Remarks'" [label]="'Patient Remarks'" formControlName="patientRemarksStatus" [error]="formErrors.patientRemarksStatus" class="col-md-6">
+            </app-admin-drop-down>
+
+            <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Patient Remarks'" [label]="'Details of Patient Remarks'" formControlName="patientRemarksDetails" class="col-md-12">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'textarea'" [placeholder]="'Examination Findings'" [label]="'Examination Findings'" formControlName="examinationFindings" class="col-md-12">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'text'" [placeholder]="'Wound Status'" [label]="'Wound Status'" formControlName="woundStatus" class="col-md-6">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'text'" [placeholder]="'Catheters'" [label]="'Catheters'" formControlName="catheters" class="col-md-6">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'textarea'" [placeholder]="'Lab Results'" [label]="'Lab Results'" formControlName="labResults" class="col-md-12">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'textarea'" [placeholder]="'Imaging Results'" [label]="'Imaging Results'" formControlName="imagingResults" class="col-md-12">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'text'" [placeholder]="'Image Path'" [label]="'Image Path'" formControlName="imagePath" class="col-md-6">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'textarea'" [placeholder]="'Advice'" [label]="'Advice'" formControlName="advice" class="col-md-12">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" formControlName="newDecision" class="col-md-12">
+            </app-admin-general-input>
+
+            <app-admin-general-input [type]="'date'" [placeholder]="'Next Follow-up Date'" [label]="'Next Follow-up Date'" formControlName="nextFollowUpDate" class="col-md-6">
+            </app-admin-general-input>
+
+            <button class="btn btn-success" (click)="AddNewItem()">
+                <i class="fas fa-save"></i> Save
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,21 @@
+<label class="form-label">{{label}}</label>
+<div ngbDropdown class="dropdown-as-input">
+    <button type="button" style="padding-left: 45px;" [disabled]="disabled" id="dropdownBasic1" class="input-box" [class.error]="error" ngbDropdownToggle>
+        <span>{{selectedName ? selectedName : placeholder}}</span>
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="w-100">
+        <div *ngIf="showSearch" class="p-2 bg-light border-bottom">
+            <input type="text" class="form-control form-control" (input)="onInputChange($event)" placeholder="Search..." />
+        </div>
+        <div class="dropdown-h large-scroll">
+            <ng-container *ngFor="let item of data | searchArry: searchText: searchFields">
+                <div class="d-flex dropdown-item cursor-pointer" [class]="item.id==selectedValue?'active DropDownSelected':''" (click)="selectOption(item)">
+                    <a>{{item.name}}</a>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+<div class="error-message" *ngIf="error">
+    {{ error }}
+</div>

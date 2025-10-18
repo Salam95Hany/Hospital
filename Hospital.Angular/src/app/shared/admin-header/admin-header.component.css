@@ -1,17 +1,33 @@
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideDown {
-    from { transform: translateY(-10px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 :root {
@@ -26,11 +42,11 @@ header#admin-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     height: var(--header-height);
     animation: slideDown 0.5s ease-out;
-    position: fixed;
+    /* position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1001; */
 }
 
 .navbar {
@@ -157,9 +173,9 @@ header#admin-header {
 .img-logo-box {
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    width: 45px;
-    height: 45px;
+    /* background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); */
+    /* width: 45px;
+    height: 45px; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -188,10 +204,10 @@ header#admin-header {
 }
 
 .logo-img {
-    width: 30px;
-    height: 30px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
+    width: 50px;
+    height: 50px;
+    /* object-fit: contain;
+    filter: brightness(0) invert(1); */
     z-index: 1;
 }
 
@@ -211,7 +227,8 @@ header#admin-header {
 
 .header-search input {
     width: 100%;
-    padding: 0.6rem 2.5rem 0.6rem 1rem; /* Adjusted padding for LTR */
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    /* Adjusted padding for LTR */
     border: none;
     border-radius: 50px;
     background: rgba(0, 0, 0, 0.03);
@@ -226,14 +243,15 @@ header#admin-header {
 
 .header-search i {
     position: absolute;
-    right: 12px; /* Changed from left */
+    right: 12px;
+    /* Changed from left */
     top: 50%;
     transform: translateY(-50%);
     color: var(--gray);
     transition: var(--header-transition);
 }
 
-.header-search input:focus + i {
+.header-search input:focus+i {
     color: var(--primary);
 }
 
@@ -268,7 +286,8 @@ header#admin-header {
 .header-user-info {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align text to the left */
+    align-items: flex-start;
+    /* Align text to the left */
 }
 
 .header-user-name {

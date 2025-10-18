@@ -13,12 +13,11 @@
 }
 
 .admin-main-content {
-    position: relative;
-    top: 70px;
+    /* position: relative; */
+    /* top: 70px; */
     width: calc(100vw - 250px);
-    min-height: calc(100vh - 70px);
-    margin-left: 250px; /* Changed from margin-right */
-    padding: 32px 24px 24px 24px;
+    /* min-height: calc(100vh - 70px); */
+    padding: 20px 20px 20px 20px;
     background: var(--light);
     border-radius: var(--border-radius-lg) 0 0 0;
     box-shadow: var(--shadow-sm);
@@ -28,7 +27,8 @@
 
 .admin-main-content.expand-content {
     width: calc(100vw - 70px);
-    margin-left: 70px; /* Changed from margin-right */
+    margin-left: 70px;
+    /* Changed from margin-right */
 }
 
 .admin-main-content::before {
@@ -43,7 +43,9 @@
     border-radius: var(--border-radius-lg) 0 0 0;
 }
 
+
 /* Card Styles */
+
 .admin-card {
     background: var(--white);
     border-radius: var(--border-radius-md);
@@ -80,7 +82,9 @@
     padding: var(--spacing-sm) 0;
 }
 
+
 /* Button Styles */
+
 .admin-btn {
     padding: 0.5rem 1rem;
     border-radius: var(--border-radius-sm);
@@ -111,16 +115,18 @@
     transform: translateY(-2px);
 }
 
+
 /* Responsive Styles */
+
 @media (max-width: 991px) {
     .admin-main-content,
     .admin-main-content.expand-content {
         width: 100%;
-        margin-left: 0; /* Changed from margin-right */
+        margin-left: 0;
+        /* Changed from margin-right */
         padding: var(--spacing-md);
         border-radius: 0;
     }
-    
     .admin-card {
         padding: var(--spacing-md);
     }

@@ -5,6 +5,12 @@ import { PatientsListComponent } from './components/patients/patients-list/patie
 import { PatientCreateComponent } from './components/patients/patient-create/patient-create.component';
 import { DoctorsListComponent } from './components/doctors/doctors-list/doctors-list.component';
 import { DoctorCreateComponent } from './components/doctors/doctor-create/doctor-create.component';
+import { AdmissionListComponent } from './components/admission/admission-list/admission-list.component';
+import { SurgicalInterventionListComponent } from './components/surgicalIntervention/surgical-intervention-list/surgical-intervention-list.component';
+import { FollowupListComponent } from './components/followup/followup-list/followup-list.component';
+import { AdmissionCreateComponent } from './components/admission/admission-create/admission-create.component';
+import { SurgicalInterventionCreateComponent } from './components/surgicalIntervention/surgical-intervention-create/surgical-intervention-create.component';
+import { FollowupCreateComponent } from './components/followup/followup-create/followup-create.component';
 
 export const routes: Routes = [
 	{
@@ -22,6 +28,12 @@ export const routes: Routes = [
 			{ path: 'doctors/edit/:id', component: DoctorCreateComponent },
 			{ path: 'doctors/view/:id', component: DoctorsListComponent },
 			// Add more hospital feature routes here
+			{ path: 'admissions', component: AdmissionListComponent },
+			{ path: 'admissions/add', component: AdmissionCreateComponent },
+			{ path: 'surgical-intervention', component: SurgicalInterventionListComponent },
+			{ path: 'surgical-intervention/add', component: SurgicalInterventionCreateComponent },
+			{ path: 'follow-up', component: FollowupListComponent },
+			{ path: 'follow-up/add', component: FollowupCreateComponent },
 		]
 	}
 ];

@@ -1,0 +1,48 @@
+﻿using Hospital.Entities.Common;
+using Hospital.Entities.Contracts.DTOs;
+using Hospital.Entities.Models;
+using Hospital.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Hospital.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AdmissionsController : ControllerBase
+    {
+        private readonly IAdmissionsService _admissionsService;
+        public AdmissionsController(IAdmissionsService admissionsService)
+        {
+            _admissionsService = admissionsService;
+        }
+
+        [HttpGet("GetAllAdmissionData")]
+        public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData()
+        {
+            var results = await _admissionsService.GetAllAdmissionData();
+            return results;
+        }
+
+        [HttpPost("AddNewAdmission")]
+        public async Task<ApiResponseModel<string>> AddNewAdmission(Admission Model)
+        {
+            var results = await _admissionsService.AddNewAdmission(Model);
+            return results;
+        }
+
+        [HttpPost("UpdateAdmission")]
+        public async Task<ApiResponseModel<string>> UpdateAdmission(Admission Model)
+        {
+            var results = await _admissionsService.UpdateAdmission(Model);
+            return results;
+        }
+
+        [HttpGet("DeleteAdmission")]
+        public async Task<ApiResponseModel<string>> DeleteAdmission(int AdmissionId)
+        {
+            var results = await _admissionsService.DeleteAdmission(AdmissionId);
+            return results;
+        }
+    }
+}

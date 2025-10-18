@@ -1,0 +1,327 @@
+:host {
+    --spacing-1: 4px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --colors-slate2: #f5f5f5;
+    --colors-slate3: #e8e8e8;
+    --colors-slate8: #a0a0a0;
+    --colors-slate10: #787878;
+    --colors-slate11: #626262;
+    --colors-slate12: #424242;
+    --radius-default: 4px;
+    --shadow-overlay: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-elements: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Layout Container */
+
+.z2-rowContainerv2 {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.z2-row-labelv2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.z2-row-label-textv2 {
+    font-size: 16px;
+    color: var(--colors-slate11);
+    font-weight: 700;
+    line-height: 1;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+
+/* Input Wrapper */
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+/* Input Group */
+
+.z2-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+
+/* Input Text */
+
+.z2-input-text {
+    width: 100%;
+    padding: 10px 12px 10px 12px;
+    font-size: 14px;
+    border: 1px solid var(--colors-slate3);
+    border-radius: var(--radius-default);
+    outline: none;
+    background-color: white;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    transition: all 0.2s ease;
+}
+
+.z2-input-text:focus {
+    border-color: var(--colors-slate8);
+    box-shadow: 0 0 0 2px rgba(160, 160, 160, 0.1);
+}
+
+.z2-input-text::placeholder {
+    color: var(--colors-slate11);
+}
+
+
+/* Search Icon */
+
+.search-icon {
+    position: absolute;
+    right: 12px;
+    color: var(--colors-slate11);
+    pointer-events: none;
+}
+
+
+/* Dropdown List */
+
+.z2-mfr-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid var(--colors-slate3);
+    border-radius: var(--radius-default);
+    box-shadow: var(--shadow-overlay);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    animation: z2-slide-up-in 0.2s ease-in-out;
+    margin: 0;
+    padding: var(--spacing-1) 0;
+}
+
+
+/* Dropdown Items */
+
+.z2-mfr-item {
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-4);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.z2-mfr-item:hover {
+    background-color: var(--colors-slate2);
+}
+
+.item-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--colors-slate12);
+    margin-bottom: 4px;
+}
+
+.item-details {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--colors-slate11);
+    line-height: 1.2;
+}
+
+.separator {
+    margin: 0 4px;
+    color: var(--colors-slate11);
+}
+
+.field-value {
+    color: var(--colors-slate11);
+}
+
+.item-url {
+    color: var(--colors-slate11);
+}
+
+
+/* Empty State */
+
+.no-results-message {
+    padding: var(--spacing-4) var(--spacing-3);
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-slate11);
+}
+
+.no-results-message svg {
+    flex-shrink: 0;
+}
+
+
+/* Loading State */
+
+.loading-results {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4) var(--spacing-3);
+    min-height: 60px;
+}
+
+
+/* Loading Spinner */
+
+.z2-loading-spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    border: 1.5px solid var(--colors-slate11);
+    border-bottom-color: transparent;
+    animation: z2-loading-spin 0.8s linear infinite;
+}
+
+.z2-loading-spinner-large {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    border: 2.5px solid var(--colors-slate10);
+    border-bottom-color: transparent;
+    animation: z2-loading-spin 0.8s linear infinite;
+}
+
+
+/* Selected Supplier Box */
+
+.selected-mfr-box {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-2) var(--spacing-4);
+    border: 1px solid var(--colors-slate8);
+    border-radius: var(--radius-default);
+    background-color: white;
+    box-shadow: var(--shadow-elements);
+    min-height: 50px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.supplier-icon {
+    flex-shrink: 0;
+    color: var(--colors-slate11);
+}
+
+.selected-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.selected-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--colors-slate12);
+}
+
+.selected-details {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--colors-slate11);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Remove Button */
+
+.selected-mfr-remove-button {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: var(--spacing-1);
+    color: var(--colors-slate11);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.selected-mfr-remove-button:hover {
+    background-color: var(--colors-slate2);
+    color: var(--colors-slate12);
+}
+
+.selected-mfr-remove-button:active {
+    background-color: var(--colors-slate3);
+}
+
+
+/* Animations */
+
+@keyframes z2-loading-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes z2-slide-up-in {
+    0% {
+        transform: scaleY(0.8);
+        transform-origin: 0% 0%;
+        opacity: 0;
+    }
+    100% {
+        transform: scaleY(1);
+        transform-origin: 0% 0%;
+        opacity: 1;
+    }
+}
+
+
+/* Scrollbar Styling (Optional) */
+
+.z2-mfr-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.z2-mfr-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.z2-mfr-list::-webkit-scrollbar-thumb {
+    background: var(--colors-slate3);
+    border-radius: 3px;
+}
+
+.z2-mfr-list::-webkit-scrollbar-thumb:hover {
+    background: var(--colors-slate8);
+}
