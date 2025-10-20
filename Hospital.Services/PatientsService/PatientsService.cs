@@ -1,11 +1,16 @@
 ﻿using Hospital.Entities.Common;
+using Hospital.Entities.Contracts.DTOs;
+using Hospital.Entities.Contracts.Requests;
 using Hospital.Entities.Models;
+using Hospital.Entities.Specifications.SearchAutoComplete;
 using Hospital.Interfaces.IPatients;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -253,23 +258,23 @@ namespace Hospital.Services.PatientsService
         }
         public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfoAsync(CancellationToken cancellationToken = default)
         {
-         
-                var patients = await _unitOfWork.Repository<Patient>()
-                    .GetAllAsQueryable().Where(i=>i.IsDeleted != true)
-                    .Select(p => new PatientListDto
-                    {
-                        Id = p.PatientId,
-                        InternalNumber = p.InternalNumber,
-                        Name = p.Name,
-                        Age = p.Age,
-                        Governorate = p.Governorate,
-                        Gender = p.Gender
-                    })
-                    .ToListAsync(cancellationToken);
 
-                return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, patients);
-            
-   
+            var patients = await _unitOfWork.Repository<Patient>()
+                .GetAllAsQueryable().Where(i => i.IsDeleted != true)
+                .Select(p => new PatientListDto
+                {
+                    Id = p.PatientId,
+                    InternalNumber = p.InternalNumber,
+                    Name = p.Name,
+                    Age = p.Age,
+                    Governorate = p.Governorate,
+                    Gender = p.Gender
+                })
+                .ToListAsync(cancellationToken);
+
+            return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, patients);
+
+
         }
         public async Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default)
         {
@@ -609,11 +614,70 @@ namespace Hospital.Services.PatientsService
                         .ToList()
                 };
 
-                return ApiResponseModel<PatientFullDetailsDto>.Success(GenericErrors.AlreadyExists,result);
+                return ApiResponseModel<PatientFullDetailsDto>.Success(GenericErrors.AlreadyExists, result);
             }
             catch (Exception ex)
             {
                 return ApiResponseModel<PatientFullDetailsDto>.Failure(GenericErrors.NotFound);
+            }
+        }
+
+        public async Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model)
+        {
+            if (Model.SearchType == "Patient")
+            {
+                var Results = await _unitOfWork.Repository<Patient>().WhereAsync(i => i.Name.Contains(Model.SearchText), 10);
+                var Data = Results.Select(i => new SearchAutoCompleteDto
+                {
+                    Id = i.PatientId,
+                    Name = i.Name
+                }).ToList();
+
+                return ApiResponseModel<List<SearchAutoCompleteDto>>.Success(GenericErrors.GetSuccess, Data);
+            }
+            else
+            {
+                string[] formats = { "dd/MM/yyyy", "MM/yyyy", "yyyy-MM", "yyyy/MM", "yyyy-MM-dd" };
+                DateTime Date;
+
+                if (!DateTime.TryParseExact(Model.SearchText, formats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out Date))
+                {
+                    return ApiResponseModel<List<SearchAutoCompleteDto>>.Failure(GenericErrors.TransFailed);
+                }
+
+                if (Model.SearchType == "Admission")
+                {
+                    var Results = await _unitOfWork.Repository<Admission>()
+                        .WhereAsync(i => i.PatientId == Model.PatientId &&
+                                         i.AdmissionDate.HasValue &&
+                                         i.AdmissionDate.Value.Month == Date.Month &&
+                                         i.AdmissionDate.Value.Year == Date.Year, 10);
+
+                    var Data = Results.Select(i => new SearchAutoCompleteDto
+                    {
+                        Id = i.AdmissionId,
+                        Name = i.AdmissionDate.Value.ToString("dd/MM/yyyy") + $" ({i.HospitalFileNumber})"
+                    }).ToList();
+
+                    return ApiResponseModel<List<SearchAutoCompleteDto>>.Success(GenericErrors.GetSuccess, Data);
+                }
+                else
+                {
+                    var Results = await _unitOfWork.Repository<SurgicalIntervention>()
+                        .WhereAsync(i => i.AdmissionId == Model.AdmissionId &&
+                                         i.InterventionDate.HasValue &&
+                                         i.InterventionDate.Value.Month == Date.Month &&
+                                         i.InterventionDate.Value.Year == Date.Year, 10);
+
+                    var Data = Results.Select(i => new SearchAutoCompleteDto
+                    {
+                        Id = i.SurgicalInterventionId,
+                        Name = i.InterventionDate.Value.ToString("dd/MM/yyyy") + $" ({i.Theater})"
+                    }).ToList();
+
+                    return ApiResponseModel<List<SearchAutoCompleteDto>>.Success(GenericErrors.GetSuccess, Data);
+                }
             }
         }
     }

@@ -1,28 +1,27 @@
+<app-admin-breadcrumb [Title]="'Surgical Intervention'"></app-admin-breadcrumb>
+
 <div class="patients-container mb-2">
     <div class="search-filter-container">
         <div class="row">
             <div class="col-md-4">
-                <app-search-autocomplete></app-search-autocomplete>
+                <app-search-autocomplete (itemSearch)="onPatientSelected($event)"></app-search-autocomplete>
             </div>
             <div class="col-md-4">
-                <app-search-autocomplete></app-search-autocomplete>
+                <app-search-autocomplete [mainTitle]="'Select Admission'" [inputPlaceholder]="'Enter Admission'" [searchDescripition]="'Start typing to search admission'" [searchType]="'Admission'" [itemId]="selectedPatient?.id" [selectedItem]="selectedAdmission" [disabled]="!selectedPatient"
+                    (itemSearch)="onAdmissionSelected($event)"></app-search-autocomplete>
             </div>
-
-
         </div>
-
-
     </div>
 </div>
 
-
-
 <div class="patients-container">
     <div class="patients-header">
-        <h2 class="patients-title">Surgical Intervention</h2>
         <button class="btn btn-primary add-patient-btn" [routerLink]="['/surgical-intervention/add']" [queryParams]="{ patientId: PatientId }">
             <i class="fas fa-plus-circle"></i> Add Surgical Intervention
         </button>
+        <div>
+            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="100"></app-admin-pagination>
+        </div>
     </div>
 
     <div class="search-filter-container">
@@ -30,8 +29,6 @@
             <i class="fas fa-search"></i>
             <input type="text" placeholder="Search for a Admission..." [(ngModel)]="searchTerm">
         </div> -->
-
-        <app-search-autocomplete></app-search-autocomplete>
     </div>
 
     <div class="patients-table-container">

@@ -1,7 +1,6 @@
+<app-admin-breadcrumb [Title]="'Create Follow Up'"></app-admin-breadcrumb>
+
 <div class="step-content form-card" data-step="1" style="display: block;">
-    <h3 class="step-heading">
-        <i class="fas fa-user"></i> Create Follow Up
-    </h3>
     <form [formGroup]="ItemForm" autocomplete="off">
         <div class="row g-3">
             <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">

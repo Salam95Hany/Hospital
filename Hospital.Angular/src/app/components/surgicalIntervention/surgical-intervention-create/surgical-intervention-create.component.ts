@@ -6,10 +6,11 @@ import { PatientService } from '../../../services/patient.service';
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { CustomValidators, RegexType } from '../../../services/custom-validators';
+import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
 
 @Component({
   selector: 'app-surgical-intervention-create',
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminBreadcrumbComponent],
   templateUrl: './surgical-intervention-create.component.html',
   styleUrl: './surgical-intervention-create.component.css'
 })

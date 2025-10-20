@@ -1,7 +1,6 @@
+<app-admin-breadcrumb [Title]="'Create Surgical Intervention'"></app-admin-breadcrumb>
+
 <div class="step-content form-card" data-step="1" style="display: block;">
-    <h3 class="step-heading">
-        <i class="fas fa-user"></i> Create Surgical Intervention
-    </h3>
     <form [formGroup]="ItemForm" autocomplete="off">
         <div class="row g-3">
             <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-6">

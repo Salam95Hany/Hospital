@@ -38,16 +38,20 @@ export class PatientService {
     return this.http.delete<any>(`${this.apiUrl}/DeletePatientWithAllData/${patientId}`);
   }
 
-  
+  GetSearchAutoCompleteData(Model: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/GetSearchAutoCompleteData`, Model);
+  }
+
+
 
   addPatient(patient: PatientData): Observable<PatientData> {
     // Generate a new ID (in a real app, this would be done by the backend)
     const newId = Math.max() + 1;
-    
+
     const newPatient: PatientData = {
       ...patient,
     };
-    
+
     this.patients.push(newPatient);
     return of(newPatient);
   }

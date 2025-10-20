@@ -1,14 +1,18 @@
+<app-admin-breadcrumb [Title]="'Follow Up'"></app-admin-breadcrumb>
+
 <div class="patients-container mb-2">
     <div class="search-filter-container">
         <div class="row">
             <div class="col-md-4">
-                <app-search-autocomplete></app-search-autocomplete>
+                <app-search-autocomplete (itemSearch)="onPatientSelected($event)"></app-search-autocomplete>
             </div>
             <div class="col-md-4">
-                <app-search-autocomplete></app-search-autocomplete>
+                <app-search-autocomplete [mainTitle]="'Select Admission'" [inputPlaceholder]="'Enter Admission'" [searchDescripition]="'Start typing to search admission'" [searchType]="'Admission'" [itemId]="selectedPatient?.id" [selectedItem]="selectedAdmission" [disabled]="!selectedPatient"
+                    (itemSearch)="onAdmissionSelected($event)"></app-search-autocomplete>
             </div>
             <div class="col-md-4">
-                <app-search-autocomplete></app-search-autocomplete>
+                <app-search-autocomplete [mainTitle]="'Select Surgical Interventions'" [inputPlaceholder]="'Enter Surgical Interventions'" [searchDescripition]="'Start typing to search surgical interventions'" [searchType]="'SurgicalInterventions'" [itemId]="selectedAdmission?.id"
+                    [selectedItem]="selectedSurgicalInterventions" [disabled]="!selectedAdmission" (itemSearch)="onSurgicalInterventionsSelected($event)"></app-search-autocomplete>
             </div>
         </div>
     </div>
@@ -20,10 +24,12 @@
 
 <div class="patients-container">
     <div class="patients-header">
-        <h2 class="patients-title">Follow Up</h2>
         <button class="btn btn-primary add-patient-btn" [routerLink]="['/follow-up/add']" [queryParams]="{ patientId: PatientId }">
             <i class="fas fa-plus-circle"></i> Add Follow Up
         </button>
+        <div>
+            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="100"></app-admin-pagination>
+        </div>
     </div>
     <div class="search-filter-container">
         <!-- <div class="search-box">

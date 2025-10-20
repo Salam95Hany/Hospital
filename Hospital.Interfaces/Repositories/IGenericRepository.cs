@@ -31,6 +31,6 @@ namespace Hospital.Interfaces.Repositories
         Task<bool> AnyAsync(CancellationToken cancellationToken = default);
         Task<TResult> MaxAsync<TResult>(Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default);
         IQueryable<T> Where(Expression<Func<T, bool>> predicate);
-        Task<List<T>> WhereAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+        Task<List<T>> WhereAsync(Expression<Func<T, bool>> predicate, int? take = null, CancellationToken cancellationToken = default);
     }
 }

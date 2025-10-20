@@ -119,11 +119,14 @@ namespace Hospital.Services.Repositories
             return _dbContext.Set<T>().Where(predicate);
         }
 
-        public async Task<List<T>> WhereAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        public async Task<List<T>> WhereAsync(Expression<Func<T, bool>> predicate, int? take = null, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Set<T>()
-                .Where(predicate)
-                .ToListAsync(cancellationToken);
+            var query = _dbContext.Set<T>().Where(predicate);
+
+            if (take.HasValue)
+                query = query.Take(take.Value);
+
+            return await query.ToListAsync(cancellationToken);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Hospital.Entities.Common;
+using Hospital.Entities.Contracts.DTOs;
+using Hospital.Entities.Contracts.Requests;
 using Hospital.Interfaces.IPatients;
 using Hospital.Services.PatientsService;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +15,8 @@ namespace Hospital.Controllers.PatientsController
         private readonly IPatientsService _PatientsService;
 
         public PatientsController(IPatientsService PatientsService)
-        {;
+        {
+            ;
             _PatientsService = PatientsService;
         }
         [HttpPost("AddNewPatientFull")]
@@ -44,6 +47,12 @@ namespace Hospital.Controllers.PatientsController
         public async Task<ApiResponseModel<PatientFullDetailsDto>> GetPatientByIdWithInclude(int patientId, CancellationToken cancellationToken = default)
         {
             return await _PatientsService.GetPatientByIdWithIncludeAsync(patientId, cancellationToken);
+        }
+
+        [HttpPost("GetSearchAutoCompleteData")]
+        public async Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model)
+        {
+            return await _PatientsService.GetSearchAutoCompleteData(Model);
         }
 
     }

@@ -1,23 +1,27 @@
 import { Component } from '@angular/core';
 import { PatientService } from '../../../services/patient.service';
 import { Router, RouterLink } from '@angular/router';
-import { NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete/search-autocomplete.component";
+import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
+import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
 
 @Component({
   selector: 'app-admission-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, RouterLink, SearchAutocompleteComponent],
+  imports: [NgIf, NgFor, FormsModule, RouterLink, SearchAutocompleteComponent, AdminPaginationComponent, AdminBreadcrumbComponent],
   templateUrl: './admission-list.component.html',
-  styleUrl: './admission-list.component.css'
+  styleUrl: './admission-list.component.css',
+  providers: [DatePipe]
 })
 export class AdmissionListComponent {
+  TitleList = ["Home", "Admission"]
   Admissions: any[] = [];
   PatientId: number;
   searchTerm: string = '';
 
-  constructor(private patientService: PatientService, private router: Router) { }
+  constructor(private patientService: PatientService, private router: Router, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.loadPatients();

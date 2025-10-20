@@ -5,10 +5,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { PatientService } from '../../../services/patient.service';
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
+import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
 
 @Component({
   selector: 'app-followup-create',
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent,ReactiveFormsModule],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminBreadcrumbComponent],
   templateUrl: './followup-create.component.html',
   styleUrl: './followup-create.component.css'
 })

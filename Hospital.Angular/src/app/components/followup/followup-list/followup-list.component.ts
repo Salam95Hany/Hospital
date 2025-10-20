@@ -3,10 +3,12 @@ import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete
 import { PatientService } from '../../../services/patient.service';
 import { Router, RouterLink } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
+import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
+import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
 
 @Component({
   selector: 'app-followup-list',
-  imports: [SearchAutocompleteComponent,RouterLink,NgFor,NgIf],
+  imports: [SearchAutocompleteComponent, RouterLink, NgFor, NgIf, AdminBreadcrumbComponent, AdminPaginationComponent],
   templateUrl: './followup-list.component.html',
   styleUrl: './followup-list.component.css'
 })
@@ -14,6 +16,9 @@ export class FollowupListComponent {
   Admissions: any[] = [];
   PatientId: number;
   searchTerm: string = '';
+  selectedPatient: any = null;
+  selectedAdmission: any = null;
+  selectedSurgicalInterventions: any = null;
 
   constructor(private patientService: PatientService, private router: Router) { }
 
@@ -37,5 +42,24 @@ export class FollowupListComponent {
         this.router.navigate(['/patients']);
       });
     }
+  }
+
+  onPatientSelected(item: any) {
+    this.selectedPatient = item;
+    if (!item) {
+      this.selectedAdmission = null;
+      this.selectedSurgicalInterventions = null;
+    }
+  }
+
+  onAdmissionSelected(item: any) {
+    this.selectedAdmission = item;
+    if (!item) {
+      this.selectedSurgicalInterventions = null;
+    }
+  }
+
+  onSurgicalInterventionsSelected(item: any) {
+    this.selectedSurgicalInterventions = item;
   }
 }

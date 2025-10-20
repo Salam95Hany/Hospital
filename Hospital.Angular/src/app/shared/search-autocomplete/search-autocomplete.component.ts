@@ -1,7 +1,8 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { PatientService } from '../../services/patient.service';
 
 @Component({
   selector: 'app-search-autocomplete',
@@ -9,26 +10,24 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   templateUrl: './search-autocomplete.component.html',
   styleUrl: './search-autocomplete.component.css'
 })
-export class SearchAutocompleteComponent {
+export class SearchAutocompleteComponent implements OnInit, OnChanges {
+  @ViewChild('inputElement') inputElement!: ElementRef;
   @Input() mainTitle = 'Select Patient';
   @Input() inputPlaceholder = 'Enter Patient';
   @Input() searchDescripition = 'Start typing to search patient';
+  @Input() searchType = 'Patient';
+  @Input() itemId: number;
+  @Input() selectedItem: any = null;
+  @Input() disabled = false;
   @Output() itemSearch = new EventEmitter<any>();
-  @ViewChild('inputElement') inputElement!: ElementRef;
   searchControl = new FormControl('');
-  selectedItem: any = null;
+
   results: any[] = [];
   isResultsOpen = false;
   isInputFocused = false;
   isAutoCompleteLoading = false;
-  mockSuppliers: any[] = [
-    { id: '1', name: 'Supplier One' },
-    { id: '2', name: 'Supplier Two' },
-    { id: '3', name: 'Supplier Three' },
-    { id: '4', name: 'Supplier Four' },
-  ];
 
-  constructor() { }
+  constructor(private patientService: PatientService) { }
 
   ngOnInit(): void {
     this.searchControl.valueChanges
@@ -41,12 +40,27 @@ export class SearchAutocompleteComponent {
       });
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['disabled']) {
+      if (this.disabled) {
+        this.searchControl.disable({ emitEvent: false });
+      } else {
+        this.searchControl.enable({ emitEvent: false });
+      }
+    }
+
+    if (changes['selectedItem'] && !changes['selectedItem'].firstChange) {
+      if (!this.selectedItem) {
+        this.selectedItem = null;
+        this.searchControl.setValue('');
+        this.results = [];
+      }
+    }
+  }
+
   onInputFocus(): void {
     this.isInputFocused = true;
     this.isResultsOpen = true;
-    if (this.searchControl.value === '') {
-      this.results = this.mockSuppliers;
-    }
   }
 
   onInputBlur(): void {
@@ -66,15 +80,18 @@ export class SearchAutocompleteComponent {
 
     this.isAutoCompleteLoading = true;
 
-    // Simulate API call delay
     setTimeout(() => {
       const query = (searchValue as string).toLowerCase();
-      this.results = this.mockSuppliers.filter(supplier =>
-        supplier.name.toLowerCase().includes(query) ||
-        (supplier.fieldValue && supplier.fieldValue.toLowerCase().includes(query)) ||
-        supplier.url.toLowerCase().includes(query)
-      );
-      this.isAutoCompleteLoading = false;
+      let obj = {
+        SearchText: query,
+        SearchType: this.searchType,
+        PatientId: this.itemId,
+        AdmissionId: this.itemId
+      }
+      this.patientService.GetSearchAutoCompleteData(obj).subscribe(data => {
+        this.results = data.results;
+        this.isAutoCompleteLoading = false;
+      });
     }, 500);
   }
 

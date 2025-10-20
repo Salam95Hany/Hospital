@@ -6,10 +6,11 @@ import { FormService } from '../../../services/form.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomValidators, RegexType } from '../../../services/custom-validators';
 import { AuthService } from '../../../auth/auth.service';
+import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
 
 @Component({
   selector: 'app-admission-create',
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminBreadcrumbComponent],
   templateUrl: './admission-create.component.html',
   styleUrl: './admission-create.component.css'
 })
