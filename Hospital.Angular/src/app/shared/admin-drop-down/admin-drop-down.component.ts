@@ -46,13 +46,14 @@ export class AdminDropDownComponent {
     }
   }
 
-  writeValue(id: any): void {
-    var sName = this.data?.find(x => x.id === id)?.name;
+  writeValue(value: any): void {
+    // Find the option by name (string value) instead of ID
+    var option = this.data?.find(x => x.name === value);
 
-    if (id)
-      this.selectedValue = id;
-    if (sName)
-      this.selectedName = sName;
+    if (value)
+      this.selectedValue = value;
+    if (option)
+      this.selectedName = option.name;
     else
       this.selectedName = '';
   }
@@ -72,10 +73,10 @@ export class AdminDropDownComponent {
   }
 
   selectOption(option: any): void {
-    this.selectedValue = option.id;
+    this.selectedValue = option.name;
     this.onChange(this.selectedValue);
     this.onTouched();
     this.selectedName = option.name;
-    this.valueChanged.emit(option.id);
+    this.valueChanged.emit(option.name);
   }
 }

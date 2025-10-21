@@ -68,30 +68,41 @@ namespace Hospital.Services.PatientsService
         private async Task<string> GenerateUniqueInternalNumber()
         {
             var currentYear = DateTime.Now.Year;
-            var prefix = $"URO-{currentYear}-";
+            var random = new Random();
+            var randomPart = random.Next(1000, 9999).ToString(); // 4-digit random number
+            var prefix = $"URO-{currentYear}-{randomPart}-";
 
-            // Using WhereAsync to get filtered list
-            var internalNumbers = await _unitOfWork.Repository<Patient>()
-                .WhereAsync(p => p.InternalNumber != null && p.InternalNumber.StartsWith(prefix));
-
-            if (!internalNumbers.Any())
-            {
-                return $"{prefix}0001";
-            }
-
-            var lastInternalNumber = internalNumbers
+            // Get the highest existing number for this random prefix within current transaction
+            var lastInternalNumber = await _unitOfWork.Repository<Patient>()
+                .Where(p => p.InternalNumber != null && p.InternalNumber.StartsWith(prefix))
                 .OrderByDescending(p => p.InternalNumber)
                 .Select(p => p.InternalNumber)
-                .First();
+                .FirstOrDefaultAsync();
 
-            var lastNumberStr = lastInternalNumber.Substring(prefix.Length);
-            if (int.TryParse(lastNumberStr, out int lastNumber))
+            int newNumber = 1;
+            if (lastInternalNumber != null)
             {
-                var newNumber = lastNumber + 1;
-                return $"{prefix}{newNumber:D4}";
+                var lastNumberStr = lastInternalNumber.Substring(prefix.Length);
+                if (int.TryParse(lastNumberStr, out int lastNumber))
+                {
+                    newNumber = lastNumber + 1;
+                }
             }
 
-            return $"{prefix}{DateTime.Now:MMddHHmmss}";
+            var uniqueNumber = $"{prefix}{newNumber:D4}";
+
+            // Optional: Final uniqueness check within transaction
+            var exists = await _unitOfWork.Repository<Patient>()
+                .AnyAsync(p => p.InternalNumber == uniqueNumber);
+
+            if (exists)
+            {
+                // If duplicate exists, increment and use next number
+                newNumber++;
+                uniqueNumber = $"{prefix}{newNumber:D4}";
+            }
+
+            return uniqueNumber;
         }
         private async Task<int> AddNewPatient(Patient patientModel, string internalNumber)
         {
@@ -108,7 +119,6 @@ namespace Hospital.Services.PatientsService
                 MaritalStatus = patientModel.MaritalStatus,
                 ChildrenCount = patientModel.ChildrenCount,
                 InternalNumber = internalNumber,
-                NationalIdImagePath = patientModel.NationalIdImagePath,
                 InsertUser = patientModel.InsertUser,
                 InsertDate = DateTime.UtcNow
             };
@@ -353,7 +363,6 @@ namespace Hospital.Services.PatientsService
             existingPatient.Occupation = patientModel.Occupation;
             existingPatient.MaritalStatus = patientModel.MaritalStatus;
             existingPatient.ChildrenCount = patientModel.ChildrenCount;
-            existingPatient.NationalIdImagePath = patientModel.NationalIdImagePath;
             existingPatient.UpdateUser = patientModel.UpdateUser;
             existingPatient.UpdateDate = DateTime.UtcNow;
 
