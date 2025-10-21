@@ -1,0 +1,49 @@
+.filter-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fs-15 {
+    font-size: 15px;
+}
+
+.form-check .form-check-input {
+    float: left;
+}
+
+.icon-Z2-Calendar:before {
+    content: "\e98c";
+}
+
+.z2actionbtnA {
+    background: #ffffff;
+    border: 1px solid #b8c2ca;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-grey {
+    background-color: #f0eeef !important;
+}
+
+.z2actionbtnleft {
+    float: left;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+    font-family: 'z2icons' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

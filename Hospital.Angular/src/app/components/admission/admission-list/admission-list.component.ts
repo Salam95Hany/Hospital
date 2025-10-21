@@ -6,11 +6,15 @@ import { FormsModule } from '@angular/forms';
 import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete/search-autocomplete.component";
 import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
 import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
+import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.component";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FilterModel } from '../../../models/FilterModel';
 
 @Component({
   selector: 'app-admission-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, RouterLink, SearchAutocompleteComponent, AdminPaginationComponent, AdminBreadcrumbComponent],
+  imports: [NgIf, NgFor, FormsModule, RouterLink, SearchAutocompleteComponent,
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule],
   templateUrl: './admission-list.component.html',
   styleUrl: './admission-list.component.css',
   providers: [DatePipe]
@@ -18,6 +22,8 @@ import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin
 export class AdmissionListComponent {
   TitleList = ["Home", "Admission"]
   Admissions: any[] = [];
+  FilterList: FilterModel[] = [];
+  isFilter = true;
   PatientId: number;
   searchTerm: string = '';
 
