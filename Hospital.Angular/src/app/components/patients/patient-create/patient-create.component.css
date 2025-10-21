@@ -107,6 +107,34 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
+.step-content-inner {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  max-height: calc(100vh - 400px); /* Space for content and navigation */
+  margin-bottom: 20px; /* Space for navigation buttons */
+  padding-right: 5px; /* Add padding to prevent scrollbar overlap */
+}
+
+/* Ensure proper scrolling behavior */
+.step-content-inner::-webkit-scrollbar {
+  width: 8px;
+}
+
+.step-content-inner::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.step-content-inner::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.step-content-inner::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
 .step-heading {
   margin-bottom: 20px;
   color: #2c3e50;

@@ -24,8 +24,6 @@ namespace Hospital.Entities.Models
         public string ChildrenCount { get; set; }
         public string InternalNumber { get; set; }
 
-        // NEW: Add National ID scanned pictures
-        public string NationalIdImagePath { get; set; }
 
         // Navigation property
         public  ICollection<Admission> Admissions { get; set; } = new List<Admission>();
