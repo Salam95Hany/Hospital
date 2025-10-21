@@ -287,6 +287,10 @@
       Next <i class="fas fa-arrow-right"></i>
     </button>
     
+    <button *ngIf="currentStep === steps.length && isEditMode && patientId" class="btn btn-danger" (click)="deletePatient()">
+      <i class="fas fa-trash"></i> Delete
+    </button>
+    
     <button *ngIf="currentStep === steps.length" class="btn btn-success" (click)="savePatient()">
       <i class="fas fa-save"></i> Save
     </button>

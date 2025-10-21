@@ -9,6 +9,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { CustomValidators, RegexType } from '../../../services/custom-validators';
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { AdminDropDownComponent } from '../../../shared/admin-drop-down/admin-drop-down.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-patient-create',
@@ -156,7 +157,8 @@ export class PatientCreateComponent implements OnInit {
     private formService: FormService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -327,11 +329,18 @@ export class PatientCreateComponent implements OnInit {
   
 
   deletePatient(): void {
-    if (this.isEditMode && this.patientId) {
+    if (this.patientId) {
       if (confirm('Are you sure you want to delete this patient and all related data?')) {
-        this.patientService.deletePatientWithAllData(this.patientId).subscribe(() => {
+        this.patientService.deletePatientWithAllData(this.patientId).subscribe({
+        next: () => {
+          this.toastr.success('Patient deleted successfully!', 'Success');
           this.router.navigate(['/patients']);
-        });
+        },
+        error: (error) => {
+          console.error('Delete error:', error);
+          this.toastr.error('Failed to delete patient', 'Error');
+        }
+      });
       }
     }
   }
@@ -464,10 +473,12 @@ export class PatientCreateComponent implements OnInit {
 
     if (this.isEditMode && this.patientId) {
       this.patientService.updatePatientFull(this.patientForm.value).subscribe(() => {
+        this.toastr.success('Patient updated successfully!', 'Success');
         this.router.navigate(['/patients']);
       });
     } else {
       this.patientService.AddNewPatientFull(this.patientForm.value).subscribe(() => {
+        this.toastr.success('Patient created successfully!', 'Success');
         this.router.navigate(['/patients']);
       });
     }

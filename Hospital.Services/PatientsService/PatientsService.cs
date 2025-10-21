@@ -72,37 +72,32 @@ namespace Hospital.Services.PatientsService
             var randomPart = random.Next(1000, 9999).ToString(); // 4-digit random number
             var prefix = $"URO-{currentYear}-{randomPart}-";
 
-            // Get the highest existing number for this random prefix within current transaction
-            var lastInternalNumber = await _unitOfWork.Repository<Patient>()
-                .Where(p => p.InternalNumber != null && p.InternalNumber.StartsWith(prefix))
+            // Get ALL internal numbers for the current year (not just this random prefix)
+            var yearPrefix = $"URO-{currentYear}-";
+            var internalNumbers = await _unitOfWork.Repository<Patient>()
+                .WhereAsync(p => p.InternalNumber != null && p.InternalNumber.StartsWith(yearPrefix));
+
+            if (!internalNumbers.Any())
+            {
+                return $"{prefix}0001";
+            }
+
+            // Find the highest sequential number across ALL random prefixes for this year
+            var lastInternalNumber = internalNumbers
                 .OrderByDescending(p => p.InternalNumber)
                 .Select(p => p.InternalNumber)
-                .FirstOrDefaultAsync();
+                .First();
 
-            int newNumber = 1;
-            if (lastInternalNumber != null)
+            // Extract the sequential part (last 4 digits)
+            var lastSequentialPart = lastInternalNumber.Substring(lastInternalNumber.Length - 4);
+            if (int.TryParse(lastSequentialPart, out int lastSequentialNumber))
             {
-                var lastNumberStr = lastInternalNumber.Substring(prefix.Length);
-                if (int.TryParse(lastNumberStr, out int lastNumber))
-                {
-                    newNumber = lastNumber + 1;
-                }
+                var newSequentialNumber = lastSequentialNumber + 1;
+                return $"{prefix}{newSequentialNumber:D4}";
             }
 
-            var uniqueNumber = $"{prefix}{newNumber:D4}";
-
-            // Optional: Final uniqueness check within transaction
-            var exists = await _unitOfWork.Repository<Patient>()
-                .AnyAsync(p => p.InternalNumber == uniqueNumber);
-
-            if (exists)
-            {
-                // If duplicate exists, increment and use next number
-                newNumber++;
-                uniqueNumber = $"{prefix}{newNumber:D4}";
-            }
-
-            return uniqueNumber;
+            // Fallback if parsing fails
+            return $"{prefix}0001";
         }
         private async Task<int> AddNewPatient(Patient patientModel, string internalNumber)
         {
@@ -534,12 +529,12 @@ namespace Hospital.Services.PatientsService
                 await _unitOfWork.CompleteAsync();
                 await transaction.CommitAsync(cancellationToken);
 
-                return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
+                return ApiResponseModel<string>.Success(GenericErrors.DeleteSuccess);
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync(cancellationToken);
-                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+                return ApiResponseModel<string>.Failure(GenericErrors.DeletePassFailed);
             }
         }
         public async Task<ApiResponseModel<string>> DeletePatientWithAllData(int patientId, CancellationToken cancellationToken = default)
