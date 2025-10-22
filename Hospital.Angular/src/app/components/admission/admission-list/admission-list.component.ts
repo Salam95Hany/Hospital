@@ -50,4 +50,8 @@ export class AdmissionListComponent {
       });
     }
   }
+
+  OnFilterChecked(filterList: FilterModel[]) {
+    console.log('filterList => ', filterList);
+  }
 }

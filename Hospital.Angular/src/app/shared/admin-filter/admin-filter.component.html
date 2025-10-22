@@ -1,58 +1,58 @@
 <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-    <div class="position-relative">
-        <input type="text" [(ngModel)]="SearchText" (keyup.enter)="InputSearchChange()" class="form-control border width-250" placeholder="Search By {{PlaceHolder}}..." />
-        <i class="fas fa-search search-icon-input" (click)="InputSearchChange()"></i>
-    </div>
-    <ng-container *ngIf="ApplyDateFilter">
-        <div class="custom-date-input position-relative">
-            <span class="date-label" *ngIf="isDate">Select Date</span>
-            <input type="date" class="form-control width-250 cursor-pointer" [(ngModel)]="DateFilter" (change)="DateFilterChange()" />
-        </div>
-    </ng-container>
-    <ng-container *ngIf="ApplyMonthFilter">
-        <div class="custom-date-input position-relative">
-            <span class="date-label" *ngIf="isMonth">Select Month</span>
-            <input type="month" class="form-control width-250 cursor-pointer" [(ngModel)]="MonthFilter" (change)="MonthFilterChange()" />
-        </div>
-    </ng-container>
-    <ng-container *ngIf="ApplyDateRangeFilter">
-        <div>
-            <input type="text" ngxDaterangepickerMd [(ngModel)]="selected" (datesUpdated)="onChange($event)" [locale]="{
-      applyLabel: 'Apply',
-      cancelLabel: 'Cancel',
-      clearLabel: 'Clear',
-      format: 'YYYY-MM-DD'
-    }" [drops]="'down'" [showCustomRangeLabel]="false" [alwaysShowCalendars]="true" [singleDatePicker]="false" [keepCalendarOpeningWithRange]="true" [showCancel]="true" autocomplete="off" placeholder="Select Date" name="daterange" class="date-range-input"
-            />
+    <ng-container *ngFor="let filter of FilterList">
+        <!-- TEXT FILTER -->
+        <div *ngIf="filter.filterType === 'SearchText'" class="position-relative">
+            <input type="text" [(ngModel)]="filter.itemId" (keyup.enter)="updateFilters(filter)" class="form-control border width-250" [placeholder]="'Search By ' + (filter.categoryDisplayName) + '...'" />
+            <i class="fas fa-search search-icon-input" (click)="updateFilters(filter)"></i>
         </div>
 
+        <!-- DATE FILTER -->
+        <div *ngIf="filter.filterType === 'Day'" class="custom-date-input position-relative">
+            <span class="date-label" *ngIf="!filter.itemId">{{filter.categoryDisplayName}}</span>
+            <input type="date" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
+        </div>
 
-    </ng-container>
-    <ng-container *ngFor="let item of FilterList">
-        <div class="filter-button" ngbDropdown display="dynamic" [autoClose]="'outside'">
+        <!-- MONTH FILTER -->
+        <div *ngIf="filter.filterType === 'Month'" class="custom-date-input position-relative">
+            <span class="date-label" *ngIf="!filter.itemId">{{filter.categoryDisplayName}}</span>
+            <input type="month" class="form-control width-250 cursor-pointer" [(ngModel)]="filter.itemId" (change)="updateFilters(filter)" />
+        </div>
+
+        <!-- DATE RANGE FILTER -->
+        <div *ngIf="filter.filterType === 'DateRange'" class="date-picker-flex">
+            <input type="text" ngxDaterangepickerMd [(ngModel)]="filter.itemId" (datesUpdated)="updateFilters(filter, $event)" [locale]="{ applyLabel: 'Apply', format: 'YYYY-MM-DD' }" [autoApply]="true" autocomplete="off" [placeholder]="filter.categoryDisplayName"
+                class="date-range-input" />
+            <i class="fa fa-calendar calendar-icon"></i>
+        </div>
+
+        <!-- CHECKBOX FILTER -->
+        <div *ngIf="filter.filterType === 'Checkbox'" class="filter-button" ngbDropdown display="dynamic" [autoClose]="'outside'">
             <button class="btn main-filter-button d-flex align-items-center gap-2" ngbDropdownToggle>
                 <i class="fas fa-filter"></i>
-                <span class="navbar-brand m-0">{{item.categoryName}}</span>
+                <span class="navbar-brand m-0">{{filter.categoryDisplayName}}</span>
             </button>
             <div ngbDropdownMenu class="dropdown-menu shadow-sm border animate__animated animate__fadeInUp p-0 overflow-hidden">
+
+                <!-- Search inside checkbox list -->
                 <div class="filter-search p-2 gray-bgcolor border-bottom">
                     <div class="position-relative">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="FilterSearchText" placeholder="Search..." />
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="filter.searchText" placeholder="Search..." />
                         <i class="fas fa-search search-icon-input"></i>
                     </div>
                 </div>
+
+                <!-- Checkbox list -->
                 <div class="min-width-230 max-height-180 px-2 py-2 overflow-auto bg-white">
-                    <div class="d-flex align-items-center justify-content-between cursor-pointer" *ngFor="let filter of item.filterItems | searchArry: FilterSearchText:['itemKey'];let x = index">
+                    <div class="d-flex align-items-center justify-content-between cursor-pointer" *ngFor="let fItem of filter.filterItems | searchArry: filter.searchText:['itemKey']; let x = index">
                         <div class="d-flex align-items-center">
-                            <input class="form-check-input" type="checkbox" [(ngModel)]="filter.isChecked" (change)="filterChecked()" id="{{item.categoryName}}_{{filter.itemKey}}_{{filter.itemValue}}_{{x}}">
-                            <label class="form-check-label cursor-pointer filter-content me-2" for="{{item.categoryName}}_{{filter.itemKey}}_{{filter.itemValue}}_{{x}}">
-                                <span>{{filter.itemKey}}</span>
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="fItem.isChecked" (change)="updateFilters(filter)" id="{{filter.categoryName}}_{{fItem.itemKey}}_{{x}}">
+                            <label class="form-check-label cursor-pointer filter-content me-2" for="{{filter.categoryName}}_{{fItem.itemKey}}_{{x}}">
+                                <span>{{fItem.itemKey}}</span>
                             </label>
                         </div>
                         <div>
-                            <span>{{filter.itemValue}}</span>
+                            <span>{{fItem.itemValue}}</span>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -60,15 +60,21 @@
     </ng-container>
 </div>
 
-<div class="d-flex align-items-center flex-wrap gap-2">
-    <div class="badge badge-success round fs-15" *ngFor="let selected of SelectedFilter;let i = index">
-        <span *ngIf="!selected.categoryNameAr" class="me-1">{{selected.categoryName}} :
-            {{selected.itemKey}}</span>
-        <span *ngIf="selected.categoryNameAr" class="me-1">{{selected.categoryNameAr}} :
-            {{selected.itemKey}}</span>
-        <i class="fas fa-times-circle font-small-3 px-02 cursor-pointer me-1" (click)="RemoveSelectedFilter(selected,i)"></i>
+<!-- Selected filters display -->
+<div class="d-flex align-items-center flex-wrap gap-2 mt-2">
+    <div class="badge badge-success round fs-15" *ngFor="let selected of SelectedFilter; let i = index">
+        <span class="me-1">
+            {{selected.categoryName}} :
+            <ng-container *ngIf="selected.from; else normalFilter">
+                {{selected.from}} - {{selected.to}}
+            </ng-container>
+            <ng-template #normalFilter>{{selected.itemId}}</ng-template>
+        </span>
+        <i class="fas fa-times-circle font-small-3 px-02 cursor-pointer me-1" (click)="removeSelectedFilter(selected, i)"></i>
     </div>
-    <div class="badge badge-danger round fs-15" *ngIf="SelectedFilter.length > 0"> Clear All
-        <i class="fas fa-times-circle font-small-3 px-02 cursor-pointer" (click)="RemoveAllFilters()"></i>
+
+    <div class="badge badge-danger round fs-15" *ngIf="SelectedFilter.length > 0">
+        Clear All
+        <i class="fas fa-times-circle font-small-3 px-02 cursor-pointer" (click)="removeAllFilters()"></i>
     </div>
 </div>

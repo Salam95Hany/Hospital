@@ -1,6 +1,6 @@
 export interface FilterModel {
     categoryName?: string;
-    categoryNameAr?: string;
+    categoryDisplayName?: string;
     itemId?: string;
     itemKey?: string;
     itemValue?: string;

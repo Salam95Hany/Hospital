@@ -19,8 +19,6 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
       useValue: {
         format: 'YYYY-MM-DD',
         applyLabel: 'Apply',
-        cancelLabel: 'Cancel',
-        clearLabel: 'Clear',
         daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
         monthNames: [
           'January', 'February', 'March', 'April', 'May', 'June',
@@ -31,116 +29,94 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
   ],
 })
 export class AdminFilterComponent {
-  @Output() FilterChecked = new EventEmitter<FilterModel[]>();
   @Input() FilterList: FilterModel[] = [];
-  @Input() PlaceHolder: any;
-  @Input() ApplyDateFilter = false;
-  @Input() ApplyMonthFilter = false;
-  @Input() ApplyDateRangeFilter = false;
-  
+  @Output() FilterChecked = new EventEmitter<FilterModel[]>();
   SelectedFilter: FilterModel[] = [];
-  InputFilters = ['SearchText', 'Date', 'Month'];
-  isFilterOnly = false;
-  isDate = true;
-  isMonth = true;
-  FilterSearchText = '';
-  SearchText = '';
-  DateFilter: any;
-  MonthFilter: any;
 
   constructor() { }
 
-  InputSearchChange() {
-    this.SelectedFilter = this.SelectedFilter.filter(i => i.categoryName != 'SearchText');
-    if (this.SearchText)
-      this.SelectedFilter.push({
-        categoryName: 'SearchText',
-        categoryNameAr: 'Search Text',
-        itemId: this.SearchText,
-        itemKey: this.SearchText
-      });
+  updateFilters(filter?: FilterModel, range?: any) {
+    let updatedFilters = [...this.SelectedFilter];
+
+    if (filter?.filterType === 'Checkbox') {
+      updatedFilters = updatedFilters.filter(f => f.filterType !== 'Checkbox');
+
+      const checkedItems = this.FilterList
+        .filter(f => f.filterType === 'Checkbox')
+        .flatMap(f => f.filterItems!.filter(x => x.isChecked)
+          .map(x => ({
+            ...x,
+            categoryName: f.categoryName,
+            categoryDisplayName: f.categoryDisplayName,
+            filterType: 'Checkbox'
+          }))
+        );
+
+      updatedFilters.push(...checkedItems);
+    }
+
+    else if (filter) {
+      debugger;
+      updatedFilters = updatedFilters.filter(f => f.categoryName !== filter.categoryName);
+
+      switch (filter.filterType) {
+        case 'SearchText':
+        case 'Day':
+        case 'Month':
+          if (filter.itemId && filter.itemId.trim() !== '') {
+            updatedFilters.push({
+              categoryName: filter.categoryName,
+              categoryDisplayName: filter.categoryDisplayName,
+              itemKey: filter.itemKey,
+              itemId: filter.itemId,
+              filterType: filter.filterType
+            });
+          }
+          break;
+
+        case 'DateRange':
+          if (range && range.endDate) {
+            updatedFilters.push({
+              categoryName: filter.categoryName,
+              categoryDisplayName: filter.categoryDisplayName,
+              filterType: 'DateRange',
+              from: range.startDate.format('YYYY-MM-DD'),
+              to: range.endDate.format('YYYY-MM-DD'),
+            });
+          }
+          break;
+      }
+    }
+
+    this.SelectedFilter = updatedFilters;
     this.FilterChecked.emit(this.SelectedFilter);
   }
 
-  filterChecked() {
-    this.SelectedFilter = this.SelectedFilter.filter(i => this.InputFilters.includes(i.categoryName));
-    this.FilterList.map(item => {
-      let checked = item.filterItems.filter(a => a.isChecked && a.isChecked == true);
-      if (checked.length > 0) {
-        checked.map(obj => {
-          this.SelectedFilter.push(obj);
+  removeSelectedFilter(filter: FilterModel, index: number) {
+    this.SelectedFilter.splice(index, 1);
+
+    this.FilterList.forEach(f => {
+      if (f.filterType === 'Checkbox' && f.filterItems) {
+        f.filterItems.forEach(item => {
+          if (item.itemId === filter.itemId) item.isChecked = false;
         });
       }
-    });
-    this.FilterChecked.emit(this.SelectedFilter);
-  }
-
-  RemoveSelectedFilter(filter: any, index: number) {
-    this.SelectedFilter.splice(index, 1);
-    this.FilterList.map(item => {
-      let checked = item.filterItems.find(a => a.itemId == filter.itemId);
-      if (checked) {
-        checked.isChecked = false;
+      if (f.categoryName === filter.categoryName) {
+        f.itemKey = '';
+        f.itemId = '';
       }
     });
-    if (filter.categoryName == 'SearchText')
-      this.SearchText = '';
-    if (filter.categoryName == 'Date') {
-      this.isDate = true;
-      this.DateFilter = '';
-    }
-
-    if (filter.categoryName == 'Month') {
-      this.isMonth = true;
-      this.MonthFilter = '';
-    }
 
     this.FilterChecked.emit(this.SelectedFilter);
   }
 
-  RemoveAllFilters() {
+  removeAllFilters() {
     this.SelectedFilter = [];
-    this.SearchText = '';
-    this.DateFilter = '';
-    this.MonthFilter = '';
-    this.isDate = true;
-    this.isMonth = true;
-    this.FilterList.map(item => {
-      item.filterItems.map(a => a.isChecked = false);
+    this.FilterList.forEach(f => {
+      f.itemKey = '';
+      f.itemId = '';
+      if (f.filterItems) f.filterItems.forEach(i => i.isChecked = false);
     });
     this.FilterChecked.emit(this.SelectedFilter);
   }
-
-  DateFilterChange() {
-    this.isDate = false;
-    this.SelectedFilter = this.SelectedFilter.filter(i => i.categoryName != 'Date');
-    if (this.DateFilter)
-      this.SelectedFilter.push({
-        categoryName: 'Date',
-        categoryNameAr: 'Day',
-        itemId: this.DateFilter,
-        itemKey: this.DateFilter
-      });
-    this.FilterChecked.emit(this.SelectedFilter);
-  }
-
-  MonthFilterChange() {
-    this.isMonth = false;
-    this.SelectedFilter = this.SelectedFilter.filter(i => i.categoryName != 'Month');
-    if (this.MonthFilter)
-      this.SelectedFilter.push({
-        categoryName: 'Month',
-        categoryNameAr: 'Month',
-        itemId: this.MonthFilter,
-        itemKey: this.MonthFilter
-      });
-    this.FilterChecked.emit(this.SelectedFilter);
-  }
-
-  selected = { startDate: null, endDate: null };
-
-  onChange(event: any) {
-  if (!event?.startDate || !event?.endDate) return;
-  console.log('Selected range:', event.startDate, event.endDate);
-}
 }

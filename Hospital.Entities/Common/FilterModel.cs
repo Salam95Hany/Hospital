@@ -8,6 +8,7 @@ namespace Hospital.Entities.Common
 {
     public class FilterModel
     {
+        public string categoryDisplayName { get; set; }
         public string CategoryName { get; set; }
         public string ItemId { get; set; }
         public string? ItemKey { get; set; }

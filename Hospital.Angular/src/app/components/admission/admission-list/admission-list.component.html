@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
-        <app-admin-filter [FilterList]="FilterList" [PlaceHolder]="'Name'"></app-admin-filter>
+        <app-admin-filter [FilterList]="FilterList" (FilterChecked)="OnFilterChecked($event)"></app-admin-filter>
     </div>
     <div class="patients-table-container">
         <table class="table patients-table">
