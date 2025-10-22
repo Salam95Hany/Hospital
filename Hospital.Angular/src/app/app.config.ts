@@ -11,10 +11,17 @@ import { provideToastr } from 'ngx-toastr';
 // };
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), 
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
     provideToastr(),
+    provideToastr({
+      positionClass: 'toast-top-right',
+      timeOut: 5000,
+      closeButton: false,
+      progressBar: true,
+      preventDuplicates: true
+    }),
     importProvidersFrom(
       BrowserAnimationsModule,
       PaginationModule.forRoot()

@@ -4,7 +4,7 @@
     <div class="search-filter-container">
         <div class="row">
             <div class="col-md-4">
-                <app-search-autocomplete></app-search-autocomplete>
+                <app-search-autocomplete (itemSearch)="GetAdmissionByPatientId($event)"></app-search-autocomplete>
             </div>
         </div>
     </div>
@@ -13,7 +13,7 @@
 <div class="patients-container">
     <div class="patients-header">
         <div class="d-flex align-items-center flex-wrap gap-2">
-            <button class="btn btn-primary add-patient-btn" [routerLink]="['/admissions/add']" [queryParams]="{ patientId: PatientId }">
+            <button class="btn btn-primary add-patient-btn" (click)="AddNewAdmission()">
                 <i class="fas fa-plus-circle"></i> Add Admission
             </button>
             <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
@@ -21,7 +21,7 @@
             </button>
         </div>
         <div>
-            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="100"></app-admin-pagination>
+            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
         </div>
     </div>
     <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
@@ -42,18 +42,18 @@
             <tbody>
                 <tr *ngFor="let item of Admissions">
                     <td>{{ item.hospitalFileNumber }}</td>
-                    <td>{{ item.admissionDate }}</td>
-                    <td>{{ item.dischargeDate }}</td>
+                    <td>{{ item.admissionDate | date }}</td>
+                    <td>{{ item.dischargeDate | date }}</td>
                     <td>{{ item.createdBy }}</td>
                     <td>{{ item.createdDate }}</td>
                     <td class="actions-cell">
-                        <button class="btn btn-sm btn-info" (click)="viewItem(item.id)">
+                        <button class="btn btn-sm btn-info" (click)="OpenAdmissionDetailsModal(AdmissionDetailsModal,item.admissionId)">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning" [routerLink]="['/admissions/add']" [queryParams]="{ id: item.id }">
+                        <button class="btn btn-sm btn-warning" [routerLink]="['/admissions/add']" [queryParams]="{ patientId: item.patientId,admissionId: item.admissionId}">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" (click)="deleteItem(item.id)">
+                        <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.admissionId)">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -65,3 +65,130 @@
         </table>
     </div>
 </div>
+
+<ng-template #AdmissionDetailsModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <i class="fas fa-file-alt"></i>
+            <span>Admission Details</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="step-content form-card" style="display: block;">
+            <div class="row g-3">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Hospital File Number'" [label]="'Hospital File Number'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Select Course'" [label]="'Course'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'HPI'" [label]="'HPI'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Current Medications'" [label]="'Current Medications'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Past History'" [label]="'Past History'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Family History'" [label]="'Family History'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Select Current Comorbidities'" [label]="'Current Comorbidities'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Select BMI'" [label]="'BMI'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Pulse'" [label]="'Pulse'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Blood Pressure'" [label]="'Blood Pressure'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date for Intervention/Procedure'" [label]="'Scheduled Date for Intervention/Procedure'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'General Examination'" [label]="'General Examination'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Abdominal Examination'" [label]="'Abdominal Examination'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Genital Examination'" [label]="'Genital Examination'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'DRE/Vaginal Examination'" [label]="'DRE/Vaginal Examination'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Lab Results'" [label]="'Other Lab Results'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Provisional Diagnosis'" [label]="'Provisional Diagnosis'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Medical Decision'" [label]="'Medical Decision'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Culture and Sensitivity'" [label]="'Culture and Sensitivity'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Serum Creatinine'" [label]="'Serum Creatinine'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Hemoglobin'" [label]="'Hemoglobin'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Total Leukocyte Count'" [label]="'Total Leukocyte Count'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Platelets'" [label]="'Platelets'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'PT/PTT/INR'" [label]="'PT/PTT/INR'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Liver Enzymes'" [label]="'Liver Enzymes'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Fasting Blood Sugar'" [label]="'Fasting Blood Sugar'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Post Prandial Blood Sugar'" [label]="'Post Prandial Blood Sugar'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'HbA1c'" [label]="'HbA1c'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Total'" [label]="'PSA Total'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Free'" [label]="'PSA Free'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Ratio'" [label]="'PSA Ratio'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'PUT'" [label]="'PUT'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Ultrasound'" [label]="'Ultrasound'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'TRUS'" [label]="'TRUS'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'CT'" [label]="'CT'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'MRI'" [label]="'MRI'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Isotope Studies'" [label]="'Isotope Studies'" class="col-md-4" [disabled]="true"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Imaging'" [label]="'Other Imaging'" class="col-md-12" [disabled]="true"></app-admin-general-input>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #deleteItemModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <span>Confirm Action</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <p class="fs-5 m-0">Are you sure you want to remove this item?</p>
+    </div>
+    <div class="modal-footer justify-content-start">
+        <button type="button" class="btn btn-success" (click)="DeleteItem()">
+            <i class="fas fa-check"></i>
+            <span class="me-2">Yes</span>
+        </button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">
+            <i class="fas fa-times"></i>
+            <span class="me-2">No</span>
+        </button>
+    </div>
+</ng-template>

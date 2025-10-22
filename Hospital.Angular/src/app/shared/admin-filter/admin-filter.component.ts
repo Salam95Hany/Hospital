@@ -56,7 +56,6 @@ export class AdminFilterComponent {
     }
 
     else if (filter) {
-      debugger;
       updatedFilters = updatedFilters.filter(f => f.categoryName !== filter.categoryName);
 
       switch (filter.filterType) {

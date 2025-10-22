@@ -9,7 +9,7 @@ namespace Hospital.Entities.Specifications.Admissions
 {
     public class AdmissionDataSpecification:BaseSpecification<Admission>
     {
-        public AdmissionDataSpecification():base()
+        public AdmissionDataSpecification(int PatientId) :base(i => i.PatientId == PatientId)
         {
             AddInclude(i => i.CreatedBy);
             AddInclude(i => i.Patient);

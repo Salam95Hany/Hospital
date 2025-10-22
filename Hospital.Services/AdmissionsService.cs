@@ -18,9 +18,9 @@ namespace Hospital.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData()
+        public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(int PatientId)
         {
-            var Spec = new AdmissionDataSpecification();
+            var Spec = new AdmissionDataSpecification(PatientId);
             var Results = await _unitOfWork.Repository<Admission>().GetAllWithSpecAsync(Spec);
             var Data = Results.Select(i => new AdmissionDto
             {
@@ -30,10 +30,25 @@ namespace Hospital.Services
                 DischargeDate = i.DischargeDate,
                 HospitalFileNumber = i.HospitalFileNumber,
                 PatientName = i.Patient.Name,
-                CreatedBy = i.CreatedBy.UserName
+                CreatedBy = i.CreatedBy?.UserName
             }).ToList();
 
             return ApiResponseModel<List<AdmissionDto>>.Success(GenericErrors.GetSuccess, Data);
+        }
+
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllAdmissionFilters(int PatientId)
+        {
+            var Data = new List<FilterModel>
+            {
+                new FilterModel
+                {
+                    CategoryDisplayName = "Name",
+                    CategoryName = "SearchText",
+                    FilterType = "SearchText"
+                }
+            };
+
+            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Data);
         }
 
         public async Task<ApiResponseModel<string>> AddNewAdmission(Admission Model)

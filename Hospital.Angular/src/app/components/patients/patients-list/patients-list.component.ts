@@ -13,7 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, SearchAutocompleteComponent, AdminPaginationComponent, AdminFilterComponent,NgbModule],
+  imports: [CommonModule, FormsModule, AdminPaginationComponent, AdminFilterComponent,NgbModule],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })
