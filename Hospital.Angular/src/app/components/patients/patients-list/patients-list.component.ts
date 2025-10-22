@@ -4,11 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Patient, PatientsList } from '../../../models/patient.model';
 import { PatientService } from '../../../services/patient.service';
+import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete/search-autocomplete.component";
+import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
+import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.component";
+import { FilterModel } from '../../../models/FilterModel';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SearchAutocompleteComponent, AdminPaginationComponent, AdminFilterComponent,NgbModule],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })
@@ -16,6 +21,9 @@ export class PatientsListComponent implements OnInit {
   patients: PatientsList[] = [];
   filteredPatients: Patient[] = [];
   searchTerm: string = '';
+  FilterList: FilterModel[] = [];
+  isFilter = true;
+
 
   constructor(
     private patientService: PatientService,

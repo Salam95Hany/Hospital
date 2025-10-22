@@ -1,19 +1,22 @@
+
 <div class="patients-container">
-  <div class="patients-header">
-    <h2 class="patients-title">Patients</h2>
-    <button class="btn btn-primary add-patient-btn" (click)="navigateToAddPatient()">
-      <i class="fas fa-plus-circle"></i> Add Patient
-    </button>
-  </div>
-
-  <div class="search-filter-container">
-    <div class="search-box">
-      <i class="fas fa-search"></i>
-      <input type="text" placeholder="Search for a patient..." [(ngModel)]="searchTerm">
+    <div class="patients-header">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <button class="btn btn-primary add-patient-btn" (click)="navigateToAddPatient()">
+                <i class="fas fa-plus-circle"></i> Add Patient
+            </button>
+            <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
+                <i class="fas fa-filter"></i> {{ isFilter ? 'Show' : 'Hide' }} Filters
+            </button>
+        </div>
+        <div>
+            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="100"></app-admin-pagination>
+        </div>
     </div>
-  </div>
-
-  <div class="patients-table-container">
+    <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
+        <app-admin-filter [FilterList]="FilterList" [PlaceHolder]="'Name'"></app-admin-filter>
+    </div>
+     <div class="patients-table-container">
     <table class="table patients-table">
       <thead>
         <tr>
@@ -44,7 +47,7 @@
             </button>
           </td>
         </tr>
-        <tr *ngIf="filteredPatients.length === 0">
+        <tr *ngIf="patients.length === 0">
           <td colspan="7" class="text-center">No patients found</td>
         </tr>
       </tbody>
