@@ -24,6 +24,13 @@ namespace Hospital.Controllers
             return results;
         }
 
+        [HttpGet("GetAdmissionById")]
+        public async Task<ApiResponseModel<Admission>> GetAdmissionById(int AdmissionId)
+        {
+            var results = await _admissionsService.GetAdmissionById(AdmissionId);
+            return results;
+        }
+
         [HttpGet("GetAllAdmissionFilters")]
         public async Task<ApiResponseModel<List<FilterModel>>> GetAllAdmissionFilters(int PatientId)
         {

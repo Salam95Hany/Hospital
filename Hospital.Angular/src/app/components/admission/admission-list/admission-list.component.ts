@@ -25,13 +25,14 @@ export class AdmissionListComponent {
   TitleList = ["Home", "Admission"]
   Admissions: any[] = [];
   FilterList: FilterModel[] = [];
+  AdmissionObj: any;
   isFilter = true;
   PatientId: number;
   AdmissionId: number;
   searchTerm: string = '';
   TotalCount = 0;
 
-  constructor(private adminService: AdminService, private router: Router, private toaster: ToastrService, private modalService: NgbModal) { }
+  constructor(private adminService: AdminService, private router: Router, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
 
@@ -65,9 +66,24 @@ export class AdmissionListComponent {
     this.GetAllAdmissionFilters();
   }
 
+  GetAdmissionById() {
+    this.adminService.GetAdmissionById(this.AdmissionId).subscribe(res => {
+      if (res.results) {
+        this.AdmissionObj = res.results;
+        Object.keys(this.AdmissionObj).forEach(key => {
+          const value = this.AdmissionObj[key];
+          if (typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}T/)) {
+            this.AdmissionObj[key] = this.datePipe.transform(value, 'yyyy-MM-dd');
+          }
+        });
+      }
+    });
+  }
+
 
   OpenAdmissionDetailsModal(content: any, admissionId: any) {
     this.AdmissionId = admissionId;
+    this.GetAdmissionById();
     this.modalService.open(content, {
       size: 'xl',
       scrollable: true,
@@ -94,6 +110,7 @@ export class AdmissionListComponent {
         this.toaster.success(res.message);
         this.GetAllAdmissionData();
         this.GetAllAdmissionFilters();
+        this.modalService.dismissAll();
       } else
         this.toaster.error(res.message);
     });

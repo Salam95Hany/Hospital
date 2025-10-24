@@ -453,3 +453,7 @@ p {
 .modal-header-bg {
     background-color: #eef4f6;
 }
+
+.cursor-pointer {
+    cursor: pointer !important;
+}

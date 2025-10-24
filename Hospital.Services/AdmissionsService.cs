@@ -36,6 +36,13 @@ namespace Hospital.Services
             return ApiResponseModel<List<AdmissionDto>>.Success(GenericErrors.GetSuccess, Data);
         }
 
+        public async Task<ApiResponseModel<Admission>> GetAdmissionById(int AdmissionId)
+        {
+            var Results = await _unitOfWork.Repository<Admission>().GetByIdAsync(AdmissionId);
+
+            return ApiResponseModel<Admission>.Success(GenericErrors.GetSuccess, Results);
+        }
+
         public async Task<ApiResponseModel<List<FilterModel>>> GetAllAdmissionFilters(int PatientId)
         {
             var Data = new List<FilterModel>

@@ -11,6 +11,7 @@ namespace Hospital.Entities.Specifications.Admissions
     {
         public AdmissionDataSpecification(int PatientId) :base(i => i.PatientId == PatientId)
         {
+            AddCriteria(i => i.IsDeleted.Value == false);
             AddInclude(i => i.CreatedBy);
             AddInclude(i => i.Patient);
         }

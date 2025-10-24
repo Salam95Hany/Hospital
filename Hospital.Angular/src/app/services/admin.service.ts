@@ -18,6 +18,10 @@ export class AdminService {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'Admissions/GetAllAdmissionData?PatientId=' + PatientId);
   }
 
+  GetAdmissionById(AdmissionId: number) {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'Admissions/GetAdmissionById?AdmissionId=' + AdmissionId);
+  }
+
   GetAllAdmissionFilters(PatientId: number) {
     return this.http.get<ApiResponseModel<FilterModel[]>>(this.Url + 'Admissions/GetAllAdmissionFilters?PatientId=' + PatientId);
   }

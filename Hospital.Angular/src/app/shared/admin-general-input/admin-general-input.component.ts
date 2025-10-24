@@ -27,14 +27,30 @@ export class AdminGeneralInputComponent {
   @Input() allowCopy: boolean = true;
   @Input() allowCut: boolean = true;
   @Input() disabled: boolean = false;
+
+  private _valueBind: any = '';
+  isUsingFormControl = false;
+
+  @Input()
+  set valueBind(val: any) {
+    this._valueBind = val;
+    if (!this.isUsingFormControl) {
+      this.value = val;
+    }
+  }
+
+  get valueBind() {
+    return this._valueBind;
+  }
+
   @Output() inputChanged = new EventEmitter<string>();
   value: any = '';
 
-  constructor() {
-
-  }
+  onChange = (value: any) => {};
+  onTouched = () => {};
 
   writeValue(obj: any): void {
+    this.isUsingFormControl = true;
     this.value = obj;
   }
 
@@ -50,22 +66,23 @@ export class AdminGeneralInputComponent {
     this.disabled = isDisabled;
   }
 
-  onChange = (value: any) => { };
-  onTouched = () => { };
-
   onInput(event: any) {
+    if (this.disabled) return;
+
     this.value = event.target.value;
     this.onChange(this.value);
     this.inputChanged.emit(this.value);
+
+    if (!this.isUsingFormControl) {
+      this._valueBind = this.value;
+    }
   }
 
   NumbersOnly(key: any) {
     if (this.allowNumbersOnly) {
       let patt = /^([0-9\+.])$/;
-      let result = patt.test(key);
-      return result;
+      return patt.test(key);
     }
-
     return true;
   }
 }
