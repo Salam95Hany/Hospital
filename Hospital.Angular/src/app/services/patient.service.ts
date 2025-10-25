@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { PatientData, PatientsList } from '../models/patient.model';
 import { HttpClient } from '@angular/common/http';
+import { ApiResponseModel } from '../models/ApiResponseModel';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class PatientService {
   }
 
   // New method to get basic patient info
-  getAllPatientsBasicInfo(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/GetAllPatientsBasicInfo`);
+  getAllPatientsBasicInfo(CurrentPage: number): Observable<any> {
+    return this.http.get<ApiResponseModel<any>>(`${this.apiUrl}/GetAllPatientsBasicInfo?CurrentPage=` + CurrentPage);
   }
 
   getPatients(): Observable<PatientData[]> {
