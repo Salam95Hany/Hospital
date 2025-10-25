@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-side-menu',
@@ -9,11 +10,45 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './admin-side-menu.component.html',
   styleUrls: ['./admin-side-menu.component.css']
 })
-export class AdminSideMenuComponent {
+export class AdminSideMenuComponent implements OnInit {
   @Input() isCollapsing = false;
   @Output() closeSideMenuFromOverlayEvent = new EventEmitter<void>();
   isCollapsed_1 = true;
   UserModel = { userName: 'Admin ', loginDate: '2025-10-09', loginTime: '10:00' };
   RoleName = 'Administrator';
-  onCloseSidemenuFromOverlay() { this.closeSideMenuFromOverlayEvent.emit(); }
+  private routeSub?: Subscription;
+
+  constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.updateCollapseState(this.router.url);
+    this.routeSub = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.updateCollapseState(event.urlAfterRedirects);
+      });
+  }
+
+  private updateCollapseState(currentUrl: string) {
+    const patientRoutes = [
+      '/patients',
+      '/admissions',
+      '/surgical-intervention',
+      '/follow-up'
+    ];
+
+    if (patientRoutes.some(r => currentUrl.startsWith(r))) {
+      this.isCollapsed_1 = false;
+    } else {
+      this.isCollapsed_1 = true;
+    }
+  }
+  
+  onCloseSidemenuFromOverlay() {
+    this.closeSideMenuFromOverlayEvent.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.routeSub?.unsubscribe();
+  }
 }

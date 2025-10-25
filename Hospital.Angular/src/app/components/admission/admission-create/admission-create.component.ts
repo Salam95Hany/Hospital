@@ -1,25 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AdminGeneralInputComponent } from "../../../shared/admin-general-input/admin-general-input.component";
 import { AdminDropDownComponent } from "../../../shared/admin-drop-down/admin-drop-down.component";
 import { FormService } from '../../../services/form.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomValidators, RegexType } from '../../../services/custom-validators';
 import { AuthService } from '../../../auth/auth.service';
-import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
 import { AdminService } from '../../../services/admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-admission-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminBreadcrumbComponent],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule],
   templateUrl: './admission-create.component.html',
   styleUrl: './admission-create.component.css',
   providers: [DatePipe]
 })
 export class AdmissionCreateComponent implements OnInit {
+  @Input() PatientId: any;
+  @Input() AdmissionId: any;
   courses = [
     { id: 'Progressing', name: 'Progressing' },
     { id: 'Stationary', name: 'Stationary' },
@@ -53,8 +54,6 @@ export class AdmissionCreateComponent implements OnInit {
   ];
   UserId: any;
   ItemForm: FormGroup;
-  AdmissionId: any;
-  PatientId: any;
   formErrors = {
     hospitalFileNumber: '',
     admissionDate: '',
@@ -63,20 +62,13 @@ export class AdmissionCreateComponent implements OnInit {
 
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
-    private route: ActivatedRoute, private toaster: ToastrService, private router: Router, private datePipe: DatePipe) { }
+    private toaster: ToastrService, private datePipe: DatePipe, private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.AdmissionId = this.route.snapshot.queryParamMap.get('admissionId');
-    this.PatientId = this.route.snapshot.queryParamMap.get('patientId');
     this.UserId = this.authService.userId;
     this.FormInit();
     if (this.AdmissionId)
       this.GetAdmissionById();
-
-    if (!this.AdmissionId && !this.PatientId) {
-      this.toaster.warning('Please select patient first');
-      this.router.navigateByUrl('/admissions');
-    }
 
   }
 
@@ -183,7 +175,7 @@ export class AdmissionCreateComponent implements OnInit {
       otherImaging: item.otherImaging ?? null,
       provisionalDiagnosis: item.provisionalDiagnosis ?? null,
       medicalDecision: item.medicalDecision ?? null,
-      scheduledDate: this.datePipe.transform(item.scheduledDate, 'yyyy-MM-dd') ?? null
+      scheduledDate: this.datePipe.transform(item.scheduledDate, 'yyyy-MM-dd') ?? ''
     });
   }
 
@@ -204,8 +196,11 @@ export class AdmissionCreateComponent implements OnInit {
     }
   }
 
+  DismissModal() {
+    this.modalService.dismissAll();
+  }
+
   AddNewItem() {
-    debugger;
     this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
     let isValid = this.validateForm();
     if (!isValid)
@@ -219,11 +214,11 @@ export class AdmissionCreateComponent implements OnInit {
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 
-    if (this.PatientId) {
+    if (!this.AdmissionId) {
       this.adminService.AddNewAdmission(this.ItemForm.value).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
-          this.router.navigateByUrl('/admissions');
+          this.modalService.dismissAll();
         }
         else
           this.toaster.error(data.message);
@@ -232,7 +227,7 @@ export class AdmissionCreateComponent implements OnInit {
       this.adminService.UpdateAdmission(this.ItemForm.value).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
-          this.router.navigateByUrl('/admissions');
+          this.modalService.dismissAll();
         }
         else
           this.toaster.error(data.message);

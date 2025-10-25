@@ -2,92 +2,115 @@ import { Component } from '@angular/core';
 import { AdminGeneralInputComponent } from "../../../shared/admin-general-input/admin-general-input.component";
 import { AdminDropDownComponent } from "../../../shared/admin-drop-down/admin-drop-down.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PatientService } from '../../../services/patient.service';
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
-import { CustomValidators, RegexType } from '../../../services/custom-validators';
 import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
+import { AdminService } from '../../../services/admin.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-surgical-intervention-create',
+  standalone: true,
   imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminBreadcrumbComponent],
   templateUrl: './surgical-intervention-create.component.html',
-  styleUrl: './surgical-intervention-create.component.css'
+  styleUrl: './surgical-intervention-create.component.css',
+  providers: [DatePipe]
 })
 export class SurgicalInterventionCreateComponent {
   theatres = [
-    { id: 1, name: 'A' },
-    { id: 2, name: 'B' },
-    { id: 3, name: 'C' },
-    { id: 4, name: 'Main' },
-    { id: 5, name: 'Dpt' },
-    { id: 6, name: 'US' }
+    { id: 'A', name: 'A' },
+    { id: 'B', name: 'B' },
+    { id: 'C', name: 'C' },
+    { id: 'Main', name: 'Main' },
+    { id: 'Dpt', name: 'Dpt' },
+    { id: 'US', name: 'US' }
   ];
+
   anaesthesias = [
-    { id: 1, name: 'General' },
-    { id: 2, name: 'Regional' },
-    { id: 3, name: 'Local' }
+    { id: 'General', name: 'General' },
+    { id: 'Regional', name: 'Regional' },
+    { id: 'Local', name: 'Local' }
   ];
+
   tubesFixed = [
-    { id: 1, name: 'Drain' },
-    { id: 2, name: 'Urethral catheter' },
-    { id: 3, name: 'S. Pubic catheter' },
-    { id: 4, name: 'Ureteric catheter' },
-    { id: 5, name: 'Ureteric Stent' },
-    { id: 6, name: 'Nephrostomy' },
-    { id: 7, name: 'Others' }
+    { id: 'Drain', name: 'Drain' },
+    { id: 'Urethral catheter', name: 'Urethral catheter' },
+    { id: 'S. Pubic catheter', name: 'S. Pubic catheter' },
+    { id: 'Ureteric catheter', name: 'Ureteric catheter' },
+    { id: 'Ureteric Stent', name: 'Ureteric Stent' },
+    { id: 'Nephrostomy', name: 'Nephrostomy' },
+    { id: 'Others', name: 'Others' }
   ];
+
   categories = [
-    { id: 1, name: 'Urolithiasis' },
-    { id: 2, name: 'Oncology' },
-    { id: 3, name: 'LUTD' },
-    { id: 4, name: 'Reconstructive' },
-    { id: 5, name: 'Andrology' },
-    { id: 6, name: 'Pediatric' }
+    { id: 'Urolithiasis', name: 'Urolithiasis' },
+    { id: 'Oncology', name: 'Oncology' },
+    { id: 'LUTD', name: 'LUTD' },
+    { id: 'Reconstructive', name: 'Reconstructive' },
+    { id: 'Andrology', name: 'Andrology' },
+    { id: 'Pediatric', name: 'Pediatric' }
   ];
+
   approaches = [
-    { id: 1, name: 'Endourology' },
-    { id: 2, name: 'Open Surgery' },
-    { id: 3, name: 'Laparoscopy' },
-    { id: 4, name: 'Microscopic' }
+    { id: 'Endourology', name: 'Endourology' },
+    { id: 'Open Surgery', name: 'Open Surgery' },
+    { id: 'Laparoscopy', name: 'Laparoscopy' },
+    { id: 'Microscopic', name: 'Microscopic' }
   ];
+
   organs = [
-    { id: 1, name: 'Adrenal' },
-    { id: 2, name: 'Kidney' },
-    { id: 3, name: 'Ureter' },
-    { id: 4, name: 'Bladder' },
-    { id: 5, name: 'Prostate' },
-    { id: 6, name: 'Urethra' },
-    { id: 7, name: 'Penis' },
-    { id: 8, name: 'Scrotum/Testes' },
-    { id: 9, name: 'Others' }
+    { id: 'Adrenal', name: 'Adrenal' },
+    { id: 'Kidney', name: 'Kidney' },
+    { id: 'Ureter', name: 'Ureter' },
+    { id: 'Bladder', name: 'Bladder' },
+    { id: 'Prostate', name: 'Prostate' },
+    { id: 'Urethra', name: 'Urethra' },
+    { id: 'Penis', name: 'Penis' },
+    { id: 'Scrotum/Testes', name: 'Scrotum/Testes' },
+    { id: 'Others', name: 'Others' }
   ];
+
   intraOpCourses = [
-    { id: 1, name: 'Smooth' },
-    { id: 2, name: 'Minor adv. Events' },
-    { id: 3, name: 'Moderate adv. Events' },
-    { id: 4, name: 'Major dv. events' }
+    { id: 'Smooth', name: 'Smooth' },
+    { id: 'Minor adv. Events', name: 'Minor adv. Events' },
+    { id: 'Moderate adv. Events', name: 'Moderate adv. Events' },
+    { id: 'Major dv. events', name: 'Major dv. events' }
   ];
+
   postOpCourses = [
-    { id: 1, name: 'Smooth' },
-    { id: 2, name: 'Minor adv. Events' },
-    { id: 3, name: 'Moderate adv. Events' },
-    { id: 4, name: 'Major dv. events' }
+    { id: 'Smooth', name: 'Smooth' },
+    { id: 'Minor adv. Events', name: 'Minor adv. Events' },
+    { id: 'Moderate adv. Events', name: 'Moderate adv. Events' },
+    { id: 'Major dv. events', name: 'Major dv. events' }
   ];
 
   UserId: any;
   ItemForm: FormGroup;
+  AdmissionId: any;
+  SurgicalInterventionId: any;
   formErrors = {
     interventionDate: '',
     theater: ''
   };
 
 
-  constructor(private patientService: PatientService, private formService: FormService, private fb: FormBuilder, private authService: AuthService) { }
+  constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
+    private route: ActivatedRoute, private toaster: ToastrService, private router: Router, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
+    this.AdmissionId = this.route.snapshot.queryParamMap.get('admissionId');
+    this.SurgicalInterventionId = this.route.snapshot.queryParamMap.get('surgicalInterventionId');
     this.UserId = this.authService.userId;
     this.FormInit();
+    if (this.SurgicalInterventionId)
+      this.GetSurgicalInterventionById();
+
+    if (!this.AdmissionId && !this.SurgicalInterventionId) {
+      this.toaster.warning('Please select admission first');
+      this.router.navigateByUrl('/surgical-intervention');
+    }
   }
 
   FormInit() {
@@ -133,7 +156,7 @@ export class SurgicalInterventionCreateComponent {
     this.ItemForm.patchValue({
       surgicalInterventionId: item.surgicalInterventionId ?? 0,
       admissionId: item.admissionId ?? null,
-      interventionDate: item.interventionDate ? new Date(item.interventionDate) : null,
+      interventionDate: this.datePipe.transform(item.interventionDate, 'yyyy-MM-dd') ?? '',
       theater: item.theater ?? null,
       mainSurgeon: item.mainSurgeon ?? null,
       assistants: item.assistants ?? null,
@@ -155,13 +178,20 @@ export class SurgicalInterventionCreateComponent {
       postOpDay2_5: item.postOpDay2_5 ?? null,
       postOpDayOver5: item.postOpDayOver5 ?? null,
       postOpAdverseEvents: item.postOpAdverseEvents ?? null,
-      dischargeDate: item.dischargeDate ? new Date(item.dischargeDate) : null,
+      dischargeDate: this.datePipe.transform(item.dischargeDate, 'yyyy-MM-dd') ?? '',
       finalDiagnosis: item.finalDiagnosis ?? null,
       dischargeInstructions: item.dischargeInstructions ?? null,
       followUpDoctor: item.followUpDoctor ?? null,
       followUpDoctorPhone: item.followUpDoctorPhone ?? null,
-      followUpAppointment: item.followUpAppointment ? new Date(item.followUpAppointment) : null,
+      followUpAppointment: this.datePipe.transform(item.followUpAppointment, 'yyyy-MM-dd') ?? '',
     });
+  }
+
+  GetSurgicalInterventionById() {
+    this.adminService.GetSurgicalInterventionById(this.SurgicalInterventionId).subscribe(res => {
+      if (res.results)
+        this.FillEditForm(res.results);
+    })
   }
 
   validateForm(): boolean {
@@ -180,21 +210,32 @@ export class SurgicalInterventionCreateComponent {
     if (!isValid)
       return;
 
-    if (this.ItemForm.controls['id'].value == 0) {
-      // this.patientService.AddNewActivity(this.ItemForm.value).subscribe(data => {
-      //   if (data.isSuccess) {
-      //     this.toaster.success(data.message);
-      //   }
-      //   else
-      //     this.toaster.error(data.message);
-      // });
+    if (this.AdmissionId)
+      this.ItemForm.patchValue({ admissionId: this.AdmissionId });
+
+    if (this.SurgicalInterventionId)
+      this.ItemForm.patchValue({ surgicalInterventionId: this.SurgicalInterventionId });
+
+    this.ItemForm.patchValue({ insertUser: this.UserId });
+
+    if (this.AdmissionId) {
+      this.adminService.AddNewSurgicalIntervention(this.ItemForm.value).subscribe(data => {
+        if (data.isSuccess) {
+          this.toaster.success(data.message);
+          this.router.navigateByUrl('/surgical-intervention');
+        }
+        else
+          this.toaster.error(data.message);
+      });
     } else {
-      // this.patientService.UpdateActivity(formData).subscribe(data => {
-      //   if (data.isSuccess) {
-      //   }
-      //   else
-      //     this.toaster.error(data.message);
-      // });
+      this.adminService.UpdateSurgicalIntervention(this.ItemForm.value).subscribe(data => {
+        if (data.isSuccess) {
+          this.toaster.success(data.message);
+          this.router.navigateByUrl('/surgical-intervention');
+        }
+        else
+          this.toaster.error(data.message);
+      });
     }
   }
 }

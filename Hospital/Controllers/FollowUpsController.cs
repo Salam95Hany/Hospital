@@ -2,6 +2,7 @@
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Models;
 using Hospital.Interfaces;
+using Hospital.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,23 @@ namespace Hospital.Controllers
         }
 
         [HttpGet("GetAllFollowUpData")]
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData()
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId)
         {
-            var results = await _followUpsService.GetAllFollowUpData();
+            var results = await _followUpsService.GetAllFollowUpData(SurgicalInterventionId);
+            return results;
+        }
+
+        [HttpGet("GetFollowUpById")]
+        public async Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId)
+        {
+            var results = await _followUpsService.GetFollowUpById(FollowUpId);
+            return results;
+        }
+
+        [HttpGet("GetAllFollowUpFilters")]
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int SurgicalInterventionId)
+        {
+            var results = await _followUpsService.GetAllFollowUpFilters(SurgicalInterventionId);
             return results;
         }
 

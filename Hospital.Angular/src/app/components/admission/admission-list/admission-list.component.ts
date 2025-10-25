@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete/search-autocomplete.component";
@@ -11,12 +11,13 @@ import { FilterModel } from '../../../models/FilterModel';
 import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
+import { AdmissionCreateComponent } from "../admission-create/admission-create.component";
 
 @Component({
   selector: 'app-admission-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, RouterLink, SearchAutocompleteComponent, CommonModule,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent],
+  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent, AdmissionCreateComponent],
   templateUrl: './admission-list.component.html',
   styleUrl: './admission-list.component.css',
   providers: [DatePipe]
@@ -36,15 +37,6 @@ export class AdmissionListComponent {
 
   ngOnInit(): void {
 
-  }
-
-  AddNewAdmission() {
-    if (!this.PatientId) {
-      this.toaster.warning('Please select patient');
-      return;
-    }
-
-    this.router.navigate(['/admissions/add'], { queryParams: { patientId: this.PatientId } });
   }
 
   GetAllAdmissionData(): void {
@@ -80,12 +72,25 @@ export class AdmissionListComponent {
     });
   }
 
+  OpenAdmissionCreateModal(content: any, admissionId: any) {
+    if (!this.PatientId) {
+      this.toaster.warning('Please select patient');
+      return;
+    }
+
+    this.AdmissionId = admissionId;
+    this.modalService.open(content, {
+      windowClass: 'details-size-modal',
+      scrollable: true,
+      centered: true
+    })
+  }
 
   OpenAdmissionDetailsModal(content: any, admissionId: any) {
     this.AdmissionId = admissionId;
     this.GetAdmissionById();
     this.modalService.open(content, {
-      size: 'xl',
+      windowClass: 'details-size-modal',
       scrollable: true,
       centered: true
     })

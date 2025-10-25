@@ -630,7 +630,7 @@ namespace Hospital.Services.PatientsService
         {
             if (Model.SearchType == "Patient")
             {
-                var Results = await _unitOfWork.Repository<Patient>().WhereAsync(i => i.Name.Contains(Model.SearchText), 10);
+                var Results = await _unitOfWork.Repository<Patient>().WhereAsync(i => i.Name.Contains(Model.SearchText) && i.IsDeleted == false, 10);
                 var Data = Results.Select(i => new SearchAutoCompleteDto
                 {
                     Id = i.PatientId,
@@ -656,7 +656,8 @@ namespace Hospital.Services.PatientsService
                         .WhereAsync(i => i.PatientId == Model.PatientId &&
                                          i.AdmissionDate.HasValue &&
                                          i.AdmissionDate.Value.Month == Date.Month &&
-                                         i.AdmissionDate.Value.Year == Date.Year, 10);
+                                         i.AdmissionDate.Value.Year == Date.Year &&
+                                         i.IsDeleted == false, 31);
 
                     var Data = Results.Select(i => new SearchAutoCompleteDto
                     {
@@ -672,7 +673,8 @@ namespace Hospital.Services.PatientsService
                         .WhereAsync(i => i.AdmissionId == Model.AdmissionId &&
                                          i.InterventionDate.HasValue &&
                                          i.InterventionDate.Value.Month == Date.Month &&
-                                         i.InterventionDate.Value.Year == Date.Year, 10);
+                                         i.InterventionDate.Value.Year == Date.Year &&
+                                         i.IsDeleted == false, 31);
 
                     var Data = Results.Select(i => new SearchAutoCompleteDto
                     {

@@ -457,3 +457,39 @@ p {
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+.modal.details-size-modal .modal-dialog {
+    max-width: 80%;
+    width: 80%;
+}
+
+.modal.details-size-modal .modal-content {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh !important;
+}
+
+.modal.details-size-modal .modal-body {
+    overflow-y: auto !important;
+    flex-grow: 1;
+    max-height: 80vh;
+    padding-right: 10px;
+}
+
+.modal.details-size-modal .modal-header,
+.modal.details-size-modal .modal-footer {
+    flex-shrink: 0;
+    position: sticky;
+    z-index: 10;
+    background-color: #fff;
+}
+
+.modal.details-size-modal .modal-header {
+    top: 0;
+}
+
+.modal.details-size-modal .modal-footer {
+    bottom: 0;
+    border-top: 1px solid #ddd;
+}
