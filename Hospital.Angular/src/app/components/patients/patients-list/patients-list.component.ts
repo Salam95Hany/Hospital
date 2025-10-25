@@ -9,6 +9,7 @@ import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin
 import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.component";
 import { FilterModel } from '../../../models/FilterModel';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-patients-list',
@@ -27,7 +28,7 @@ export class PatientsListComponent implements OnInit {
 
   constructor(
     private patientService: PatientService,
-    private router: Router
+    private router: Router,private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -59,10 +60,17 @@ export class PatientsListComponent implements OnInit {
 
 
   deletePatient(id: number): void {
-      if (confirm('Are you sure you want to delete this patient and all related data?')) {
-        this.patientService.deletePatientWithAllData(id).subscribe(() => {
-          this.router.navigate(['/patients']);
-        });
+       if (confirm('Are you sure you want to delete this patient and all related data?')) {
+        this.patientService.deletePatientWithAllData(id).subscribe({
+        next: () => {
+          this.toastr.success('Patient deleted successfully!', 'Success');
+          this.loadPatients();
+        },
+        error: (error) => {
+          console.error('Delete error:', error);
+          this.toastr.error('Failed to delete patient', 'Error');
+        }
+      });
       }
     
   }
