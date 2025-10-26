@@ -1,7 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { PatientData, PatientsList } from '../models/patient.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+
+export interface PaginationParams {
+  page: number;
+  pageSize: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface PatientFilterParams {
+  searchTerm?: string;
+  governorate?: string;
+  gender?: string;
+  ageRange?: { min?: number; max?: number };
+  admissionDateRange?: { from?: Date; to?: Date };
+}
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +35,78 @@ export class PatientService {
   // New method to get basic patient info
   getAllPatientsBasicInfo(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/GetAllPatientsBasicInfo`);
+  }
+
+  // Get patients with pagination and filtering
+  getPatientsWithPagination(pagination: PaginationParams, filters?: PatientFilterParams): Observable<any> {
+    let params = new HttpParams()
+      .set('page', pagination.page.toString())
+      .set('pageSize', pagination.pageSize.toString());
+
+    if (pagination.sortBy) {
+      params = params.set('sortBy', pagination.sortBy);
+    }
+    if (pagination.sortOrder) {
+      params = params.set('sortOrder', pagination.sortOrder);
+    }
+
+    // Add filter parameters
+    if (filters) {
+      if (filters.searchTerm) {
+        params = params.set('searchTerm', filters.searchTerm);
+      }
+      if (filters.governorate) {
+        params = params.set('governorate', filters.governorate);
+      }
+      if (filters.gender) {
+        params = params.set('gender', filters.gender);
+      }
+      if (filters.ageRange?.min !== undefined) {
+        params = params.set('minAge', filters.ageRange.min.toString());
+      }
+      if (filters.ageRange?.max !== undefined) {
+        params = params.set('maxAge', filters.ageRange.max.toString());
+      }
+      if (filters.admissionDateRange?.from) {
+        params = params.set('admissionDateFrom', filters.admissionDateRange.from.toISOString());
+      }
+      if (filters.admissionDateRange?.to) {
+        params = params.set('admissionDateTo', filters.admissionDateRange.to.toISOString());
+      }
+    }
+
+    return this.http.get<any>(`${this.apiUrl}/GetPatientsWithPagination`, { params });
+  }
+
+  // Get filtered patients count for pagination
+  getFilteredPatientsCount(filters?: PatientFilterParams): Observable<number> {
+    let params = new HttpParams();
+
+    if (filters) {
+      if (filters.searchTerm) {
+        params = params.set('searchTerm', filters.searchTerm);
+      }
+      if (filters.governorate) {
+        params = params.set('governorate', filters.governorate);
+      }
+      if (filters.gender) {
+        params = params.set('gender', filters.gender);
+      }
+      if (filters.ageRange?.min !== undefined) {
+        params = params.set('minAge', filters.ageRange.min.toString());
+      }
+      if (filters.ageRange?.max !== undefined) {
+        params = params.set('maxAge', filters.ageRange.max.toString());
+      }
+      if (filters.admissionDateRange?.from) {
+        params = params.set('admissionDateFrom', filters.admissionDateRange.from.toISOString());
+      }
+      if (filters.admissionDateRange?.to) {
+        params = params.set('admissionDateTo', filters.admissionDateRange.to.toISOString());
+      }
+    }
+
+    return this.http.get<number>(`${this.apiUrl}/GetFilteredPatientsCount`, { params });
   }
 
   getPatients(): Observable<PatientData[]> {
