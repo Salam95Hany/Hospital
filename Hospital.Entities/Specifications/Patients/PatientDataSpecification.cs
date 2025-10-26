@@ -12,7 +12,7 @@ namespace Hospital.Entities.Specifications.Patients
     {
         public PatientDataSpecification(int CurrentPage, bool applyPaging = true) :base(i => i.IsDeleted == false)
         {
-            ApplyOrderByDescending(fc => fc.InsertDate);
+            ApplyOrderBy(fc => fc.InsertDate);
             if (applyPaging)
                 ApplyPaging((CurrentPage - 1) * 20, 20);
         }

@@ -11,7 +11,7 @@
 
             <!-- Search Bar -->
             <div class="header-search d-none d-lg-block">
-                <input type="text" placeholder="Search..." (input)="onShowAutoCompleteMenu($event.target)" [(ngModel)]="SearchText">
+                <input type="text" placeholder="Search..." autocomplete="off" (input)="onShowAutoCompleteMenu($event.target)" [(ngModel)]="SearchText">
                 <i class="fas fa-search"></i>
 
                 <!-- Search Autocomplete -->

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { PatientData, PatientsList } from '../models/patient.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponseModel } from '../models/ApiResponseModel';
 
 export interface PaginationParams {
