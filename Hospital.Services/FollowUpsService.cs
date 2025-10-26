@@ -22,9 +22,9 @@ namespace Hospital.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData()
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId)
         {
-            var Spec = new FollowUpDataSpecification();
+            var Spec = new FollowUpDataSpecification(SurgicalInterventionId);
             var Results = await _unitOfWork.Repository<FollowUp>().GetAllWithSpecAsync(Spec);
             var Data = Results.Select(i => new FollowUpDto
             {
@@ -34,10 +34,33 @@ namespace Hospital.Services
                 PatientId = i.SurgicalInterventions.Admission.Patient.PatientId,
                 FollowUpDate = i.FollowUpDate,
                 PatientName = i.SurgicalInterventions.Admission.Patient.Name,
-                CreatedBy = i.CreatedBy.UserName
+                CreatedBy = i.CreatedBy?.UserName,
+                CreatedDate = i.InsertDate
             }).ToList();
 
             return ApiResponseModel<List<FollowUpDto>>.Success(GenericErrors.GetSuccess, Data);
+        }
+
+        public async Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId)
+        {
+            var Results = await _unitOfWork.Repository<FollowUp>().GetByIdAsync(FollowUpId);
+
+            return ApiResponseModel<FollowUp>.Success(GenericErrors.GetSuccess, Results);
+        }
+
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int SurgicalInterventionId)
+        {
+            var Data = new List<FilterModel>
+            {
+                new FilterModel
+                {
+                    CategoryDisplayName = "Name",
+                    CategoryName = "SearchText",
+                    FilterType = "SearchText"
+                }
+            };
+
+            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Data);
         }
 
         public async Task<ApiResponseModel<string>> AddNewFollowUp(FollowUp Model)
@@ -59,6 +82,7 @@ namespace Hospital.Services
                     Advice = Model.Advice,
                     NewDecision = Model.NewDecision,
                     NextFollowUpDate = Model.NextFollowUpDate,
+                    IsDeleted = false,
                     InsertUser = Model.InsertUser,
                     InsertDate = DateTime.UtcNow
                 };
@@ -78,7 +102,7 @@ namespace Hospital.Services
         {
             try
             {
-                var Entity = await _unitOfWork.Repository<FollowUp>().GetByIdAsync(Model.SurgicalInterventionId);
+                var Entity = await _unitOfWork.Repository<FollowUp>().GetByIdAsync(Model.FollowUpId);
 
                 if (Entity == null)
                     return ApiResponseModel<string>.Failure(GenericErrors.NotFound);

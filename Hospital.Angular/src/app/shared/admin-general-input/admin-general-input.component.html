@@ -1,9 +1,9 @@
 <label class="form-label">{{ label }}</label>
 
-<input *ngIf="type !== 'textarea'" [type]="type" class="form-control input-box" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" (keypress)="NumbersOnly($event.key)" [class.error]="error" [disabled]="disabled"
-/>
+<input *ngIf="type !== 'textarea'" [type]="type" class="form-control input-box" (copy)="allowCopy" (paste)="allowPaste" (cut)="allowCut" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" (keypress)="NumbersOnly($event.key)"
+    [class.error]="error" [disabled]="disabled" />
 
-<textarea *ngIf="type === 'textarea'" class="form-control input-box" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" [class.error]="error" [disabled]="disabled">
+<textarea *ngIf="type === 'textarea'" class="form-control input-box" (copy)="allowCopy" (paste)="allowPaste" (cut)="allowCut" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" [class.error]="error" [disabled]="disabled">
 </textarea>
 
 <div class="error-message" *ngIf="error">

@@ -16,5 +16,6 @@ namespace Hospital.Entities.Contracts.DTOs
         public string? PatientRemarksStatus { get; set; }
         public string? PatientName { get; set; }
         public string? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }

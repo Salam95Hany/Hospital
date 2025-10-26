@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { PatientData, PatientsList } from '../models/patient.model';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { ApiResponseModel } from '../models/ApiResponseModel';
 
 export interface PaginationParams {
   page: number;
@@ -33,8 +34,8 @@ export class PatientService {
   }
 
   // New method to get basic patient info
-  getAllPatientsBasicInfo(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/GetAllPatientsBasicInfo`);
+  getAllPatientsBasicInfo(CurrentPage: number): Observable<any> {
+    return this.http.get<ApiResponseModel<any>>(`${this.apiUrl}/GetAllPatientsBasicInfo?CurrentPage=` + CurrentPage);
   }
 
   // Get patients with pagination and filtering

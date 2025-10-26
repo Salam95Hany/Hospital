@@ -2,6 +2,7 @@
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Contracts.Requests;
 using Hospital.Entities.Models;
+using Hospital.Entities.Specifications.Patients;
 using Hospital.Entities.Specifications.SearchAutoComplete;
 using Hospital.Interfaces.IPatients;
 using Hospital.Interfaces.Repositories;
@@ -261,23 +262,24 @@ namespace Hospital.Services.PatientsService
             return await _unitOfWork.Repository<Patient>()
                 .FirstOrDefaultAsync(p => p.InternalNumber == internalNumber);
         }
-        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfoAsync(CancellationToken cancellationToken = default)
+        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfoAsync(int CurrentPage, CancellationToken cancellationToken = default)
         {
+            var DataSpec = new PatientDataSpecification(CurrentPage);
+            var CountSpec = new PatientDataSpecification(CurrentPage, false);
+            var Entity = _unitOfWork.Repository<Patient>();
+            var TotalCount = await Entity.GetCountAsync(CountSpec, cancellationToken);
+            var Data = await Entity.GetAllWithSpecAsync(DataSpec, cancellationToken);
+            var Results = Data.Select(p => new PatientListDto
+            {
+                Id = p.PatientId,
+                InternalNumber = p.InternalNumber,
+                Name = p.Name,
+                Age = p.Age,
+                Governorate = p.Governorate,
+                Gender = p.Gender
+            }).ToList();
 
-            var patients = await _unitOfWork.Repository<Patient>()
-                .GetAllAsQueryable().Where(i => i.IsDeleted != true)
-                .Select(p => new PatientListDto
-                {
-                    Id = p.PatientId,
-                    InternalNumber = p.InternalNumber,
-                    Name = p.Name,
-                    Age = p.Age,
-                    Governorate = p.Governorate,
-                    Gender = p.Gender
-                })
-                .ToListAsync(cancellationToken);
-
-            return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, patients);
+            return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);
 
 
         }
@@ -630,7 +632,7 @@ namespace Hospital.Services.PatientsService
         {
             if (Model.SearchType == "Patient")
             {
-                var Results = await _unitOfWork.Repository<Patient>().WhereAsync(i => i.Name.Contains(Model.SearchText), 10);
+                var Results = await _unitOfWork.Repository<Patient>().WhereAsync(i => i.Name.Contains(Model.SearchText) && i.IsDeleted == false, 10);
                 var Data = Results.Select(i => new SearchAutoCompleteDto
                 {
                     Id = i.PatientId,
@@ -656,7 +658,8 @@ namespace Hospital.Services.PatientsService
                         .WhereAsync(i => i.PatientId == Model.PatientId &&
                                          i.AdmissionDate.HasValue &&
                                          i.AdmissionDate.Value.Month == Date.Month &&
-                                         i.AdmissionDate.Value.Year == Date.Year, 10);
+                                         i.AdmissionDate.Value.Year == Date.Year &&
+                                         i.IsDeleted == false, 31);
 
                     var Data = Results.Select(i => new SearchAutoCompleteDto
                     {
@@ -672,7 +675,8 @@ namespace Hospital.Services.PatientsService
                         .WhereAsync(i => i.AdmissionId == Model.AdmissionId &&
                                          i.InterventionDate.HasValue &&
                                          i.InterventionDate.Value.Month == Date.Month &&
-                                         i.InterventionDate.Value.Year == Date.Year, 10);
+                                         i.InterventionDate.Value.Year == Date.Year &&
+                                         i.IsDeleted == false, 31);
 
                     var Data = Results.Select(i => new SearchAutoCompleteDto
                     {

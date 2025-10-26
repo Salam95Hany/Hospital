@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Hospital.Entities.Specifications.FollowUps
 {
-    public class FollowUpDataSpecification:BaseSpecification<FollowUp>
+    public class FollowUpDataSpecification : BaseSpecification<FollowUp>
     {
-        public FollowUpDataSpecification():base()
+        public FollowUpDataSpecification(int SurgicalInterventionId) : base(i => i.SurgicalInterventionId == SurgicalInterventionId)
         {
-            AddInclude(i => i.SurgicalInterventions);
+            AddCriteria(i => i.IsDeleted == false);
+            AddInclude("SurgicalInterventions.Admission.Patient");
             AddInclude(i => i.CreatedBy);
         }
     }

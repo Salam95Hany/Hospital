@@ -27,9 +27,9 @@ namespace Hospital.Controllers.PatientsController
         }
 
         [HttpGet("GetAllPatientsBasicInfo")]
-        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfo(CancellationToken cancellationToken = default)
+        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfo(int CurrentPage, CancellationToken cancellationToken = default)
         {
-            return await _PatientsService.GetAllPatientsBasicInfoAsync(cancellationToken);
+            return await _PatientsService.GetAllPatientsBasicInfoAsync(CurrentPage,cancellationToken);
         }
         [HttpPut("UpdatePatientFull")]
         public async Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model)

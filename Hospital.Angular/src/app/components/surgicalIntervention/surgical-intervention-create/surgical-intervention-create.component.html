@@ -45,7 +45,7 @@
             <app-admin-drop-down [data]="intraOpCourses" [placeholder]="'Select Intra-operative Course'" [label]="'Intra-operative Course'" formControlName="intraOperativeCourse" class="col-md-6">
             </app-admin-drop-down>
 
-            <app-admin-general-input [type]="'text'" [placeholder]="'Blood Transfusion (Units)'" [label]="'Blood Transfusion (Units)'" formControlName="bloodTransfusionUnits" class="col-md-6">
+            <app-admin-general-input [type]="'text'" [placeholder]="'Blood Transfusion (Units)'" [allowNumbersOnly]="true" [allowPaste]="false" [label]="'Blood Transfusion (Units)'" formControlName="bloodTransfusionUnits" class="col-md-6">
             </app-admin-general-input>
 
             <app-admin-general-input [type]="'textarea'" [placeholder]="'Intra-op Adverse Events'" [label]="'Intra-op Adverse Events'" formControlName="intraOpAdverseEvents" class="col-md-12">

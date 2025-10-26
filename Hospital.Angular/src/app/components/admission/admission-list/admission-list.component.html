@@ -13,7 +13,7 @@
 <div class="patients-container">
     <div class="patients-header">
         <div class="d-flex align-items-center flex-wrap gap-2">
-            <button class="btn btn-primary add-patient-btn" (click)="AddNewAdmission()">
+            <button class="btn btn-primary add-patient-btn" (click)="OpenAdmissionCreateModal(AdmissionCreateModal,null)">
                 <i class="fas fa-plus-circle"></i> Add Admission
             </button>
             <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
@@ -50,7 +50,7 @@
                         <button class="btn btn-sm btn-info" (click)="OpenAdmissionDetailsModal(AdmissionDetailsModal,item.admissionId)">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning" [routerLink]="['/admissions/add']" [queryParams]="{ admissionId: item.admissionId}">
+                        <button class="btn btn-sm btn-warning" (click)="OpenAdmissionCreateModal(AdmissionCreateModal,item.admissionId)">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.admissionId)">
@@ -65,6 +65,10 @@
         </table>
     </div>
 </div>
+
+<ng-template #AdmissionCreateModal let-modal>
+    <app-admission-create [PatientId]="PatientId" [AdmissionId]="AdmissionId"></app-admission-create>
+</ng-template>
 
 <ng-template #AdmissionDetailsModal let-modal>
     <div class="modal-header modal-header-bg justify-content-between">

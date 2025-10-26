@@ -16,56 +16,177 @@
 
 <div class="patients-container">
     <div class="patients-header">
-        <button class="btn btn-primary add-patient-btn" [routerLink]="['/surgical-intervention/add']" [queryParams]="{ patientId: PatientId }">
-            <i class="fas fa-plus-circle"></i> Add Surgical Intervention
-        </button>
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <button class="btn btn-primary add-patient-btn" (click)="AddNewSurgicalIntervention()">
+                <i class="fas fa-plus-circle"></i> Add Surgical Intervention
+            </button>
+            <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
+                <i class="fas fa-filter"></i> {{ isFilter ? 'Show' : 'Hide' }} Filters
+            </button>
+        </div>
         <div>
-            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="100"></app-admin-pagination>
+            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
         </div>
     </div>
-
-    <div class="search-filter-container">
-        <!-- <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search for a Admission..." [(ngModel)]="searchTerm">
-        </div> -->
+    <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
+        <app-admin-filter [FilterList]="FilterList" (FilterChecked)="OnFilterChecked($event)"></app-admin-filter>
     </div>
 
     <div class="patients-table-container">
         <table class="table patients-table">
             <thead>
                 <tr>
-                    <th>Hospital File Number</th>
-                    <th>Admission Date</th>
-                    <th>Discharge Date</th>
+                    <th>Intervention Date</th>
+                    <th>Theater</th>
                     <th>Created By</th>
                     <th>Added Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of Admissions">
-                    <td>{{ item.hospitalFileNumber }}</td>
-                    <td>{{ item.admissionDate }}</td>
-                    <td>{{ item.dischargeDate }}</td>
+                <tr *ngFor="let item of SurgicalInterventions">
+                    <td>{{ item.interventionDate | date }}</td>
+                    <td>{{ item.theater }}</td>
                     <td>{{ item.createdBy }}</td>
                     <td>{{ item.createdDate }}</td>
                     <td class="actions-cell">
-                        <button class="btn btn-sm btn-info" (click)="viewItem(item.id)">
+                        <button class="btn btn-sm btn-info" (click)="OpenSurgicalDetailsModal(SurgicalDetailsModal,item.surgicalInterventionId)">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning" [routerLink]="['/surgical-intervention/add']" [queryParams]="{ id: item.id }">
+                        <button class="btn btn-sm btn-warning" [routerLink]="['/surgical-intervention/add']" [queryParams]="{ surgicalInterventionId: item.surgicalInterventionId }">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" (click)="deleteItem(item.id)">
+                        <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.surgicalInterventionId)">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 </tr>
-                <tr *ngIf="Admissions.length === 0">
+                <tr *ngIf="SurgicalInterventions.length === 0">
                     <td colspan="7" class="text-center">No Data Found</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<ng-template #SurgicalDetailsModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <i class="fas fa-file-alt"></i>
+            <span>Surgical Intervention Details</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="step-content form-card" style="display: block;">
+            <div class="row g-3">
+                <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.interventionDate ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Theater'" [label]="'Theater'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.theater ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Main Surgeon'" [label]="'Main Surgeon'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.mainSurgeon ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Assistants'" [label]="'Assistants'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.assistants ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Resident'" [label]="'Resident'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.resident ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Off-Field Supervisor'" [label]="'Off-Field Supervisor'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.offFieldSupervisor ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Anesthesia'" [label]="'Anesthesia'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.anesthesia ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.dischargeDate ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Intervention'" [label]="'Intervention'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.intervention ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Intervention'" [label]="'Details of Intervention'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.interventionDetails ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Tubes Fixed'" [label]="'Tubes Fixed'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.tubesFixed ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Category'" [label]="'Category'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.category ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Approach'" [label]="'Approach'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.approach ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Organ'" [label]="'Organ'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.organ ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Intra-operative Course'" [label]="'Intra-operative Course'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.intraOperativeCourse ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Blood Transfusion (Units)'" [label]="'Blood Transfusion (Units)'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.bloodTransfusionUnits ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Intra-op Adverse Events'" [label]="'Intra-op Adverse Events'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.intraOpAdverseEvents ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Recommendations'" [label]="'Post-op Recommendations'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.postOpRecommendations ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.postOpDay0_1 ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.postOpDay2_5 ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.postOpDayOver5 ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.postOpAdverseEvents ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Final Diagnosis'" [label]="'Final Diagnosis'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.finalDiagnosis ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.dischargeInstructions ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.followUpDoctor ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.followUpDoctorPhone ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.followUpAppointment ?? ''">
+                </app-admin-general-input>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #deleteItemModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <span>Confirm Action</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <p class="fs-5 m-0">Are you sure you want to remove this item?</p>
+    </div>
+    <div class="modal-footer justify-content-start">
+        <button type="button" class="btn btn-success" (click)="DeleteItem()">
+            <i class="fas fa-check"></i>
+            <span class="me-2">Yes</span>
+        </button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">
+            <i class="fas fa-times"></i>
+            <span class="me-2">No</span>
+        </button>
+    </div>
+</ng-template>

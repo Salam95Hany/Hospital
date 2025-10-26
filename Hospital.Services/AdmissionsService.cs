@@ -109,6 +109,7 @@ namespace Hospital.Services
                     ProvisionalDiagnosis = Model.ProvisionalDiagnosis,
                     MedicalDecision = Model.MedicalDecision,
                     ScheduledDate = Model.ScheduledDate,
+                    IsDeleted = false,
                     InsertUser = Model.InsertUser,
                     InsertDate = DateTime.UtcNow
                 };

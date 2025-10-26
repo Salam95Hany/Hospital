@@ -17,9 +17,9 @@ namespace Hospital.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention()
+        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(int AdmissionId)
         {
-            var Spec = new SurgicalInterventionDataSpecification();
+            var Spec = new SurgicalInterventionDataSpecification(AdmissionId);
             var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetAllWithSpecAsync(Spec);
             var Data = Results.Select(i => new SurgicalInterventionDto
             {
@@ -28,10 +28,32 @@ namespace Hospital.Services
                 PatientId = i.Admission.PatientId,
                 InterventionDate = i.InterventionDate,
                 Theater = i.Theater,
-                CreatedBy = i.CreatedBy.UserName
+                CreatedBy = i.CreatedBy?.UserName
             }).ToList();
 
             return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data);
+        }
+
+        public async Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId)
+        {
+            var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalInterventionId);
+
+            return ApiResponseModel<SurgicalIntervention>.Success(GenericErrors.GetSuccess, Results);
+        }
+
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllSurgicalInterventionFilters(int AdmissionId)
+        {
+            var Data = new List<FilterModel>
+            {
+                new FilterModel
+                {
+                    CategoryDisplayName = "Name",
+                    CategoryName = "SearchText",
+                    FilterType = "SearchText"
+                }
+            };
+
+            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Data);
         }
 
         public async Task<ApiResponseModel<string>> AddNewSurgicalIntervention(SurgicalIntervention Model)
@@ -69,6 +91,7 @@ namespace Hospital.Services
                     FollowUpDoctor = Model.FollowUpDoctor,
                     FollowUpDoctorPhone = Model.FollowUpDoctorPhone,
                     FollowUpAppointment = Model.FollowUpAppointment,
+                    IsDeleted = false,
                     InsertUser = Model.InsertUser,
                     InsertDate = DateTime.UtcNow
                 };
