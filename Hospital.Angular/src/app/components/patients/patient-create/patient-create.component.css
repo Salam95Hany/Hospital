@@ -111,8 +111,8 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden; /* Prevent horizontal scrolling */
-  max-height: calc(100vh - 400px); /* Space for content and navigation */
-  margin-bottom: 20px; /* Space for navigation buttons */
+  max-height: calc(100vh - 500px); /* Reduced space for more compact layout */
+  margin-bottom: 25px; /* Reduced space for navigation buttons */
   padding-right: 5px; /* Add padding to prevent scrollbar overlap */
 }
 
@@ -136,10 +136,10 @@
 }
 
 .step-heading {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #2c3e50;
-  font-size: 1.4rem;
-  padding-bottom: 10px;
+  font-size: 1.3rem;
+  padding-bottom: 8px;
   border-bottom: 1px solid #eee;
 }
 
@@ -154,10 +154,12 @@
 
 .form-control,
 .form-select {
-  padding: 10px 12px;
+  padding: 8px 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
+  height: 38px;
 }
 
 .form-control:focus,
@@ -184,8 +186,51 @@
 }
 
 .form-navigation button {
-  padding: 10px 20px;
+  padding: 8px 16px;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+/* Compact form row styling */
+.row.g-3 {
+  --bs-gutter-y: 0.75rem;
+  --bs-gutter-x: 0.75rem;
+}
+
+/* Compact form labels */
+.form-label {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+/* Compact textarea styling */
+textarea.form-control {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Responsive adjustments for compact layout */
+@media (max-width: 768px) {
+  .step-content-inner {
+    max-height: calc(100vh - 700px);
+    margin-bottom: 25px;
+  }
+  
+  .row.g-3 {
+    --bs-gutter-y: 0.5rem;
+    --bs-gutter-x: 0.5rem;
+  }
+  
+  .form-control,
+  .form-select {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    height: 34px;
+  }
+  
+  textarea.form-control {
+    min-height: 70px;
+  }
 }
 
 .form-navigation button:hover {
