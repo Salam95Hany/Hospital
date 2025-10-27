@@ -51,89 +51,91 @@
           <div class="row g-3">
           <app-admin-general-input [type]="'text'" [placeholder]="'Hospital File Number'" [label]="'Hospital File Number'" class="col-md-6" formControlName="hospitalFileNumber" [error]="formErrors.hospitalFileNumber"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-6" formControlName="admissionDate" [error]="formErrors.admissionDate"></app-admin-general-input>
+                <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-6" formControlName="admissionDate" [error]="formErrors.admissionDate"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-6" formControlName="dischargeDate"></app-admin-general-input>
+                <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-6" formControlName="dischargeDate"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-6" formControlName="duration"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-6" formControlName="duration"></app-admin-general-input>
 
-          <app-admin-drop-down [data]="courses" [placeholder]="'Select Course'" [label]="'Course'" class="col-md-6" formControlName="course" [error]="formErrors.course"></app-admin-drop-down>
+                <app-admin-drop-down [data]="courses" [placeholder]="'Select Course'" [label]="'Course'" class="col-md-6" formControlName="course" [error]="formErrors.course"></app-admin-drop-down>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'HPI'" [label]="'HPI'" class="col-md-12" formControlName="hPI"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'HPI'" [label]="'HPI'" class="col-md-12" formControlName="hPI"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'Current Medications'" [label]="'Current Medications'" class="col-md-12" formControlName="currentMedications"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Current Medications'" [label]="'Current Medications'" class="col-md-12" formControlName="currentMedications"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'Past History'" [label]="'Past History'" class="col-md-12" formControlName="pastHistory"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Past History'" [label]="'Past History'" class="col-md-12" formControlName="pastHistory"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'Family History'" [label]="'Family History'" class="col-md-12" formControlName="familyHistory"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Family History'" [label]="'Family History'" class="col-md-12" formControlName="familyHistory"></app-admin-general-input>
 
-          <app-admin-drop-down [data]="comorbidities" [placeholder]="'Select Current Comorbidities'" [label]="'Current Comorbidities'" class="col-md-6" formControlName="comorbidities"></app-admin-drop-down>
+                <app-admin-drop-down [data]="comorbidities" [placeholder]="'Select Current Comorbidities'" [label]="'Current Comorbidities'" class="col-md-6" formControlName="comorbidities"></app-admin-drop-down>
 
-          <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down>
+                <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down>
 
-          <app-admin-drop-down [data]="bmis" [placeholder]="'Select BMI'" [label]="'BMI'" class="col-md-6" formControlName="bMI"></app-admin-drop-down>
+                <app-admin-drop-down [data]="bmis" [placeholder]="'Select BMI'" [label]="'BMI'" class="col-md-6" formControlName="bMI"></app-admin-drop-down>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Pulse'" [label]="'Pulse'" class="col-md-6" formControlName="pulse"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Pulse'" [label]="'Pulse'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pulse"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Blood Pressure'" [label]="'Blood Pressure'" class="col-md-6" formControlName="bloodPressure"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Blood Pressure'" [label]="'Blood Pressure'" class="col-md-6" formControlName="bloodPressure"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'General Examination'" [label]="'General Examination'" class="col-md-12" formControlName="generalExamination"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Temperature'" [label]="'Temperature'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="temperature"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'Abdominal Examination'" [label]="'Abdominal Examination'" class="col-md-12" formControlName="abdominalExamination"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'General Examination'" [label]="'General Examination'" class="col-md-12" formControlName="generalExamination"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'Genital Examination'" [label]="'Genital Examination'" class="col-md-12" formControlName="genitalExamination"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Abdominal Examination'" [label]="'Abdominal Examination'" class="col-md-12" formControlName="abdominalExamination"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'DRE/Vaginal Examination'" [label]="'DRE/Vaginal Examination'" class="col-md-12" formControlName="dREVaginalExamination"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Genital Examination'" [label]="'Genital Examination'" class="col-md-12" formControlName="genitalExamination"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Lab Results'" [label]="'Other Lab Results'" class="col-md-12" formControlName="otherLabResults"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'DRE/Vaginal Examination'" [label]="'DRE/Vaginal Examination'" class="col-md-12" formControlName="dREVaginalExamination"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Provisional Diagnosis'" [label]="'Provisional Diagnosis'" class="col-md-6" formControlName="provisionalDiagnosis"></app-admin-general-input>
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Lab Results'" [label]="'Other Lab Results'" class="col-md-12" formControlName="otherLabResults"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Medical Decision'" [label]="'Medical Decision'" class="col-md-6" formControlName="medicalDecision"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Provisional Diagnosis'" [label]="'Provisional Diagnosis'" class="col-md-6" formControlName="provisionalDiagnosis"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Culture and Sensitivity'" [label]="'Culture and Sensitivity'" class="col-md-6" formControlName="cultureAndSensitivity"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Medical Decision'" [label]="'Medical Decision'" class="col-md-6" formControlName="medicalDecision"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Serum Creatinine'" [label]="'Serum Creatinine'" class="col-md-6" formControlName="serumCreatinine"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Culture and Sensitivity'" [label]="'Culture and Sensitivity'" class="col-md-6" formControlName="cultureAndSensitivity"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Hemoglobin'" [label]="'Hemoglobin'" class="col-md-6" formControlName="hemoglobin"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Serum Creatinine'" [label]="'Serum Creatinine'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="serumCreatinine"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Total Leukocyte Count'" [label]="'Total Leukocyte Count'" class="col-md-6" formControlName="totalLeukocyteCount"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Hemoglobin'" [label]="'Hemoglobin'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="hemoglobin"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Platelets'" [label]="'Platelets'" class="col-md-6" formControlName="platelets"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Total Leukocyte Count'" [label]="'Total Leukocyte Count'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="totalLeukocyteCount"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'PT/PTT/INR'" [label]="'PT/PTT/INR'" class="col-md-6" formControlName="pT_PTT_INR"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Platelets'" [label]="'Platelets'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="platelets"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Liver Enzymes'" [label]="'Liver Enzymes'" class="col-md-6" formControlName="liverEnzymes"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'PT/PTT/INR'" [label]="'PT/PTT/INR'" class="col-md-6" formControlName="pT_PTT_INR"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Fasting Blood Sugar'" [label]="'Fasting Blood Sugar'" class="col-md-6" formControlName="fastingBloodSugar"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Liver Enzymes'" [label]="'Liver Enzymes'" class="col-md-6" formControlName="liverEnzymes"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Post Prandial Blood Sugar'" [label]="'Post Prandial Blood Sugar'" class="col-md-6" formControlName="postPrandialBloodSugar"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Fasting Blood Sugar'" [label]="'Fasting Blood Sugar'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="fastingBloodSugar"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'HbA1c'" [label]="'HbA1c'" class="col-md-6" formControlName="hbA1c"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Post Prandial Blood Sugar'" [label]="'Post Prandial Blood Sugar'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="postPrandialBloodSugar"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'PSA Total'" [label]="'PSA Total'" class="col-md-6" formControlName="pSATotal"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'HbA1c'" [label]="'HbA1c'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="hbA1c"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'PSA Free'" [label]="'PSA Free'" class="col-md-6" formControlName="pSAFree"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Total'" [label]="'PSA Total'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSATotal"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'PSA Ratio'" [label]="'PSA Ratio'" class="col-md-6" formControlName="pSARatio"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Free'" [label]="'PSA Free'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSAFree"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'PUT'" [label]="'PUT'" class="col-md-6" formControlName="pUT"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Ratio'" [label]="'PSA Ratio'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSARatio"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Ultrasound'" [label]="'Ultrasound'" class="col-md-6" formControlName="ultrasound"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'PUT'" [label]="'PUT'" class="col-md-6" formControlName="pUT"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'TRUS'" [label]="'TRUS'" class="col-md-6" formControlName="tRUS"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Ultrasound'" [label]="'Ultrasound'" class="col-md-6" formControlName="ultrasound"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'CT'" [label]="'CT'" class="col-md-6" formControlName="cT"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'TRUS'" [label]="'TRUS'" class="col-md-6" formControlName="tRUS"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'MRI'" [label]="'MRI'" class="col-md-6" formControlName="mRI"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'CT'" [label]="'CT'" class="col-md-6" formControlName="cT"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'text'" [placeholder]="'Isotope Studies'" [label]="'Isotope Studies'" class="col-md-6" formControlName="isotopeStudies"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'MRI'" [label]="'MRI'" class="col-md-6" formControlName="mRI"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date for Intervention/Procedure'" [label]="'Scheduled Date for Intervention/Procedure'" class="col-md-6" formControlName="scheduledDate"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'Isotope Studies'" [label]="'Isotope Studies'" class="col-md-6" formControlName="isotopeStudies"></app-admin-general-input>
 
-          <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Imaging'" [label]="'Other Imaging'" class="col-md-12 mb-2" formControlName="otherImaging"></app-admin-general-input>
+                <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date for Intervention/Procedure'" [label]="'Scheduled Date for Intervention/Procedure'" class="col-md-6" formControlName="scheduledDate"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Imaging'" [label]="'Other Imaging'" class="col-md-12 mb-2" formControlName="otherImaging"></app-admin-general-input>
         </div>
       </div>
       </div>
