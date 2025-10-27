@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { PatientData, PatientsList } from '../models/patient.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponseModel } from '../models/ApiResponseModel';
+import { PagingFilterModel } from '../models/PagingFilterModel';
 
 export interface PaginationParams {
   page: number;
@@ -36,6 +37,10 @@ export class PatientService {
   // New method to get basic patient info
   getAllPatientsBasicInfo(CurrentPage: number): Observable<any> {
     return this.http.get<ApiResponseModel<any>>(`${this.apiUrl}/GetAllPatientsBasicInfo?CurrentPage=` + CurrentPage);
+  }
+
+  GetAllPatientsBasicInfoFilter(PagingFilter: PagingFilterModel) {
+    return this.http.post<any[]>(`${this.apiUrl}/GetAllPatientsBasicInfoFilter`, PagingFilter);
   }
 
   // Get patients with pagination and filtering

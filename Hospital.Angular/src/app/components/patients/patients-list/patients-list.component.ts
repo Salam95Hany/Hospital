@@ -10,6 +10,7 @@ import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.
 import { FilterModel } from '../../../models/FilterModel';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { PagingFilterModel } from '../../../models/PagingFilterModel';
 
 @Component({
   selector: 'app-patients-list',
@@ -26,6 +27,11 @@ export class PatientsListComponent implements OnInit {
   isFilter = true;
   TotalCount = 0;
   CurrentPage = 1;
+  PagingFilter: PagingFilterModel = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 20
+  };
 
 
   constructor(
@@ -42,6 +48,16 @@ export class PatientsListComponent implements OnInit {
       this.patients = response.results;
       this.TotalCount = response.totalCount;
     });
+  } 
+
+  GetAllPatientsBasicInfoFilter() {
+    this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {
+      this.FilterList = data;
+    });
+  }
+  FilterChecked(filterList: FilterModel[]) {
+    this.PagingFilter.filterList = filterList;
+    this.loadPatients();
   }
 
   OnPageChange(obj: any) {

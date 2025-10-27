@@ -1,4 +1,5 @@
-﻿using Hospital.Entities.Common;
+﻿using Hospital.Entities.Auth;
+using Hospital.Entities.Common;
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Contracts.Requests;
 using Hospital.Entities.Models;
@@ -282,6 +283,28 @@ namespace Hospital.Services.PatientsService
             return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);
 
 
+        }
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientsBasicInfoFilter(CancellationToken cancellationToken = default)
+        {
+            var data = await _unitOfWork.Repository<Patient>().GetAllAsQueryable().Include(x => x.CreatedBy).Select(x => new Patient
+            {
+                InsertUser = x.InsertUser,
+                CreatedBy = new AdminUser { UserName = x.CreatedBy.UserName }
+            }).ToListAsync();
+
+            var filterRequests = new List<FilterRequest<Patient>>
+            {
+                new()
+                {
+                    CategoryName = "Patient Code",
+                    Source = data,
+                    ItemIdSelector = x => x.InternalNumber,
+                    ItemKeySelector = x => x.InternalNumber ?? ""
+                }
+            };
+
+            var results = await filterRequests.GenerateManyAsync(cancellationToken);
+            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, results);
         }
         public async Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default)
         {
