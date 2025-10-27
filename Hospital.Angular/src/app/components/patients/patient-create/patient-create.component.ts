@@ -143,6 +143,7 @@ export class PatientCreateComponent implements OnInit {
   formErrors = {
     hospitalFileNumber: '',
     admissionDate: '',
+    dischargeDate : '',
     course: '',
     interventionDate: '',
     theater: '',
@@ -151,6 +152,7 @@ export class PatientCreateComponent implements OnInit {
     nationalId: '',
     name: '',
   };
+  form: FormGroup<any>;
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
@@ -200,6 +202,7 @@ export class PatientCreateComponent implements OnInit {
 
     this.admission.valueChanges.subscribe(() => {
       this.clearErrorsForFormGroup(this.admission);
+      this.validateAdmissionDates();
     });
 
     this.surgicalIntervention.valueChanges.subscribe(() => {
@@ -209,13 +212,22 @@ export class PatientCreateComponent implements OnInit {
     this.followUp.valueChanges.subscribe(() => {
       this.clearErrorsForFormGroup(this.followUp);
     });
+
+    // Subscribe to admission date changes specifically for validation
+    this.admission.get('admissionDate').valueChanges.subscribe(() => {
+      this.validateAdmissionDates();
+    });
+
+    this.admission.get('dischargeDate').valueChanges.subscribe(() => {
+      this.validateAdmissionDates();
+    });
   }
 
   createAdmissionFormGroup(): FormGroup {
     return this.fb.group({
       hospitalFileNumber: ['', [Validators.required, CustomValidators.regexPattern(RegexType.noSpace)]],
       admissionDate: ['', [Validators.required]],
-      dischargeDate: true,
+      dischargeDate: ['', [Validators.required]],
       chiefComplaint: null,
       duration: null,
       course: ['', [Validators.required]],
@@ -450,6 +462,44 @@ export class PatientCreateComponent implements OnInit {
     });
   }
 
+  validateAdmissionDates() {
+    const admissionDate = this.admission.get('admissionDate').value;
+    const dischargeDate = this.admission.get('dischargeDate').value;
+
+    if (admissionDate && dischargeDate) {
+      const admission = new Date(admissionDate);
+      const discharge = new Date(dischargeDate);
+
+      // Check if admission date is after discharge date
+      if (admission > discharge) {
+        this.admission.get('dischargeDate').setErrors({ dateOrder: true });
+        this.formErrors.dischargeDate = 'Discharge date must be after admission date';
+        // Show toast notification
+        this.toastr.error('Discharge date must be greater than admission date', 'Invalid Date Range');
+      } else {
+        // Clear the error if dates are valid
+        this.admission.get('dischargeDate').setErrors(null);
+        delete this.formErrors.dischargeDate;
+        
+        // Calculate and set the duration
+        this.calculateDuration(admission, discharge);
+      }
+    } else {
+      // Clear errors if either date is missing
+      this.admission.get('dischargeDate').setErrors(null);
+      delete this.formErrors.dischargeDate;
+    }
+  }
+
+  calculateDuration(admission: Date, discharge: Date) {
+    // Calculate difference in days
+    const timeDiff = discharge.getTime() - admission.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    
+    // Set the duration in the form
+    this.admission.get('duration').setValue(`${daysDiff} days`);
+  }
+
   savePatient(): void {
     this.patientForm = this.formService.TrimFormInputValue(this.patientForm);
     
@@ -488,5 +538,8 @@ export class PatientCreateComponent implements OnInit {
   navigateBack(): void {
     this.router.navigate(['/patients']);
   }
+
+
+  
 
 }
