@@ -26,11 +26,18 @@ namespace Hospital.Controllers.PatientsController
             return results;
         }
 
-        [HttpGet("GetAllPatientsBasicInfo")]
-        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfo(int CurrentPage, CancellationToken cancellationToken = default)
+        [HttpPost("GetAllPatientsBasicInfo")]
+        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfo(PagingFilterModel PagingFilter, CancellationToken cancellationToken = default)
         {
-            return await _PatientsService.GetAllPatientsBasicInfoAsync(CurrentPage,cancellationToken);
+            return await _PatientsService.GetAllPatientsBasicInfoAsync(PagingFilter, cancellationToken);
         }
+
+        //[HttpGet("GetAllPatientsBasicInfoFilter")]
+        //public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientsBasicInfoFilter()
+        //{
+        //    var results = await _PatientsService.GetAllPatientsBasicInfoFilter();
+        //    return results;
+        //}
         [HttpPut("UpdatePatientFull")]
         public async Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model)
         {

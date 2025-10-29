@@ -35,8 +35,8 @@ export class PatientService {
   }
 
   // New method to get basic patient info
-  getAllPatientsBasicInfo(CurrentPage: number): Observable<any> {
-    return this.http.get<ApiResponseModel<any>>(`${this.apiUrl}/GetAllPatientsBasicInfo?CurrentPage=` + CurrentPage);
+  getAllPatientsBasicInfo(PagingFilter: PagingFilterModel): Observable<any> {
+    return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}/GetAllPatientsBasicInfo` , PagingFilter);
   }
 
   GetAllPatientsBasicInfoFilter(PagingFilter: PagingFilterModel) {

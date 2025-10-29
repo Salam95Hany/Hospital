@@ -4,17 +4,19 @@
             <button class="btn btn-primary add-patient-btn" (click)="navigateToAddPatient()">
                 <i class="fas fa-plus-circle"></i> Add Patient
             </button>
-            <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
-                <i class="fas fa-filter"></i> {{ isFilter ? 'Show' : 'Hide' }} Filters
-            </button>
+            
         </div>
         <div>
-            <app-admin-pagination (pageChanged)="OnPageChange($event)" [currentPage]="CurrentPage" [pageSize]="20" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
+            <app-admin-pagination (pageChanged)="OnPageChange($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
         </div>
     </div>
-    <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
-        <app-admin-filter [FilterList]="FilterList"></app-admin-filter>
+    <div class="px-3 py-2 bg-light border-bottom"  >
+        <div class="search-filter-container">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search for a Code..." [(ngModel)]="searchTerm" (input)="applyFilter()">
     </div>
+  </div>
     <div class="patients-table-container">
         <table class="table patients-table">
             <thead>
@@ -28,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let patient of patients">
+                <tr *ngFor="let patient of filteredPatients">
                     <td>{{ patient.internalNumber }}</td>
                     <td>{{ patient.name }}</td>
                     <td>{{ patient.age }}</td>
@@ -46,7 +48,7 @@
             </button>
                     </td>
                 </tr>
-                <tr *ngIf="patients.length === 0">
+                <tr *ngIf="filteredPatients.length === 0">
                     <td colspan="7" class="text-center">No patients found</td>
                 </tr>
             </tbody>

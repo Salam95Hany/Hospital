@@ -263,10 +263,10 @@ namespace Hospital.Services.PatientsService
             return await _unitOfWork.Repository<Patient>()
                 .FirstOrDefaultAsync(p => p.InternalNumber == internalNumber);
         }
-        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfoAsync(int CurrentPage, CancellationToken cancellationToken = default)
+        public async Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfoAsync(PagingFilterModel PagingFilter, CancellationToken cancellationToken = default)
         {
-            var DataSpec = new PatientDataSpecification(CurrentPage);
-            var CountSpec = new PatientDataSpecification(CurrentPage, false);
+            var DataSpec = new PatientDataSpecification(PagingFilter);
+            var CountSpec = new PatientDataSpecification(PagingFilter, false);
             var Entity = _unitOfWork.Repository<Patient>();
             var TotalCount = await Entity.GetCountAsync(CountSpec, cancellationToken);
             var Data = await Entity.GetAllWithSpecAsync(DataSpec, cancellationToken);
@@ -284,28 +284,28 @@ namespace Hospital.Services.PatientsService
 
 
         }
-        public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientsBasicInfoFilter(CancellationToken cancellationToken = default)
-        {
-            var data = await _unitOfWork.Repository<Patient>().GetAllAsQueryable().Include(x => x.CreatedBy).Select(x => new Patient
-            {
-                InsertUser = x.InsertUser,
-                CreatedBy = new AdminUser { UserName = x.CreatedBy.UserName }
-            }).ToListAsync();
+        //public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientsBasicInfoFilter(CancellationToken cancellationToken = default)
+        //{
+        //    var data = await _unitOfWork.Repository<Patient>().GetAllAsQueryable().Include(x => x.CreatedBy).Select(x => new Patient
+        //    {
+        //        InsertUser = x.InsertUser,
+        //        CreatedBy = new AdminUser { UserName = x.CreatedBy.UserName }
+        //    }).ToListAsync();
 
-            var filterRequests = new List<FilterRequest<Patient>>
-            {
-                new()
-                {
-                    CategoryName = "Patient Code",
-                    Source = data,
-                    ItemIdSelector = x => x.InternalNumber,
-                    ItemKeySelector = x => x.InternalNumber ?? ""
-                }
-            };
+        //    var filterRequests = new List<FilterRequest<Patient>>
+        //    {
+        //        new()
+        //        {
+        //            CategoryName = "Patient Code",
+        //            Source = data,
+        //            ItemIdSelector = x => x.InternalNumber,
+        //            ItemKeySelector = x => x.InternalNumber ?? ""
+        //        }
+        //    };
 
-            var results = await filterRequests.GenerateManyAsync(cancellationToken);
-            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, results);
-        }
+        //    var results = await filterRequests.GenerateManyAsync(cancellationToken);
+        //    return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, results);
+        //}
         public async Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default)
         {
             using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);

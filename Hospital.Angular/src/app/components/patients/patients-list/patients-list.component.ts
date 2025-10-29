@@ -21,7 +21,7 @@ import { PagingFilterModel } from '../../../models/PagingFilterModel';
 })
 export class PatientsListComponent implements OnInit {
   patients: PatientsList[] = [];
-  filteredPatients: Patient[] = [];
+  filteredPatients: PatientsList[] = [];
   searchTerm: string = '';
   FilterList: FilterModel[] = [];
   isFilter = true;
@@ -41,27 +41,38 @@ export class PatientsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPatients();
+    //this.GetAllPatientsBasicInfoFilter();
   }
 
   loadPatients(): void {
-    this.patientService.getAllPatientsBasicInfo(this.CurrentPage).subscribe(response => {
+    this.patientService.getAllPatientsBasicInfo(this.PagingFilter).subscribe(response => {
       this.patients = response.results;
       this.TotalCount = response.totalCount;
+      this.applyFilter();
     });
   } 
 
-  GetAllPatientsBasicInfoFilter() {
-    this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {
-      this.FilterList = data;
-    });
+  applyFilter(): void {
+    if (!this.searchTerm.trim()) { this.filteredPatients = this.patients; return; }
+    const s = this.searchTerm.toLowerCase();
+    this.filteredPatients = this.patients.filter(d =>
+      d.internalNumber.toLowerCase().includes(s)||
+      d.name.toLowerCase().includes(s)
+    );
   }
+
+  // GetAllPatientsBasicInfoFilter() {
+  //   this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {
+  //     this.FilterList = data;
+  //   });
+  // }
   FilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
     this.loadPatients();
   }
 
   OnPageChange(obj: any) {
-    this.CurrentPage = obj.page;
+    this.PagingFilter.currentpage = obj.page;
     this.loadPatients();
   }
 
@@ -89,6 +100,7 @@ export class PatientsListComponent implements OnInit {
         next: () => {
           this.toastr.success('Patient deleted successfully!', 'Success');
           this.loadPatients();
+          //this.GetAllPatientsBasicInfoFilter();
         },
         error: (error) => {
           console.error('Delete error:', error);
