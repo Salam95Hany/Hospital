@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements  CanActivate {
   private http = inject(HttpClient);
   private router = inject(Router);
 
@@ -32,5 +32,13 @@ export class AuthService {
 
   get userRole(): string {
     return this.UserModel?.role;
+  }
+  canActivate(): boolean {
+    const isLoggedIn = !!localStorage.getItem('token'); // or use a service
+    if (!isLoggedIn) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
   }
 }

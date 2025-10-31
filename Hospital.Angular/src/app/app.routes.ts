@@ -11,29 +11,36 @@ import { FollowupListComponent } from './components/followup/followup-list/follo
 import { AdmissionCreateComponent } from './components/admission/admission-create/admission-create.component';
 import { SurgicalInterventionCreateComponent } from './components/surgicalIntervention/surgical-intervention-create/surgical-intervention-create.component';
 import { FollowupCreateComponent } from './components/followup/followup-create/followup-create.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { AuthService } from './auth/auth.service';
 
 export const routes: Routes = [
-	{
-		path: '',
-		component: AdminLayoutComponent,
-		children: [
-			{ path: '', component: DashboardComponent },
-			{ path: 'dashboard', component: DashboardComponent },
-			{ path: 'patients', component: PatientsListComponent },
-			{ path: 'patients/add', component: PatientCreateComponent },
-			{ path: 'patients/edit/:id', component: PatientCreateComponent },
-			{ path: 'patients/view/:id', component: PatientsListComponent },
-			{ path: 'doctors', component: DoctorsListComponent },
-			{ path: 'doctors/add', component: DoctorCreateComponent },
-			{ path: 'doctors/edit/:id', component: DoctorCreateComponent },
-			{ path: 'doctors/view/:id', component: DoctorsListComponent },
-			// Add more hospital feature routes here
-			{ path: 'admissions', component: AdmissionListComponent },
-			{ path: 'admissions/add', component: AdmissionCreateComponent },
-			{ path: 'surgical-intervention', component: SurgicalInterventionListComponent },
-			{ path: 'surgical-intervention/add', component: SurgicalInterventionCreateComponent },
-			{ path: 'follow-up', component: FollowupListComponent },
-			{ path: 'follow-up/add', component: FollowupCreateComponent },
-		]
-	}
+  { path: 'login', component: LoginPageComponent },
+
+  {
+    path: '',
+    component: AdminLayoutComponent,
+     canActivate: [AuthService],// Protect all admin routes
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'patients', component: PatientsListComponent },
+      { path: 'patients/add', component: PatientCreateComponent },
+      { path: 'patients/edit/:id', component: PatientCreateComponent },
+      { path: 'patients/view/:id', component: PatientsListComponent },
+      { path: 'doctors', component: DoctorsListComponent },
+      { path: 'doctors/add', component: DoctorCreateComponent },
+      { path: 'doctors/edit/:id', component: DoctorCreateComponent },
+      { path: 'doctors/view/:id', component: DoctorsListComponent },
+      { path: 'admissions', component: AdmissionListComponent },
+      { path: 'admissions/add', component: AdmissionCreateComponent },
+      { path: 'surgical-intervention', component: SurgicalInterventionListComponent },
+      { path: 'surgical-intervention/add', component: SurgicalInterventionCreateComponent },
+      { path: 'follow-up', component: FollowupListComponent },
+      { path: 'follow-up/add', component: FollowupCreateComponent },
+    ],
+  },
+
+  // Redirect unknown routes to login
+  { path: '**', redirectTo: 'login' },
 ];
