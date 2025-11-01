@@ -67,7 +67,7 @@
 </div>
 
 <ng-template #AdmissionCreateModal let-modal>
-    <app-admission-create [PatientId]="PatientId" [AdmissionId]="AdmissionId"></app-admission-create>
+    <app-admission-create (RefreshData)="RefreshData($event)" [PatientId]="PatientId" [AdmissionId]="AdmissionId"></app-admission-create>
 </ng-template>
 
 <ng-template #AdmissionDetailsModal let-modal>
@@ -168,6 +168,8 @@
                 <app-admin-general-input [type]="'text'" [placeholder]="'Isotope Studies'" [label]="'Isotope Studies'" class="col-md-4" [disabled]="true" [valueBind]="AdmissionObj?.isotopeStudies ?? ''"></app-admin-general-input>
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Imaging'" [label]="'Other Imaging'" class="col-md-12" [disabled]="true" [valueBind]="AdmissionObj?.otherImaging ?? ''"></app-admin-general-input>
+
+                <app-admin-slider-image [Images]="ImportedFiles" [disabled]="true"></app-admin-slider-image>
             </div>
         </div>
     </div>

@@ -20,6 +20,9 @@ namespace Hospital.Services.Common
         public async Task<ApiResponseModel<string>> UploadFile(IFormFile File, string FolderName)
         {
             string FolderPath = Path.Combine(_webRootPath, FolderName.ToString());
+            if (!Directory.Exists(FolderPath))
+                Directory.CreateDirectory(FolderPath);
+
             bool ImageIsExist = CheckFileIsExist(FolderPath, File.FileName);
             if (ImageIsExist)
             {
@@ -36,9 +39,6 @@ namespace Hospital.Services.Common
             }
             else
             {
-                if (!Directory.Exists(FolderPath))
-                    Directory.CreateDirectory(FolderPath);
-
                 if (File.Length > 0)
                 {
                     using (var stream = new FileStream(Path.Combine(FolderPath, FileName), FileMode.Create))

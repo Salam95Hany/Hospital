@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,5 +19,8 @@ namespace Hospital.Entities.Models
         public string FileSize { get; set; }
         public string InsertUser { get; set; }
         public DateTime InsertDate { get; set; }
+
+        [NotMapped]
+        public string FileUrl { get; set; }
     }
 }

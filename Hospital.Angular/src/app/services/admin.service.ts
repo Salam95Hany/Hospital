@@ -96,4 +96,16 @@ export class AdminService {
   GetFilesByActionId(ActionId: number, ActionType: ActionTypes) {
     return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Patients/GetFilesByActionId?ActionId=' + ActionId + '&ActionType=' + ActionType);
   }
+
+  // ============================== Files ==============================
+
+  DownloadFile(FileName: string, Type: ActionTypes) {
+    return this.http.get(this.Url + 'Attachments/DownloadFile?FileName=' + FileName + '&Type=' + Type, {
+      responseType: 'blob',
+    });
+  }
+
+  DeleteFile(AttachmentId: number, FileName: string, Type: ActionTypes) {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'Attachments/DeleteFile?AttachmentId=' + AttachmentId + '&FileName=' + FileName + '&Type=' + Type)
+  }
 }

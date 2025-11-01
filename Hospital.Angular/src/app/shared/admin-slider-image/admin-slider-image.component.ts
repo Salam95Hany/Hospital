@@ -1,5 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AdminService } from '../../services/admin.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-slider-image',
@@ -11,4 +13,36 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 })
 export class AdminSliderImageComponent {
   @Input() Images: any[] = [];
+  @Input() disabled: boolean = false;
+
+  @Output() RefreshImage = new EventEmitter<boolean>();
+
+  constructor(private adminService: AdminService, private toaster: ToastrService) {
+  }
+
+  DownloadFile(item: any) {
+    this.adminService.DownloadFile(item.fileName, item.actionType).subscribe((fileBlob) => {
+      const url = window.URL.createObjectURL(fileBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = item.existFileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  DeleteFile(item: any) {
+    this.adminService.DeleteFile(item.attachmentId, item.fileName, item.actionType).subscribe(res => {
+      if (res.isSuccess) {
+        this.toaster.success(res.message);
+        this.RefreshImage.emit(true);
+        this.Images = this.Images.filter(i => i.attachmentId != item.attachmentId);
+      } else
+        this.toaster.error(res.message);
+    });
+  }
+
+  trackByImageId(index: number, item: any): any {
+    return item.attachmentId || item.fileName || index;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdminGeneralInputComponent } from "../../../shared/admin-general-input/admin-general-input.component";
 import { AdminDropDownComponent } from "../../../shared/admin-drop-down/admin-drop-down.component";
 import { FormService } from '../../../services/form.service';
@@ -24,6 +24,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 export class AdmissionCreateComponent implements OnInit {
   @Input() PatientId: any;
   @Input() AdmissionId: any;
+  @Output() RefreshData = new EventEmitter<boolean>();
   courses = [
     { id: 'Progressing', name: 'Progressing' },
     { id: 'Stationary', name: 'Stationary' },
@@ -59,7 +60,6 @@ export class AdmissionCreateComponent implements OnInit {
   ItemForm: FormGroup;
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
-  Images: any[] = [];
   formErrors = {
     hospitalFileNumber: '',
     admissionDate: '',
@@ -203,16 +203,20 @@ export class AdmissionCreateComponent implements OnInit {
         this.ImportedFiles = res.results.map<FilesModel>(i => {
           return {
             attachmentId: i.attachmentId,
-            fileName: i.existFileName,
+            actionType: ActionTypes.Admission,
+            fileName: i.fileName,
             existFileName: i.existFileName,
+            fileUrl: i.fileUrl,
             fileSize: i.fileSize,
             file: null
           }
         });
-
-        this.Images = res.results.map(i => i.fileName);
       }
     })
+  }
+
+  RefreshImageData(item: boolean) {
+    this.GetFilesByActionId();
   }
 
   validateForm(): boolean {
@@ -230,12 +234,10 @@ export class AdmissionCreateComponent implements OnInit {
   }
 
   OnFileChange(selectedFile: UploadFileModel) {
-    debugger;
     this.SelectedFile = selectedFile;
   }
 
   AddNewItem() {
-    debugger;
     this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
     let isValid = this.validateForm();
     if (!isValid)
@@ -249,8 +251,10 @@ export class AdmissionCreateComponent implements OnInit {
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 
-    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0)
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
       this.ItemForm.patchValue({ fileModel: this.SelectedFile });
+    }
+
 
     const formData = new FormData();
     this.formService.buildFormData(formData, this.ItemForm.value);
@@ -260,6 +264,7 @@ export class AdmissionCreateComponent implements OnInit {
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
+          this.RefreshData.emit(true);
         }
         else
           this.toaster.error(data.message);
@@ -269,6 +274,7 @@ export class AdmissionCreateComponent implements OnInit {
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
+          this.RefreshData.emit(true);
         }
         else
           this.toaster.error(data.message);

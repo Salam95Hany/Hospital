@@ -2,6 +2,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FilesModel, UploadFileModel } from '../../models/UploadFileModel';
 import { AuthService } from '../../auth/auth.service';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-admin-upload-file',
@@ -23,7 +24,7 @@ export class AdminUploadFileComponent implements OnInit, OnChanges {
   };
   isDragOver = false;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private adminService: AdminService) {
     this.SelectedFiles.insertUser = this.authService.userId;
   }
 
@@ -57,6 +58,7 @@ export class AdminUploadFileComponent implements OnInit, OnChanges {
     this.isDragOver = false;
     const files = Array.from(event.dataTransfer?.files || []);
     this.handleFiles(files);
+    this.FilesChenged.emit(this.SelectedFiles);
   }
 
   onFileSelected(event: Event) {
@@ -88,6 +90,17 @@ export class AdminUploadFileComponent implements OnInit, OnChanges {
     }
     this.SelectedFiles.files.splice(index, 1);
     this.FilesChenged.emit(this.SelectedFiles);
+  }
+
+  downloadFile(file: any) {
+    this.adminService.DownloadFile(file.fileName, file.actionType).subscribe((fileBlob) => {
+      const url = window.URL.createObjectURL(fileBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.existFileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
   }
 
   formatFileSize(bytes: number): string {

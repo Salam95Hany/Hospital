@@ -12,12 +12,15 @@ import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { AdmissionCreateComponent } from "../admission-create/admission-create.component";
+import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
+import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 
 @Component({
   selector: 'app-admission-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent, AdmissionCreateComponent],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
+    AdminGeneralInputComponent, AdmissionCreateComponent, AdminSliderImageComponent],
   templateUrl: './admission-list.component.html',
   styleUrl: './admission-list.component.css',
   providers: [DatePipe]
@@ -26,6 +29,7 @@ export class AdmissionListComponent {
   TitleList = ["Home", "Admission"]
   Admissions: any[] = [];
   FilterList: FilterModel[] = [];
+  ImportedFiles: FilesModel[] = [];
   AdmissionObj: any;
   isFilter = true;
   PatientId: number;
@@ -72,6 +76,24 @@ export class AdmissionListComponent {
     });
   }
 
+  GetFilesByActionId() {
+    this.adminService.GetFilesByActionId(this.AdmissionId, ActionTypes.Admission).subscribe(res => {
+      if (res.results) {
+        this.ImportedFiles = res.results.map<FilesModel>(i => {
+          return {
+            attachmentId: i.attachmentId,
+            actionType: ActionTypes.Admission,
+            fileName: i.fileName,
+            existFileName: i.existFileName,
+            fileUrl: i.fileUrl,
+            fileSize: i.fileSize,
+            file: null
+          }
+        });
+      }
+    })
+  }
+
   OpenAdmissionCreateModal(content: any, admissionId: any) {
     if (!this.PatientId) {
       this.toaster.warning('Please select patient');
@@ -89,6 +111,7 @@ export class AdmissionListComponent {
   OpenAdmissionDetailsModal(content: any, admissionId: any) {
     this.AdmissionId = admissionId;
     this.GetAdmissionById();
+    this.GetFilesByActionId();
     this.modalService.open(content, {
       windowClass: 'details-size-modal',
       scrollable: true,
@@ -107,6 +130,11 @@ export class AdmissionListComponent {
 
   OnFilterChecked(filterList: FilterModel[]) {
     console.log('filterList => ', filterList);
+  }
+
+  RefreshData(item: boolean) {
+    this.GetAllAdmissionData();
+    this.GetAllAdmissionFilters();
   }
 
   DeleteItem() {

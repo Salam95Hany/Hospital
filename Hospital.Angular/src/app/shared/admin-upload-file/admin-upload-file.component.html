@@ -16,9 +16,14 @@
                             <div class="file-size">{{ file.fileSize }}</div>
                         </div>
                     </div>
-                    <button class="btn-remove" (click)="removeFile(i,file)">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <div>
+                        <button class="btn-remove" (click)="downloadFile(file)" *ngIf="file?.attachmentId">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn-remove" (click)="removeFile(i,file)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

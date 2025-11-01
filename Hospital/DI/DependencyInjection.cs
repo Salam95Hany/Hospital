@@ -67,7 +67,7 @@ namespace Hospital.DI
             services.AddScoped<ISurgicalInterventionsService, SurgicalInterventionsService>();
             services.AddScoped<IFollowUpsService, FollowUpsService>();
             services.AddScoped<IAttachmentsService, AttachmentsService>();
-            
+
 
             #region ReportsDI
 

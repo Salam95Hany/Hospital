@@ -22,7 +22,7 @@ namespace Hospital.Entities.Common
         public string FileName { get; set; }
         public string ExistFileName { get; set; }
         public string FileSize { get; set; }
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
     }
 
     public class DeletedFileModel

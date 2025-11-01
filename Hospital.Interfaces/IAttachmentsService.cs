@@ -12,5 +12,6 @@ namespace Hospital.Interfaces
     {
         Task<ApiResponseModel<List<Attachment>>> GetFilesByActionId(int ActionId, ActionTypes ActionType);
         Task<ApiResponseModel<string>> AddActionFiles(UploadFileModel Model);
+        Task<ApiResponseModel<string>> DeleteFile(int AttachmentId, string FileName, ActionTypes Type);
     }
 }

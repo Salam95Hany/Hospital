@@ -5,6 +5,7 @@ using Hospital.Interfaces;
 using Hospital.Interfaces.Common;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Hospital.Services
@@ -34,7 +35,8 @@ namespace Hospital.Services
                 ActionId = i.ActionId,
                 ActionTypeId = i.ActionTypeId,
                 ExistFileName = i.ExistFileName,
-                FileName = Path.Combine(ApiLocalUrl, ActionType.ToString(), i.FileName),
+                FileName = i.FileName,
+                FileUrl = Path.Combine(ApiLocalUrl, ActionType.ToString(), i.FileName),
                 FileSize = i.FileSize
             }).ToList();
 
@@ -45,10 +47,10 @@ namespace Hospital.Services
         {
             try
             {
-                var AttachmentFiles = new List<Attachment>();
                 if (Model.Files != null)
                 {
-                    foreach (var newFile in Model.Files)
+                    var AttachmentFiles = new List<Attachment>();
+                    foreach (var newFile in Model.Files.Where(i => i.File != null))
                     {
                         var FileName = await _manageFileService.UploadFile(newFile.File, Model.ActionType.ToString());
                         if (FileName.IsSuccess)
@@ -86,6 +88,24 @@ namespace Hospital.Services
                     await _unitOfWork.Repository<Attachment>().DeleteWhereAsync(i => AttachmentIds.Contains(i.AttachmentId));
                 }
 
+
+                await _unitOfWork.CompleteAsync();
+
+                return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
+            }
+            catch (Exception)
+            {
+                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+            }
+        }
+
+        public async Task<ApiResponseModel<string>> DeleteFile(int AttachmentId, string FileName, ActionTypes Type)
+        {
+            try
+            {
+                var File = _manageFileService.DeleteFile(FileName, Type.ToString());
+                if (File.IsSuccess)
+                    await _unitOfWork.Repository<Attachment>().DeleteWhereAsync(i => i.AttachmentId == AttachmentId);
 
                 await _unitOfWork.CompleteAsync();
 

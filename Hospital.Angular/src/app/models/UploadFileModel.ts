@@ -20,6 +20,7 @@ export enum ActionTypes {
 
 export interface FilesModel {
     attachmentId: number;
+    actionType?: ActionTypes;
     fileName: string;
     existFileName: string;
     fileSize: string;

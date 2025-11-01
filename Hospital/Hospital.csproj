@@ -19,10 +19,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\ExportFiles\" />
-    <Folder Include="wwwroot\Admission\" />
-    <Folder Include="wwwroot\FollowUp\" />
-    <Folder Include="wwwroot\Patient\" />
-    <Folder Include="wwwroot\SurgicalIntervention\" />
   </ItemGroup>
 
   <ItemGroup>

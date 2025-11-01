@@ -103,7 +103,7 @@
 
                 <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
 
-                <app-admin-slider-image [Images]="Images"></app-admin-slider-image>
+                <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
             </div>
         </form>
     </div>
