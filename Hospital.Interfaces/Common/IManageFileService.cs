@@ -10,7 +10,7 @@ namespace Hospital.Interfaces.Common
 {
     public interface IManageFileService
     {
-        Task<ApiResponseModel<string>> UploadFile(IFormFile File, string OldFileName, string FolderName);
+        Task<ApiResponseModel<string>> UploadFile(IFormFile File, string FolderName);
         ApiResponseModel<string> DeleteFile(string FileName, string FolderName);
     }
 }

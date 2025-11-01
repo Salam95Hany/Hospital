@@ -1,0 +1,94 @@
+.khairy-box {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+    transition: transform 0.3s ease;
+}
+
+.khairy-box:hover {
+    transform: translateY(-4px);
+}
+
+.kahiry-img {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.kahiry-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.khairy-box:hover .kahiry-img img {
+    transform: scale(1.05);
+}
+
+
+/* Action Buttons Overlay */
+
+.image-actions {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.khairy-box:hover .image-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-action:active {
+    transform: scale(0.95);
+}
+
+.btn-download {
+    color: #0d6efd;
+}
+
+.btn-download:hover {
+    background: #0d6efd;
+    color: white;
+}
+
+.btn-delete {
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: white;
+}

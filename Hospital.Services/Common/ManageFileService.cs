@@ -17,13 +17,9 @@ namespace Hospital.Services.Common
         {
             _webRootPath = options.Value.WebRootPath;
         }
-        public async Task<ApiResponseModel<string>> UploadFile(IFormFile File, string OldFileName, string FolderName)
+        public async Task<ApiResponseModel<string>> UploadFile(IFormFile File, string FolderName)
         {
             string FolderPath = Path.Combine(_webRootPath, FolderName.ToString());
-            if (!string.IsNullOrEmpty(OldFileName))
-            {
-                DeleteFile(OldFileName, FolderName);
-            }
             bool ImageIsExist = CheckFileIsExist(FolderPath, File.FileName);
             if (ImageIsExist)
             {

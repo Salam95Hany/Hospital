@@ -6,18 +6,36 @@ import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 })
 export class FormService {
 
-  buildFormData(formData, data, parentKey = null, key = null) {
-    if (data instanceof File)
-      formData.append('Files', data);
-    else if (data && typeof data === 'object' && !(data instanceof File)) {
-      Object.keys(data).forEach(key => {
-        this.buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key, key);
-      });
-    } else {
-      const value = data == null ? '' : data;
-      formData.append(parentKey, value);
-    }
+  buildFormData(formData: FormData, data: any, parentKey: string | null = null) {
+  if (data === null || data === undefined) return;
+
+  if (data instanceof File) {
+    formData.append(parentKey!, data);
   }
+  else if (Array.isArray(data)) {
+    data.forEach((item, index) => {
+      const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
+      this.buildFormData(formData, item, key);
+    });
+  }
+  else if (typeof data === 'object' && !(data instanceof Date)) {
+    Object.keys(data).forEach(key => {
+      const value = data[key];
+
+      if (value === null || value === undefined) return;
+
+      if (key.toLowerCase() === 'file' && value instanceof File) {
+        formData.append(`${parentKey}.${key}`, value);
+      } else {
+        this.buildFormData(formData, value, parentKey ? `${parentKey}.${key}` : key);
+      }
+    });
+  }
+  else {
+    if (data !== '')
+      formData.append(parentKey!, data);
+  }
+}
 
   NumbersOnly(key: any): boolean {
     let patt = /^([0-9\+.])$/;

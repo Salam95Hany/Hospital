@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { ApiResponseModel } from '../models/ApiResponseModel';
 import { FilterModel } from '../models/FilterModel';
+import { ActionTypes } from '../models/UploadFileModel';
 
 @Injectable({
   providedIn: 'root'
@@ -88,5 +89,11 @@ export class AdminService {
 
   DeleteFollowUp(FollowUpId: number) {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'FollowUps/DeleteFollowUp?FollowUpId=' + FollowUpId);
+  }
+
+  // ============================== Patients ==============================
+
+  GetFilesByActionId(ActionId: number, ActionType: ActionTypes) {
+    return this.http.get<ApiResponseModel<any[]>>(this.Url + 'Patients/GetFilesByActionId?ActionId=' + ActionId + '&ActionType=' + ActionType);
   }
 }

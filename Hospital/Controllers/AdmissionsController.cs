@@ -39,14 +39,14 @@ namespace Hospital.Controllers
         }
 
         [HttpPost("AddNewAdmission")]
-        public async Task<ApiResponseModel<string>> AddNewAdmission(Admission Model)
+        public async Task<ApiResponseModel<string>> AddNewAdmission([FromForm] Admission Model)
         {
             var results = await _admissionsService.AddNewAdmission(Model);
             return results;
         }
 
         [HttpPost("UpdateAdmission")]
-        public async Task<ApiResponseModel<string>> UpdateAdmission(Admission Model)
+        public async Task<ApiResponseModel<string>> UpdateAdmission([FromForm] Admission Model)
         {
             var results = await _admissionsService.UpdateAdmission(Model);
             return results;

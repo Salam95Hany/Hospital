@@ -13,9 +13,11 @@ namespace Hospital.Services
     public class AdmissionsService : IAdmissionsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public AdmissionsService(IUnitOfWork unitOfWork)
+        private readonly IAttachmentsService _attachmentsService;
+        public AdmissionsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService)
         {
             _unitOfWork = unitOfWork;
+            _attachmentsService = attachmentsService;
         }
 
         public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(int PatientId)
@@ -52,6 +54,12 @@ namespace Hospital.Services
                     CategoryDisplayName = "Name",
                     CategoryName = "SearchText",
                     FilterType = "SearchText"
+                },
+                 new FilterModel
+                {
+                    CategoryDisplayName = "Select Date Range",
+                    CategoryName = "DateRange",
+                    FilterType = "DateRange"
                 }
             };
 
@@ -110,12 +118,21 @@ namespace Hospital.Services
                     MedicalDecision = Model.MedicalDecision,
                     ScheduledDate = Model.ScheduledDate,
                     IsDeleted = false,
-                    InsertUser = Model.InsertUser,
+                    InsertUser = null,
                     InsertDate = DateTime.UtcNow
                 };
 
                 await _unitOfWork.Repository<Admission>().AddAsync(admission);
                 await _unitOfWork.CompleteAsync();
+
+                if (Model.FileModel != null)
+                {
+                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.ActionId = admission.AdmissionId;
+                    Model.FileModel.ActionType = ActionTypes.Admission;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
+                }
+
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
             }
@@ -178,10 +195,18 @@ namespace Hospital.Services
                 Entity.ProvisionalDiagnosis = Model.ProvisionalDiagnosis;
                 Entity.MedicalDecision = Model.MedicalDecision;
                 Entity.ScheduledDate = Model.ScheduledDate;
-                Entity.UpdateUser = Model.InsertUser;
+                Entity.UpdateUser = null;
                 Entity.UpdateDate = DateTime.UtcNow;
 
                 await _unitOfWork.CompleteAsync();
+
+                if (Model.FileModel != null)
+                {
+                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.ActionId = Entity.AdmissionId;
+                    Model.FileModel.ActionType = ActionTypes.Admission;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
+                }
 
                 return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
             }

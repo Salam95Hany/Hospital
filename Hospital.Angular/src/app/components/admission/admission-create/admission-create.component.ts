@@ -9,11 +9,14 @@ import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
+import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
+import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
 
 @Component({
   selector: 'app-admission-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule, AdminSliderImageComponent, AdminUploadFileComponent],
   templateUrl: './admission-create.component.html',
   styleUrl: './admission-create.component.css',
   providers: [DatePipe]
@@ -54,6 +57,9 @@ export class AdmissionCreateComponent implements OnInit {
   ];
   UserId: any;
   ItemForm: FormGroup;
+  SelectedFile: UploadFileModel;
+  ImportedFiles: FilesModel[] = [];
+  Images: any[] = [];
   formErrors = {
     hospitalFileNumber: '',
     admissionDate: '',
@@ -67,8 +73,11 @@ export class AdmissionCreateComponent implements OnInit {
   ngOnInit(): void {
     this.UserId = this.authService.userId;
     this.FormInit();
-    if (this.AdmissionId)
+    if (this.AdmissionId) {
       this.GetAdmissionById();
+      this.GetFilesByActionId();
+    }
+
 
   }
 
@@ -120,7 +129,8 @@ export class AdmissionCreateComponent implements OnInit {
       provisionalDiagnosis: null,
       medicalDecision: null,
       scheduledDate: null,
-      insertUser: null
+      insertUser: null,
+      fileModel: null
     });
 
     this.ItemForm.valueChanges.subscribe((data) => {
@@ -175,7 +185,8 @@ export class AdmissionCreateComponent implements OnInit {
       otherImaging: item.otherImaging ?? null,
       provisionalDiagnosis: item.provisionalDiagnosis ?? null,
       medicalDecision: item.medicalDecision ?? null,
-      scheduledDate: this.datePipe.transform(item.scheduledDate, 'yyyy-MM-dd') ?? ''
+      scheduledDate: this.datePipe.transform(item.scheduledDate, 'yyyy-MM-dd') ?? '',
+      fileModel: null
     });
   }
 
@@ -183,6 +194,24 @@ export class AdmissionCreateComponent implements OnInit {
     this.adminService.GetAdmissionById(this.AdmissionId).subscribe(res => {
       if (res.results)
         this.FillEditForm(res.results);
+    })
+  }
+
+  GetFilesByActionId() {
+    this.adminService.GetFilesByActionId(this.AdmissionId, ActionTypes.Admission).subscribe(res => {
+      if (res.results) {
+        this.ImportedFiles = res.results.map<FilesModel>(i => {
+          return {
+            attachmentId: i.attachmentId,
+            fileName: i.existFileName,
+            existFileName: i.existFileName,
+            fileSize: i.fileSize,
+            file: null
+          }
+        });
+
+        this.Images = res.results.map(i => i.fileName);
+      }
     })
   }
 
@@ -200,7 +229,13 @@ export class AdmissionCreateComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+  OnFileChange(selectedFile: UploadFileModel) {
+    debugger;
+    this.SelectedFile = selectedFile;
+  }
+
   AddNewItem() {
+    debugger;
     this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
     let isValid = this.validateForm();
     if (!isValid)
@@ -214,8 +249,14 @@ export class AdmissionCreateComponent implements OnInit {
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0)
+      this.ItemForm.patchValue({ fileModel: this.SelectedFile });
+
+    const formData = new FormData();
+    this.formService.buildFormData(formData, this.ItemForm.value);
+
     if (!this.AdmissionId) {
-      this.adminService.AddNewAdmission(this.ItemForm.value).subscribe(data => {
+      this.adminService.AddNewAdmission(formData).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
@@ -224,7 +265,7 @@ export class AdmissionCreateComponent implements OnInit {
           this.toaster.error(data.message);
       });
     } else {
-      this.adminService.UpdateAdmission(this.ItemForm.value).subscribe(data => {
+      this.adminService.UpdateAdmission(formData).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();

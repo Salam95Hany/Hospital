@@ -9,20 +9,25 @@ namespace Hospital.Entities.Common
 {
     public class UploadFileModel
     {
-        public int Id { get; set; }
-        public List<IFormFile> Files { get; set; } = [];
+        public int? ActionId { get; set; }
+        public ActionTypes? ActionType { get; set; }  // Patient = 1, Admission = 2, SurgicalIntervention = 3, FollowUp = 4
+        public string InsertUser { get; set; }
+        public List<FileModel> Files { get; set; } = [];
         public List<DeletedFileModel> DeletedFiles { get; set; } = [];
+    }
+
+    public class FileModel
+    {
+        public int AttachmentId { get; set; }
+        public string FileName { get; set; }
+        public string ExistFileName { get; set; }
+        public string FileSize { get; set; }
+        public IFormFile File { get; set; }
     }
 
     public class DeletedFileModel
     {
-        public int Id { get; set; }
+        public int AttachmentId { get; set; }
         public string FileName { get; set; }
-    }
-
-    public class FileSortingModel
-    {
-        public int FileId { get; set; }
-        public int DisplayOrder { get; set; }
     }
 }

@@ -493,3 +493,28 @@ p {
     bottom: 0;
     border-top: 1px solid #ddd;
 }
+
+swiper-container::part(button-next),
+swiper-container::part(button-prev) {
+    background-color: transparent;
+    border-radius: 0;
+    transition: background-color 0.3s ease;
+    top: 0;
+    height: 117%;
+    width: 50px;
+}
+
+swiper-container::part(button-next):hover,
+swiper-container::part(button-prev):hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+swiper-container[dir="rtl"]::part(button-next) {
+    left: 0;
+    right: auto;
+}
+
+swiper-container[dir="rtl"]::part(button-prev) {
+    right: 0;
+    left: auto;
+}

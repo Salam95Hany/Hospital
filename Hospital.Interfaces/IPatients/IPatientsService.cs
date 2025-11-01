@@ -1,6 +1,7 @@
 ﻿using Hospital.Entities.Common;
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Contracts.Requests;
+using Hospital.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,6 @@ namespace Hospital.Interfaces.IPatients
         Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default);
         Task<ApiResponseModel<PatientFullDetailsDto>> GetPatientByIdWithIncludeAsync(int patientId, CancellationToken cancellationToken = default);
         Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model);
-        //Task<ApiResponseModel<List<FilterModel>>> GetAllPatientsBasicInfoFilter(CancellationToken cancellationToken = default);
+        Task<ApiResponseModel<List<Attachment>>> GetFilesByActionId(int ActionId, ActionTypes ActionType);
     }
 }

@@ -83,6 +83,9 @@ namespace Hospital.Entities.Models
         public string? MedicalDecision { get; set; }
         public DateTime? ScheduledDate { get; set; }
 
+        [NotMapped]
+        public UploadFileModel? FileModel { get; set; }
+
 
         // Navigation properties
         [ForeignKey("PatientId")]

@@ -1,6 +1,7 @@
 ﻿using Hospital.Entities.Common;
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Contracts.Requests;
+using Hospital.Entities.Models;
 using Hospital.Interfaces.IPatients;
 using Hospital.Services.PatientsService;
 using Microsoft.AspNetCore.Http;
@@ -60,6 +61,12 @@ namespace Hospital.Controllers.PatientsController
         public async Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model)
         {
             return await _PatientsService.GetSearchAutoCompleteData(Model);
+        }
+
+        [HttpGet("GetFilesByActionId")]
+        public async Task<ApiResponseModel<List<Attachment>>> GetFilesByActionId(int ActionId, ActionTypes ActionType)
+        {
+            return await _PatientsService.GetFilesByActionId(ActionId, ActionType);
         }
 
     }

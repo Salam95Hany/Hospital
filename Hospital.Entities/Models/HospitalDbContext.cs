@@ -19,7 +19,8 @@ namespace Hospital.Entities.Models
         public DbSet<Admission> Admissions { get; set; }
         public DbSet<SurgicalIntervention> SurgicalInterventions { get; set; }
         public DbSet<FollowUp> FollowUps { get; set; }
-
+        public DbSet<Attachment> Attachments { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -5,6 +5,7 @@ using Hospital.Entities.Contracts.Requests;
 using Hospital.Entities.Models;
 using Hospital.Entities.Specifications.Patients;
 using Hospital.Entities.Specifications.SearchAutoComplete;
+using Hospital.Interfaces;
 using Hospital.Interfaces.IPatients;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
@@ -22,9 +23,11 @@ namespace Hospital.Services.PatientsService
     public class PatientsService : IPatientsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public PatientsService(IUnitOfWork unitOfWork)
+        private readonly IAttachmentsService _attachmentsService;
+        public PatientsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService)
         {
             _unitOfWork = unitOfWork;
+            _attachmentsService = attachmentsService;
         }
         public async Task<ApiResponseModel<string>> AddNewPatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default)
         {
@@ -710,6 +713,12 @@ namespace Hospital.Services.PatientsService
                     return ApiResponseModel<List<SearchAutoCompleteDto>>.Success(GenericErrors.GetSuccess, Data);
                 }
             }
+        }
+
+        public async Task<ApiResponseModel<List<Attachment>>> GetFilesByActionId(int ActionId, ActionTypes ActionType)
+        {
+            var Results = await _attachmentsService.GetFilesByActionId(ActionId, ActionType);
+            return Results;
         }
     }
 }

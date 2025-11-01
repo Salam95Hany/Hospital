@@ -1,0 +1,20 @@
+<div class="col-12">
+    <swiper-container *ngIf="Images?.length > 0" dir="rtl" navigation="true" pagination='{"clickable": true}' loop="false" space-between="20" [initialSlide]="0" [breakpoints]="{
+        '0': { 'slidesPerView': 1 },
+        '575': { 'slidesPerView': 1 },
+        '767': { 'slidesPerView': 2 },
+        '1024': { 'slidesPerView': 2 },
+        '1200': { 'slidesPerView': 3 }
+      }" style="
+    --swiper-navigation-color: #fff;
+    --swiper-navigation-size: 35px;
+  ">
+        <swiper-slide *ngFor="let img of Images">
+            <div class="khairy-box h-100">
+                <div class="kahiry-img">
+                    <img [src]="img" loading="lazy" alt="khairy-images" class="img-fluid rounded shadow-sm" />
+                </div>
+            </div>
+        </swiper-slide>
+    </swiper-container>
+</div>
