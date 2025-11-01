@@ -35,7 +35,7 @@ namespace Hospital.Services.Auth
         public async Task<DataTable> GetAllUsers()
         {
             var Params = new SqlParameter[0];
-            var dt = await _sQLHelper.ExecuteDataTableAsync("web.SP_GetAllUsersData", Params);
+            var dt = await _sQLHelper.ExecuteDataTableAsync("dbo.SP_GetAllUsersData", Params);
             return dt;
         }
 
