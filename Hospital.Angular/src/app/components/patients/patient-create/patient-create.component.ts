@@ -274,8 +274,8 @@ export class PatientCreateComponent implements OnInit {
 
   createSurgicalInterventionFormGroup(): FormGroup {
     return this.fb.group({
-      interventionDate: [null, [Validators.required]],
-      theater: [null, [Validators.required]],
+      interventionDate: [null],
+      theater: [null],
       mainSurgeon: [null],
       assistants: [null],
       resident: [null],
@@ -307,8 +307,8 @@ export class PatientCreateComponent implements OnInit {
 
   createFollowUpFormGroup(): FormGroup {
     return this.fb.group({
-      followUpDate: [null, [Validators.required]],
-      patientRemarksStatus: [null, [Validators.required]],
+      followUpDate: [null],
+      patientRemarksStatus: [null],
       patientRemarksDetails: [null],
       examinationFindings: [null],
       woundStatus: [null],

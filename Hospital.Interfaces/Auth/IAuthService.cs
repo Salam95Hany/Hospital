@@ -11,7 +11,7 @@ namespace Hospital.Interfaces.Auth
 {
     public interface IAuthService
     {
-        Task<DataTable> GetAllUsers();
+        Task<ApiResponseModel<DataTable>> GetAllUsers();
         Task<ApiResponseModel<ApplicationUserRespone>> AdminLogin(LoginModel request);
         Task<ApiResponseModel<string>> CreateUser(AddUserModel model);
         Task<ApiResponseModel<string>> EditUser(AddUserModel model);

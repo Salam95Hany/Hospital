@@ -15,7 +15,7 @@ import { PagingFilterModel } from '../../../models/PagingFilterModel';
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminPaginationComponent, AdminFilterComponent, NgbModule],
+  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })
