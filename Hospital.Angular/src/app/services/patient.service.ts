@@ -33,6 +33,9 @@ export class PatientService {
   AddNewPatientFull(patientData: PatientData): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/AddNewPatientFull`, patientData);
   }
+  updatePatientFull(patientData: PatientData): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/UpdatePatientFull`, patientData);
+  }
 
   // New method to get basic patient info
   getAllPatientsBasicInfo(PagingFilter: PagingFilterModel): Observable<any> {
@@ -119,13 +122,10 @@ export class PatientService {
     return of(this.patients);
   }
 
-  getPatientById(id: number): Observable<PatientData | undefined> {
-    const patient = this.patients.find(p => p.patient);
-    return of(patient);
+  getPatientById(id: number): Observable<any> {
+     return this.http.get<any>(`${this.apiUrl}/GetPatientByIdWithInclude/${id}`);
   }
-  updatePatientFull(patientData: PatientData): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/UpdatePatientFull`, patientData);
-  }
+  
 
   deletePatientWithAllData(patientId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/DeletePatientWithAllData/${patientId}`);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,10 @@ import { CustomValidators, RegexType } from '../../../services/custom-validators
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { AdminDropDownComponent } from '../../../shared/admin-drop-down/admin-drop-down.component';
 import { ToastrService } from 'ngx-toastr';
+import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
+import { AdminService } from '../../../services/admin.service';
+import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
+import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admin-upload-file.component';
 
 @Component({
   selector: 'app-patient-create',
@@ -17,7 +21,7 @@ import { ToastrService } from 'ngx-toastr';
   imports: [CommonModule, FormsModule,
     ReactiveFormsModule,
     AdminGeneralInputComponent,
-    AdminDropDownComponent],
+    AdminDropDownComponent,AdminSliderImageComponent, AdminUploadFileComponent],
   templateUrl: './patient-create.component.html',
   styleUrls: ['./patient-create.component.css']
 })
@@ -25,6 +29,8 @@ export class PatientCreateComponent implements OnInit {
   patientData: PatientData = new PatientData();
   patientForm: FormGroup;
   currentStep: number = 1;
+  SelectedFile: UploadFileModel;
+  ImportedFiles: FilesModel[] = [];
   steps = [
     { title: 'Patient Information', isCompleted: false },
     { title: 'Admission Details', isCompleted: false },
@@ -160,7 +166,8 @@ export class PatientCreateComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private adminService: AdminService
   ) { }
 
   ngOnInit(): void {
@@ -187,6 +194,30 @@ export class PatientCreateComponent implements OnInit {
       surgicalIntervention: this.createSurgicalInterventionFormGroup(),
       followUp: this.createFollowUpFormGroup()
     });
+  }
+  OnFileChange(selectedFile: UploadFileModel) {
+    this.SelectedFile = selectedFile;
+  }
+  GetFilesByActionId() {
+    this.adminService.GetFilesByActionId(this.patientId, ActionTypes.Patient).subscribe(res => {
+      if (res.results) {
+        this.ImportedFiles = res.results.map<FilesModel>(i => {
+          return {
+            attachmentId: i.attachmentId,
+            actionType: ActionTypes.Patient,
+            fileName: i.fileName,
+            existFileName: i.existFileName,
+            fileUrl: i.fileUrl,
+            fileSize: i.fileSize,
+            file: null
+          }
+        });
+      }
+    })
+  }
+
+  RefreshImageData(item: boolean) {
+    this.GetFilesByActionId();
   }
 
   setupFormValueChanges() {
@@ -508,6 +539,10 @@ export class PatientCreateComponent implements OnInit {
     this.markFormGroupTouched(this.admission);
     this.markFormGroupTouched(this.surgicalIntervention);
     this.markFormGroupTouched(this.followUp);
+
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+      this.patientForm.patchValue({ fileModel: this.SelectedFile });
+    }
     
     // Check if the form is invalid by validating individual form groups
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;

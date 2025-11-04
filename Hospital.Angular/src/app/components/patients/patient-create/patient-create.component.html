@@ -39,6 +39,8 @@
         <app-admin-general-input class="col-md-6" label="Occupation" placeholder="Enter occupation" formControlName="occupation"></app-admin-general-input>
         <app-admin-drop-down class="col-md-6" label="Marital Status" [data]="maritalStatuses" placeholder="Select Marital Status" formControlName="maritalStatus"></app-admin-drop-down>
         <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
+        <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+        <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
       </div>
       </div>
     </div>
@@ -147,10 +149,10 @@
         <h3 class="step-heading">Surgical Intervention</h3>
         <div class="step-content-inner">
           <div class="row g-3">
-        <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" class="col-md-6">
+        <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-6">
             </app-admin-general-input>
 
-            <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [label]="'Theater'" formControlName="theater" class="col-md-6">
+            <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-6">
             </app-admin-drop-down>
 
             <app-admin-general-input [type]="'text'" [placeholder]="'Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" class="col-md-6">
@@ -238,10 +240,10 @@
         <h3 class="step-heading">Follow-Up</h3>
         <div class="step-content-inner">
           <div class="row g-3">
-        <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" class="col-md-6">
+        <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">
             </app-admin-general-input>
 
-            <app-admin-drop-down [data]="patientRemarks" [placeholder]="'Select Patient Remarks'" [label]="'Patient Remarks'" formControlName="patientRemarksStatus" class="col-md-6">
+            <app-admin-drop-down [data]="patientRemarks" [placeholder]="'Select Patient Remarks'" [label]="'Patient Remarks'" formControlName="patientRemarksStatus" [error]="formErrors.patientRemarksStatus" class="col-md-6">
             </app-admin-drop-down>
 
             <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Patient Remarks'" [label]="'Details of Patient Remarks'" formControlName="patientRemarksDetails" class="col-md-12">
