@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace Hospital.Entities.Models
         public string MaritalStatus { get; set; }
         public string ChildrenCount { get; set; }
         public string InternalNumber { get; set; }
+        [NotMapped]
+        public UploadFileModel? FileModel { get; set; }
 
 
         // Navigation property

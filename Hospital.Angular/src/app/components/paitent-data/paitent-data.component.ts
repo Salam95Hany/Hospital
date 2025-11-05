@@ -86,7 +86,8 @@ patientData: PatientData = new PatientData();
         occupation: [''],
         maritalStatus: [''],
         childrenCount: [''],
-        internalNumber: ['']
+        internalNumber: [''],
+        fileModel: null
       }),
     });
   }
@@ -209,6 +210,10 @@ get patient(): FormGroup {
     this.markFormGroupTouched(this.patientForm.get('patient') as FormGroup);
 
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
+
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+      this.patientForm.patchValue({ fileModel: this.SelectedFile });
+    }
 
     if (this.PatientId)
       this.patientForm.patchValue({ patientId: this.PatientId });

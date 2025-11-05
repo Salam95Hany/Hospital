@@ -21,7 +21,7 @@ namespace Hospital.Controllers.PatientsController
             _PatientsService = PatientsService;
         }
         [HttpPost("AddNewPatientFull")]
-        public async Task<ApiResponseModel<string>> AddNewPatientFull(AddPatientFullModel Model)
+        public async Task<ApiResponseModel<string>> AddNewPatientFull([FromForm]AddPatientFullModel Model)
         {
             var results = await _PatientsService.AddNewPatientFull(Model);
             return results;
@@ -40,7 +40,7 @@ namespace Hospital.Controllers.PatientsController
         //    return results;
         //}
         [HttpPut("UpdatePatientFull")]
-        public async Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model)
+        public async Task<ApiResponseModel<string>> UpdatePatientFull([FromForm]AddPatientFullModel Model)
         {
             return await _PatientsService.UpdatePatientFull(Model);
         }

@@ -188,7 +188,8 @@ export class PatientCreateComponent implements OnInit {
         occupation: [''],
         maritalStatus: [''],
         childrenCount: [''],
-        internalNumber: ['']
+        internalNumber: [''],
+        fileModel: null
       }),
       admission: this.createAdmissionFormGroup(),
       surgicalIntervention: this.createSurgicalInterventionFormGroup(),
@@ -299,7 +300,8 @@ export class PatientCreateComponent implements OnInit {
       otherImaging: null,
       provisionalDiagnosis: null,
       medicalDecision: null,
-      scheduledDate: null
+      scheduledDate: null,
+      fileModel: null
     });
   }
 

@@ -59,6 +59,13 @@ namespace Hospital.Services.PatientsService
                 }
 
                 await _unitOfWork.CompleteAsync();
+                if (Model.Patient.FileModel != null)
+                {
+                    Model.Patient.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.Patient.FileModel.ActionId = patientId;
+                    Model.Patient.FileModel.ActionType = ActionTypes.Patient;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.Patient.FileModel);
+                }
                 await transaction.CommitAsync(cancellationToken);
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
@@ -311,6 +318,7 @@ namespace Hospital.Services.PatientsService
             using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
+
                 // Step 1: Update Patient
                 await UpdatePatient(Model.Patient);
 
@@ -354,6 +362,13 @@ namespace Hospital.Services.PatientsService
                 }
 
                 await _unitOfWork.CompleteAsync();
+                if (Model.Patient.FileModel != null)
+                {
+                    Model.Patient.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.Patient.FileModel.ActionId = Model.Patient.PatientId;
+                    Model.Patient.FileModel.ActionType = ActionTypes.Patient;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.Patient.FileModel);
+                }
                 await transaction.CommitAsync(cancellationToken);
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
