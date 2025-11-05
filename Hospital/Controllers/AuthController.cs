@@ -19,7 +19,7 @@ namespace Hospital.Controllers
 
         [HttpGet]
         [Route("GetAllUsers")]
-        public async Task<ApiResponseModel<DataTable>> GetAllUsers()
+        public async Task<DataTable> GetAllUsers()
         {
             var results = await _authService.GetAllUsers();
             return results;
