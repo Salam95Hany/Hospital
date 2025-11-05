@@ -59,6 +59,13 @@ namespace Hospital.Services.PatientsService
                 }
 
                 await _unitOfWork.CompleteAsync();
+                if (Model.Patient.FileModel != null)
+                {
+                    Model.Patient.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.Patient.FileModel.ActionId = patientId;
+                    Model.Patient.FileModel.ActionType = ActionTypes.Patient;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.Patient.FileModel);
+                }
                 await transaction.CommitAsync(cancellationToken);
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
@@ -77,32 +84,29 @@ namespace Hospital.Services.PatientsService
             var randomPart = random.Next(1000, 9999).ToString(); // 4-digit random number
             var prefix = $"URO-{currentYear}-{randomPart}-";
 
-            // Get ALL internal numbers for the current year (not just this random prefix)
+            // Get all existing internal numbers for the current year
             var yearPrefix = $"URO-{currentYear}-";
             var internalNumbers = await _unitOfWork.Repository<Patient>()
                 .WhereAsync(p => p.InternalNumber != null && p.InternalNumber.StartsWith(yearPrefix));
 
-            if (!internalNumbers.Any())
+            // Find the highest sequential number across ALL existing numbers
+            int newSequentialNumber = 1;
+            if (internalNumbers.Any())
             {
-                return $"{prefix}0001";
+                var lastSequentialNumber = internalNumbers
+                    .Select(p =>
+                    {
+                        var parts = p.InternalNumber.Split('-');
+                        if (parts.Length >= 4 && int.TryParse(parts[3], out int seq))
+                            return seq;
+                        return 0;
+                    })
+                    .Max();
+
+                newSequentialNumber = lastSequentialNumber + 1;
             }
 
-            // Find the highest sequential number across ALL random prefixes for this year
-            var lastInternalNumber = internalNumbers
-                .OrderByDescending(p => p.InternalNumber)
-                .Select(p => p.InternalNumber)
-                .First();
-
-            // Extract the sequential part (last 4 digits)
-            var lastSequentialPart = lastInternalNumber.Substring(lastInternalNumber.Length - 4);
-            if (int.TryParse(lastSequentialPart, out int lastSequentialNumber))
-            {
-                var newSequentialNumber = lastSequentialNumber + 1;
-                return $"{prefix}{newSequentialNumber:D4}";
-            }
-
-            // Fallback if parsing fails
-            return $"{prefix}0001";
+            return $"{prefix}{newSequentialNumber:D4}";
         }
         private async Task<int> AddNewPatient(Patient patientModel, string internalNumber)
         {
@@ -314,6 +318,7 @@ namespace Hospital.Services.PatientsService
             using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
+
                 // Step 1: Update Patient
                 await UpdatePatient(Model.Patient);
 
@@ -357,6 +362,13 @@ namespace Hospital.Services.PatientsService
                 }
 
                 await _unitOfWork.CompleteAsync();
+                if (Model.Patient.FileModel != null)
+                {
+                    Model.Patient.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.Patient.FileModel.ActionId = Model.Patient.PatientId;
+                    Model.Patient.FileModel.ActionType = ActionTypes.Patient;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.Patient.FileModel);
+                }
                 await transaction.CommitAsync(cancellationToken);
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);

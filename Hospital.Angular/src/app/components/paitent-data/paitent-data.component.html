@@ -1,0 +1,42 @@
+
+<div class="modal-header modal-header-bg justify-content-between">
+    <h2 class="d-flex align-items-center gap-2">
+        <i class="fas fa-{{!PatientId ? 'plus':'edit'}}"></i>
+        <span>{{!PatientId ? 'Add' : 'Edit'}} Patient</span>
+    </h2>
+    <div class="cursor-pointer text-danger fs-2" (click)="DismissModal()">
+        <i class="fas fa-times-circle"></i>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="step-content form-card" data-step="1" style="display: block;">
+        <form [formGroup]="patientForm" autocomplete="off">
+        <div formGroupName="patient">
+        <div class="row g-3">
+        <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
+        <app-admin-general-input class="col-md-6" type="date" label="Birth Date" formControlName="birthDate"></app-admin-general-input>
+        <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age"></app-admin-general-input>
+        <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{name:'Male'}, {name:'Female'}]" placeholder="Select Gender" formControlName="gender"></app-admin-drop-down>
+        <app-admin-general-input class="col-md-6" label="National ID" placeholder="Enter National ID" formControlName="nationalId" [error]="formErrors.nationalId"></app-admin-general-input>
+        <app-admin-general-input class="col-md-6" label="Address" placeholder="Enter address" formControlName="address"></app-admin-general-input>
+        <app-admin-drop-down class="col-md-6" label="Governorate" [data]="governorates" placeholder="Select Governorate" formControlName="governorate"></app-admin-drop-down>
+        <app-admin-general-input class="col-md-6" label="Occupation" placeholder="Enter occupation" formControlName="occupation"></app-admin-general-input>
+        <app-admin-drop-down class="col-md-6" label="Marital Status" [data]="maritalStatuses" placeholder="Select Marital Status" formControlName="maritalStatus"></app-admin-drop-down>
+        <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
+        <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+        <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                </div>
+                </div>
+                </form>
+    </div>
+</div>
+<div class="modal-footer flex-nowrap gap-2">
+    <button class="btn btn-danger" (click)="DismissModal()">
+        <i class="fas fa-times-circle"></i> Cancel
+    </button>
+    <button class="btn btn-success" (click)="updatePatient()">
+        <i class="fas fa-save"></i> update
+    </button>
+
+</div>
+

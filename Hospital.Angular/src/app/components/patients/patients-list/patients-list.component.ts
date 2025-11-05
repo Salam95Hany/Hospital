@@ -8,14 +8,16 @@ import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete
 import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
 import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.component";
 import { FilterModel } from '../../../models/FilterModel';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TemplateRef, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
+import { PaitentDataComponent } from '../../paitent-data/paitent-data.component';
 
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminPaginationComponent, AdminFilterComponent, NgbModule],
+  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule,PaitentDataComponent],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })
@@ -32,11 +34,13 @@ export class PatientsListComponent implements OnInit {
     currentpage: 1,
     pagesize: 20
   };
+  PatientId: any;
+  @ViewChild('PatientCreateModal', { read: TemplateRef }) PatientCreateModalRef!: TemplateRef<any>;
 
 
   constructor(
     private patientService: PatientService,
-    private router: Router, private toastr: ToastrService
+    private router: Router, private toastr: ToastrService,private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -110,4 +114,34 @@ export class PatientsListComponent implements OnInit {
     }
 
   }
+
+  OpenPatentCreateModal(content: any, patientId: any) {
+    this.PatientId = patientId;
+    try {
+      const tpl = content || this.PatientCreateModalRef;
+      this.modalService.open(tpl, {
+        windowClass: 'details-size-modal',
+        scrollable: true,
+        centered: true
+      });
+    } catch (err) {
+      console.error('Failed to open patient modal:', err);
+      // fallback: try opening the ViewChild template if available
+      if (this.PatientCreateModalRef) {
+        try {
+          this.modalService.open(this.PatientCreateModalRef, {
+            windowClass: 'details-size-modal',
+            scrollable: true,
+            centered: true
+          });
+        } catch (innerErr) {
+          console.error('Fallback modal open failed:', innerErr);
+        }
+      }
+    }
+  }
+  RefreshData(item: boolean) {
+  this.loadPatients();
+  }
+
 }
