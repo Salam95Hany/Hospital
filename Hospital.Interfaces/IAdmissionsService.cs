@@ -11,9 +11,8 @@ namespace Hospital.Interfaces
 {
     public interface IAdmissionsService
     {
-        Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(int PatientId);
+        Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(PagingFilterModel PagingFilter, int PatientId);
         Task<ApiResponseModel<Admission>> GetAdmissionById(int AdmissionId);
-        Task<ApiResponseModel<List<FilterModel>>> GetAllAdmissionFilters(int PatientId);
         Task<ApiResponseModel<string>> AddNewAdmission(Admission Model);
         Task<ApiResponseModel<string>> UpdateAdmission(Admission Model);
         Task<ApiResponseModel<string>> DeleteAdmission(int AdmissionId);

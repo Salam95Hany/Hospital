@@ -17,10 +17,10 @@ namespace Hospital.Controllers
             _admissionsService = admissionsService;
         }
 
-        [HttpGet("GetAllAdmissionData")]
-        public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(int PatientId)
+        [HttpPost("GetAllAdmissionData")]
+        public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(PagingFilterModel PagingFilter, int PatientId)
         {
-            var results = await _admissionsService.GetAllAdmissionData(PatientId);
+            var results = await _admissionsService.GetAllAdmissionData(PagingFilter, PatientId);
             return results;
         }
 
@@ -28,13 +28,6 @@ namespace Hospital.Controllers
         public async Task<ApiResponseModel<Admission>> GetAdmissionById(int AdmissionId)
         {
             var results = await _admissionsService.GetAdmissionById(AdmissionId);
-            return results;
-        }
-
-        [HttpGet("GetAllAdmissionFilters")]
-        public async Task<ApiResponseModel<List<FilterModel>>> GetAllAdmissionFilters(int PatientId)
-        {
-            var results = await _admissionsService.GetAllAdmissionFilters(PatientId);
             return results;
         }
 

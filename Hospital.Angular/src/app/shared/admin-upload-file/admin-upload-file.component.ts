@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FilesModel, UploadFileModel } from '../../models/UploadFileModel';
 import { AuthService } from '../../auth/auth.service';
 import { AdminService } from '../../services/admin.service';
@@ -11,9 +11,8 @@ import { AdminService } from '../../services/admin.service';
   templateUrl: './admin-upload-file.component.html',
   styleUrl: './admin-upload-file.component.css'
 })
-export class AdminUploadFileComponent implements OnInit, OnChanges {
+export class AdminUploadFileComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  @Input() ImportedFiles: FilesModel[] = [];
   @Output() FilesChenged = new EventEmitter<UploadFileModel>();
   SelectedFiles: UploadFileModel = {
     actionId: null,
@@ -28,17 +27,7 @@ export class AdminUploadFileComponent implements OnInit, OnChanges {
     this.SelectedFiles.insertUser = this.authService.userId;
   }
 
-  ngOnInit(): void {
-    this.SelectedFiles.files = [];
-    if (this.ImportedFiles && this.ImportedFiles.length > 0)
-      this.SelectedFiles.files = this.ImportedFiles;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.SelectedFiles.files = [];
-    if (this.ImportedFiles && this.ImportedFiles.length > 0)
-      this.SelectedFiles.files = this.ImportedFiles;
-  }
+  ngOnInit(): void {}
 
   onAreaClick() {
     this.fileInput.nativeElement.click();

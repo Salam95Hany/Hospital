@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AdminGeneralInputComponent } from "../../../shared/admin-general-input/admin-general-input.component";
 import { AdminDropDownComponent } from "../../../shared/admin-drop-down/admin-drop-down.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,11 +8,14 @@ import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
+import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
+import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
 
 @Component({
   selector: 'app-followup-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent],
   templateUrl: './followup-create.component.html',
   styleUrl: './followup-create.component.css',
   providers: [DatePipe]
@@ -20,6 +23,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class FollowupCreateComponent {
   @Input() FollowUpId: any;
   @Input() SurgicalInterventionId: any;
+  @Output() RefreshData = new EventEmitter<boolean>();
 
   patientRemarks = [
     { id: 'Better', name: 'Better' },
@@ -27,7 +31,8 @@ export class FollowupCreateComponent {
     { id: 'The same', name: 'The same' },
     { id: 'Details', name: 'Details' }
   ];
-
+  SelectedFile: UploadFileModel;
+  ImportedFiles: FilesModel[] = [];
   UserId: any;
   ItemForm: FormGroup;
   formErrors = {
@@ -42,8 +47,10 @@ export class FollowupCreateComponent {
   ngOnInit(): void {
     this.UserId = this.authService.userId;
     this.FormInit();
-    if (this.FollowUpId)
+    if (this.FollowUpId) {
       this.GetFollowUpById();
+      this.GetFilesByActionId();
+    }
   }
 
   FormInit() {
@@ -61,7 +68,8 @@ export class FollowupCreateComponent {
       imagePath: [null],
       advice: [null],
       newDecision: [null],
-      nextFollowUpDate: [null]
+      nextFollowUpDate: [null],
+      fileModel: null
     });
 
     this.ItemForm.valueChanges.subscribe(() => {
@@ -84,7 +92,8 @@ export class FollowupCreateComponent {
       imagePath: item.imagePath ?? null,
       advice: item.advice ?? null,
       newDecision: item.newDecision ?? null,
-      nextFollowUpDate: this.datePipe.transform(item.nextFollowUpDate, 'yyyy-MM-dd') ?? ''
+      nextFollowUpDate: this.datePipe.transform(item.nextFollowUpDate, 'yyyy-MM-dd') ?? '',
+      fileModel: null
     });
   }
 
@@ -95,8 +104,34 @@ export class FollowupCreateComponent {
     })
   }
 
+  GetFilesByActionId() {
+    this.adminService.GetFilesByActionId(this.FollowUpId, ActionTypes.FollowUp).subscribe(res => {
+      if (res.results) {
+        this.ImportedFiles = res.results.map<FilesModel>(i => {
+          return {
+            attachmentId: i.attachmentId,
+            actionType: ActionTypes.FollowUp,
+            fileName: i.fileName,
+            existFileName: i.existFileName,
+            fileUrl: i.fileUrl,
+            fileSize: i.fileSize,
+            file: null
+          }
+        });
+      }
+    })
+  }
+
+  RefreshImageData(item: boolean) {
+    this.GetFilesByActionId();
+  }
+
   DismissModal() {
     this.modalService.dismissAll();
+  }
+
+  OnFileChange(selectedFile: UploadFileModel) {
+    this.SelectedFile = selectedFile;
   }
 
   validateForm(): boolean {
@@ -120,20 +155,30 @@ export class FollowupCreateComponent {
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+      this.ItemForm.patchValue({ fileModel: this.SelectedFile });
+    }
+
+
+    const formData = new FormData();
+    this.formService.buildFormData(formData, this.ItemForm.value);
+
     if (!this.FollowUpId) {
-      this.adminService.AddNewFollowUp(this.ItemForm.value).subscribe(data => {
+      this.adminService.AddNewFollowUp(formData).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
+          this.RefreshData.emit(true);
         }
         else
           this.toaster.error(data.message);
       });
     } else {
-      this.adminService.UpdateFollowUp(this.ItemForm.value).subscribe(data => {
+      this.adminService.UpdateFollowUp(formData).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
+          this.RefreshData.emit(true);
         }
         else
           this.toaster.error(data.message);

@@ -13,7 +13,6 @@ namespace Hospital.Interfaces
     {
         Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId);
         Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId);
-        Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int SurgicalInterventionId);
         Task<ApiResponseModel<string>> AddNewFollowUp(FollowUp Model);
         Task<ApiResponseModel<string>> UpdateFollowUp(FollowUp Model);
         Task<ApiResponseModel<string>> DeleteFollowUp(int FollowUpId);

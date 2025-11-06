@@ -25,7 +25,6 @@ import { FilterModel } from '../../../models/FilterModel';
 })
 export class FollowupListComponent {
   FollowUps: any[] = [];
-  FilterList: FilterModel[] = [];
   FollowUpObj: any;
   SurgicalInterventionId: number;
   FollowUpId: number;
@@ -35,6 +34,18 @@ export class FollowupListComponent {
   selectedSurgicalInterventions: any = null;
   isFilter = true;
   TotalCount = 0;
+  FilterList: FilterModel[] = [
+    {
+      categoryDisplayName: "Name",
+      categoryName: "SearchText",
+      filterType: "SearchText"
+    },
+    {
+      categoryDisplayName: "Select Date Range",
+      categoryName: "DateRange",
+      filterType: "DateRange"
+    }
+  ];
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
     private toaster: ToastrService, private datePipe: DatePipe, private modalService: NgbModal) { }
@@ -46,12 +57,6 @@ export class FollowupListComponent {
     this.adminService.GetAllFollowUpData(this.SurgicalInterventionId).subscribe(response => {
       this.FollowUps = response.results;
       this.TotalCount = response.totalCount;
-    });
-  }
-
-  GetAllFollowUpFilters() {
-    this.adminService.GetAllFollowUpFilters(this.SurgicalInterventionId).subscribe(res => {
-      this.FilterList = res.results;
     });
   }
 
@@ -90,7 +95,6 @@ export class FollowupListComponent {
     this.SurgicalInterventionId = item?.id;
     this.selectedSurgicalInterventions = item;
     this.GetAllFollowUpData();
-    this.GetAllFollowUpFilters();
   }
 
   OpenFollowUpCreateModal(content: any, followUpId: any) {
@@ -114,7 +118,7 @@ export class FollowupListComponent {
       windowClass: 'details-size-modal',
       scrollable: true,
       centered: true
-    })
+    });
   }
 
   OpenFollowUpDetailsModal(content: any, followUpId: any) {
@@ -140,12 +144,15 @@ export class FollowupListComponent {
     console.log('filterList => ', filterList);
   }
 
+  RefreshData(item: boolean) {
+    this.GetAllFollowUpData();
+  }
+
   DeleteItem() {
     this.adminService.DeleteFollowUp(this.FollowUpId).subscribe(res => {
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllFollowUpData();
-        this.GetAllFollowUpFilters();
         this.modalService.dismissAll();
       } else
         this.toaster.error(res.message);

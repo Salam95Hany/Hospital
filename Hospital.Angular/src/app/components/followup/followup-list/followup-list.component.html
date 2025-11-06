@@ -74,7 +74,7 @@
 
 
 <ng-template #FollowUpCreateModal let-modal>
-    <app-followup-create [FollowUpId]="FollowUpId" [SurgicalInterventionId]="SurgicalInterventionId"></app-followup-create>
+    <app-followup-create (RefreshData)="RefreshData($event)" [FollowUpId]="FollowUpId" [SurgicalInterventionId]="SurgicalInterventionId"></app-followup-create>
 </ng-template>
 
 <ng-template #FollowUpDetailsModal let-modal>

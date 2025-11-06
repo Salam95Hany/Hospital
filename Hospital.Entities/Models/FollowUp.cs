@@ -35,6 +35,9 @@ namespace Hospital.Entities.Models
         public string? NewDecision { get; set; }
         public DateTime? NextFollowUpDate { get; set; }
 
+        [NotMapped]
+        public UploadFileModel? FileModel { get; set; }
+
         [ForeignKey("SurgicalInterventionId")]
         public SurgicalIntervention? SurgicalInterventions { get; set; }
     }

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { ApiResponseModel } from '../models/ApiResponseModel';
-import { FilterModel } from '../models/FilterModel';
 import { ActionTypes } from '../models/UploadFileModel';
+import { PagingFilterModel } from '../models/PagingFilterModel';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +15,12 @@ export class AdminService {
 
   // ============================== Admissions ==============================
 
-  GetAllAdmissionData(PatientId: number) {
-    return this.http.get<ApiResponseModel<any>>(this.Url + 'Admissions/GetAllAdmissionData?PatientId=' + PatientId);
+  GetAllAdmissionData(PagingFilter: PagingFilterModel, PatientId: number) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'Admissions/GetAllAdmissionData?PatientId=' + PatientId, PagingFilter);
   }
 
   GetAdmissionById(AdmissionId: number) {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'Admissions/GetAdmissionById?AdmissionId=' + AdmissionId);
-  }
-
-  GetAllAdmissionFilters(PatientId: number) {
-    return this.http.get<ApiResponseModel<FilterModel[]>>(this.Url + 'Admissions/GetAllAdmissionFilters?PatientId=' + PatientId);
   }
 
   AddNewAdmission(Model: any) {
@@ -49,10 +45,6 @@ export class AdminService {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'SurgicalInterventions/GetSurgicalInterventionById?SurgicalInterventionId=' + SurgicalInterventionId);
   }
 
-  GetAllSurgicalInterventionFilters(AdmissionId: number) {
-    return this.http.get<ApiResponseModel<FilterModel[]>>(this.Url + 'SurgicalInterventions/GetAllSurgicalInterventionFilters?AdmissionId=' + AdmissionId);
-  }
-
   AddNewSurgicalIntervention(Model: any) {
     return this.http.post<ApiResponseModel<any>>(this.Url + 'SurgicalInterventions/AddNewSurgicalIntervention', Model);
   }
@@ -73,10 +65,6 @@ export class AdminService {
 
   GetFollowUpById(FollowUpId: number) {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'FollowUps/GetFollowUpById?FollowUpId=' + FollowUpId);
-  }
-
-  GetAllFollowUpFilters(SurgicalInterventionId: number) {
-    return this.http.get<ApiResponseModel<FilterModel[]>>(this.Url + 'FollowUps/GetAllFollowUpFilters?SurgicalInterventionId=' + SurgicalInterventionId);
   }
 
   AddNewFollowUp(Model: any) {

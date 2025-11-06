@@ -13,7 +13,6 @@ namespace Hospital.Interfaces
     {
         Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(int AdmissionId);
         Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId);
-        Task<ApiResponseModel<List<FilterModel>>> GetAllSurgicalInterventionFilters(int AdmissionId);
         Task<ApiResponseModel<string>> AddNewSurgicalIntervention(SurgicalIntervention Model);
         Task<ApiResponseModel<string>> UpdateSurgicalIntervention(SurgicalIntervention Model);
         Task<ApiResponseModel<string>> DeleteSurgicalIntervention(int SurgicalInterventionId);

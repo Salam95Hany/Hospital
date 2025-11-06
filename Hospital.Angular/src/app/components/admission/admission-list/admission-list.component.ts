@@ -14,6 +14,7 @@ import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/
 import { AdmissionCreateComponent } from "../admission-create/admission-create.component";
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
+import { PagingFilterModel } from '../../../models/PagingFilterModel';
 
 @Component({
   selector: 'app-admission-list',
@@ -28,7 +29,6 @@ import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/ad
 export class AdmissionListComponent {
   TitleList = ["Home", "Admission"]
   Admissions: any[] = [];
-  FilterList: FilterModel[] = [];
   ImportedFiles: FilesModel[] = [];
   AdmissionObj: any;
   isFilter = true;
@@ -36,6 +36,28 @@ export class AdmissionListComponent {
   AdmissionId: number;
   searchTerm: string = '';
   TotalCount = 0;
+  PagingFilter: PagingFilterModel = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 20
+  };
+  FilterList: FilterModel[] = [
+    {
+      categoryDisplayName: "Name",
+      categoryName: "SearchText",
+      filterType: "SearchText"
+    },
+    {
+      categoryDisplayName: "Admission Date",
+      categoryName: "Admission Date",
+      filterType: "DateRange"
+    },
+    {
+      categoryDisplayName: "Discharge Date",
+      categoryName: "Discharge Date",
+      filterType: "DateRange"
+    }
+  ];
 
   constructor(private adminService: AdminService, private router: Router, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe) { }
 
@@ -44,22 +66,15 @@ export class AdmissionListComponent {
   }
 
   GetAllAdmissionData(): void {
-    this.adminService.GetAllAdmissionData(this.PatientId).subscribe(res => {
+    this.adminService.GetAllAdmissionData(this.PagingFilter, this.PatientId).subscribe(res => {
       this.Admissions = res.results;
       this.TotalCount = res.totalCount;
-    });
-  }
-
-  GetAllAdmissionFilters() {
-    this.adminService.GetAllAdmissionFilters(this.PatientId).subscribe(res => {
-      this.FilterList = res.results;
     });
   }
 
   GetAdmissionByPatientId(item: any) {
     this.PatientId = item.id;
     this.GetAllAdmissionData();
-    this.GetAllAdmissionFilters();
   }
 
   GetAdmissionById() {
@@ -129,12 +144,17 @@ export class AdmissionListComponent {
   }
 
   OnFilterChecked(filterList: FilterModel[]) {
-    console.log('filterList => ', filterList);
+    this.PagingFilter.filterList = filterList;
+    this.GetAllAdmissionData();
+  }
+
+  OnPageChanged(obj: any) {
+    this.PagingFilter.currentpage = obj.page;
+    this.GetAllAdmissionData();
   }
 
   RefreshData(item: boolean) {
     this.GetAllAdmissionData();
-    this.GetAllAdmissionFilters();
   }
 
   DeleteItem() {
@@ -142,7 +162,6 @@ export class AdmissionListComponent {
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllAdmissionData();
-        this.GetAllAdmissionFilters();
         this.modalService.dismissAll();
       } else
         this.toaster.error(res.message);
