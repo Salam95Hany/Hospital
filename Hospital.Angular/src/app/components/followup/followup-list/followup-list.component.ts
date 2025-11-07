@@ -13,6 +13,7 @@ import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FilterModel } from '../../../models/FilterModel';
+import { PagingFilterModel } from '../../../models/PagingFilterModel';
 
 @Component({
   selector: 'app-followup-list',
@@ -34,15 +35,20 @@ export class FollowupListComponent {
   selectedSurgicalInterventions: any = null;
   isFilter = true;
   TotalCount = 0;
+  PagingFilter: PagingFilterModel = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 10
+  };
   FilterList: FilterModel[] = [
+    // {
+    //   categoryDisplayName: "Name",
+    //   categoryName: "SearchText",
+    //   filterType: "SearchText"
+    // },
     {
-      categoryDisplayName: "Name",
-      categoryName: "SearchText",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "Select Date Range",
-      categoryName: "DateRange",
+      categoryDisplayName: "FollowUp Date",
+      categoryName: "FollowUp Date",
       filterType: "DateRange"
     }
   ];
@@ -54,7 +60,7 @@ export class FollowupListComponent {
   }
 
   GetAllFollowUpData(): void {
-    this.adminService.GetAllFollowUpData(this.SurgicalInterventionId).subscribe(response => {
+    this.adminService.GetAllFollowUpData(this.PagingFilter,this.SurgicalInterventionId).subscribe(response => {
       this.FollowUps = response.results;
       this.TotalCount = response.totalCount;
     });
@@ -141,7 +147,13 @@ export class FollowupListComponent {
   }
 
   OnFilterChecked(filterList: FilterModel[]) {
-    console.log('filterList => ', filterList);
+    this.PagingFilter.filterList = filterList;
+    this.GetAllFollowUpData();
+  }
+
+  OnPageChanged(obj: any) {
+    this.PagingFilter.currentpage = obj.page;
+    this.GetAllFollowUpData();
   }
 
   RefreshData(item: boolean) {

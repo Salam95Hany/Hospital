@@ -1,5 +1,6 @@
 ﻿using Hospital.Entities.Auth;
 using Hospital.Entities.Common;
+using Hospital.Entities.Contracts.DTOs;
 using Hospital.Interfaces.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace Hospital.Controllers
 
         [HttpGet]
         [Route("GetAllUsers")]
-        public async Task<ApiResponseModel<DataTable>> GetAllUsers()
+        public async Task<ApiResponseModel<List<UserWithRolesDto>>> GetAllUsers()
         {
             var results = await _authService.GetAllUsers();
             return results;

@@ -1,10 +1,13 @@
 ﻿using Hospital.Entities.Auth;
 using Hospital.Entities.Common;
+using Hospital.Entities.Contracts.DTOs;
 using Hospital.Interfaces.Auth;
 using Hospital.Interfaces.Common;
+using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,28 +18,60 @@ using System.Threading.Tasks;
 
 namespace Hospital.Services.Auth
 {
-    public class AuthService: IAuthService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<AdminUser> _userManager;
         private readonly SignInManager<AdminUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ISQLHelper _sQLHelper;
         private readonly IJwtProvider _jwtProvider;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AuthService(UserManager<AdminUser> userManager, SignInManager<AdminUser> signInManager, RoleManager<IdentityRole> roleManager, IJwtProvider jwtProvider, ISQLHelper sQLHelper)
+        public AuthService(UserManager<AdminUser> userManager, SignInManager<AdminUser> signInManager, RoleManager<IdentityRole> roleManager, IJwtProvider jwtProvider, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtProvider = jwtProvider;
-            _sQLHelper = sQLHelper;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<ApiResponseModel<DataTable>> GetAllUsers()
+        public async Task<ApiResponseModel<List<UserWithRolesDto>>> GetAllUsers()
         {
-            var Params = new SqlParameter[0];
-            var dt = await _sQLHelper.ExecuteDataTableAsync("dbo.SP_GetAllUsersData", Params);
-            return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
+            var users = _unitOfWork.Repository<AdminUser>().GetAllAsQueryable();
+            var roles = _unitOfWork.Repository<IdentityRole>().GetAllAsQueryable();
+            var userRoles = _unitOfWork.Repository<IdentityUserRole<string>>().GetAllAsQueryable();
+
+            var data = await (from user in users
+                              join ur in userRoles on user.Id equals ur.UserId into userRoleJoin
+                              from ur in userRoleJoin.DefaultIfEmpty()
+                              join role in roles on ur.RoleId equals role.Id into roleJoin
+                              from role in roleJoin.DefaultIfEmpty()
+                              select new
+                              {
+                                  user.Id,
+                                  user.UserName,
+                                  user.Email,
+                                  user.Address,
+                                  user.PhoneNumber,
+                                  user.LoginDate,
+                                  user.IsActive,
+                                  RoleName = role != null ? role.Name : null
+                              }).ToListAsync();
+
+
+            var result = data.Select(g => new UserWithRolesDto
+            {
+                UserId = g.Id,
+                UserName = g.UserName,
+                Email = g.Email,
+                Address = g.Address,
+                PhoneNumber = g.PhoneNumber,
+                IsActive = g.IsActive,
+                LoginDate = g.LoginDate,
+                Role = g.RoleName
+            }).ToList();
+
+            return ApiResponseModel<List<UserWithRolesDto>>.Success(GenericErrors.GetSuccess, result);
         }
 
         public async Task<ApiResponseModel<ApplicationUserRespone>> AdminLogin(LoginModel request)
@@ -52,8 +87,7 @@ namespace Hospital.Services.Auth
 
                 var roles = await _userManager.GetRolesAsync(user);
                 var roleNme = roles.FirstOrDefault();
-                user.IsActive = true;
-                user.LoginDate = DateTime.UtcNow;
+                user.IsActive = false;
                 await _userManager.UpdateAsync(user);
 
                 string roleId = null;
@@ -72,8 +106,8 @@ namespace Hospital.Services.Auth
                     UserId = user.Id,
                     Token = token,
                     LoginDate = DateTime.UtcNow,
-                    LoginDateAr = DateTime.UtcNow.ToString("dddd d MMMM , yyyy", new CultureInfo("ar-AE")),
-                    LoginTimeAr = DateTime.UtcNow.ToString("hh:mm:ss t", new CultureInfo("ar-AE")),
+                    LoginDateAr = DateTime.UtcNow.ToString("dddd d MMMM , yyyy"),
+                    LoginTimeAr = DateTime.UtcNow.ToString("hh:mm:ss t"),
                     ExpiresIn = expiresIn,
                 };
 

@@ -37,8 +37,8 @@ export class AdminService {
 
   // ============================== SurgicalInterventions ==============================
 
-  GetAllSurgicalIntervention(AdmissionId: number) {
-    return this.http.get<ApiResponseModel<any>>(this.Url + 'SurgicalInterventions/GetAllSurgicalIntervention?AdmissionId=' + AdmissionId);
+  GetAllSurgicalIntervention(PagingFilter: PagingFilterModel, AdmissionId: number) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'SurgicalInterventions/GetAllSurgicalIntervention?AdmissionId=' + AdmissionId, PagingFilter);
   }
 
   GetSurgicalInterventionById(SurgicalInterventionId: number) {
@@ -59,8 +59,8 @@ export class AdminService {
 
   // ============================== FollowUps ==============================
 
-  GetAllFollowUpData(SurgicalInterventionId: number) {
-    return this.http.get<ApiResponseModel<any>>(this.Url + 'FollowUps/GetAllFollowUpData?SurgicalInterventionId=' + SurgicalInterventionId);
+  GetAllFollowUpData(PagingFilter: PagingFilterModel, SurgicalInterventionId: number) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'FollowUps/GetAllFollowUpData?SurgicalInterventionId=' + SurgicalInterventionId, PagingFilter);
   }
 
   GetFollowUpById(FollowUpId: number) {

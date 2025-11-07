@@ -18,10 +18,10 @@ namespace Hospital.Controllers
             _surgicalInterventionsService = surgicalInterventionsService;
         }
 
-        [HttpGet("GetAllSurgicalIntervention")]
-        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(int AdmissionId)
+        [HttpPost("GetAllSurgicalIntervention")]
+        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(PagingFilterModel PagingFilter, int AdmissionId)
         {
-            var results = await _surgicalInterventionsService.GetAllSurgicalIntervention(AdmissionId);
+            var results = await _surgicalInterventionsService.GetAllSurgicalIntervention(PagingFilter, AdmissionId);
             return results;
         }
 

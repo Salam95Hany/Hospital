@@ -2,6 +2,7 @@
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Models;
 using Hospital.Entities.Specifications.FollowUps;
+using Hospital.Entities.Specifications.SurgicalInterventions;
 using Hospital.Interfaces;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
@@ -9,7 +10,7 @@ using Hospital.Services.Common;
 
 namespace Hospital.Services
 {
-    public class FollowUpsService: IFollowUpsService
+    public class FollowUpsService : IFollowUpsService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAttachmentsService _attachmentsService;
@@ -19,10 +20,13 @@ namespace Hospital.Services
             _attachmentsService = attachmentsService;
         }
 
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId)
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int SurgicalInterventionId)
         {
-            var Spec = new FollowUpDataSpecification(SurgicalInterventionId);
-            var Results = await _unitOfWork.Repository<FollowUp>().GetAllWithSpecAsync(Spec);
+            var DataSpec = new FollowUpDataSpecification(PagingFilter, SurgicalInterventionId);
+            var CountSpec = new FollowUpDataSpecification(PagingFilter, SurgicalInterventionId, false);
+            var Entity = _unitOfWork.Repository<FollowUp>();
+            var TotalCount = await Entity.GetCountAsync(CountSpec);
+            var Results = await Entity.GetAllWithSpecAsync(DataSpec);
             var Data = Results.Select(i => new FollowUpDto
             {
                 FollowUpId = i.FollowUpId,
@@ -31,11 +35,12 @@ namespace Hospital.Services
                 PatientId = i.SurgicalInterventions.Admission.Patient.PatientId,
                 FollowUpDate = i.FollowUpDate,
                 PatientName = i.SurgicalInterventions.Admission.Patient.Name,
+                InternalNumber = i.SurgicalInterventions.Admission.Patient.InternalNumber,
                 CreatedBy = i.CreatedBy?.UserName,
                 CreatedDate = i.InsertDate
             }).ToList();
 
-            return ApiResponseModel<List<FollowUpDto>>.Success(GenericErrors.GetSuccess, Data);
+            return ApiResponseModel<List<FollowUpDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
         }
 
         public async Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId)

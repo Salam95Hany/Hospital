@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AdminService } from '../../../services/admin.service';
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { SurgicalInterventionCreateComponent } from '../surgical-intervention-create/surgical-intervention-create.component';
+import { PagingFilterModel } from '../../../models/PagingFilterModel';
 
 @Component({
   selector: 'app-surgical-intervention-list',
@@ -32,15 +33,20 @@ export class SurgicalInterventionListComponent implements OnInit {
   selectedPatient: any = null;
   selectedAdmission: any = null;
   TotalCount = 0;
+  PagingFilter: PagingFilterModel = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 10
+  };
   FilterList: FilterModel[] = [
+    // {
+    //   categoryDisplayName: "Name",
+    //   categoryName: "SearchText",
+    //   filterType: "SearchText"
+    // },
     {
-      categoryDisplayName: "Name",
-      categoryName: "SearchText",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "Select Date Range",
-      categoryName: "DateRange",
+      categoryDisplayName: "Intervention Date",
+      categoryName: "Intervention Date",
       filterType: "DateRange"
     }
   ];
@@ -70,7 +76,7 @@ export class SurgicalInterventionListComponent implements OnInit {
   }
 
   GetAllSurgicalIntervention(): void {
-    this.adminService.GetAllSurgicalIntervention(this.AdmissionId).subscribe(response => {
+    this.adminService.GetAllSurgicalIntervention(this.PagingFilter, this.AdmissionId).subscribe(response => {
       this.SurgicalInterventions = response.results;
       this.TotalCount = response.totalCount;
     });
@@ -109,8 +115,14 @@ export class SurgicalInterventionListComponent implements OnInit {
     })
   }
 
-  OnFilterChecked(filterList: FilterModel[]) {
-    console.log('filterList => ', filterList);
+   OnFilterChecked(filterList: FilterModel[]) {
+    this.PagingFilter.filterList = filterList;
+    this.GetAllSurgicalIntervention();
+  }
+
+  OnPageChanged(obj: any) {
+    this.PagingFilter.currentpage = obj.page;
+    this.GetAllSurgicalIntervention();
   }
 
   RefreshData(item: boolean) {

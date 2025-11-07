@@ -1,5 +1,6 @@
 ﻿using Hospital.Entities.Auth;
 using Hospital.Entities.Common;
+using Hospital.Entities.Contracts.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +12,7 @@ namespace Hospital.Interfaces.Auth
 {
     public interface IAuthService
     {
-        Task<ApiResponseModel<DataTable>> GetAllUsers();
+        Task<ApiResponseModel<List<UserWithRolesDto>>> GetAllUsers();
         Task<ApiResponseModel<ApplicationUserRespone>> AdminLogin(LoginModel request);
         Task<ApiResponseModel<string>> CreateUser(AddUserModel model);
         Task<ApiResponseModel<string>> EditUser(AddUserModel model);

@@ -13,7 +13,9 @@ namespace Hospital.Entities.Contracts.DTOs
         public string? HospitalFileNumber { get; set; }
         public DateTime? AdmissionDate { get; set; }
         public DateTime? DischargeDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string? PatientName { get; set; }
+        public string? InternalNumber { get; set; }
         public string? CreatedBy { get; set; }
     }
 }

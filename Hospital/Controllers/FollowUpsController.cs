@@ -18,10 +18,10 @@ namespace Hospital.Controllers
             _followUpsService = followUpsService;
         }
 
-        [HttpGet("GetAllFollowUpData")]
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId)
+        [HttpPost("GetAllFollowUpData")]
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int SurgicalInterventionId)
         {
-            var results = await _followUpsService.GetAllFollowUpData(SurgicalInterventionId);
+            var results = await _followUpsService.GetAllFollowUpData(PagingFilter, SurgicalInterventionId);
             return results;
         }
 

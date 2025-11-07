@@ -19,21 +19,28 @@ namespace Hospital.Services
             _attachmentsService = attachmentsService;
         }
 
-        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(int AdmissionId)
+        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(PagingFilterModel PagingFilter, int AdmissionId)
         {
-            var Spec = new SurgicalInterventionDataSpecification(AdmissionId);
-            var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetAllWithSpecAsync(Spec);
+            var DataSpec = new SurgicalInterventionDataSpecification(PagingFilter, AdmissionId);
+            var CountSpec = new SurgicalInterventionDataSpecification(PagingFilter, AdmissionId, false);
+            var Entity = _unitOfWork.Repository<SurgicalIntervention>();
+            var TotalCount = await Entity.GetCountAsync(CountSpec);
+            var Results = await Entity.GetAllWithSpecAsync(DataSpec);
+
             var Data = Results.Select(i => new SurgicalInterventionDto
             {
                 SurgicalInterventionId = i.SurgicalInterventionId,
                 AdmissionId = i.AdmissionId,
                 PatientId = i.Admission.PatientId,
+                PatientName = i.Admission?.Patient?.Name,
+                InternalNumber = i.Admission?.Patient?.InternalNumber,
                 InterventionDate = i.InterventionDate,
                 Theater = i.Theater,
-                CreatedBy = i.CreatedBy?.UserName
+                CreatedBy = i.CreatedBy?.UserName,
+                CreatedDate = i.InsertDate,
             }).ToList();
 
-            return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data);
+            return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
         }
 
         public async Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId)

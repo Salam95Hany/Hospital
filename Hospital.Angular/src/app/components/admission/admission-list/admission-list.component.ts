@@ -39,7 +39,7 @@ export class AdmissionListComponent {
   PagingFilter: PagingFilterModel = {
     filterList: [],
     currentpage: 1,
-    pagesize: 20
+    pagesize: 10
   };
   FilterList: FilterModel[] = [
     {

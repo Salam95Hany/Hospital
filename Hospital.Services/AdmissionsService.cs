@@ -36,8 +36,10 @@ namespace Hospital.Services
                 AdmissionDate = i.AdmissionDate,
                 DischargeDate = i.DischargeDate,
                 HospitalFileNumber = i.HospitalFileNumber,
-                PatientName = i.Patient.Name,
-                CreatedBy = i.CreatedBy?.UserName
+                PatientName = i.Patient?.Name,
+                InternalNumber = i.Patient?.InternalNumber,
+                CreatedBy = i.CreatedBy?.UserName,
+                CreatedDate = i.InsertDate
             }).ToList();
 
             return ApiResponseModel<List<AdmissionDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);

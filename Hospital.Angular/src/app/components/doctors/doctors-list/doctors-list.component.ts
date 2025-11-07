@@ -1,50 +1,192 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Doctor } from '../../../models/doctor.model';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
+import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.component";
+import { PagingFilterModel } from '../../../models/PagingFilterModel';
+import { FilterModel } from '../../../models/FilterModel';
 import { DoctorService } from '../../../services/doctor.service';
+import { ToastrService } from 'ngx-toastr';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
+import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
+import { FormService } from '../../../services/form.service';
+import { AuthService } from '../../../auth/auth.service';
+import { CustomValidators, RegexType } from '../../../services/custom-validators';
+import { AdminDropDownComponent } from '../../../shared/admin-drop-down/admin-drop-down.component';
 
 @Component({
   selector: 'app-doctors-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [NgIf, NgFor, FormsModule, CommonModule, ReactiveFormsModule,
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
+    AdminGeneralInputComponent, AdminDropDownComponent],
   templateUrl: './doctors-list.component.html',
   styleUrls: ['./doctors-list.component.css']
 })
 export class DoctorsListComponent implements OnInit {
-  doctors: Doctor[] = [];
-  filteredDoctors: Doctor[] = [];
-  searchTerm: string = '';
+  DoctorsData: any[] = [];
+  Roles = [
+    { value: 'SupperAdmin', name: 'SupperAdmin' },
+    { value: 'Admin', name: 'Admin' }
+  ];
+  isFilter = true;
+  UserId: any;
+  TotalCount = 0;
+  CurrentUserId: any;
+  ItemForm: FormGroup;
+  PagingFilter: PagingFilterModel = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 10
+  };
+  FilterList: FilterModel[] = [
+    {
+      categoryDisplayName: "Name",
+      categoryName: "SearchText",
+      filterType: "SearchText"
+    },
+    {
+      categoryDisplayName: "Login Date",
+      categoryName: "Login Date",
+      filterType: "DateRange"
+    }
+  ];
+  formErrors = {
+    userName: '',
+    email: '',
+    password: '',
+    phoneNumber: '',
+    address: '',
+    role: ''
+  };
 
-  constructor(private doctorService: DoctorService, private router: Router) { }
+  constructor(private doctorService: DoctorService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
+    private toaster: ToastrService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.loadDoctors();
+    this.CurrentUserId = this.authService.userId;
+    this.FormInit();
+    this.GetAllDoctorsData();
   }
 
-  loadDoctors(): void {
-    this.doctorService.getDoctors().subscribe(d => { this.doctors = d; this.applyFilter(); });
+  FormInit() {
+    this.ItemForm = this.fb.group({
+      userId: null,
+      userName: ['', [Validators.required, CustomValidators.regexPattern(RegexType.englishLettersOnly), CustomValidators.regexPattern(RegexType.noSpace)]],
+      email: ['', [Validators.required, CustomValidators.regexPattern(RegexType.email)]],
+      password: ['', [Validators.required, CustomValidators.regexPattern(RegexType.FourMinLength), CustomValidators.regexPattern(RegexType.noSpace)]],
+      phoneNumber: ['', [Validators.required]],
+      address: ['', [Validators.required, CustomValidators.regexPattern(RegexType.noSpace)]],
+      role: ['', [Validators.required]],
+    });
+
+    this.ItemForm.valueChanges.subscribe((data) => {
+      this.formErrors = this.formService.validateForm(this.ItemForm, this.formErrors, true);
+    });
   }
 
-  applyFilter(): void {
-    if (!this.searchTerm.trim()) { this.filteredDoctors = this.doctors; return; }
-    const s = this.searchTerm.toLowerCase();
-    this.filteredDoctors = this.doctors.filter(d =>
-      d.fullName.toLowerCase().includes(s) ||
-      (d.licenseNumber || '').toLowerCase().includes(s) ||
-      (d.specialization || '').toLowerCase().includes(s) ||
-      (d.phoneNumber || '').toLowerCase().includes(s)
-    );
+  FillEditForm(item: any) {
+    this.ItemForm.patchValue({
+      admissionId: item.admissionId ?? 0,
+      patientId: item.patientId ?? 0,
+      hospitalFileNumber: item.hospitalFileNumber ?? '',
+      chiefComplaint: item.chiefComplaint ?? null,
+      duration: item.duration ?? null,
+      course: item.course ?? ''
+    });
   }
 
-  navigateToAddDoctor(): void { this.router.navigate(['/doctors/add']); }
-  viewDoctor(id?: number): void { if (id) this.router.navigate(['/doctors/view', id]); }
-  editDoctor(id?: number): void { if (id) this.router.navigate(['/doctors/edit', id]); }
-  deleteDoctor(id?: number): void {
-    if (id && confirm('هل أنت متأكد من حذف هذا الطبيب؟')) {
-      this.doctorService.deleteDoctor(id).subscribe(ok => { if (ok) this.loadDoctors(); });
+  GetAllDoctorsData(): void {
+    this.doctorService.GetAllUsers().subscribe(res => {
+      this.DoctorsData = res.results;
+      this.TotalCount = res.totalCount;
+    });
+  }
+
+  OpenCreateModal(content: any, item: any) {
+    this.formService.updateFieldsRequiredValidation(this.ItemForm, 'password', true);
+    this.ItemForm.reset();
+    if (item) {
+      this.FillEditForm(item);
+      this.formService.updateFieldsRequiredValidation(this.ItemForm, 'password', false);
+    }
+    this.UserId = item?.userId;
+    this.modalService.open(content, {
+      windowClass: 'details-size-modal',
+      scrollable: true,
+      centered: true
+    })
+  }
+
+  openDeleteItemModal(content: any, userId: any) {
+    this.UserId = userId;
+    this.modalService.open(content, {
+      size: 'md',
+      scrollable: true,
+      centered: true
+    })
+  }
+
+  OnFilterChecked(filterList: FilterModel[]) {
+    this.PagingFilter.filterList = filterList;
+    this.GetAllDoctorsData();
+  }
+
+  OnPageChanged(obj: any) {
+    this.PagingFilter.currentpage = obj.page;
+    this.GetAllDoctorsData();
+  }
+
+  validateForm(): boolean {
+    this.formService.markFormGroupTouched(this.ItemForm);
+    if (this.ItemForm.valid) {
+      return true;
+    } else {
+      this.formErrors = this.formService.validateForm(this.ItemForm, this.formErrors, false)
+      return false;
     }
   }
-  // addDoctor removed; navigation handled by navigateToAddDoctor
+
+  AddNewItem() {
+    this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
+    let isValid = this.validateForm();
+    if (!isValid)
+      return;
+
+    this.ItemForm.patchValue({ insertUser: this.CurrentUserId });
+
+
+
+    if (!this.UserId) {
+      this.doctorService.CreateUser(this.ItemForm.value).subscribe(data => {
+        if (data.isSuccess) {
+          this.toaster.success(data.message);
+          this.modalService.dismissAll();
+        }
+        else
+          this.toaster.error(data.message);
+      });
+    } else {
+      this.doctorService.EditUser(this.ItemForm.value).subscribe(data => {
+        if (data.isSuccess) {
+          this.toaster.success(data.message);
+          this.modalService.dismissAll();
+        }
+        else
+          this.toaster.error(data.message);
+      });
+    }
+  }
+
+  DeleteItem() {
+    this.doctorService.DeleteUser(this.UserId).subscribe(res => {
+      if (res.isSuccess) {
+        this.toaster.success(res.message);
+        this.GetAllDoctorsData();
+        this.modalService.dismissAll();
+      } else
+        this.toaster.error(res.message);
+    });
+  }
 }
