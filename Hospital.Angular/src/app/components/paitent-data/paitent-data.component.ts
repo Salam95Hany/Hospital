@@ -54,6 +54,7 @@ patientData: PatientData = new PatientData();
   // patientDataOnly: import("d:/mine/Hospital/Hospital.Angular/src/app/models/patient.model").Patient;
   // full payload returned from getPatientById (contains patient, admissions, surgical, followUp)
   loadedPatientFull: any = null;
+  patientDataOnly: any;
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
@@ -264,13 +265,13 @@ get patient(): FormGroup {
       this.patientService.getPatientById(this.PatientId).subscribe(res => {
         if (res && res.results) {
           this.loadedPatientFull = res.results;
-          // this.patientDataOnly = res.results.patient;
-          // const patientGroup = this.patientForm.get('patient') as FormGroup;
-          // if (patientGroup) {
-          //   patientGroup.patchValue(this.patientDataOnly || {});
-          // } else {
-          //   this.patientForm.patchValue({ patient: this.patientDataOnly || {} });
-          // }
+          this.patientDataOnly = res.results.patient;
+          const patientGroup = this.patientForm.get('patient') as FormGroup;
+          if (patientGroup) {
+            patientGroup.patchValue(this.patientDataOnly || {});
+          } else {
+            this.patientForm.patchValue({ patient: this.patientDataOnly || {} });
+          }
         }
       }, err => {
        
