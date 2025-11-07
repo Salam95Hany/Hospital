@@ -57,6 +57,13 @@ namespace Hospital.Controllers
             var results = await _authService.EditUser(model);
             return results;
         }
+        [HttpGet]
+        [Route("GetUserById")]
+        public async Task<ApiResponseModel<AdminUser>> GetUserById(string DocId)
+        {
+            var results = await _authService.GetUserById(DocId);
+            return results;
+        }
 
         [HttpGet]
         [Route("DeleteUser")]

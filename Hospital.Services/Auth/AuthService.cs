@@ -248,5 +248,24 @@ namespace Hospital.Services.Auth
             var addResult = await _userManager.AddToRoleAsync(user, newRole);
             return addResult.Succeeded;
         }
+
+        public async Task<ApiResponseModel<AdminUser>> GetUserById(string docId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(docId);
+                if (user == null)
+                {
+                    return ApiResponseModel<AdminUser>.Failure(GenericErrors.UserNotFound);
+                }
+
+                return ApiResponseModel<AdminUser>.Success(GenericErrors.AlreadyExists, user);
+
+            }
+            catch (Exception)
+            {
+                return ApiResponseModel<AdminUser>.Failure(GenericErrors.TransFailed);
+            }
+        }
     }
 }
