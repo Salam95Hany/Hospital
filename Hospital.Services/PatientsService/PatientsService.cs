@@ -10,6 +10,7 @@ using Hospital.Interfaces.IPatients;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -313,61 +314,25 @@ namespace Hospital.Services.PatientsService
         //    var results = await filterRequests.GenerateManyAsync(cancellationToken);
         //    return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, results);
         //}
-        public async Task<ApiResponseModel<string>> UpdatePatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default)
+        public async Task<ApiResponseModel<string>> UpdatePatientFull(Patient Model, CancellationToken cancellationToken = default)
         {
             using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
 
                 // Step 1: Update Patient
-                await UpdatePatient(Model.Patient);
+                await UpdatePatient(Model);
 
                 // Step 2: Update or Create Admission
-                if (Model.Admission != null)
-                {
-                    if (Model.Admission.AdmissionId > 0)
-                    {
-                        await UpdateAdmission(Model.Admission);
-                    }
-                    else
-                    {
-                        await AddNewAdmission(Model.Admission, Model.Patient.PatientId);
-                    }
-                }
-
-                // Step 3: Update or Create Surgical Intervention
-                if (Model.SurgicalIntervention != null)
-                {
-                    if (Model.SurgicalIntervention.SurgicalInterventionId > 0)
-                    {
-                        await UpdateSurgicalIntervention(Model.SurgicalIntervention);
-                    }
-                    else if (Model.Admission?.AdmissionId > 0)
-                    {
-                        await AddNewSurgicalIntervention(Model.SurgicalIntervention, Model.Admission.AdmissionId);
-                    }
-                }
-
-                // Step 4: Update or Create FollowUp
-                if (Model.FollowUp != null)
-                {
-                    if (Model.FollowUp.FollowUpId > 0)
-                    {
-                        await UpdateFollowUp(Model.FollowUp);
-                    }
-                    else if (Model.SurgicalIntervention?.SurgicalInterventionId > 0)
-                    {
-                        await AddNewFollowUp(Model.FollowUp, Model.SurgicalIntervention.SurgicalInterventionId);
-                    }
-                }
+                
 
                 await _unitOfWork.CompleteAsync();
-                if (Model.Patient.FileModel != null)
+                if (Model.FileModel != null)
                 {
-                    Model.Patient.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
-                    Model.Patient.FileModel.ActionId = Model.Patient.PatientId;
-                    Model.Patient.FileModel.ActionType = ActionTypes.Patient;
-                    var Attachments = await _attachmentsService.AddActionFiles(Model.Patient.FileModel);
+                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.ActionId = Model.PatientId;
+                    Model.FileModel.ActionType = ActionTypes.Patient;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
                 }
                 await transaction.CommitAsync(cancellationToken);
 
@@ -633,12 +598,7 @@ namespace Hospital.Services.PatientsService
         {
             try
             {
-                var patient = await _unitOfWork.Repository<Patient>()
-                    .GetAllAsQueryable()
-                    .Include(p => p.Admissions)
-                            .ThenInclude(a => a.SurgicalInterventions)
-                                .ThenInclude(si => si.FollowUps)
-                    .FirstOrDefaultAsync(p => p.PatientId == patientId, cancellationToken);
+                var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientId);
 
                 if (patient == null)
                 {
