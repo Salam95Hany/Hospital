@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete/search-autocomplete.component";
-import { Router, RouterLink } from '@angular/router';
 import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
 import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
@@ -11,11 +10,13 @@ import { FilterModel } from '../../../models/FilterModel';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from '../../../services/admin.service';
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
+import { SurgicalInterventionCreateComponent } from '../surgical-intervention-create/surgical-intervention-create.component';
+import { PagingFilterModel } from '../../../models/PagingFilterModel';
 
 @Component({
   selector: 'app-surgical-intervention-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, RouterLink, SearchAutocompleteComponent, CommonModule,
+  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
@@ -23,7 +24,6 @@ import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/
 })
 export class SurgicalInterventionListComponent implements OnInit {
   SurgicalInterventions: any[] = [];
-  FilterList: FilterModel[] = [];
   SurgicalObj: any;
   PatientId: number;
   AdmissionId: number;
@@ -33,36 +33,52 @@ export class SurgicalInterventionListComponent implements OnInit {
   selectedPatient: any = null;
   selectedAdmission: any = null;
   TotalCount = 0;
+  PagingFilter: PagingFilterModel = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 10
+  };
+  FilterList: FilterModel[] = [
+    // {
+    //   categoryDisplayName: "Name",
+    //   categoryName: "SearchText",
+    //   filterType: "SearchText"
+    // },
+    {
+      categoryDisplayName: "Intervention Date",
+      categoryName: "Intervention Date",
+      filterType: "DateRange"
+    }
+  ];
 
-  constructor(private adminService: AdminService, private router: Router, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe) { }
+  constructor(private adminService: AdminService, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
   }
 
-  AddNewSurgicalIntervention() {
-    if (!this.PatientId) {
+  OpenSurgicalCreateModal(content: any, surgicalInterventionId: any) {
+    if (!this.selectedPatient?.id) {
       this.toaster.warning('Please select patient');
       return;
     }
 
-    if (!this.AdmissionId) {
+    if (!this.selectedAdmission?.id) {
       this.toaster.warning('Please select admission');
       return;
     }
 
-    this.router.navigate(['/surgical-intervention/add'], { queryParams: { admissionId: this.AdmissionId } });
-  }
-
-  GetAllSurgicalIntervention(): void {
-    this.adminService.GetAllSurgicalIntervention(this.AdmissionId).subscribe(response => {
-      this.SurgicalInterventions = response.results;
-      this.TotalCount = response.totalCount;
+    this.SurgicalInterventionId = surgicalInterventionId;
+    this.modalService.open(content, {
+      windowClass: 'details-size-modal',
+      scrollable: true,
+      centered: true
     });
   }
 
-  GetAllSurgicalInterventionFilters() {
-    this.adminService.GetAllSurgicalInterventionFilters(this.AdmissionId).subscribe(res => {
-      this.FilterList = res.results;
+  GetAllSurgicalIntervention(): void {
+    this.adminService.GetAllSurgicalIntervention(this.PagingFilter, this.AdmissionId).subscribe(response => {
+      this.SurgicalInterventions = response.results;
+      this.TotalCount = response.totalCount;
     });
   }
 
@@ -77,8 +93,6 @@ export class SurgicalInterventionListComponent implements OnInit {
           }
         });
       }
-      console.log('this.SurgicalObj => ', this.SurgicalObj);
-
     });
   }
 
@@ -101,8 +115,18 @@ export class SurgicalInterventionListComponent implements OnInit {
     })
   }
 
-  OnFilterChecked(filterList: FilterModel[]) {
-    console.log('filterList => ', filterList);
+   OnFilterChecked(filterList: FilterModel[]) {
+    this.PagingFilter.filterList = filterList;
+    this.GetAllSurgicalIntervention();
+  }
+
+  OnPageChanged(obj: any) {
+    this.PagingFilter.currentpage = obj.page;
+    this.GetAllSurgicalIntervention();
+  }
+
+  RefreshData(item: boolean) {
+    this.GetAllSurgicalIntervention();
   }
 
   onPatientSelected(item: any) {
@@ -121,7 +145,6 @@ export class SurgicalInterventionListComponent implements OnInit {
 
     if (this.AdmissionId && this.PatientId) {
       this.GetAllSurgicalIntervention();
-      this.GetAllSurgicalInterventionFilters();
     }
   }
 
@@ -130,7 +153,6 @@ export class SurgicalInterventionListComponent implements OnInit {
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllSurgicalIntervention();
-        this.GetAllSurgicalInterventionFilters();
         this.modalService.dismissAll();
       } else
         this.toaster.error(res.message);

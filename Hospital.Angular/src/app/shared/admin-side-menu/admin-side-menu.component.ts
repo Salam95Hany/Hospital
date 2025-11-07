@@ -14,6 +14,7 @@ export class AdminSideMenuComponent implements OnInit {
   @Input() isCollapsing = false;
   @Output() closeSideMenuFromOverlayEvent = new EventEmitter<void>();
   isCollapsed_1 = true;
+  isCollapsed_2 = true;
   UserModel = { userName: 'Admin ', loginDate: '2025-10-09', loginTime: '10:00' };
   RoleName = 'Administrator';
   private routeSub?: Subscription;
@@ -37,10 +38,20 @@ export class AdminSideMenuComponent implements OnInit {
       '/follow-up'
     ];
 
+    const doctorRoutes = [
+      '/doctors',
+    ];
+
     if (patientRoutes.some(r => currentUrl.startsWith(r))) {
       this.isCollapsed_1 = false;
     } else {
       this.isCollapsed_1 = true;
+    }
+
+    if (doctorRoutes.some(r => currentUrl.startsWith(r))) {
+      this.isCollapsed_2 = false;
+    } else {
+      this.isCollapsed_2 = true;
     }
   }
   

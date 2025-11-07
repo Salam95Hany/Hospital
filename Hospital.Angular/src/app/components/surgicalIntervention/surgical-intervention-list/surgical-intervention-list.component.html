@@ -17,15 +17,15 @@
 <div class="patients-container">
     <div class="patients-header">
         <div class="d-flex align-items-center flex-wrap gap-2">
-            <button class="btn btn-primary add-patient-btn" (click)="AddNewSurgicalIntervention()">
+            <button class="btn btn-primary add-patient-btn" (click)="OpenSurgicalCreateModal(SurgicalCreateModal,null)">
                 <i class="fas fa-plus-circle"></i> Add Surgical Intervention
             </button>
-            <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
+            <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter" *ngIf="SurgicalInterventions.length > 0">
                 <i class="fas fa-filter"></i> {{ isFilter ? 'Show' : 'Hide' }} Filters
             </button>
         </div>
         <div>
-            <app-admin-pagination [currentPage]="1" [pageSize]="20" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
+            <app-admin-pagination (pageChanged)="OnPageChanged($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
         </div>
     </div>
     <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
@@ -36,6 +36,8 @@
         <table class="table patients-table">
             <thead>
                 <tr>
+                    <th>Internal Number</th>
+                    <th>Patient Name</th>
                     <th>Intervention Date</th>
                     <th>Theater</th>
                     <th>Created By</th>
@@ -45,15 +47,17 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of SurgicalInterventions">
+                    <td>{{ item.internalNumber }}</td>
+                    <td>{{ item.patientName }}</td>
                     <td>{{ item.interventionDate | date }}</td>
                     <td>{{ item.theater }}</td>
                     <td>{{ item.createdBy }}</td>
-                    <td>{{ item.createdDate }}</td>
+                    <td>{{ item.createdDate | date}}</td>
                     <td class="actions-cell">
                         <button class="btn btn-sm btn-info" (click)="OpenSurgicalDetailsModal(SurgicalDetailsModal,item.surgicalInterventionId)">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning" [routerLink]="['/surgical-intervention/add']" [queryParams]="{ surgicalInterventionId: item.surgicalInterventionId }">
+                        <button class="btn btn-sm btn-warning" (click)="OpenSurgicalCreateModal(SurgicalCreateModal,item.surgicalInterventionId)">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.surgicalInterventionId)">
@@ -68,6 +72,10 @@
         </table>
     </div>
 </div>
+
+<ng-template #SurgicalCreateModal let-modal>
+    <app-surgical-intervention-create (RefreshData)="RefreshData($event)" [AdmissionId]="AdmissionId" [SurgicalInterventionId]="SurgicalInterventionId"></app-surgical-intervention-create>
+</ng-template>
 
 <ng-template #SurgicalDetailsModal let-modal>
     <div class="modal-header modal-header-bg justify-content-between">

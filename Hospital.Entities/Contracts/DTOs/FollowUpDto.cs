@@ -15,6 +15,7 @@ namespace Hospital.Entities.Contracts.DTOs
         public DateTime? FollowUpDate { get; set; }
         public string? PatientRemarksStatus { get; set; }
         public string? PatientName { get; set; }
+        public string? InternalNumber { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

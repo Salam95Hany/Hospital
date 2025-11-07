@@ -6,26 +6,27 @@ using Hospital.Entities.Specifications.SurgicalInterventions;
 using Hospital.Interfaces;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Hospital.Services
 {
-    public class FollowUpsService: IFollowUpsService
+    public class FollowUpsService : IFollowUpsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public FollowUpsService(IUnitOfWork unitOfWork)
+        private readonly IAttachmentsService _attachmentsService;
+        public FollowUpsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService)
         {
             _unitOfWork = unitOfWork;
+            _attachmentsService = attachmentsService;
         }
 
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId)
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int SurgicalInterventionId)
         {
-            var Spec = new FollowUpDataSpecification(SurgicalInterventionId);
-            var Results = await _unitOfWork.Repository<FollowUp>().GetAllWithSpecAsync(Spec);
+            var DataSpec = new FollowUpDataSpecification(PagingFilter, SurgicalInterventionId);
+            var CountSpec = new FollowUpDataSpecification(PagingFilter, SurgicalInterventionId, false);
+            var Entity = _unitOfWork.Repository<FollowUp>();
+            var TotalCount = await Entity.GetCountAsync(CountSpec);
+            var Results = await Entity.GetAllWithSpecAsync(DataSpec);
             var Data = Results.Select(i => new FollowUpDto
             {
                 FollowUpId = i.FollowUpId,
@@ -34,11 +35,12 @@ namespace Hospital.Services
                 PatientId = i.SurgicalInterventions.Admission.Patient.PatientId,
                 FollowUpDate = i.FollowUpDate,
                 PatientName = i.SurgicalInterventions.Admission.Patient.Name,
+                InternalNumber = i.SurgicalInterventions.Admission.Patient.InternalNumber,
                 CreatedBy = i.CreatedBy?.UserName,
                 CreatedDate = i.InsertDate
             }).ToList();
 
-            return ApiResponseModel<List<FollowUpDto>>.Success(GenericErrors.GetSuccess, Data);
+            return ApiResponseModel<List<FollowUpDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
         }
 
         public async Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId)
@@ -46,21 +48,6 @@ namespace Hospital.Services
             var Results = await _unitOfWork.Repository<FollowUp>().GetByIdAsync(FollowUpId);
 
             return ApiResponseModel<FollowUp>.Success(GenericErrors.GetSuccess, Results);
-        }
-
-        public async Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int SurgicalInterventionId)
-        {
-            var Data = new List<FilterModel>
-            {
-                new FilterModel
-                {
-                    CategoryDisplayName = "Name",
-                    CategoryName = "SearchText",
-                    FilterType = "SearchText"
-                }
-            };
-
-            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Data);
         }
 
         public async Task<ApiResponseModel<string>> AddNewFollowUp(FollowUp Model)
@@ -89,6 +76,14 @@ namespace Hospital.Services
 
                 await _unitOfWork.Repository<FollowUp>().AddAsync(followUp);
                 await _unitOfWork.CompleteAsync();
+
+                if (Model.FileModel != null)
+                {
+                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.ActionId = followUp.FollowUpId;
+                    Model.FileModel.ActionType = ActionTypes.FollowUp;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
+                }
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
             }
@@ -123,6 +118,14 @@ namespace Hospital.Services
                 Entity.UpdateDate = DateTime.UtcNow;
 
                 await _unitOfWork.CompleteAsync();
+
+                if (Model.FileModel != null)
+                {
+                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.ActionId = Entity.FollowUpId;
+                    Model.FileModel.ActionType = ActionTypes.FollowUp;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
+                }
 
                 return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
             }

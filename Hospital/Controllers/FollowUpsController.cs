@@ -18,10 +18,10 @@ namespace Hospital.Controllers
             _followUpsService = followUpsService;
         }
 
-        [HttpGet("GetAllFollowUpData")]
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId)
+        [HttpPost("GetAllFollowUpData")]
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int SurgicalInterventionId)
         {
-            var results = await _followUpsService.GetAllFollowUpData(SurgicalInterventionId);
+            var results = await _followUpsService.GetAllFollowUpData(PagingFilter, SurgicalInterventionId);
             return results;
         }
 
@@ -32,22 +32,15 @@ namespace Hospital.Controllers
             return results;
         }
 
-        [HttpGet("GetAllFollowUpFilters")]
-        public async Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int SurgicalInterventionId)
-        {
-            var results = await _followUpsService.GetAllFollowUpFilters(SurgicalInterventionId);
-            return results;
-        }
-
         [HttpPost("AddNewFollowUp")]
-        public async Task<ApiResponseModel<string>> AddNewFollowUp(FollowUp Model)
+        public async Task<ApiResponseModel<string>> AddNewFollowUp([FromForm] FollowUp Model)
         {
             var results = await _followUpsService.AddNewFollowUp(Model);
             return results;
         }
 
         [HttpPost("UpdateFollowUp")]
-        public async Task<ApiResponseModel<string>> UpdateFollowUp(FollowUp Model)
+        public async Task<ApiResponseModel<string>> UpdateFollowUp([FromForm] FollowUp Model)
         {
             var results = await _followUpsService.UpdateFollowUp(Model);
             return results;

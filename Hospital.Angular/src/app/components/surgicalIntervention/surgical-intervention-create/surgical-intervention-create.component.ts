@@ -1,24 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AdminGeneralInputComponent } from "../../../shared/admin-general-input/admin-general-input.component";
 import { AdminDropDownComponent } from "../../../shared/admin-drop-down/admin-drop-down.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
-import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
 import { AdminService } from '../../../services/admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
+import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
+import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
 
 @Component({
   selector: 'app-surgical-intervention-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminBreadcrumbComponent],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent],
   templateUrl: './surgical-intervention-create.component.html',
   styleUrl: './surgical-intervention-create.component.css',
   providers: [DatePipe]
 })
 export class SurgicalInterventionCreateComponent {
+  @Input() AdmissionId: any;
+  @Input() SurgicalInterventionId: any;
+  @Output() RefreshData = new EventEmitter<boolean>();
+
   theatres = [
     { id: 'A', name: 'A' },
     { id: 'B', name: 'B' },
@@ -86,10 +92,10 @@ export class SurgicalInterventionCreateComponent {
     { id: 'Major dv. events', name: 'Major dv. events' }
   ];
 
+  SelectedFile: UploadFileModel;
+  ImportedFiles: FilesModel[] = [];
   UserId: any;
   ItemForm: FormGroup;
-  AdmissionId: any;
-  SurgicalInterventionId: any;
   formErrors = {
     interventionDate: '',
     theater: ''
@@ -97,20 +103,16 @@ export class SurgicalInterventionCreateComponent {
 
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
-    private route: ActivatedRoute, private toaster: ToastrService, private router: Router, private datePipe: DatePipe) { }
+    private toaster: ToastrService, private datePipe: DatePipe, private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.AdmissionId = this.route.snapshot.queryParamMap.get('admissionId');
-    this.SurgicalInterventionId = this.route.snapshot.queryParamMap.get('surgicalInterventionId');
     this.UserId = this.authService.userId;
     this.FormInit();
-    if (this.SurgicalInterventionId)
+    if (this.SurgicalInterventionId) {
       this.GetSurgicalInterventionById();
-
-    if (!this.AdmissionId && !this.SurgicalInterventionId) {
-      this.toaster.warning('Please select admission first');
-      this.router.navigateByUrl('/surgical-intervention');
+      this.GetFilesByActionId();
     }
+
   }
 
   FormInit() {
@@ -145,6 +147,7 @@ export class SurgicalInterventionCreateComponent {
       followUpDoctor: [null],
       followUpDoctorPhone: [null],
       followUpAppointment: [null],
+      fileModel: null
     });
 
     this.ItemForm.valueChanges.subscribe(() => {
@@ -184,6 +187,7 @@ export class SurgicalInterventionCreateComponent {
       followUpDoctor: item.followUpDoctor ?? null,
       followUpDoctorPhone: item.followUpDoctorPhone ?? null,
       followUpAppointment: this.datePipe.transform(item.followUpAppointment, 'yyyy-MM-dd') ?? '',
+      fileModel: null
     });
   }
 
@@ -192,6 +196,36 @@ export class SurgicalInterventionCreateComponent {
       if (res.results)
         this.FillEditForm(res.results);
     })
+  }
+
+  GetFilesByActionId() {
+    this.adminService.GetFilesByActionId(this.SurgicalInterventionId, ActionTypes.SurgicalIntervention).subscribe(res => {
+      if (res.results) {
+        this.ImportedFiles = res.results.map<FilesModel>(i => {
+          return {
+            attachmentId: i.attachmentId,
+            actionType: ActionTypes.SurgicalIntervention,
+            fileName: i.fileName,
+            existFileName: i.existFileName,
+            fileUrl: i.fileUrl,
+            fileSize: i.fileSize,
+            file: null
+          }
+        });
+      }
+    })
+  }
+
+  RefreshImageData(item: boolean) {
+    this.GetFilesByActionId();
+  }
+
+  DismissModal() {
+    this.modalService.dismissAll();
+  }
+
+  OnFileChange(selectedFile: UploadFileModel) {
+    this.SelectedFile = selectedFile;
   }
 
   validateForm(): boolean {
@@ -218,20 +252,30 @@ export class SurgicalInterventionCreateComponent {
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 
-    if (this.AdmissionId) {
-      this.adminService.AddNewSurgicalIntervention(this.ItemForm.value).subscribe(data => {
+     if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+      this.ItemForm.patchValue({ fileModel: this.SelectedFile });
+    }
+
+
+    const formData = new FormData();
+    this.formService.buildFormData(formData, this.ItemForm.value);
+
+    if (!this.SurgicalInterventionId) {
+      this.adminService.AddNewSurgicalIntervention(formData).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
-          this.router.navigateByUrl('/surgical-intervention');
+          this.modalService.dismissAll();
+          this.RefreshData.emit(true);
         }
         else
           this.toaster.error(data.message);
       });
     } else {
-      this.adminService.UpdateSurgicalIntervention(this.ItemForm.value).subscribe(data => {
+      this.adminService.UpdateSurgicalIntervention(formData).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
-          this.router.navigateByUrl('/surgical-intervention');
+          this.modalService.dismissAll();
+          this.RefreshData.emit(true);
         }
         else
           this.toaster.error(data.message);

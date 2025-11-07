@@ -47,6 +47,10 @@
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" formControlName="newDecision" class="col-md-12">
                 </app-admin-general-input>
+
+                <app-admin-upload-file (FilesChenged)="OnFileChange($event)"></app-admin-upload-file>
+
+                <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
             </div>
         </form>
     </div>

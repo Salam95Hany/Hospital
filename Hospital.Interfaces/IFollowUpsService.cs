@@ -11,9 +11,8 @@ namespace Hospital.Interfaces
 {
     public interface IFollowUpsService
     {
-        Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(int SurgicalInterventionId);
+        Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int SurgicalInterventionId);
         Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId);
-        Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int SurgicalInterventionId);
         Task<ApiResponseModel<string>> AddNewFollowUp(FollowUp Model);
         Task<ApiResponseModel<string>> UpdateFollowUp(FollowUp Model);
         Task<ApiResponseModel<string>> DeleteFollowUp(int FollowUpId);

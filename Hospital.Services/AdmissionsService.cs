@@ -3,10 +3,12 @@ using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Models;
 using Hospital.Entities.Specifications.Admissions;
 using Hospital.Entities.Specifications.FollowUps;
+using Hospital.Entities.Specifications.Patients;
 using Hospital.Entities.Specifications.SurgicalInterventions;
 using Hospital.Interfaces;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
+using System.Threading;
 
 namespace Hospital.Services
 {
@@ -20,22 +22,27 @@ namespace Hospital.Services
             _attachmentsService = attachmentsService;
         }
 
-        public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(int PatientId)
+        public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(PagingFilterModel PagingFilter, int PatientId)
         {
-            var Spec = new AdmissionDataSpecification(PatientId);
-            var Results = await _unitOfWork.Repository<Admission>().GetAllWithSpecAsync(Spec);
-            var Data = Results.Select(i => new AdmissionDto
+            var DataSpec = new AdmissionDataSpecification(PagingFilter, PatientId);
+            var CountSpec = new AdmissionDataSpecification(PagingFilter, PatientId, false);
+            var Entity = _unitOfWork.Repository<Admission>();
+            var TotalCount = await Entity.GetCountAsync(CountSpec);
+            var Data = await Entity.GetAllWithSpecAsync(DataSpec);
+            var Results = Data.Select(i => new AdmissionDto
             {
                 AdmissionId = i.AdmissionId,
                 PatientId = i.PatientId,
                 AdmissionDate = i.AdmissionDate,
                 DischargeDate = i.DischargeDate,
                 HospitalFileNumber = i.HospitalFileNumber,
-                PatientName = i.Patient.Name,
-                CreatedBy = i.CreatedBy?.UserName
+                PatientName = i.Patient?.Name,
+                InternalNumber = i.Patient?.InternalNumber,
+                CreatedBy = i.CreatedBy?.UserName,
+                CreatedDate = i.InsertDate
             }).ToList();
 
-            return ApiResponseModel<List<AdmissionDto>>.Success(GenericErrors.GetSuccess, Data);
+            return ApiResponseModel<List<AdmissionDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);
         }
 
         public async Task<ApiResponseModel<Admission>> GetAdmissionById(int AdmissionId)
@@ -43,27 +50,6 @@ namespace Hospital.Services
             var Results = await _unitOfWork.Repository<Admission>().GetByIdAsync(AdmissionId);
 
             return ApiResponseModel<Admission>.Success(GenericErrors.GetSuccess, Results);
-        }
-
-        public async Task<ApiResponseModel<List<FilterModel>>> GetAllAdmissionFilters(int PatientId)
-        {
-            var Data = new List<FilterModel>
-            {
-                new FilterModel
-                {
-                    CategoryDisplayName = "Name",
-                    CategoryName = "SearchText",
-                    FilterType = "SearchText"
-                },
-                 new FilterModel
-                {
-                    CategoryDisplayName = "Select Date Range",
-                    CategoryName = "DateRange",
-                    FilterType = "DateRange"
-                }
-            };
-
-            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Data);
         }
 
         public async Task<ApiResponseModel<string>> AddNewAdmission(Admission Model)

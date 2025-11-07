@@ -53,6 +53,9 @@ namespace Hospital.Entities.Models
         public string? FollowUpDoctorPhone { get; set; }
         public DateTime? FollowUpAppointment { get; set; }
 
+        [NotMapped]
+        public UploadFileModel? FileModel { get; set; }
+
         [ForeignKey("AdmissionId")]
         public virtual Admission? Admission { get; set; }
 

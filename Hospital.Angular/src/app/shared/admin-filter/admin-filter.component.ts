@@ -74,7 +74,8 @@ export class AdminFilterComponent {
           break;
 
         case 'DateRange':
-          if (range && range.endDate) {
+          if (!range || !range.endDate || !range.startDate) return;
+          if (range && range.endDate && range.startDate) {
             updatedFilters.push({
               categoryName: filter.categoryName,
               categoryDisplayName: filter.categoryDisplayName,

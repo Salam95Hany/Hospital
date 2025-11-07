@@ -12,26 +12,35 @@ namespace Hospital.Services
     public class SurgicalInterventionsService : ISurgicalInterventionsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public SurgicalInterventionsService(IUnitOfWork unitOfWork)
+        private readonly IAttachmentsService _attachmentsService;
+        public SurgicalInterventionsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService)
         {
             _unitOfWork = unitOfWork;
+            _attachmentsService = attachmentsService;
         }
 
-        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(int AdmissionId)
+        public async Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(PagingFilterModel PagingFilter, int AdmissionId)
         {
-            var Spec = new SurgicalInterventionDataSpecification(AdmissionId);
-            var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetAllWithSpecAsync(Spec);
+            var DataSpec = new SurgicalInterventionDataSpecification(PagingFilter, AdmissionId);
+            var CountSpec = new SurgicalInterventionDataSpecification(PagingFilter, AdmissionId, false);
+            var Entity = _unitOfWork.Repository<SurgicalIntervention>();
+            var TotalCount = await Entity.GetCountAsync(CountSpec);
+            var Results = await Entity.GetAllWithSpecAsync(DataSpec);
+
             var Data = Results.Select(i => new SurgicalInterventionDto
             {
                 SurgicalInterventionId = i.SurgicalInterventionId,
                 AdmissionId = i.AdmissionId,
                 PatientId = i.Admission.PatientId,
+                PatientName = i.Admission?.Patient?.Name,
+                InternalNumber = i.Admission?.Patient?.InternalNumber,
                 InterventionDate = i.InterventionDate,
                 Theater = i.Theater,
-                CreatedBy = i.CreatedBy?.UserName
+                CreatedBy = i.CreatedBy?.UserName,
+                CreatedDate = i.InsertDate,
             }).ToList();
 
-            return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data);
+            return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
         }
 
         public async Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId)
@@ -39,21 +48,6 @@ namespace Hospital.Services
             var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalInterventionId);
 
             return ApiResponseModel<SurgicalIntervention>.Success(GenericErrors.GetSuccess, Results);
-        }
-
-        public async Task<ApiResponseModel<List<FilterModel>>> GetAllSurgicalInterventionFilters(int AdmissionId)
-        {
-            var Data = new List<FilterModel>
-            {
-                new FilterModel
-                {
-                    CategoryDisplayName = "Name",
-                    CategoryName = "SearchText",
-                    FilterType = "SearchText"
-                }
-            };
-
-            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Data);
         }
 
         public async Task<ApiResponseModel<string>> AddNewSurgicalIntervention(SurgicalIntervention Model)
@@ -98,6 +92,14 @@ namespace Hospital.Services
 
                 await _unitOfWork.Repository<SurgicalIntervention>().AddAsync(surgicalIntervention);
                 await _unitOfWork.CompleteAsync();
+
+                if (Model.FileModel != null)
+                {
+                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.ActionId = surgicalIntervention.SurgicalInterventionId;
+                    Model.FileModel.ActionType = ActionTypes.SurgicalIntervention;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
+                }
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
             }
@@ -148,6 +150,14 @@ namespace Hospital.Services
                 Entity.UpdateDate = DateTime.UtcNow;
 
                 await _unitOfWork.CompleteAsync();
+
+                if (Model.FileModel != null)
+                {
+                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.ActionId = Entity.SurgicalInterventionId;
+                    Model.FileModel.ActionType = ActionTypes.SurgicalIntervention;
+                    var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
+                }
 
                 return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
             }
