@@ -546,7 +546,6 @@ export class PatientCreateComponent implements OnInit {
       this.patientForm.patchValue({ fileModel: this.SelectedFile });
     }
     
-    // Check if the form is invalid by validating individual form groups
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
     const admissionValid = this.admission.valid;
     const interventionValid = this.surgicalIntervention.valid;
@@ -557,14 +556,15 @@ export class PatientCreateComponent implements OnInit {
         this.showValidationErrors();
         return;
     }
-
+    const formData = new FormData();
+    this.formService.buildFormData(formData, this.patientForm.value);
     if (this.isEditMode && this.patientId) {
-      this.patientService.updatePatientFull(this.patientForm.value).subscribe(() => {
+      this.patientService.updatePatientFull(formData).subscribe(() => {
         this.toastr.success('Patient updated successfully!', 'Success');
         this.router.navigate(['/patients']);
       });
     } else {
-      this.patientService.AddNewPatientFull(this.patientForm.value).subscribe(() => {
+      this.patientService.AddNewPatientFull(formData).subscribe(() => {
         this.toastr.success('Patient created successfully!', 'Success');
         this.router.navigate(['/patients']);
       });

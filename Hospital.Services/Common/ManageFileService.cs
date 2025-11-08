@@ -73,7 +73,7 @@ namespace Hospital.Services.Common
         private bool CheckFileIsExist(string FolderPath, string FileName)
         {
             var Files = Directory.GetFiles(FolderPath);
-            bool ImageIsExist = Files.Any(i => i.EndsWith(FileName));
+            bool ImageIsExist = Files.Any(i => i.Equals(FileName));
             return ImageIsExist;
         }
     }

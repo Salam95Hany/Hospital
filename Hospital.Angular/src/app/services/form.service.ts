@@ -33,7 +33,7 @@ export class FormService {
   }
   else {
     if (data !== '')
-      formData.append(parentKey!, data);
+      formData.set(parentKey!, data);
   }
 }
 
@@ -149,4 +149,51 @@ export class FormService {
 
     control.updateValueAndValidity();
   }
+
+  /**
+   * Build FormData from a flat object.
+   * - Appends primitive values as key => string(value)
+   * - Appends File instances under their key
+   * - Stringifies arrays and nested objects so server can parse them from a single field
+   * - If parentKey is provided keys will be prefixed with `${parentKey}.` (optional)
+   */
+ buildFormDataFlat(formData: FormData, data: any, parentKey: string | null = null): void {
+  if (data === null || data === undefined) return;
+
+  // Handle File or Blob directly
+  if (data instanceof File || data instanceof Blob) {
+    formData.append(parentKey ?? 'file', data);
+    return;
+  }
+
+  // Handle primitive types
+  if (typeof data !== 'object' || data instanceof Date) {
+    formData.append(parentKey ?? 'value', String(data));
+    return;
+  }
+
+  // Handle arrays
+  if (Array.isArray(data)) {
+    data.forEach((item, index) => {
+      const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
+      this.buildFormDataFlat(formData, item, key);
+    });
+    return;
+  }
+
+  // Handle objects
+  Object.entries(data).forEach(([key, value]) => {
+    if (value === null || value === undefined) return;
+
+    // Construct new key
+    const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+    // Recurse deeper
+    if (typeof value === 'object' && !(value instanceof File) && !(value instanceof Blob) && !(value instanceof Date)) {
+      this.buildFormDataFlat(formData, value, newKey);
+    } else {
+      formData.append(newKey, value instanceof Date ? value.toISOString() : String(value));
+    }
+  });
+}
 }

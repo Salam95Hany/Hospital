@@ -40,7 +40,7 @@ namespace Hospital.Controllers.PatientsController
         //    return results;
         //}
         [HttpPut("UpdatePatientFull")]
-        public async Task<ApiResponseModel<string>> UpdatePatientFull([FromForm]AddPatientFullModel Model)
+        public async Task<ApiResponseModel<string>> UpdatePatientFull([FromForm]Patient Model)
         {
             return await _PatientsService.UpdatePatientFull(Model);
         }

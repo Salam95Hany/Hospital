@@ -18,5 +18,7 @@ namespace Hospital.Interfaces.Auth
         Task<ApiResponseModel<string>> EditUser(AddUserModel model);
         Task<ApiResponseModel<string>> DeleteUser(string userId);
         Task<ApiResponseModel<string>> AdminLogout(string UserId);
+
+         Task<ApiResponseModel<AdminUser>> GetUserById(string docId);
     }
 }
