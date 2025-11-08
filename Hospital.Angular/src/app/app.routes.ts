@@ -7,29 +7,77 @@ import { DoctorsListComponent } from './components/doctors/doctors-list/doctors-
 import { AdmissionListComponent } from './components/admission/admission-list/admission-list.component';
 import { SurgicalInterventionListComponent } from './components/surgicalIntervention/surgical-intervention-list/surgical-intervention-list.component';
 import { FollowupListComponent } from './components/followup/followup-list/followup-list.component';
-import { LoginPageComponent } from './login-page/login-page.component';
-import { AuthService } from './auth/auth.service';
+import { LoginPageComponent } from './auth/login-page/login-page.component';
+import { NotAuthorizedComponent } from './auth/not-authorized/not-authorized.component';
+import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginPageComponent },
-
+  { path: '', component: LoginPageComponent },
+  { path: 'not-authorized', component: NotAuthorizedComponent },
   {
-    path: '',
+    path: 'admin',
     component: AdminLayoutComponent,
-    canActivate: [AuthService],
+    canActivate: [authGuard],
+    data: { roles: ["SupperAdmin", "Admin"] },
     children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'patients',
+        component: PatientsListComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'patients/add',
+        component: PatientCreateComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'patients/edit/:id',
+        component: PatientCreateComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'patients/view/:id',
+        component: PatientsListComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'doctors',
+        component: DoctorsListComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin"] },
+      },
+      {
+        path: 'admissions',
+        component: AdmissionListComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'surgical-intervention',
+        component: SurgicalInterventionListComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'follow-up',
+        component: FollowupListComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'patients', component: PatientsListComponent },
-      { path: 'patients/add', component: PatientCreateComponent },
-      { path: 'patients/edit/:id', component: PatientCreateComponent },
-      { path: 'patients/view/:id', component: PatientsListComponent },
-      { path: 'doctors', component: DoctorsListComponent },
-      { path: 'admissions', component: AdmissionListComponent },
-      { path: 'surgical-intervention', component: SurgicalInterventionListComponent },
-      { path: 'follow-up', component: FollowupListComponent },
     ],
   },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
 
-  { path: '**', redirectTo: 'login' },
 ];

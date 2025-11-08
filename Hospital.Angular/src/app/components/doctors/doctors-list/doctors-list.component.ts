@@ -27,8 +27,8 @@ import { AdminDropDownComponent } from '../../../shared/admin-drop-down/admin-dr
 export class DoctorsListComponent implements OnInit {
   DoctorsData: any[] = [];
   Roles = [
-    { value: 'SupperAdmin', name: 'SupperAdmin' },
-    { value: 'Admin', name: 'Admin' }
+    { id: 'SupperAdmin', name: 'SupperAdmin' },
+    { id: 'Admin', name: 'Admin' }
   ];
   isFilter = true;
   UserId: any;
@@ -75,7 +75,7 @@ export class DoctorsListComponent implements OnInit {
       userId: null,
       userName: ['', [Validators.required, CustomValidators.regexPattern(RegexType.englishLettersOnly), CustomValidators.regexPattern(RegexType.noSpace)]],
       email: ['', [Validators.required, CustomValidators.regexPattern(RegexType.email)]],
-      password: ['', [Validators.required, CustomValidators.regexPattern(RegexType.FourMinLength), CustomValidators.regexPattern(RegexType.noSpace)]],
+      password: ['', [Validators.required, CustomValidators.regexPattern(RegexType.password)]],
       phoneNumber: ['', [Validators.required]],
       address: ['', [Validators.required, CustomValidators.regexPattern(RegexType.noSpace)]],
       role: ['', [Validators.required]],
@@ -88,12 +88,12 @@ export class DoctorsListComponent implements OnInit {
 
   FillEditForm(item: any) {
     this.ItemForm.patchValue({
-      admissionId: item.admissionId ?? 0,
-      patientId: item.patientId ?? 0,
-      hospitalFileNumber: item.hospitalFileNumber ?? '',
-      chiefComplaint: item.chiefComplaint ?? null,
-      duration: item.duration ?? null,
-      course: item.course ?? ''
+      userId: item?.userId ?? '',
+      userName: item?.userName ?? '',
+      email: item.email ?? '',
+      phoneNumber: item.phoneNumber ?? '',
+      address: item.address ?? '',
+      role: item.role ?? ''
     });
   }
 
@@ -162,6 +162,7 @@ export class DoctorsListComponent implements OnInit {
       this.doctorService.CreateUser(this.ItemForm.value).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
+          this.GetAllDoctorsData();
           this.modalService.dismissAll();
         }
         else
@@ -171,6 +172,7 @@ export class DoctorsListComponent implements OnInit {
       this.doctorService.EditUser(this.ItemForm.value).subscribe(data => {
         if (data.isSuccess) {
           this.toaster.success(data.message);
+          this.GetAllDoctorsData();
           this.modalService.dismissAll();
         }
         else

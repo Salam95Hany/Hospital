@@ -25,7 +25,6 @@
                 <div class="input-container">
                     <i class="fas fa-lock input-icon lock-icon" (click)="togglePassword()"></i>
                     <input [type]="showPassword ? 'text' : 'password'" class="form-input" name="Password" #Password="ngModel" [(ngModel)]="LoginModel.password" placeholder="Password" required />
-                    <!-- <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" class="password-toggle" (click)="togglePassword()"></i> -->
                 </div>
                 <div class="error-message show" *ngIf="Password.invalid && (Password.dirty || Password.touched || LoginForm.submitted )">
                     <i class="fas fa-exclamation-circle"></i>

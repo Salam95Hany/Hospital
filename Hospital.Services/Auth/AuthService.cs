@@ -213,7 +213,7 @@ namespace Hospital.Services.Auth
 
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
-                return ApiResponseModel<string>.Failure(GenericErrors.DeleteSuccess);
+                return ApiResponseModel<string>.Success(GenericErrors.DeleteSuccess);
             else
                 return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
         }
@@ -225,7 +225,6 @@ namespace Hospital.Services.Auth
                 return ApiResponseModel<string>.Failure(GenericErrors.UserNotFound);
 
             user.IsActive = false;
-            user.LoginDate = null;
 
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)

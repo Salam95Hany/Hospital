@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-admin-header',
@@ -18,19 +19,25 @@ export class AdminHeaderComponent {
   isUserDropdownOpen = false;
   SearchText = '';
   PagesList = [
-    { name: 'dashboard', pageUrl: '/dashboard' },
-    { name: 'patients', pageUrl: '/patients' },
-    { name: 'doctors', pageUrl: '/doctors' },
-    { name: 'appointments', pageUrl: '/appointments' },
-    { name: 'departments', pageUrl: '/departments' },
-    { name: 'users', pageUrl: '/users' }
+    { name: 'dashboard', pageUrl: '/admin/dashboard' },
+    { name: 'patients', pageUrl: '/admin/patients' },
+    { name: 'doctors', pageUrl: '/admin/doctors' },
+    { name: 'appointments', pageUrl: '/admin/appointments' },
+    { name: 'departments', pageUrl: '/admin/departments' },
+    { name: 'users', pageUrl: '/admin/users' }
   ];
-  UserModel = { userName: 'Admin' };
+  UserModel: any;
 
-  goToWebsite() {}
+  constructor(private authService: AuthService) {
+    this.UserModel = this.authService.UserModel;
+  }
+
+  goToWebsite() { }
   onCollapseExpandMenu() { this.collapseExpandContent.emit(); }
   onShowAutoCompleteMenu(inputEle: any) { this.showAutoCompleteMenu = !!inputEle.value; }
   HandleSearchEle(i: number, inputEle: any) { this.SearchText = this.PagesList[i].name; this.showAutoCompleteMenu = false; inputEle.value = ''; }
   toggleUserDropdown() { this.isUserDropdownOpen = !this.isUserDropdownOpen; }
-  Logout() {}
+  Logout() {
+    this.authService.loginRedirect();
+  }
 }

@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Patient, PatientsList } from '../../../models/patient.model';
+import { PatientsList } from '../../../models/patient.model';
 import { PatientService } from '../../../services/patient.service';
-import { SearchAutocompleteComponent } from "../../../shared/search-autocomplete/search-autocomplete.component";
 import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
-import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.component";
 import { FilterModel } from '../../../models/FilterModel';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TemplateRef, ViewChild } from '@angular/core';
@@ -82,18 +80,18 @@ export class PatientsListComponent implements OnInit {
 
 
   navigateToAddPatient(): void {
-    this.router.navigate(['/patients/add']);
+    this.router.navigate(['/admin/patients/add']);
   }
 
   viewPatient(id: number | undefined): void {
     if (id) {
-      this.router.navigate(['/patients/view', id]);
+      this.router.navigate(['/admin/patients/view', id]);
     }
   }
 
   editPatient(id: number | undefined): void {
     if (id) {
-      this.router.navigate(['/patients/edit', id]);
+      this.router.navigate(['/admin/patients/edit', id]);
     }
   }
 

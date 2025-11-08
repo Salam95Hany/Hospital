@@ -2,11 +2,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { RoleCheckerDirective } from '../../directives/role-checker.directive';
+import { AuthService } from '../../auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-side-menu',
   standalone: true,
-  imports: [NgbCollapse, RouterLink, RouterLinkActive],
+  imports: [NgbCollapse, RouterLink, RouterLinkActive, RoleCheckerDirective,CommonModule],
   templateUrl: './admin-side-menu.component.html',
   styleUrls: ['./admin-side-menu.component.css']
 })
@@ -15,11 +18,12 @@ export class AdminSideMenuComponent implements OnInit {
   @Output() closeSideMenuFromOverlayEvent = new EventEmitter<void>();
   isCollapsed_1 = true;
   isCollapsed_2 = true;
-  UserModel = { userName: 'Admin ', loginDate: '2025-10-09', loginTime: '10:00' };
-  RoleName = 'Administrator';
+  UserModel: any;
   private routeSub?: Subscription;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) {
+    this.UserModel = this.authService.UserModel;
+  }
 
   ngOnInit(): void {
     this.updateCollapseState(this.router.url);
@@ -32,14 +36,14 @@ export class AdminSideMenuComponent implements OnInit {
 
   private updateCollapseState(currentUrl: string) {
     const patientRoutes = [
-      '/patients',
-      '/admissions',
-      '/surgical-intervention',
-      '/follow-up'
+      '/admin/patients',
+      '/admin/admissions',
+      '/admin/surgical-intervention',
+      '/admin/follow-up'
     ];
 
     const doctorRoutes = [
-      '/doctors',
+      '/admin/doctors',
     ];
 
     if (patientRoutes.some(r => currentUrl.startsWith(r))) {
@@ -54,7 +58,7 @@ export class AdminSideMenuComponent implements OnInit {
       this.isCollapsed_2 = true;
     }
   }
-  
+
   onCloseSidemenuFromOverlay() {
     this.closeSideMenuFromOverlayEvent.emit();
   }

@@ -9,15 +9,15 @@
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <i class="fas fa-calendar-alt"></i>
-                    <div class="fw-bold side-menu-text">{{UserModel.loginDate}}</div>
+                    <div class="fw-bold side-menu-text">{{UserModel.loginDate | date}}</div>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <i class="fas fa-clock"></i>
-                    <div class="fw-bold side-menu-text">{{UserModel.loginTime}}</div>
+                    <div class="fw-bold side-menu-text">{{UserModel.loginTimeAr}}</div>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <i class="fas fa-user-shield"></i>
-                    <div class="fw-bold side-menu-text">{{RoleName}}</div>
+                    <div class="fw-bold side-menu-text">{{UserModel.role}}</div>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <!-- Dashboard Section -->
             <ul class="side-menu-list list-unstyled p-0 m-0">
                 <li class="side-menu-list-item">
-                    <a class="side-menu-list-link" routerLink="/dashboard" routerLinkActive="active">
+                    <a class="side-menu-list-link" routerLink="/admin/dashboard" routerLinkActive="active">
                         <i class="fas fa-chart-line"></i>
                         <span class="side-menu-text">Dashboard</span>
                     </a>
@@ -44,25 +44,25 @@
                     </li>
                     <ul class="list-unstyled m-0 menu-list-collapsed" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed_1">
                         <li>
-                            <a class="side-menu-list-link sub-link" routerLink="/patients" routerLinkActive="active">
+                            <a class="side-menu-list-link sub-link" routerLink="/admin/patients" routerLinkActive="active">
                                 <i class="fas fa-users"></i>
                                 <span class="side-menu-text">Patients</span>
                             </a>
                         </li>
                         <li>
-                            <a class="side-menu-list-link sub-link" routerLink="/admissions" routerLinkActive="active">
+                            <a class="side-menu-list-link sub-link" routerLink="/admin/admissions" routerLinkActive="active">
                                 <i class="fas fa-users"></i>
                                 <span class="side-menu-text">Admissions</span>
                             </a>
                         </li>
                         <li>
-                            <a class="side-menu-list-link sub-link" routerLink="/surgical-intervention" routerLinkActive="active">
+                            <a class="side-menu-list-link sub-link" routerLink="/admin/surgical-intervention" routerLinkActive="active">
                                 <i class="fas fa-users"></i>
                                 <span class="side-menu-text">Surgical Interventions</span>
                             </a>
                         </li>
                         <li>
-                            <a class="side-menu-list-link sub-link" routerLink="/follow-up" routerLinkActive="active">
+                            <a class="side-menu-list-link sub-link" routerLink="/admin/follow-up" routerLinkActive="active">
                                 <i class="fas fa-user-md"></i>
                                 <span class="side-menu-text">Follow Up</span>
                             </a>
@@ -71,7 +71,7 @@
                 </ul>
             </div>
             <!-- Settings Section -->
-            <div>
+            <div appRole [roles]="['SupperAdmin']">
                 <div class="side-menu-list-title side-menu-text">Settings</div>
                 <ul class="side-menu-list list-unstyled p-0 m-0">
                     <li class="side-menu-list-item">
@@ -82,7 +82,7 @@
                     </li>
                     <ul class="list-unstyled m-0 menu-list-collapsed" #collapse2="ngbCollapse" [(ngbCollapse)]="isCollapsed_2">
                         <li>
-                            <a class="side-menu-list-link sub-link" routerLink="/doctors" routerLinkActive="active">
+                            <a class="side-menu-list-link sub-link" routerLink="/admin/doctors" routerLinkActive="active">
                                 <i class="fas fa-users"></i>
                                 <span class="side-menu-text">Doctors</span>
                             </a>

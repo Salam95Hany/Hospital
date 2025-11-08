@@ -21,6 +21,7 @@
         "@fortawesome/fontawesome-free": "^7.1.0",
         "@ng-bootstrap/ng-bootstrap": "^14.2.0",
         "bootstrap": "^5.3.8",
+        "jwt-decode": "^4.0.0",
         "ngx-bootstrap": "^20.0.2",
         "ngx-daterangepicker-material": "^6.0.4",
         "ngx-toastr": "^19.1.0",

@@ -44,7 +44,7 @@
                         </div>
                         <div class="header-user-info d-none d-md-flex">
                             <span class="header-user-name">{{UserModel.userName}}</span>
-                            <span class="header-user-role">Administrator</span>
+                            <span class="header-user-role">{{UserModel?.role}}</span>
                         </div>
                         <i class="fas fa-chevron-down dropdown-arrow ml-2" [class.rotate-arrow]="isUserDropdownOpen"></i>
                     </div>
@@ -54,10 +54,6 @@
                         <a class="dropdown-item" href="#">
                             <i class="fas fa-user"></i> My Profile
                         </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" (click)="Logout()">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>

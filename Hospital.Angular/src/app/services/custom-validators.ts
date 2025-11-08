@@ -46,6 +46,7 @@ export enum RegexType {
     phoneNumber,
     englishLettersOnly,
     FourMinLength,
+    password
 
 }
 export const regexList: RegexModel[] = [
@@ -143,6 +144,11 @@ export const regexList: RegexModel[] = [
         pattern: /^.{4,}$/,
         message: "Password must be at least 4 characters long.",
         type: RegexType.FourMinLength
+    },
+    {
+        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/,
+        message: "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character (@, #, $, %, etc.).",
+        type: RegexType.password
     }
 
 ];
