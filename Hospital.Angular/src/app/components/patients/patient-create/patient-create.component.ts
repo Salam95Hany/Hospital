@@ -183,12 +183,12 @@ export class PatientCreateComponent implements OnInit {
         age: [null],
         gender: [''],
         nationalId: ['', [Validators.required]],
-        address: [''],
+        address: null,
         governorate: [''],
-        occupation: [''],
+        occupation: null,
         maritalStatus: [''],
-        childrenCount: [''],
-        internalNumber: [''],
+        childrenCount: null,
+        internalNumber: 1,
         fileModel: null
       }),
       admission: this.createAdmissionFormGroup(),
@@ -335,6 +335,7 @@ export class PatientCreateComponent implements OnInit {
       followUpDoctor: [null],
       followUpDoctorPhone: [null],
       followUpAppointment: [null],
+      fileModel: null
     });
   }
 
@@ -351,7 +352,8 @@ export class PatientCreateComponent implements OnInit {
       imagePath: [null],
       advice: [null],
       newDecision: [null],
-      nextFollowUpDate: [null]
+      nextFollowUpDate: [null],
+      fileModel: null
     });
   }
 
@@ -557,7 +559,8 @@ export class PatientCreateComponent implements OnInit {
         return;
     }
     const formData = new FormData();
-    this.formService.buildFormData(formData, this.patientForm.value);
+    debugger
+    this.formService.buildFormDataData(formData, this.patientForm.value);
     if (this.isEditMode && this.patientId) {
       this.patientService.updatePatientFull(formData).subscribe(() => {
         this.toastr.success('Patient updated successfully!', 'Success');

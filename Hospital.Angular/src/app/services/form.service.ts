@@ -196,4 +196,16 @@ export class FormService {
     }
   });
 }
+buildFormDataData(formData, data, parentKey = null, key = null) {
+  if (data instanceof File)
+    formData.append(key, data);
+  else if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+    Object.keys(data).forEach(key => {
+      this.buildFormDataData(formData, data[key], parentKey ? parentKey + '[' + key + ']' : key, key);
+    });
+  } else {
+    const value = data == null ? '' : data;
+    formData.append(parentKey, value);
+  }
+}
 }
