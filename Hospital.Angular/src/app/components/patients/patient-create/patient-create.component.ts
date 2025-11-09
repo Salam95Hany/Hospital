@@ -648,9 +648,46 @@ export class PatientCreateComponent implements OnInit {
         this.showValidationErrors();
         return;
     }
+    // Build PascalCase payload with per-step FileModel for correct binding
+    const patientGroup = this.patientForm.get('patient') as FormGroup;
+    const { fileModel: _pFileModel, ...patientData } = (patientGroup?.value) || {};
+    const { fileModel: _aFileModel, ...admissionData } = (this.admission?.value) || {};
+    const { fileModel: _sFileModel, ...surgicalData } = (this.surgicalIntervention?.value) || {};
+    const { fileModel: _fFileModel, ...followUpData } = (this.followUp?.value) || {};
+
+    const apiPayload: any = {
+      Patient: {
+        ...patientData,
+        FileModel: patientGroup?.get('fileModel')?.value || null,
+      },
+      Admission: {
+        ...admissionData,
+        FileModel: this.admission?.get('fileModel')?.value || null,
+      },
+      SurgicalIntervention: {
+        ...surgicalData,
+        FileModel: this.surgicalIntervention?.get('fileModel')?.value || null,
+      },
+      FollowUp: {
+        ...followUpData,
+        FileModel: this.followUp?.get('fileModel')?.value || null,
+      }
+    };
+
+    if (this.isEditMode && this.patientId) {
+      apiPayload.PatientId = this.patientId;
+      apiPayload.Patient = { ...(apiPayload.Patient || {}), patientId: this.patientId };
+    }
+
     const formData = new FormData();
-    debugger
-    this.formService.buildFormDataData(formData, this.patientForm.value);
+    this.formService.buildFormData(formData, apiPayload);
+    // Debug: log FormData keys to verify binding paths
+    try {
+      for (const [k, v] of (formData as any).entries()) {
+        const isFile = typeof File !== 'undefined' && v instanceof File;
+        console.log(k, isFile ? `File(${(v as File).name})` : v);
+      }
+    } catch {}
     if (this.isEditMode && this.patientId) {
       this.patientService.updatePatientFull(formData).subscribe(() => {
         this.toastr.success('Patient updated successfully!', 'Success');
@@ -665,17 +702,18 @@ export class PatientCreateComponent implements OnInit {
   }
   
   toApiFileModel(model: UploadFileModel, actionType: ActionTypes) {
+    const isFileBlob = (value: any): boolean => value instanceof File || value instanceof Blob;
     return {
       ActionId: (this.patientId ?? model.actionId) ?? 0,
       ActionType: actionType,
-      InsertUser: 'mo',
+      InsertUser: this.authService.UserModel?.userName ?? this.authService.userId ?? '',
       Files: (model.files || []).map(f => ({
-        AttachmentId: Number(f.attachmentId ?? 0),
+        AttachmentId: (f.attachmentId !== undefined && f.attachmentId !== null) ? Number(f.attachmentId) : null,
         ActionType: actionType,
         FileName: f.fileName ?? '',
         ExistFileName: f.existFileName ?? '',
         FileSize: f.fileSize ?? '',
-        File: f.file ?? null
+        File: isFileBlob(f.file) ? f.file : null
       })),
       DeletedFiles: (model.deletedFiles || []).map(d => ({
         AttachmentId: Number(d.attachmentId ?? 0),
