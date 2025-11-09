@@ -170,6 +170,8 @@
 
                 <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.followUpAppointment ?? ''">
                 </app-admin-general-input>
+
+                <app-admin-slider-image *ngIf="showSlider" [Images]="ImportedFiles" [disabled]="true"></app-admin-slider-image>
             </div>
         </div>
     </div>

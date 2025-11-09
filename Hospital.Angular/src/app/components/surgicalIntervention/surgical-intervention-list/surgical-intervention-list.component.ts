@@ -12,24 +12,29 @@ import { AdminService } from '../../../services/admin.service';
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { SurgicalInterventionCreateComponent } from '../surgical-intervention-create/surgical-intervention-create.component';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
+import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
+import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 
 @Component({
   selector: 'app-surgical-intervention-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent,
+    AdminSliderImageComponent],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
   providers: [DatePipe]
 })
 export class SurgicalInterventionListComponent implements OnInit {
   SurgicalInterventions: any[] = [];
+  ImportedFiles: FilesModel[] = [];
   SurgicalObj: any;
   PatientId: number;
   AdmissionId: number;
   SurgicalInterventionId: number;
   searchTerm: string = '';
   isFilter = true;
+  showSlider = false;
   selectedPatient: any = null;
   selectedAdmission: any = null;
   TotalCount = 0;
@@ -96,9 +101,31 @@ export class SurgicalInterventionListComponent implements OnInit {
     });
   }
 
+  GetFilesByActionId() {
+    this.showSlider = false;
+    this.adminService.GetFilesByActionId(this.SurgicalInterventionId, ActionTypes.SurgicalIntervention).subscribe(res => {
+      if (res.results) {
+        this.ImportedFiles = res.results.map<FilesModel>(i => {
+          return {
+            attachmentId: i.attachmentId,
+            actionType: ActionTypes.SurgicalIntervention,
+            fileName: i.fileName,
+            existFileName: i.existFileName,
+            fileUrl: i.fileUrl,
+            fileSize: i.fileSize,
+            file: null
+          }
+        });
+
+        this.showSlider = true;
+      }
+    })
+  }
+
   OpenSurgicalDetailsModal(content: any, surgicalInterventionId: any) {
     this.SurgicalInterventionId = surgicalInterventionId;
     this.GetSurgicalInterventionById();
+    this.GetFilesByActionId();
     this.modalService.open(content, {
       windowClass: 'details-size-modal',
       scrollable: true,
@@ -115,7 +142,7 @@ export class SurgicalInterventionListComponent implements OnInit {
     })
   }
 
-   OnFilterChecked(filterList: FilterModel[]) {
+  OnFilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
     this.GetAllSurgicalIntervention();
   }

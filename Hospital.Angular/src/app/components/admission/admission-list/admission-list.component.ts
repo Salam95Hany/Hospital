@@ -32,6 +32,7 @@ export class AdmissionListComponent {
   ImportedFiles: FilesModel[] = [];
   AdmissionObj: any;
   isFilter = true;
+  showSlider = false;
   PatientId: number;
   AdmissionId: number;
   searchTerm: string = '';
@@ -78,6 +79,7 @@ export class AdmissionListComponent {
   }
 
   GetAdmissionById() {
+    this.showSlider = false;
     this.adminService.GetAdmissionById(this.AdmissionId).subscribe(res => {
       if (res.results) {
         this.AdmissionObj = res.results;
@@ -87,6 +89,7 @@ export class AdmissionListComponent {
             this.AdmissionObj[key] = this.datePipe.transform(value, 'yyyy-MM-dd');
           }
         });
+        this.showSlider = true;
       }
     });
   }
