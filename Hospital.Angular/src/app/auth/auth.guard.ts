@@ -5,7 +5,7 @@ import { inject } from '@angular/core';
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  debugger
+
   if (authService.isAuthenticated()) {
     const allowedRoles: string[] = route.data["roles"];
     if (allowedRoles && allowedRoles.length > 0) {

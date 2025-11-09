@@ -127,6 +127,8 @@
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" [valueBind]="FollowUpObj?.newDecision ?? ''" [disabled]="true" class="col-md-12">
                 </app-admin-general-input>
+
+                <app-admin-slider-image *ngIf="showSlider" [Images]="ImportedFiles" [disabled]="true"></app-admin-slider-image>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { DOCUMENT, NgFor, NgIf } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,10 +14,17 @@ import { ToastrService } from 'ngx-toastr';
 export class AdminSliderImageComponent {
   @Input() Images: any[] = [];
   @Input() disabled: boolean = false;
-
   @Output() RefreshImage = new EventEmitter<boolean>();
+  selectedImage = null;
 
-  constructor(private adminService: AdminService, private toaster: ToastrService) {
+  constructor(private adminService: AdminService, private toaster: ToastrService) { }
+
+  openImage(url: string) {
+    this.selectedImage = url;
+  }
+
+  closeImage() {
+    this.selectedImage = null;
   }
 
   DownloadFile(item: any) {

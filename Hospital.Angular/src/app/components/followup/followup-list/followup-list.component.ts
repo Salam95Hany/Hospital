@@ -14,18 +14,22 @@ import { AuthService } from '../../../auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FilterModel } from '../../../models/FilterModel';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
+import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
+import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 
 @Component({
   selector: 'app-followup-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent, FollowupCreateComponent],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
+    AdminGeneralInputComponent, FollowupCreateComponent, AdminSliderImageComponent],
   templateUrl: './followup-list.component.html',
   styleUrl: './followup-list.component.css',
   providers: [DatePipe]
 })
 export class FollowupListComponent {
   FollowUps: any[] = [];
+  ImportedFiles: FilesModel[] = [];
   FollowUpObj: any;
   SurgicalInterventionId: number;
   FollowUpId: number;
@@ -34,6 +38,7 @@ export class FollowupListComponent {
   selectedAdmission: any = null;
   selectedSurgicalInterventions: any = null;
   isFilter = true;
+  showSlider = false;
   TotalCount = 0;
   PagingFilter: PagingFilterModel = {
     filterList: [],
@@ -60,7 +65,7 @@ export class FollowupListComponent {
   }
 
   GetAllFollowUpData(): void {
-    this.adminService.GetAllFollowUpData(this.PagingFilter,this.SurgicalInterventionId).subscribe(response => {
+    this.adminService.GetAllFollowUpData(this.PagingFilter, this.SurgicalInterventionId).subscribe(response => {
       this.FollowUps = response.results;
       this.TotalCount = response.totalCount;
     });
@@ -127,9 +132,30 @@ export class FollowupListComponent {
     });
   }
 
+  GetFilesByActionId() {
+    this.showSlider = false;
+    this.adminService.GetFilesByActionId(this.FollowUpId, ActionTypes.FollowUp).subscribe(res => {
+      if (res.results) {
+        this.ImportedFiles = res.results.map<FilesModel>(i => {
+          return {
+            attachmentId: i.attachmentId,
+            actionType: ActionTypes.FollowUp,
+            fileName: i.fileName,
+            existFileName: i.existFileName,
+            fileUrl: i.fileUrl,
+            fileSize: i.fileSize,
+            file: null
+          }
+        });
+        this.showSlider = true;
+      }
+    })
+  }
+
   OpenFollowUpDetailsModal(content: any, followUpId: any) {
     this.FollowUpId = followUpId;
     this.GetFollowUpById();
+    this.GetFilesByActionId();
     this.modalService.open(content, {
       windowClass: 'details-size-modal',
       scrollable: true,
