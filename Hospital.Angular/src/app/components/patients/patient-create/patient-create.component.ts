@@ -31,6 +31,39 @@ export class PatientCreateComponent implements OnInit {
   currentStep: number = 1;
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
+  
+  // Store files separately for each step
+  patientFiles: UploadFileModel = {
+    actionId: null,
+    actionType: ActionTypes.Patient,
+    insertUser: '',
+    files: [],
+    deletedFiles: []
+  };
+  
+  admissionFiles: UploadFileModel = {
+    actionId: null,
+    actionType: ActionTypes.Admission,
+    insertUser: '',
+    files: [],
+    deletedFiles: []
+  };
+  
+  surgicalFiles: UploadFileModel = {
+    actionId: null,
+    actionType: ActionTypes.SurgicalIntervention,
+    insertUser: '',
+    files: [],
+    deletedFiles: []
+  };
+  
+  followUpFiles: UploadFileModel = {
+    actionId: null,
+    actionType: ActionTypes.FollowUp,
+    insertUser: '',
+    files: [],
+    deletedFiles: []
+  };
   steps = [
     { title: 'Patient Information', isCompleted: false },
     { title: 'Admission Details', isCompleted: false },
@@ -171,8 +204,18 @@ export class PatientCreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Get route parameters
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.patientId = +params['id'];
+        this.isEditMode = true;
+        this.GetFilesByActionId();
+      }
+    });
+    
     this.initForm();
     this.setupFormValueChanges();
+
   }
 
   initForm() {
@@ -195,26 +238,64 @@ export class PatientCreateComponent implements OnInit {
       surgicalIntervention: this.createSurgicalInterventionFormGroup(),
       followUp: this.createFollowUpFormGroup()
     });
+    
+    // Set actionId for file objects if patientId exists
+    if (this.patientId) {
+      this.patientFiles.actionId = this.patientId;
+      this.admissionFiles.actionId = this.patientId;
+      this.surgicalFiles.actionId = this.patientId;
+      this.followUpFiles.actionId = this.patientId;
+    }
   }
   OnFileChange(selectedFile: UploadFileModel) {
+    // Store files based on current step
+    switch (this.currentStep) {
+      case 1:
+        this.patientFiles = selectedFile;
+        break;
+      case 2:
+        this.admissionFiles = selectedFile;
+        break;
+      case 3:
+        this.surgicalFiles = selectedFile;
+        break;
+      case 4:
+        this.followUpFiles = selectedFile;
+        break;
+    }
+    
+    // Also keep the SelectedFile for backward compatibility
     this.SelectedFile = selectedFile;
   }
   GetFilesByActionId() {
-    this.adminService.GetFilesByActionId(this.patientId, ActionTypes.Patient).subscribe(res => {
-      if (res.results) {
-        this.ImportedFiles = res.results.map<FilesModel>(i => {
-          return {
-            attachmentId: i.attachmentId,
-            actionType: ActionTypes.Patient,
-            fileName: i.fileName,
-            existFileName: i.existFileName,
-            fileUrl: i.fileUrl,
-            fileSize: i.fileSize,
-            file: null
-          }
-        });
-      }
-    })
+    // Load files for all steps
+    const actionTypes = [
+      ActionTypes.Patient,
+      ActionTypes.Admission,
+      ActionTypes.SurgicalIntervention,
+      ActionTypes.FollowUp
+    ];
+    
+    this.ImportedFiles = [];
+    
+    actionTypes.forEach(actionType => {
+      this.adminService.GetFilesByActionId(this.patientId, actionType).subscribe(res => {
+        if (res.results) {
+          const files = res.results.map<FilesModel>(i => {
+            return {
+              attachmentId: i.attachmentId,
+              actionType: actionType,
+              fileName: i.fileName,
+              existFileName: i.existFileName,
+              fileUrl: i.fileUrl,
+              fileSize: i.fileSize,
+              file: null
+            }
+          });
+          this.ImportedFiles.push(...files);
+        }
+      });
+    });
   }
 
   RefreshImageData(item: boolean) {
@@ -544,9 +625,18 @@ export class PatientCreateComponent implements OnInit {
     this.markFormGroupTouched(this.surgicalIntervention);
     this.markFormGroupTouched(this.followUp);
 
-    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
-      this.patientForm.patchValue({ fileModel: this.SelectedFile });
-    }
+    // Attach files to their respective step objects with API-ready shape
+    const setModel = (group: FormGroup, model: UploadFileModel, actionType: ActionTypes) => {
+      if ((model?.files?.length || 0) > 0 || (model?.deletedFiles?.length || 0) > 0) {
+        group.get('fileModel').setValue(this.toApiFileModel(model, actionType));
+      } else {
+        group.get('fileModel').setValue(null);
+      }
+    };
+    setModel(this.patientForm.get('patient') as FormGroup, this.patientFiles, ActionTypes.Patient);
+    setModel(this.admission, this.admissionFiles, ActionTypes.Admission);
+    setModel(this.surgicalIntervention, this.surgicalFiles, ActionTypes.SurgicalIntervention);
+    setModel(this.followUp, this.followUpFiles, ActionTypes.FollowUp);
     
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
     const admissionValid = this.admission.valid;
@@ -572,6 +662,26 @@ export class PatientCreateComponent implements OnInit {
         this.router.navigate(['/patients']);
       });
     }
+  }
+  
+  toApiFileModel(model: UploadFileModel, actionType: ActionTypes) {
+    return {
+      ActionId: (this.patientId ?? model.actionId) ?? 0,
+      ActionType: actionType,
+      InsertUser: 'mo',
+      Files: (model.files || []).map(f => ({
+        AttachmentId: Number(f.attachmentId ?? 0),
+        ActionType: actionType,
+        FileName: f.fileName ?? '',
+        ExistFileName: f.existFileName ?? '',
+        FileSize: f.fileSize ?? '',
+        File: f.file ?? null
+      })),
+      DeletedFiles: (model.deletedFiles || []).map(d => ({
+        AttachmentId: Number(d.attachmentId ?? 0),
+        FileName: d.fileName ?? ''
+      }))
+    };
   }
   
 
