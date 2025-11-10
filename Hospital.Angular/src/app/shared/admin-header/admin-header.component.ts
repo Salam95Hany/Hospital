@@ -46,6 +46,7 @@ export class AdminHeaderComponent {
   clickOutside(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.isUserDropdownOpen = false;
+      this.showAutoCompleteMenu = false;
     }
   }
 }
