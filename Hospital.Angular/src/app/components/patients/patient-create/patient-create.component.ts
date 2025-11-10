@@ -464,7 +464,7 @@ export class PatientCreateComponent implements OnInit {
         this.patientService.deletePatientWithAllData(this.patientId).subscribe({
         next: () => {
           this.toastr.success('Patient deleted successfully!', 'Success');
-          this.router.navigate(['/patients']);
+          this.router.navigate(['/admin/patients']);
         },
         error: (error) => {
           console.error('Delete error:', error);
@@ -693,12 +693,12 @@ export class PatientCreateComponent implements OnInit {
     if (this.isEditMode && this.patientId) {
       this.patientService.updatePatientFull(formData).subscribe(() => {
         this.toastr.success('Patient updated successfully!', 'Success');
-        this.router.navigate(['/patients']);
+        this.router.navigate(['/admin/patients']);
       });
     } else {
       this.patientService.AddNewPatientFull(formData).subscribe(() => {
         this.toastr.success('Patient created successfully!', 'Success');
-        this.router.navigate(['/patients']);
+        this.router.navigate(['/admin/patients']);
       });
     }
   }
@@ -726,7 +726,7 @@ export class PatientCreateComponent implements OnInit {
   
 
   navigateBack(): void {
-    this.router.navigate(['/patients']);
+    this.router.navigate(['/admin/patients']);
   }
 
 

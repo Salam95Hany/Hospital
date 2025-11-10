@@ -250,7 +250,7 @@ get patient(): FormGroup {
         this.PatientId ? 'Patient updated successfully!' : 'Patient created successfully!',
         'Success'
       );
-      this.router.navigate(['/patients']);
+      this.router.navigate(['/admin/patients']);
       this.modalService.dismissAll();
       this.RefreshData.emit(true);
     },
@@ -282,7 +282,7 @@ get patient(): FormGroup {
   }
 
   navigateBack(): void {
-    this.router.navigate(['/patients']);
+    this.router.navigate(['/admin/patients']);
   }
   DismissModal() {
     this.modalService.dismissAll();
