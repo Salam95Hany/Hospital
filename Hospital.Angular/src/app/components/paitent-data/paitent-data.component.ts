@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from '../../services/admin.service';
 import { PatientData, Admission, SurgicalIntervention, FollowUp } from '../../models/patient.model';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { AdminGeneralInputComponent } from '../../shared/admin-general-input/admin-general-input.component';
 import { AdminDropDownComponent } from '../../shared/admin-drop-down/admin-drop-down.component';
 import { AdminSliderImageComponent } from '../../shared/admin-slider-image/admin-slider-image.component';
@@ -23,7 +23,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
     AdminGeneralInputComponent,
     AdminDropDownComponent,AdminSliderImageComponent, AdminUploadFileComponent],
   templateUrl: './paitent-data.component.html',
-  styleUrls: ['./paitent-data.component.css']
+  styleUrls: ['./paitent-data.component.css'],
+  providers: [DatePipe]
 })
 export class PaitentDataComponent implements OnInit {
 patientData: PatientData = new PatientData();
@@ -64,7 +65,8 @@ patientData: PatientData = new PatientData();
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private adminService: AdminService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {

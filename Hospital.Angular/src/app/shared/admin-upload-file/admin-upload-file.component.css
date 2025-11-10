@@ -1,16 +1,16 @@
 .upload-container {
-    background: white;
-    border-radius: 20px;
-    padding: 10px 15px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    background: #fff;
+    border-radius: 10px;
+    padding: 6px 10px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
 }
 
 .upload-area {
-    border: 3px dashed #667eea;
-    border-radius: 15px;
-    padding: 60px 20px;
+    border: 2px dashed #667eea;
+    border-radius: 10px;
+    padding: 24px 12px;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: background 0.2s ease, border-color 0.2s ease;
     cursor: pointer;
     background: #f8f9ff;
 }
@@ -18,25 +18,24 @@
 .upload-area.dragover {
     border-color: #28a745;
     background: #e8f5e9;
-    transform: scale(1.02);
 }
 
 .upload-icon {
-    font-size: 64px;
+    font-size: 32px;
     color: #667eea;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 .upload-text {
-    font-size: 18px;
+    font-size: 14px;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     font-weight: 600;
 }
 
 .upload-hint {
     color: #666;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .file-input {
@@ -46,9 +45,9 @@
 .btn-upload {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
-    padding: 12px 40px;
+    padding: 8px 24px;
     font-weight: 600;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 .btn-upload:hover {
@@ -57,33 +56,32 @@
 }
 
 .file-list {
-    margin-top: 30px;
+    margin-top: 12px;
 }
 
 .file-item {
     background: #f8f9fa;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 10px;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: all 0.3s ease;
+    transition: background 0.2s ease;
 }
 
 .file-item:hover {
     background: #e9ecef;
-    transform: translateX(5px);
 }
 
 .file-info {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .file-icon {
-    font-size: 24px;
+    font-size: 18px;
     color: #667eea;
 }
 
@@ -96,10 +94,11 @@
     font-weight: 600;
     color: #333;
     margin-bottom: 2px;
+    font-size: 13px;
 }
 
 .file-size {
-    font-size: 12px;
+    font-size: 11px;
     color: #666;
 }
 
@@ -108,12 +107,11 @@
     border: none;
     color: #dc3545;
     cursor: pointer;
-    font-size: 20px;
-    transition: all 0.3s ease;
+    font-size: 16px;
+    transition: color 0.2s ease;
 }
 
 .btn-remove:hover {
-    transform: scale(1.2);
     color: #c82333;
 }
 

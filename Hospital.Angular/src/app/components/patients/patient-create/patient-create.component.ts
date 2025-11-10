@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../services/patient.service';
@@ -23,7 +23,8 @@ import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admi
     AdminGeneralInputComponent,
     AdminDropDownComponent,AdminSliderImageComponent, AdminUploadFileComponent],
   templateUrl: './patient-create.component.html',
-  styleUrls: ['./patient-create.component.css']
+  styleUrls: ['./patient-create.component.css'],
+  providers: [DatePipe]
 })
 export class PatientCreateComponent implements OnInit {
   patientData: PatientData = new PatientData();
@@ -200,7 +201,8 @@ export class PatientCreateComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
