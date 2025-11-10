@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
@@ -28,7 +28,7 @@ export class AdminHeaderComponent {
   ];
   UserModel: any;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,private eRef: ElementRef) {
     this.UserModel = this.authService.UserModel;
   }
 
@@ -39,5 +39,12 @@ export class AdminHeaderComponent {
   toggleUserDropdown() { this.isUserDropdownOpen = !this.isUserDropdownOpen; }
   Logout() {
     this.authService.loginRedirect();
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.isUserDropdownOpen = false;
+    }
   }
 }

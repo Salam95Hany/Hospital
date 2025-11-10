@@ -38,4 +38,5 @@
     background-color: var(--primary-light) !important;
     border-color: var(--primary-light) !important;
     color: #fff !important;
+    z-index: 0;
 }
