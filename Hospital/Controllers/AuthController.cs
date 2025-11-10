@@ -26,6 +26,14 @@ namespace Hospital.Controllers
             return results;
         }
 
+        [HttpGet]
+        [Route("GetUserInfoById")]
+        public async Task<ApiResponseModel<UserWithRolesDto>> GetUserInfoById(string UserId)
+        {
+            var results = await _authService.GetUserInfoById(UserId);
+            return results;
+        }
+
         [HttpPost]
         [Route("AdminLogin")]
         public async Task<ApiResponseModel<ApplicationUserRespone>> AdminLogin(LoginModel model)
@@ -70,6 +78,22 @@ namespace Hospital.Controllers
         public async Task<ApiResponseModel<string>> DeleteUser(string UserId)
         {
             var results = await _authService.DeleteUser(UserId);
+            return results;
+        }
+
+        [HttpPost]
+        [Route("EditUserProfile")]
+        public async Task<ApiResponseModel<string>> EditUserProfile(AddUserModel model)
+        {
+            var results = await _authService.EditUserProfile(model);
+            return results;
+        }
+
+        [HttpPost]
+        [Route("ChangeUserPassword")]
+        public async Task<ApiResponseModel<string>> ChangeUserPassword(AddUserModel model)
+        {
+            var results = await _authService.ChangeUserPassword(model);
             return results;
         }
     }

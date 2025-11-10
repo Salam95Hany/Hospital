@@ -67,11 +67,51 @@ namespace Hospital.Services.Auth
                 Address = g.Address,
                 PhoneNumber = g.PhoneNumber,
                 IsActive = g.IsActive,
-                LoginDate = g.LoginDate,
+                LoginFullDate = DateTime.UtcNow.ToString("dddd d MMMM , yyyy") + " - " + DateTime.UtcNow.ToString("hh:mm:ss tt"),
                 Role = g.RoleName
             }).ToList();
 
             return ApiResponseModel<List<UserWithRolesDto>>.Success(GenericErrors.GetSuccess, result);
+        }
+
+        public async Task<ApiResponseModel<UserWithRolesDto>> GetUserInfoById(string UserId)
+        {
+            var users = _unitOfWork.Repository<AdminUser>().GetAllAsQueryable();
+            var roles = _unitOfWork.Repository<IdentityRole>().GetAllAsQueryable();
+            var userRoles = _unitOfWork.Repository<IdentityUserRole<string>>().GetAllAsQueryable();
+
+            var data = await (from user in users
+                              join ur in userRoles on user.Id equals ur.UserId into userRoleJoin
+                              from ur in userRoleJoin.DefaultIfEmpty()
+                              join role in roles on ur.RoleId equals role.Id into roleJoin
+                              from role in roleJoin.DefaultIfEmpty()
+                              where user.Id == UserId
+                              select new
+                              {
+                                  user.Id,
+                                  user.UserName,
+                                  user.Email,
+                                  user.Address,
+                                  user.PhoneNumber,
+                                  user.LoginDate,
+                                  user.IsActive,
+                                  RoleName = role != null ? role.Name : null
+                              }).FirstOrDefaultAsync();
+
+
+            var result = new UserWithRolesDto
+            {
+                UserId = data.Id,
+                UserName = data.UserName,
+                Email = data.Email,
+                Address = data.Address,
+                PhoneNumber = data.PhoneNumber,
+                IsActive = data.IsActive,
+                LoginFullDate = DateTime.UtcNow.ToString("dddd d MMMM , yyyy") +" - "+ DateTime.UtcNow.ToString("hh:mm:ss tt"),
+                Role = data.RoleName
+            };
+
+            return ApiResponseModel<UserWithRolesDto>.Success(GenericErrors.GetSuccess, result);
         }
 
         public async Task<ApiResponseModel<ApplicationUserRespone>> AdminLogin(LoginModel request)
@@ -87,7 +127,8 @@ namespace Hospital.Services.Auth
 
                 var roles = await _userManager.GetRolesAsync(user);
                 var roleNme = roles.FirstOrDefault();
-                user.IsActive = false;
+                user.IsActive = true;
+                user.LoginDate = DateTime.UtcNow;
                 await _userManager.UpdateAsync(user);
 
                 string roleId = null;
@@ -107,7 +148,7 @@ namespace Hospital.Services.Auth
                     Token = token,
                     LoginDate = DateTime.UtcNow,
                     LoginDateAr = DateTime.UtcNow.ToString("dddd d MMMM , yyyy"),
-                    LoginTimeAr = DateTime.UtcNow.ToString("hh:mm:ss t"),
+                    LoginTimeAr = DateTime.UtcNow.ToString("hh:mm:ss tt"),
                     ExpiresIn = expiresIn,
                 };
 
@@ -188,6 +229,62 @@ namespace Hospital.Services.Auth
                 var roleAssignResult = await AssignNewRoleToUser(model.UserId, model.Role);
                 if (!roleAssignResult)
                     return ApiResponseModel<string>.Failure(GenericErrors.UpdateRoleFailed);
+
+                return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
+            }
+            catch (Exception)
+            {
+                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+            }
+        }
+
+        public async Task<ApiResponseModel<string>> EditUserProfile(AddUserModel model)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+                if (user == null)
+                {
+                    return ApiResponseModel<string>.Failure(GenericErrors.UserNotFound);
+                }
+
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Email = model.Email;
+                user.NormalizedEmail = model.Email.ToUpperInvariant();
+
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                    return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+
+                return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
+            }
+            catch (Exception)
+            {
+                return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
+            }
+        }
+
+        public async Task<ApiResponseModel<string>> ChangeUserPassword(AddUserModel model)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+                if (user == null)
+                {
+                    return ApiResponseModel<string>.Failure(GenericErrors.UserNotFound);
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                {
+                    var removePassResult = await _userManager.RemovePasswordAsync(user);
+                    if (!removePassResult.Succeeded)
+                        return ApiResponseModel<string>.Failure(GenericErrors.DeletePassFailed);
+
+                    var addPassResult = await _userManager.AddPasswordAsync(user, model.Password);
+                    if (!addPassResult.Succeeded)
+                        return ApiResponseModel<string>.Failure(GenericErrors.NewPassFailed);
+                }
 
                 return ApiResponseModel<string>.Success(GenericErrors.UpdateSuccess);
             }

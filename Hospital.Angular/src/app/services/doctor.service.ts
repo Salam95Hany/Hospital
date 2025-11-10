@@ -28,4 +28,16 @@ export class DoctorService {
   DeleteUser(UserId: string) {
     return this.http.get<ApiResponseModel<any>>(this.apiURL + 'Auth/DeleteUser?UserId=' + UserId);
   }
+
+  GetUserInfoById(UserId: string) {
+    return this.http.get<any>(this.apiURL + 'Auth/GetUserInfoById?UserId=' + UserId);
+  }
+
+  EditUserProfile(Model: any) {
+    return this.http.post<ApiResponseModel<any>>(this.apiURL + 'Auth/EditUserProfile', Model);
+  }
+
+  ChangeUserPassword(Model: any) {
+    return this.http.post<ApiResponseModel<any>>(this.apiURL + 'Auth/ChangeUserPassword', Model);
+  }
 }

@@ -15,6 +15,7 @@ namespace Hospital.Entities.Contracts.DTOs
         public string Address { get; set; }
         public string Role { get; set; }
         public DateTime? LoginDate { get; set; }
+        public string? LoginFullDate { get; set; }
         public bool IsActive { get; set; }
     }
 }
