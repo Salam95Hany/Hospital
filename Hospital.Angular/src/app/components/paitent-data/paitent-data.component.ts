@@ -268,6 +268,13 @@ get patient(): FormGroup {
         if (res && res.results) {
           this.loadedPatientFull = res.results;
           this.patientDataOnly = res.results.patient;
+          // Normalize birthDate to yyyy-MM-dd for date input binding
+          if (this.patientDataOnly && (this.patientDataOnly as any).birthDate) {
+            const formatted = this.datePipe.transform((this.patientDataOnly as any).birthDate, 'yyyy-MM-dd');
+            if (formatted) {
+              (this.patientDataOnly as any).birthDate = formatted;
+            }
+          }
           const patientGroup = this.patientForm.get('patient') as FormGroup;
           if (patientGroup) {
             patientGroup.patchValue(this.patientDataOnly || {});
