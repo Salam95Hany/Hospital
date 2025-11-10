@@ -1,0 +1,138 @@
+<div>
+    <div class="profile-card">
+        <div class="profile-header">
+            <h1 class="profile-name">{{UserInfo?.userName}}</h1>
+            <p class="profile-role">{{UserInfo?.role}}</p>
+        </div>
+        <div class="profile-body">
+            <div class="info-section">
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i> Personal Information
+                </h2>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-envelope"></i> Email
+                    </div>
+                    <div class="info-value">{{UserInfo?.email}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-phone"></i> Phone
+                    </div>
+                    <div class="info-value">{{UserInfo?.phoneNumber}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-phone"></i> Address
+                    </div>
+                    <div class="info-value">{{UserInfo?.address}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-building"></i> Department
+                    </div>
+                    <div class="info-value">Urology Department</div>
+                </div>
+            </div>
+            <div class="info-section">
+                <h2 class="section-title">
+                    <i class="fas fa-cog"></i> Account Information
+                </h2>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-user-tag"></i> Role
+                    </div>
+                    <div class="info-value">{{UserInfo?.role}}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-circle-check"></i> Status
+                    </div>
+                    <div class="info-value">
+                        <span class="badge-status" [ngClass]="{'badge-active': UserInfo?.isActive , 'badge-inactive' : !UserInfo?.isActive}">
+                            {{UserInfo?.isActive ? 'Active' : 'Inactive'}}
+                        </span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-clock"></i> Last Login
+                    </div>
+                    <div class="info-value">{{UserInfo?.loginFullDate}}</div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-green" (click)="OpenEditProfileModal(EditProfileModal)">
+                    <i class="fas fa-edit"></i>
+                    <span class="me-2">Edit Profile</span>
+                </button>
+                <button class="btn btn-green" (click)="OpenChangePasswordModal(ChangePasswordModal)">
+                    <i class="fas fa-key"></i>
+                    <span class="me-2">Change Password</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #EditProfileModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <i class="fas fa-edit"></i>
+            <span>Edit Profile</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="step-content form-card" data-step="1" style="display: block;">
+            <form [formGroup]="EditProfileForm" autocomplete="off">
+                <div class="row g-3">
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Phone Number'" [label]="'Phone Number'" class="col-md-12" formControlName="phoneNumber" [allowNumbersOnly]="true" [error]="EditProfileErrors.phoneNumber"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Email'" [label]="'Email'" class="col-md-12" formControlName="email" [error]="EditProfileErrors.email"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Address'" [label]="'Address'" class="col-md-12" formControlName="address" [error]="EditProfileErrors.address"></app-admin-general-input>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer flex-nowrap gap-2">
+        <button class="btn btn-danger" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i> Cancel
+        </button>
+        <button class="btn btn-success" (click)="EditUserProfile()">
+            <i class="fas fa-save"></i> Save
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #ChangePasswordModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <i class="fas fa-edit"></i>
+            <span>Change Password</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="step-content form-card" data-step="1" style="display: block;">
+            <form [formGroup]="ChangePasswordForm" autocomplete="off">
+                <div class="row g-3">
+                    <app-admin-general-input [type]="'password'" [placeholder]="'Password'" [label]="'Password'" class="col-md-12" formControlName="password" [error]="ChangePasswordFormErrors.password"></app-admin-general-input>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer flex-nowrap gap-2">
+        <button class="btn btn-danger" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i> Cancel
+        </button>
+        <button class="btn btn-success" (click)="ChangeUserPassword()">
+            <i class="fas fa-save"></i> Save
+        </button>
+    </div>
+</ng-template>

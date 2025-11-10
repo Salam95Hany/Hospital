@@ -2,11 +2,12 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-admin-header',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './admin-header.component.html',
   styleUrls: ['./admin-header.component.css']
 })

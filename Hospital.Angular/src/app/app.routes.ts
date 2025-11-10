@@ -10,6 +10,7 @@ import { FollowupListComponent } from './components/followup/followup-list/follo
 import { LoginPageComponent } from './auth/login-page/login-page.component';
 import { NotAuthorizedComponent } from './auth/not-authorized/not-authorized.component';
 import { authGuard } from './auth/auth.guard';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 export const routes: Routes = [
   { path: '', component: LoginPageComponent },
@@ -71,6 +72,12 @@ export const routes: Routes = [
       {
         path: 'follow-up',
         component: FollowupListComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin"] },
+      },
+      {
+        path: 'user-profile',
+        component: UserProfileComponent,
         canActivate: [authGuard],
         data: { roles: ["SupperAdmin", "Admin"] },
       },
