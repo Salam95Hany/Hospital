@@ -59,14 +59,7 @@ namespace Hospital.Services.PatientsService
                     await AddNewFollowUp(Model.FollowUp, surgicalInterventionId.Value);
                 }
 
-                await _unitOfWork.CompleteAsync();
-                if (Model.Patient.FileModel != null)
-                {
-                    Model.Patient.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
-                    Model.Patient.FileModel.ActionId = patientId;
-                    Model.Patient.FileModel.ActionType = ActionTypes.Patient;
-                    var Attachments = await _attachmentsService.AddActionFiles(Model.Patient.FileModel);
-                }
+                
                 await transaction.CommitAsync(cancellationToken);
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
@@ -127,9 +120,17 @@ namespace Hospital.Services.PatientsService
                 InsertUser = patientModel.InsertUser,
                 InsertDate = DateTime.UtcNow
             };
-
             await _unitOfWork.Repository<Patient>().AddAsync(patient);
-            await _unitOfWork.CompleteAsync(); // Complete to get the PatientId
+            await _unitOfWork.CompleteAsync();
+            if (patientModel.FileModel != null)
+            {
+                patientModel.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                patientModel.FileModel.ActionId = patient.PatientId;
+                patientModel.FileModel.ActionType = ActionTypes.Patient;
+                var Attachments = await _attachmentsService.AddActionFiles(patientModel.FileModel);
+            }
+
+            // Complete to get the PatientId
 
             return patient.PatientId;
         }
@@ -188,7 +189,15 @@ namespace Hospital.Services.PatientsService
             };
 
             await _unitOfWork.Repository<Admission>().AddAsync(admission);
-            await _unitOfWork.CompleteAsync(); // Complete to get the AdmissionId
+            await _unitOfWork.CompleteAsync();
+
+            if (Model.FileModel != null)
+            {
+                Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                Model.FileModel.ActionId = admission.AdmissionId;
+                Model.FileModel.ActionType = ActionTypes.Admission;
+                var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
+            }
 
             return admission.AdmissionId;
         }
@@ -231,7 +240,15 @@ namespace Hospital.Services.PatientsService
             };
 
             await _unitOfWork.Repository<SurgicalIntervention>().AddAsync(surgicalIntervention);
-            await _unitOfWork.CompleteAsync(); // Complete to get the SurgicalInterventionId
+            await _unitOfWork.CompleteAsync();
+
+            if (interventionModel.FileModel != null)
+            {
+                interventionModel.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                interventionModel.FileModel.ActionId = surgicalIntervention.SurgicalInterventionId;
+                interventionModel.FileModel.ActionType = ActionTypes.SurgicalIntervention;
+                var Attachments = await _attachmentsService.AddActionFiles(interventionModel.FileModel);
+            }
 
             return surgicalIntervention.SurgicalInterventionId;
         }
@@ -258,6 +275,15 @@ namespace Hospital.Services.PatientsService
             };
 
             await _unitOfWork.Repository<FollowUp>().AddAsync(followUp);
+            await _unitOfWork.CompleteAsync();
+
+            if (followUpModel.FileModel != null)
+            {
+                followUpModel.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                followUpModel.FileModel.ActionId = followUp.FollowUpId;
+                followUpModel.FileModel.ActionType = ActionTypes.FollowUp;
+                var Attachments = await _attachmentsService.AddActionFiles(followUpModel.FileModel);
+            }
         }
         public async Task<bool> IsNationalIdExists(string nationalId)
         {
