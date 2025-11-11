@@ -4,6 +4,7 @@ import { PatientData, PatientsList } from '../models/patient.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponseModel } from '../models/ApiResponseModel';
 import { PagingFilterModel } from '../models/PagingFilterModel';
+import { environment } from '../../environments/environment';
 
 export interface PaginationParams {
   page: number;
@@ -24,7 +25,7 @@ export interface PatientFilterParams {
   providedIn: 'root'
 })
 export class PatientService {
-  private apiUrl = 'http://localhost:40950/api/Patients'; // Adjust the URL as needed
+  private apiUrl = environment.apiUrl; // Adjust the URL as needed
   private patients: PatientData[] = [];
 
   constructor(private http: HttpClient) { }
