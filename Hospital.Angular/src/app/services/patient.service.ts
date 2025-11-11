@@ -32,19 +32,19 @@ export class PatientService {
 
   // New method to add a full patient record
   AddNewPatientFull(patientData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/AddNewPatientFull`, patientData);
+    return this.http.post<any>(`${this.apiUrl}Patients/AddNewPatientFull`, patientData);
   }
   updatePatientFull(patientData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/UpdatePatientFull`, patientData);
+    return this.http.put<any>(`${this.apiUrl}Patients/UpdatePatientFull`, patientData);
   }
 
   // New method to get basic patient info
   getAllPatientsBasicInfo(PagingFilter: PagingFilterModel): Observable<any> {
-    return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}/GetAllPatientsBasicInfo` , PagingFilter);
+    return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}Patients/GetAllPatientsBasicInfo` , PagingFilter);
   }
 
   GetAllPatientsBasicInfoFilter(PagingFilter: PagingFilterModel) {
-    return this.http.post<any[]>(`${this.apiUrl}/GetAllPatientsBasicInfoFilter`, PagingFilter);
+    return this.http.post<any[]>(`${this.apiUrl}Patients/GetAllPatientsBasicInfoFilter`, PagingFilter);
   }
 
   // Get patients with pagination and filtering
@@ -85,7 +85,7 @@ export class PatientService {
       }
     }
 
-    return this.http.get<any>(`${this.apiUrl}/GetPatientsWithPagination`, { params });
+    return this.http.get<any>(`${this.apiUrl}Patients/GetPatientsWithPagination`, { params });
   }
 
   // Get filtered patients count for pagination
@@ -116,7 +116,7 @@ export class PatientService {
       }
     }
 
-    return this.http.get<number>(`${this.apiUrl}/GetFilteredPatientsCount`, { params });
+    return this.http.get<number>(`${this.apiUrl}Patients/GetFilteredPatientsCount`, { params });
   }
 
   getPatients(): Observable<PatientData[]> {
@@ -124,16 +124,16 @@ export class PatientService {
   }
 
   getPatientById(id: number): Observable<any> {
-     return this.http.get<any>(`${this.apiUrl}/GetPatientByIdWithInclude/${id}`);
+     return this.http.get<any>(`${this.apiUrl}Patients/GetPatientByIdWithInclude/${id}`);
   }
   
 
   deletePatientWithAllData(patientId: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/DeletePatientWithAllData/${patientId}`);
+    return this.http.delete<any>(`${this.apiUrl}Patients/DeletePatientWithAllData/${patientId}`);
   }
 
   GetSearchAutoCompleteData(Model: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/GetSearchAutoCompleteData`, Model);
+    return this.http.post<any>(`${this.apiUrl}Patients/GetSearchAutoCompleteData`, Model);
   }
 
 
