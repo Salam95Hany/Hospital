@@ -8,7 +8,7 @@
                 <i class="fas fa-user-injured"></i>
             </div>
             <div class="dashboard-card-title">Patients</div>
-            <div class="dashboard-card-value">1,254</div>
+            <div class="dashboard-card-value">{{CardData?.patients ?? 0 | number}}</div>
             <div class="dashboard-card-subtitle">
                 <span class="stat-change-up">+12% </span>compared to last month
             </div>
@@ -19,7 +19,7 @@
                 <i class="fas fa-user-md"></i>
             </div>
             <div class="dashboard-card-title">Doctors</div>
-            <div class="dashboard-card-value">87</div>
+            <div class="dashboard-card-value">{{CardData?.doctors ?? 0 | number}}</div>
             <div class="dashboard-card-subtitle">
                 <span class="stat-change-up">+5% </span>compared to last month
             </div>
@@ -30,7 +30,7 @@
                 <i class="fas fa-procedures"></i>
             </div>
             <div class="dashboard-card-title">Admissions</div>
-            <div class="dashboard-card-value">328</div>
+            <div class="dashboard-card-value">{{CardData?.admissions ?? 0 | number}}</div>
             <div class="dashboard-card-subtitle">
                 <span class="stat-change-up">+8% </span>compared to last month
             </div>
@@ -41,7 +41,7 @@
                 <i class="fas fa-calendar-check"></i>
             </div>
             <div class="dashboard-card-title">Surgical Interventions</div>
-            <div class="dashboard-card-value">542</div>
+            <div class="dashboard-card-value">{{CardData?.surgicalInterventions ?? 0 | number}}</div>
             <div class="dashboard-card-subtitle">
                 <span class="stat-change-down">-3% </span>compared to last month
             </div>
@@ -51,7 +51,7 @@
                 <i class="fas fa-calendar-check"></i>
             </div>
             <div class="dashboard-card-title">Follow Ups</div>
-            <div class="dashboard-card-value">542</div>
+            <div class="dashboard-card-value">{{CardData?.followUps ?? 0 | number}}</div>
             <div class="dashboard-card-subtitle">
                 <span class="stat-change-down">-3% </span>compared to last month
             </div>

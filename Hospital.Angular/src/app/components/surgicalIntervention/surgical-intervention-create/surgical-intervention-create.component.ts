@@ -95,6 +95,7 @@ export class SurgicalInterventionCreateComponent {
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
   UserId: any;
+  BtnDisabled = false;
   ItemForm: FormGroup;
   formErrors = {
     interventionDate: '',
@@ -252,16 +253,17 @@ export class SurgicalInterventionCreateComponent {
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 
-     if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
       this.ItemForm.patchValue({ fileModel: this.SelectedFile });
     }
 
 
     const formData = new FormData();
     this.formService.buildFormData(formData, this.ItemForm.value);
-
+    this.BtnDisabled = true;
     if (!this.SurgicalInterventionId) {
       this.adminService.AddNewSurgicalIntervention(formData).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
@@ -272,6 +274,7 @@ export class SurgicalInterventionCreateComponent {
       });
     } else {
       this.adminService.UpdateSurgicalIntervention(formData).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();

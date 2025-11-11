@@ -10,6 +10,7 @@ using Hospital.Interfaces.IPatients;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -59,7 +60,7 @@ namespace Hospital.Services.PatientsService
                     await AddNewFollowUp(Model.FollowUp, surgicalInterventionId.Value);
                 }
 
-                
+
                 await transaction.CommitAsync(cancellationToken);
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
@@ -350,7 +351,7 @@ namespace Hospital.Services.PatientsService
                 await UpdatePatient(Model);
 
                 // Step 2: Update or Create Admission
-                
+
 
                 await _unitOfWork.CompleteAsync();
                 if (Model.FileModel != null)
@@ -717,6 +718,17 @@ namespace Hospital.Services.PatientsService
         {
             var Results = await _attachmentsService.GetFilesByActionId(ActionId, ActionType);
             return Results;
+        }
+
+        public async Task<ApiResponseModel<DashboardCardDto>> GetDashboardStatistics()
+        {
+            var Card = new DashboardCardDto();
+            Card.Patients = await _unitOfWork.Repository<Patient>().CountAsync(i => i.IsDeleted == false);
+            Card.Admissions = await _unitOfWork.Repository<Admission>().CountAsync(i => i.IsDeleted == false);
+            Card.SurgicalInterventions = await _unitOfWork.Repository<SurgicalIntervention>().CountAsync(i => i.IsDeleted == false);
+            Card.FollowUps = await _unitOfWork.Repository<FollowUp>().CountAsync(i => i.IsDeleted == false);
+            Card.Doctors = await _unitOfWork.Repository<AdminUser>().CountAsync();
+            return ApiResponseModel<DashboardCardDto>.Success(GenericErrors.GetSuccess, Card);
         }
     }
 }

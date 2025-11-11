@@ -20,6 +20,7 @@ export class UserProfileComponent implements OnInit {
   UserId: any;
   EditProfileForm: FormGroup;
   ChangePasswordForm: FormGroup;
+  BtnDisabled = false;
   EditProfileErrors = {
     email: '',
     phoneNumber: '',
@@ -115,8 +116,9 @@ export class UserProfileComponent implements OnInit {
       return;
 
     this.EditProfileForm.patchValue({ userId: this.UserId });
-
+    this.BtnDisabled = true;
     this.doctorService.EditUserProfile(this.EditProfileForm.value).subscribe((res) => {
+      this.BtnDisabled = false;
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetUserInfoById();
@@ -144,11 +146,13 @@ export class UserProfileComponent implements OnInit {
       return;
 
     this.ChangePasswordForm.patchValue({ userId: this.UserId });
-
+    this.BtnDisabled = true;
     this.doctorService.ChangeUserPassword(this.ChangePasswordForm.value).subscribe((res) => {
+      this.BtnDisabled = false;
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.modalService.dismissAll();
+        this.authService.loginRedirect();
       } else {
         this.toaster.error(res.message);
       }

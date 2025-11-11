@@ -69,5 +69,11 @@ namespace Hospital.Controllers.PatientsController
             return await _PatientsService.GetFilesByActionId(ActionId, ActionType);
         }
 
+        [HttpGet("GetDashboardStatistics")]
+        public async Task<ApiResponseModel<DashboardCardDto>> GetDashboardStatistics()
+        {
+            return await _PatientsService.GetDashboardStatistics();
+        }
+
     }
 }

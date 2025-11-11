@@ -35,6 +35,7 @@ export class FollowupCreateComponent {
   ImportedFiles: FilesModel[] = [];
   UserId: any;
   ItemForm: FormGroup;
+  BtnDisabled = false;
   formErrors = {
     followUpDate: '',
     patientRemarksStatus: ''
@@ -162,9 +163,10 @@ export class FollowupCreateComponent {
 
     const formData = new FormData();
     this.formService.buildFormData(formData, this.ItemForm.value);
-
+    this.BtnDisabled = true;
     if (!this.FollowUpId) {
       this.adminService.AddNewFollowUp(formData).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
@@ -175,6 +177,7 @@ export class FollowupCreateComponent {
       });
     } else {
       this.adminService.UpdateFollowUp(formData).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();

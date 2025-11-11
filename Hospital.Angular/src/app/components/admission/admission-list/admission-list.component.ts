@@ -32,6 +32,7 @@ export class AdmissionListComponent {
   ImportedFiles: FilesModel[] = [];
   AdmissionObj: any;
   isFilter = true;
+  BtnDisabled = false;
   showSlider = false;
   PatientId: number;
   AdmissionId: number;
@@ -161,7 +162,9 @@ export class AdmissionListComponent {
   }
 
   DeleteItem() {
+    this.BtnDisabled = true;
     this.adminService.DeleteAdmission(this.AdmissionId).subscribe(res => {
+      this.BtnDisabled = false;
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllAdmissionData();

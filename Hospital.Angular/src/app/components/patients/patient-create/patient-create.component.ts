@@ -32,7 +32,7 @@ export class PatientCreateComponent implements OnInit {
   currentStep: number = 1;
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
-  
+  BtnDisabled = false;
   // Store files separately for each step
   patientFiles: UploadFileModel = {
     actionId: null,
@@ -690,13 +690,16 @@ export class PatientCreateComponent implements OnInit {
         console.log(k, isFile ? `File(${(v as File).name})` : v);
       }
     } catch {}
+    this.BtnDisabled = true;
     if (this.isEditMode && this.patientId) {
       this.patientService.updatePatientFull(formData).subscribe(() => {
+        this.BtnDisabled = false;
         this.toastr.success('Patient updated successfully!', 'Success');
         this.router.navigate(['/admin/patients']);
       });
     } else {
       this.patientService.AddNewPatientFull(formData).subscribe(() => {
+        this.BtnDisabled = false;
         this.toastr.success('Patient created successfully!', 'Success');
         this.router.navigate(['/admin/patients']);
       });

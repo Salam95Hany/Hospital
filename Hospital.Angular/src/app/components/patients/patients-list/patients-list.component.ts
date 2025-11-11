@@ -25,6 +25,7 @@ export class PatientsListComponent implements OnInit {
   searchTerm: string = '';
   FilterList: FilterModel[] = [];
   isFilter = true;
+  BtnDisabled = false;
   TotalCount = 0;
   CurrentPage = 1;
   PagingFilter: PagingFilterModel = {

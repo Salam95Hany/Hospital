@@ -39,6 +39,7 @@ export class FollowupListComponent {
   selectedSurgicalInterventions: any = null;
   isFilter = true;
   showSlider = false;
+  BtnDisabled = false;
   TotalCount = 0;
   PagingFilter: PagingFilterModel = {
     filterList: [],
@@ -187,7 +188,9 @@ export class FollowupListComponent {
   }
 
   DeleteItem() {
+    this.BtnDisabled = true;
     this.adminService.DeleteFollowUp(this.FollowUpId).subscribe(res => {
+      this.BtnDisabled = false;
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllFollowUpData();

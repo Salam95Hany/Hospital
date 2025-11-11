@@ -40,7 +40,7 @@ export class PatientService {
 
   // New method to get basic patient info
   getAllPatientsBasicInfo(PagingFilter: PagingFilterModel): Observable<any> {
-    return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}Patients/GetAllPatientsBasicInfo` , PagingFilter);
+    return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}Patients/GetAllPatientsBasicInfo`, PagingFilter);
   }
 
   GetAllPatientsBasicInfoFilter(PagingFilter: PagingFilterModel) {
@@ -124,9 +124,9 @@ export class PatientService {
   }
 
   getPatientById(id: number): Observable<any> {
-     return this.http.get<any>(`${this.apiUrl}Patients/GetPatientByIdWithInclude/${id}`);
+    return this.http.get<any>(`${this.apiUrl}Patients/GetPatientByIdWithInclude/${id}`);
   }
-  
+
 
   deletePatientWithAllData(patientId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}Patients/DeletePatientWithAllData/${patientId}`);
@@ -134,6 +134,10 @@ export class PatientService {
 
   GetSearchAutoCompleteData(Model: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}Patients/GetSearchAutoCompleteData`, Model);
+  }
+
+  GetDashboardStatistics() {
+    return this.http.get<any>(`${this.apiUrl}Patients/GetDashboardStatistics`);
   }
 
 

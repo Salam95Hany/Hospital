@@ -31,6 +31,7 @@ export class DoctorsListComponent implements OnInit {
     { id: 'Admin', name: 'Admin' }
   ];
   isFilter = true;
+  BtnDisabled = false;
   UserId: any;
   TotalCount = 0;
   CurrentUserId: any;
@@ -157,9 +158,10 @@ export class DoctorsListComponent implements OnInit {
     this.ItemForm.patchValue({ insertUser: this.CurrentUserId });
 
 
-
+    this.BtnDisabled = true;
     if (!this.UserId) {
       this.doctorService.CreateUser(this.ItemForm.value).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.GetAllDoctorsData();
@@ -170,6 +172,7 @@ export class DoctorsListComponent implements OnInit {
       });
     } else {
       this.doctorService.EditUser(this.ItemForm.value).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.GetAllDoctorsData();
@@ -182,7 +185,9 @@ export class DoctorsListComponent implements OnInit {
   }
 
   DeleteItem() {
+    this.BtnDisabled = true;
     this.doctorService.DeleteUser(this.UserId).subscribe(res => {
+      this.BtnDisabled = false;
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllDoctorsData();

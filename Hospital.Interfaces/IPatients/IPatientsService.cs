@@ -20,5 +20,6 @@ namespace Hospital.Interfaces.IPatients
         Task<ApiResponseModel<PatientFullDetailsDto>> GetPatientByIdWithIncludeAsync(int patientId, CancellationToken cancellationToken = default);
         Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model);
         Task<ApiResponseModel<List<Attachment>>> GetFilesByActionId(int ActionId, ActionTypes ActionType);
+        Task<ApiResponseModel<DashboardCardDto>> GetDashboardStatistics();
     }
 }

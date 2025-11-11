@@ -95,7 +95,7 @@
         <button class="btn btn-danger" (click)="modal.dismiss()">
             <i class="fas fa-times-circle"></i> Cancel
         </button>
-        <button class="btn btn-success" (click)="AddNewItem()">
+        <button class="btn btn-success" (click)="AddNewItem()" [disabled]="BtnDisabled">
             <i class="fas fa-save"></i> Save
         </button>
 
@@ -115,7 +115,7 @@
         <p class="fs-5 m-0">Are you sure you want to remove this item?</p>
     </div>
     <div class="modal-footer justify-content-start">
-        <button type="button" class="btn btn-success" (click)="DeleteItem()">
+        <button type="button" class="btn btn-success" (click)="DeleteItem()" [disabled]="BtnDisabled">
             <i class="fas fa-check"></i>
             <span class="me-2">Yes</span>
         </button>
