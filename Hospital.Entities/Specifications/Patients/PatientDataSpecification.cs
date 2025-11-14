@@ -14,7 +14,7 @@ namespace Hospital.Entities.Specifications.Patients
         public PatientDataSpecification(PagingFilterModel PagingFilter, bool applyPaging = true) :base(i => i.IsDeleted == false)
         {
 
-            var searchText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Patient Code")?.ItemId;
+            var searchText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "SearchText")?.ItemId;
 
             if (!string.IsNullOrEmpty(searchText))
                 AddCriteria(fc => fc.InternalNumber.Contains(searchText));

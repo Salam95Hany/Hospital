@@ -11,20 +11,19 @@ import { TemplateRef, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { PaitentDataComponent } from '../../paitent-data/paitent-data.component';
+import { AdminFilterComponent } from '../../../shared/admin-filter/admin-filter.component';
 
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule,PaitentDataComponent],
+  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })
 export class PatientsListComponent implements OnInit {
   patients: PatientsList[] = [];
   filteredPatients: PatientsList[] = [];
-  searchTerm: string = '';
-  FilterList: FilterModel[] = [];
-  isFilter = true;
+  isFilter = false;
   BtnDisabled = false;
   TotalCount = 0;
   CurrentPage = 1;
@@ -33,6 +32,14 @@ export class PatientsListComponent implements OnInit {
     currentpage: 1,
     pagesize: 20
   };
+  FilterList: FilterModel[] = [
+    {
+      categoryDisplayName: "Code",
+      categoryName: "SearchText",
+      filterType: "SearchText"
+    }
+  ];
+
   PatientId: any;
   @ViewChild('PatientCreateModal', { read: TemplateRef }) PatientCreateModalRef!: TemplateRef<any>;
 
@@ -44,32 +51,36 @@ export class PatientsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPatients();
-    //this.GetAllPatientsBasicInfoFilter();
+    this.GetAllPatientsBasicInfoFilter();
   }
 
   loadPatients(): void {
     this.patientService.getAllPatientsBasicInfo(this.PagingFilter).subscribe(response => {
       this.patients = response.results;
       this.TotalCount = response.totalCount;
-      this.applyFilter();
+      this.filteredPatients = this.patients;
     });
   } 
 
-  applyFilter(): void {
-    if (!this.searchTerm.trim()) { this.filteredPatients = this.patients; return; }
-    const s = this.searchTerm.toLowerCase();
-    this.filteredPatients = this.patients.filter(d =>
-      d.internalNumber.toLowerCase().includes(s)||
-      d.name.toLowerCase().includes(s)
-    );
+  GetAllPatientsBasicInfoFilter() {
+    this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {
+      // Fallback filters if backend returns empty
+      this.FilterList = (data && data.length > 0) ? data : [
+        {
+          categoryDisplayName: "Name",
+          categoryName: "SearchText",
+          filterType: "SearchText"
+        },
+        {
+          categoryDisplayName: "Birth Date",
+          categoryName: "BirthDate",
+          filterType: "DateRange"
+        }
+      ];
+    });
   }
 
-  // GetAllPatientsBasicInfoFilter() {
-  //   this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {
-  //     this.FilterList = data;
-  //   });
-  // }
-  FilterChecked(filterList: FilterModel[]) {
+  OnFilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;
     this.loadPatients();
   }
