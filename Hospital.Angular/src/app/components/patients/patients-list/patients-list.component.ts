@@ -51,7 +51,7 @@ export class PatientsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPatients();
-    this.GetAllPatientsBasicInfoFilter();
+    //this.GetAllPatientsBasicInfoFilter();
   }
 
   loadPatients(): void {
@@ -62,23 +62,23 @@ export class PatientsListComponent implements OnInit {
     });
   } 
 
-  GetAllPatientsBasicInfoFilter() {
-    this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {
-      // Fallback filters if backend returns empty
-      this.FilterList = (data && data.length > 0) ? data : [
-        {
-          categoryDisplayName: "Name",
-          categoryName: "SearchText",
-          filterType: "SearchText"
-        },
-        {
-          categoryDisplayName: "Birth Date",
-          categoryName: "BirthDate",
-          filterType: "DateRange"
-        }
-      ];
-    });
-  }
+  // GetAllPatientsBasicInfoFilter() {
+  //   this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {
+  //     // Fallback filters if backend returns empty
+  //     this.FilterList = (data && data.length > 0) ? data : [
+  //       {
+  //         categoryDisplayName: "Name",
+  //         categoryName: "SearchText",
+  //         filterType: "SearchText"
+  //       },
+  //       {
+  //         categoryDisplayName: "Birth Date",
+  //         categoryName: "BirthDate",
+  //         filterType: "DateRange"
+  //       }
+  //     ];
+  //   });
+  // }
 
   OnFilterChecked(filterList: FilterModel[]) {
     this.PagingFilter.filterList = filterList;

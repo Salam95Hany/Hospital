@@ -21,5 +21,7 @@ namespace Hospital.Interfaces.IPatients
         Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model);
         Task<ApiResponseModel<List<Attachment>>> GetFilesByActionId(int ActionId, ActionTypes ActionType);
         Task<ApiResponseModel<DashboardCardDto>> GetDashboardStatistics();
+        Task<Patient> GetPatientByInternalNumber(string internalNumber);
+        Task<List<Admission>> GetHospitalFileNumber(string hospitalFileNumber);
     }
 }

@@ -14,6 +14,8 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 import { AdminService } from '../../../services/admin.service';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admin-upload-file.component';
+import { of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-patient-create',
@@ -217,7 +219,43 @@ export class PatientCreateComponent implements OnInit {
     
     this.initForm();
     this.setupFormValueChanges();
+    // Duplicate check for hospital file number in admission step when creating a new patient
+    if (!this.patientId) {
+      this.setupHospitalFileNumberValidation();
+    }
 
+  }
+
+  private setupHospitalFileNumberValidation(): void {
+    const ctrl = this.admission.get('hospitalFileNumber');
+    if (!ctrl) return;
+
+    ctrl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          const trimmed = (value ?? '').trim();
+          if (!trimmed) {
+            return of([]);
+          }
+          return this.patientService.GetHospitalFileNumber(trimmed);
+        })
+      )
+      .subscribe((results: any[]) => {
+        const exists = Array.isArray(results) && results.length > 0;
+        if (exists) {
+          this.formErrors.hospitalFileNumber = 'Hospital file number already exists';
+          ctrl.setErrors({ ...(ctrl.errors || {}), duplicate: true });
+          this.BtnDisabled = true;
+        } else {
+          const { duplicate, ...otherErrors } = ctrl.errors || {};
+          const newErrors = Object.keys(otherErrors).length ? otherErrors : null;
+          ctrl.setErrors(newErrors);
+          this.formErrors.hospitalFileNumber = '';
+          this.BtnDisabled = false;
+        }
+      });
   }
 
   initForm() {

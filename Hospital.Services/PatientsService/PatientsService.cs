@@ -734,5 +734,13 @@ namespace Hospital.Services.PatientsService
             Card.Doctors = await _unitOfWork.Repository<AdminUser>().CountAsync();
             return ApiResponseModel<DashboardCardDto>.Success(GenericErrors.GetSuccess, Card);
         }
+
+        public async Task<List<Admission>> GetHospitalFileNumber(string hospitalFileNumber)
+        {
+            var result = await _unitOfWork.Repository<Admission>().WhereAsync(i=>i.HospitalFileNumber == hospitalFileNumber);
+            return result;
+                
+        }
+
     }
 }

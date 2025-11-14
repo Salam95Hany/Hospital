@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PatientData, PatientsList } from '../models/patient.model';
+import { PatientData, PatientsList, Admission } from '../models/patient.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponseModel } from '../models/ApiResponseModel';
 import { PagingFilterModel } from '../models/PagingFilterModel';
@@ -43,9 +43,9 @@ export class PatientService {
     return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}Patients/GetAllPatientsBasicInfo`, PagingFilter);
   }
 
-  GetAllPatientsBasicInfoFilter(PagingFilter: PagingFilterModel) {
-    return this.http.post<any[]>(`${this.apiUrl}Patients/GetAllPatientsBasicInfoFilter`, PagingFilter);
-  }
+  // GetAllPatientsBasicInfoFilter(PagingFilter: PagingFilterModel) {
+  //   return this.http.post<any[]>(`${this.apiUrl}Patients/GetAllPatientsBasicInfoFilter`, PagingFilter);
+  // }
 
   // Get patients with pagination and filtering
   getPatientsWithPagination(pagination: PaginationParams, filters?: PatientFilterParams): Observable<any> {
@@ -169,5 +169,11 @@ export class PatientService {
     const initialLength = this.patients.length;
     this.patients = this.patients;
     return of(this.patients.length !== initialLength);
+  }
+
+  // Validate hospital file number existence for admission create flow
+  GetHospitalFileNumber(hospitalFileNumber: string): Observable<Admission[]> {
+    const params = new HttpParams().set('hospitalFileNumber', hospitalFileNumber ?? '');
+    return this.http.get<Admission[]>(`${this.apiUrl}Patients/GetHospitalFileNumber`, { params });
   }
 }

@@ -6,6 +6,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CustomValidators, RegexType } from '../../../services/custom-validators';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
+import { PatientService } from '../../../services/patient.service';
+import { of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -69,17 +72,54 @@ export class AdmissionCreateComponent implements OnInit {
 
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
-    private toaster: ToastrService, private datePipe: DatePipe, private modalService: NgbModal) { }
+    private toaster: ToastrService, private datePipe: DatePipe, private modalService: NgbModal, private patientService: PatientService) { }
 
   ngOnInit(): void {
     this.UserId = this.authService.userId;
     this.FormInit();
+    // Only enforce duplicate check when adding new admission (no AdmissionId)
+    if (!this.AdmissionId) {
+      this.setupHospitalFileNumberValidation();
+    }
     if (this.AdmissionId) {
       this.GetAdmissionById();
       this.GetFilesByActionId();
     }
 
 
+  }
+
+  private setupHospitalFileNumberValidation(): void {
+    const ctrl = this.ItemForm.get('hospitalFileNumber');
+    if (!ctrl) return;
+
+    ctrl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((value: string) => {
+          const trimmed = (value ?? '').trim();
+          if (!trimmed) {
+            return of([]);
+          }
+          return this.patientService.GetHospitalFileNumber(trimmed);
+        })
+      )
+      .subscribe((results: any[]) => {
+        const exists = Array.isArray(results) && results.length > 0;
+        if (exists) {
+          this.formErrors.hospitalFileNumber = 'Hospital file number already exists';
+          ctrl.setErrors({ ...(ctrl.errors || {}), duplicate: true });
+          this.BtnDisabled = true;
+        } else {
+          // Clear duplicate error while preserving other errors
+          const { duplicate, ...otherErrors } = ctrl.errors || {};
+          const newErrors = Object.keys(otherErrors).length ? otherErrors : null;
+          ctrl.setErrors(newErrors);
+          this.formErrors.hospitalFileNumber = '';
+          this.BtnDisabled = false;
+        }
+      });
   }
 
   FormInit() {

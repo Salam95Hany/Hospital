@@ -68,12 +68,18 @@ namespace Hospital.Controllers.PatientsController
         {
             return await _PatientsService.GetFilesByActionId(ActionId, ActionType);
         }
-
+        
         [HttpGet("GetDashboardStatistics")]
         public async Task<ApiResponseModel<DashboardCardDto>> GetDashboardStatistics()
         {
             return await _PatientsService.GetDashboardStatistics();
         }
+        [HttpGet("GetHospitalFileNumber")]
+        public async Task<List<Admission>> GetHospitalFileNumber(string hospitalFileNumber)
+        {
+            return await _PatientsService.GetHospitalFileNumber(hospitalFileNumber);
+        }
+
 
     }
 }
