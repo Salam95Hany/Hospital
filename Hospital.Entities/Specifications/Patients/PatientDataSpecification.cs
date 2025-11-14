@@ -11,7 +11,7 @@ namespace Hospital.Entities.Specifications.Patients
 {
     public class PatientDataSpecification:BaseSpecification<Patient>
     {
-        public PatientDataSpecification(PagingFilterModel PagingFilter, bool applyPaging = true) :base(i => i.IsDeleted == false || i.IsDeleted == null)
+        public PatientDataSpecification(PagingFilterModel PagingFilter, bool applyPaging = true) :base(i => i.IsDeleted == false)
         {
 
             var searchText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Patient Code")?.ItemId;

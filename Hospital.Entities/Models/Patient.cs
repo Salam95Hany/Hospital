@@ -13,17 +13,17 @@ namespace Hospital.Entities.Models
     {
         [Key]
         public int PatientId { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public DateTime? BirthDate { get; set; }
         public int? Age { get; set; }
-        public string Gender { get; set; }
-        public string NationalId { get; set; }
-        public string Address { get; set; }
-        public string Governorate { get; set; }
-        public string Occupation { get; set; }
-        public string MaritalStatus { get; set; }
-        public string ChildrenCount { get; set; }
-        public string InternalNumber { get; set; }
+        public string? Gender { get; set; }
+        public string? NationalId { get; set; }
+        public string? Address { get; set; }
+        public string? Governorate { get; set; }
+        public string? Occupation { get; set; }
+        public string? MaritalStatus { get; set; }
+        public string? ChildrenCount { get; set; }
+        public string? InternalNumber { get; set; }
         [NotMapped]
         public UploadFileModel? FileModel { get; set; }
 

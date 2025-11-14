@@ -118,7 +118,8 @@ namespace Hospital.Services.PatientsService
                 ChildrenCount = patientModel.ChildrenCount,
                 InternalNumber = internalNumber,
                 InsertUser = patientModel.InsertUser,
-                InsertDate = DateTime.UtcNow
+                InsertDate = DateTime.UtcNow,
+                IsDeleted = false
             };
             await _unitOfWork.Repository<Patient>().AddAsync(patient);
             await _unitOfWork.CompleteAsync();
@@ -185,7 +186,8 @@ namespace Hospital.Services.PatientsService
                 MedicalDecision = Model.MedicalDecision,
                 ScheduledDate = Model.ScheduledDate,
                 InsertUser = Model.InsertUser,
-                InsertDate = DateTime.UtcNow
+                InsertDate = DateTime.UtcNow,
+                IsDeleted = false
             };
 
             await _unitOfWork.Repository<Admission>().AddAsync(admission);
@@ -236,7 +238,8 @@ namespace Hospital.Services.PatientsService
                 FollowUpDoctorPhone = interventionModel.FollowUpDoctorPhone,
                 FollowUpAppointment = interventionModel.FollowUpAppointment,
                 InsertUser = interventionModel.InsertUser,
-                InsertDate = DateTime.UtcNow
+                InsertDate = DateTime.UtcNow,
+                IsDeleted = false
             };
 
             await _unitOfWork.Repository<SurgicalIntervention>().AddAsync(surgicalIntervention);
@@ -271,7 +274,8 @@ namespace Hospital.Services.PatientsService
                 NewDecision = followUpModel.NewDecision,
                 NextFollowUpDate = followUpModel.NextFollowUpDate,
                 InsertUser = followUpModel.InsertUser,
-                InsertDate = DateTime.UtcNow
+                InsertDate = DateTime.UtcNow,
+                IsDeleted = false
             };
 
             await _unitOfWork.Repository<FollowUp>().AddAsync(followUp);
