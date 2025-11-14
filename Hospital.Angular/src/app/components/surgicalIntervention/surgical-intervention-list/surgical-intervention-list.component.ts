@@ -35,6 +35,7 @@ export class SurgicalInterventionListComponent implements OnInit {
   searchTerm: string = '';
   isFilter = true;
   showSlider = false;
+  BtnDisabled = false;
   selectedPatient: any = null;
   selectedAdmission: any = null;
   TotalCount = 0;
@@ -176,7 +177,9 @@ export class SurgicalInterventionListComponent implements OnInit {
   }
 
   DeleteItem() {
+    this.BtnDisabled = true;
     this.adminService.DeleteSurgicalIntervention(this.SurgicalInterventionId).subscribe(res => {
+      this.BtnDisabled = false;
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllSurgicalIntervention();

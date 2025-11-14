@@ -59,6 +59,7 @@ export class AdmissionCreateComponent implements OnInit {
   UserId: any;
   ItemForm: FormGroup;
   SelectedFile: UploadFileModel;
+  BtnDisabled = false;
   ImportedFiles: FilesModel[] = [];
   formErrors = {
     hospitalFileNumber: '',
@@ -258,9 +259,10 @@ export class AdmissionCreateComponent implements OnInit {
 
     const formData = new FormData();
     this.formService.buildFormData(formData, this.ItemForm.value);
-
+    this.BtnDisabled = true;
     if (!this.AdmissionId) {
       this.adminService.AddNewAdmission(formData).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();
@@ -271,6 +273,7 @@ export class AdmissionCreateComponent implements OnInit {
       });
     } else {
       this.adminService.UpdateAdmission(formData).subscribe(data => {
+        this.BtnDisabled = false;
         if (data.isSuccess) {
           this.toaster.success(data.message);
           this.modalService.dismissAll();

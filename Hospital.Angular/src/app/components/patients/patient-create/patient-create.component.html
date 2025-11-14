@@ -1,308 +1,305 @@
 <div class="patient-create-container">
-  <div class="patient-create-header">
-    <h2 class="patient-create-title">Add New Patient</h2>
-    <button class="btn btn-outline-secondary" (click)="navigateBack()">
+    <div class="patient-create-header">
+        <h2 class="patient-create-title">Add New Patient</h2>
+        <button class="btn btn-outline-secondary" (click)="navigateBack()">
       <i class="fas fa-arrow-left"></i> Back to List
     </button>
-  </div>
-
-  <!-- Steps Progress Bar -->
-  <div class="steps-container">
-    <div class="steps-progress">
-      <div class="progress-bar" [style.width.%]="((currentStep - 1) / (steps.length - 1)) * 100"></div>
-    </div>
-    <div class="steps-list">
-      <div *ngFor="let step of steps; let i = index"
-           class="step-item"
-           [class.active]="currentStep === i + 1"
-           [class.completed]="step.isCompleted">
-        <div class="step-number">{{ i + 1 }}</div>
-        <div class="step-title">{{ step.title }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Form Steps -->
-  <form [formGroup]="patientForm" (ngSubmit)="savePatient()">
-    <!-- Step 1: Patient Information -->
-    <div *ngIf="currentStep === 1" class="step-content" formGroupName="patient">
-      <h3 class="step-heading">Patient Information</h3>
-      <div class="step-content-inner">
-        <div class="row g-3">
-        <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
-        <app-admin-general-input class="col-md-6" type="date" label="Birth Date" formControlName="birthDate"></app-admin-general-input>
-        <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age"></app-admin-general-input>
-        <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{name:'Male'}, {name:'Female'}]" placeholder="Select Gender" formControlName="gender"></app-admin-drop-down>
-        <app-admin-general-input class="col-md-6" label="National ID" placeholder="Enter National ID" formControlName="nationalId" [error]="formErrors.nationalId"></app-admin-general-input>
-        <app-admin-general-input class="col-md-6" label="Address" placeholder="Enter address" formControlName="address"></app-admin-general-input>
-        <app-admin-drop-down class="col-md-6" label="Governorate" [data]="governorates" placeholder="Select Governorate" formControlName="governorate"></app-admin-drop-down>
-        <app-admin-general-input class="col-md-6" label="Occupation" placeholder="Enter occupation" formControlName="occupation"></app-admin-general-input>
-        <app-admin-drop-down class="col-md-6" label="Marital Status" [data]="maritalStatuses" placeholder="Select Marital Status" formControlName="maritalStatus"></app-admin-drop-down>
-        <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
-        <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-        <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
-      </div>
-      </div>
     </div>
 
-    <!-- Step 2: Admission Details -->
-    <div *ngIf="currentStep === 2" class="step-content" formGroupName="admission">
-      
-        <h3 class="step-heading">Admission Details</h3>
-        <div class="step-content-inner">
-          <div class="row g-3">
-          <app-admin-general-input [type]="'text'" [placeholder]="'Hospital File Number'" [label]="'Hospital File Number'" class="col-md-6" formControlName="hospitalFileNumber" [error]="formErrors.hospitalFileNumber"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-6" formControlName="admissionDate" [error]="formErrors.admissionDate"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-6" formControlName="dischargeDate" [error]="formErrors.dischargeDate"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-6" formControlName="duration"></app-admin-general-input>
-
-                <app-admin-drop-down [data]="courses" [placeholder]="'Select Course'" [label]="'Course'" class="col-md-6" formControlName="course" [error]="formErrors.course"></app-admin-drop-down>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'HPI'" [label]="'HPI'" class="col-md-12" formControlName="hPI"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Current Medications'" [label]="'Current Medications'" class="col-md-12" formControlName="currentMedications"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Past History'" [label]="'Past History'" class="col-md-12" formControlName="pastHistory"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Family History'" [label]="'Family History'" class="col-md-12" formControlName="familyHistory"></app-admin-general-input>
-
-                <app-admin-drop-down [data]="comorbidities" [placeholder]="'Select Current Comorbidities'" [label]="'Current Comorbidities'" class="col-md-6" formControlName="comorbidities"></app-admin-drop-down>
-
-                <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down>
-
-                <app-admin-drop-down [data]="bmis" [placeholder]="'Select BMI'" [label]="'BMI'" class="col-md-6" formControlName="bMI"></app-admin-drop-down>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Pulse'" [label]="'Pulse'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pulse"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Blood Pressure'" [label]="'Blood Pressure'" class="col-md-6" formControlName="bloodPressure"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Temperature'" [label]="'Temperature'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="temperature"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'General Examination'" [label]="'General Examination'" class="col-md-12" formControlName="generalExamination"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Abdominal Examination'" [label]="'Abdominal Examination'" class="col-md-12" formControlName="abdominalExamination"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Genital Examination'" [label]="'Genital Examination'" class="col-md-12" formControlName="genitalExamination"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'DRE/Vaginal Examination'" [label]="'DRE/Vaginal Examination'" class="col-md-12" formControlName="dREVaginalExamination"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Lab Results'" [label]="'Other Lab Results'" class="col-md-12" formControlName="otherLabResults"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Provisional Diagnosis'" [label]="'Provisional Diagnosis'" class="col-md-6" formControlName="provisionalDiagnosis"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Medical Decision'" [label]="'Medical Decision'" class="col-md-6" formControlName="medicalDecision"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Culture and Sensitivity'" [label]="'Culture and Sensitivity'" class="col-md-6" formControlName="cultureAndSensitivity"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Serum Creatinine'" [label]="'Serum Creatinine'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="serumCreatinine"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Hemoglobin'" [label]="'Hemoglobin'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="hemoglobin"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Total Leukocyte Count'" [label]="'Total Leukocyte Count'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="totalLeukocyteCount"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Platelets'" [label]="'Platelets'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="platelets"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'PT/PTT/INR'" [label]="'PT/PTT/INR'" class="col-md-6" formControlName="pT_PTT_INR"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Liver Enzymes'" [label]="'Liver Enzymes'" class="col-md-6" formControlName="liverEnzymes"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Fasting Blood Sugar'" [label]="'Fasting Blood Sugar'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="fastingBloodSugar"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Post Prandial Blood Sugar'" [label]="'Post Prandial Blood Sugar'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="postPrandialBloodSugar"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'HbA1c'" [label]="'HbA1c'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="hbA1c"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Total'" [label]="'PSA Total'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSATotal"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Free'" [label]="'PSA Free'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSAFree"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Ratio'" [label]="'PSA Ratio'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSARatio"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'PUT'" [label]="'PUT'" class="col-md-6" formControlName="pUT"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Ultrasound'" [label]="'Ultrasound'" class="col-md-6" formControlName="ultrasound"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'TRUS'" [label]="'TRUS'" class="col-md-6" formControlName="tRUS"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'CT'" [label]="'CT'" class="col-md-6" formControlName="cT"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'MRI'" [label]="'MRI'" class="col-md-6" formControlName="mRI"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Isotope Studies'" [label]="'Isotope Studies'" class="col-md-6" formControlName="isotopeStudies"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date for Intervention/Procedure'" [label]="'Scheduled Date for Intervention/Procedure'" class="col-md-6" formControlName="scheduledDate"></app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Imaging'" [label]="'Other Imaging'" class="col-md-12 mb-2" formControlName="otherImaging"></app-admin-general-input>
-                <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-        <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+    <!-- Steps Progress Bar -->
+    <div class="steps-container">
+        <div class="steps-progress">
+            <div class="progress-bar" [style.width.%]="((currentStep - 1) / (steps.length - 1)) * 100"></div>
         </div>
-      </div>
-      </div>
-   
-
-    <!-- Step 3: Surgical Intervention -->
-    <div *ngIf="currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
-      
-        <h3 class="step-heading">Surgical Intervention</h3>
-        <div class="step-content-inner">
-          <div class="row g-3">
-        <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Assistants'" [label]="'Assistants'" formControlName="assistants" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Resident'" [label]="'Resident'" formControlName="resident" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Off-Field Supervisor'" [label]="'Off-Field Supervisor'" formControlName="offFieldSupervisor" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-drop-down [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Intervention'" [label]="'Intervention'" formControlName="intervention" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Intervention'" [label]="'Details of Intervention'" formControlName="interventionDetails" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-drop-down [data]="tubesFixed" [placeholder]="'Select Tubes Fixed'" [label]="'Tubes Fixed'" formControlName="tubesFixed" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-drop-down [data]="categories" [placeholder]="'Select Category'" [label]="'Category'" formControlName="category" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-drop-down [data]="approaches" [placeholder]="'Select Approach'" [label]="'Approach'" formControlName="approach" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-drop-down [data]="organs" [placeholder]="'Select Organ'" [label]="'Organ'" formControlName="organ" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-drop-down [data]="intraOpCourses" [placeholder]="'Select Intra-operative Course'" [label]="'Intra-operative Course'" formControlName="intraOperativeCourse" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Blood Transfusion (Units)'" [label]="'Blood Transfusion (Units)'" formControlName="bloodTransfusionUnits" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Intra-op Adverse Events'" [label]="'Intra-op Adverse Events'" formControlName="intraOpAdverseEvents" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Recommendations'" [label]="'Post-op Recommendations'" formControlName="postOpRecommendations" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" formControlName="postOpAdverseEvents" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" formControlName="dischargeDate" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Final Diagnosis'" [label]="'Final Diagnosis'" formControlName="finalDiagnosis" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" formControlName="dischargeInstructions" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" class="col-md-6">
-            </app-admin-general-input>
-            <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-        <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
-          </div>
+        <div class="steps-list">
+            <div *ngFor="let step of steps; let i = index" class="step-item" [class.active]="currentStep === i + 1" [class.completed]="step.isCompleted">
+                <div class="step-number">{{ i + 1 }}</div>
+                <div class="step-title">{{ step.title }}</div>
+            </div>
         </div>
-      </div>
-    
+    </div>
 
-    <!-- Step 4: Follow-Up -->
-    <div *ngIf="currentStep === 4" class="step-content" formGroupName="followUp">
-      
-        <h3 class="step-heading">Follow-Up</h3>
-        <div class="step-content-inner">
-          <div class="row g-3">
-        <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-drop-down [data]="patientRemarks" [placeholder]="'Select Patient Remarks'" [label]="'Patient Remarks'" formControlName="patientRemarksStatus" [error]="formErrors.patientRemarksStatus" class="col-md-6">
-            </app-admin-drop-down>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Patient Remarks'" [label]="'Details of Patient Remarks'" formControlName="patientRemarksDetails" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Examination Findings'" [label]="'Examination Findings'" formControlName="examinationFindings" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Wound Status'" [label]="'Wound Status'" formControlName="woundStatus" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Catheters'" [label]="'Catheters'" formControlName="catheters" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Lab Results'" [label]="'Lab Results'" formControlName="labResults" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Imaging Results'" [label]="'Imaging Results'" formControlName="imagingResults" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'text'" [placeholder]="'Image Path'" [label]="'Image Path'" formControlName="imagePath" class="col-md-6">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'Advice'" [label]="'Advice'" formControlName="advice" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" formControlName="newDecision" class="col-md-12">
-            </app-admin-general-input>
-
-            <app-admin-general-input [type]="'date'" [placeholder]="'Next Follow-up Date'" [label]="'Next Follow-up Date'" formControlName="nextFollowUpDate" class="col-md-6">
-            </app-admin-general-input>
-            <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-        <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
-          </div>
+    <!-- Form Steps -->
+    <form [formGroup]="patientForm" (ngSubmit)="savePatient()">
+        <!-- Step 1: Patient Information -->
+        <div *ngIf="currentStep === 1" class="step-content" formGroupName="patient">
+            <h3 class="step-heading">Patient Information</h3>
+            <div class="step-content-inner">
+                <div class="row g-3">
+                    <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
+                    <app-admin-general-input class="col-md-6" type="date" label="Birth Date" formControlName="birthDate"></app-admin-general-input>
+                    <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age"></app-admin-general-input>
+                    <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{name:'Male'}, {name:'Female'}]" placeholder="Select Gender" formControlName="gender"></app-admin-drop-down>
+                    <app-admin-general-input class="col-md-6" label="National ID" placeholder="Enter National ID" formControlName="nationalId" [error]="formErrors.nationalId"></app-admin-general-input>
+                    <app-admin-general-input class="col-md-6" label="Address" placeholder="Enter address" formControlName="address"></app-admin-general-input>
+                    <app-admin-drop-down class="col-md-6" label="Governorate" [data]="governorates" placeholder="Select Governorate" formControlName="governorate"></app-admin-drop-down>
+                    <app-admin-general-input class="col-md-6" label="Occupation" placeholder="Enter occupation" formControlName="occupation"></app-admin-general-input>
+                    <app-admin-drop-down class="col-md-6" label="Marital Status" [data]="maritalStatuses" placeholder="Select Marital Status" formControlName="maritalStatus"></app-admin-drop-down>
+                    <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
+                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                </div>
+            </div>
         </div>
-      </div>
-    
-  </form>
 
-  <!-- Navigation Buttons -->
-   <div class="form-navigation">
-    <button *ngIf="currentStep > 1" class="btn btn-outline-primary" (click)="prevStep()">
+        <!-- Step 2: Admission Details -->
+        <div *ngIf="currentStep === 2" class="step-content" formGroupName="admission">
+
+            <h3 class="step-heading">Admission Details</h3>
+            <div class="step-content-inner">
+                <div class="row g-3">
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Hospital File Number'" [label]="'Hospital File Number'" class="col-md-6" formControlName="hospitalFileNumber" [error]="formErrors.hospitalFileNumber"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-6" formControlName="admissionDate" [error]="formErrors.admissionDate"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-6" formControlName="dischargeDate" [error]="formErrors.dischargeDate"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-6" formControlName="duration"></app-admin-general-input>
+
+                    <app-admin-drop-down [data]="courses" [placeholder]="'Select Course'" [label]="'Course'" class="col-md-6" formControlName="course" [error]="formErrors.course"></app-admin-drop-down>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'HPI'" [label]="'HPI'" class="col-md-12" formControlName="hPI"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Current Medications'" [label]="'Current Medications'" class="col-md-12" formControlName="currentMedications"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Past History'" [label]="'Past History'" class="col-md-12" formControlName="pastHistory"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Family History'" [label]="'Family History'" class="col-md-12" formControlName="familyHistory"></app-admin-general-input>
+
+                    <app-admin-drop-down [data]="comorbidities" [placeholder]="'Select Current Comorbidities'" [label]="'Current Comorbidities'" class="col-md-6" formControlName="comorbidities"></app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="bmis" [placeholder]="'Select BMI'" [label]="'BMI'" class="col-md-6" formControlName="bMI"></app-admin-drop-down>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Pulse'" [label]="'Pulse'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pulse"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Blood Pressure'" [label]="'Blood Pressure'" class="col-md-6" formControlName="bloodPressure"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Temperature'" [label]="'Temperature'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="temperature"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'General Examination'" [label]="'General Examination'" class="col-md-12" formControlName="generalExamination"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Abdominal Examination'" [label]="'Abdominal Examination'" class="col-md-12" formControlName="abdominalExamination"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Genital Examination'" [label]="'Genital Examination'" class="col-md-12" formControlName="genitalExamination"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'DRE/Vaginal Examination'" [label]="'DRE/Vaginal Examination'" class="col-md-12" formControlName="dREVaginalExamination"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Lab Results'" [label]="'Other Lab Results'" class="col-md-12" formControlName="otherLabResults"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Provisional Diagnosis'" [label]="'Provisional Diagnosis'" class="col-md-6" formControlName="provisionalDiagnosis"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Medical Decision'" [label]="'Medical Decision'" class="col-md-6" formControlName="medicalDecision"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Culture and Sensitivity'" [label]="'Culture and Sensitivity'" class="col-md-6" formControlName="cultureAndSensitivity"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Serum Creatinine'" [label]="'Serum Creatinine'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="serumCreatinine"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Hemoglobin'" [label]="'Hemoglobin'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="hemoglobin"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Total Leukocyte Count'" [label]="'Total Leukocyte Count'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="totalLeukocyteCount"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Platelets'" [label]="'Platelets'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="platelets"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'PT/PTT/INR'" [label]="'PT/PTT/INR'" class="col-md-6" formControlName="pT_PTT_INR"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Liver Enzymes'" [label]="'Liver Enzymes'" class="col-md-6" formControlName="liverEnzymes"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Fasting Blood Sugar'" [label]="'Fasting Blood Sugar'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="fastingBloodSugar"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Post Prandial Blood Sugar'" [label]="'Post Prandial Blood Sugar'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="postPrandialBloodSugar"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'HbA1c'" [label]="'HbA1c'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="hbA1c"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'PSA Total'" [label]="'PSA Total'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSATotal"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'PSA Free'" [label]="'PSA Free'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSAFree"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'PSA Ratio'" [label]="'PSA Ratio'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-6" formControlName="pSARatio"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'PUT'" [label]="'PUT'" class="col-md-6" formControlName="pUT"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Ultrasound'" [label]="'Ultrasound'" class="col-md-6" formControlName="ultrasound"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'TRUS'" [label]="'TRUS'" class="col-md-6" formControlName="tRUS"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'CT'" [label]="'CT'" class="col-md-6" formControlName="cT"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'MRI'" [label]="'MRI'" class="col-md-6" formControlName="mRI"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Isotope Studies'" [label]="'Isotope Studies'" class="col-md-6" formControlName="isotopeStudies"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date for Intervention/Procedure'" [label]="'Scheduled Date for Intervention/Procedure'" class="col-md-6" formControlName="scheduledDate"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Imaging'" [label]="'Other Imaging'" class="col-md-12 mb-2" formControlName="otherImaging"></app-admin-general-input>
+                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Step 3: Surgical Intervention -->
+        <div *ngIf="currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
+
+            <h3 class="step-heading">Surgical Intervention</h3>
+            <div class="step-content-inner">
+                <div class="row g-3">
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Assistants'" [label]="'Assistants'" formControlName="assistants" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Resident'" [label]="'Resident'" formControlName="resident" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Off-Field Supervisor'" [label]="'Off-Field Supervisor'" formControlName="offFieldSupervisor" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-drop-down [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Intervention'" [label]="'Intervention'" formControlName="intervention" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Intervention'" [label]="'Details of Intervention'" formControlName="interventionDetails" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-drop-down [data]="tubesFixed" [placeholder]="'Select Tubes Fixed'" [label]="'Tubes Fixed'" formControlName="tubesFixed" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="categories" [placeholder]="'Select Category'" [label]="'Category'" formControlName="category" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="approaches" [placeholder]="'Select Approach'" [label]="'Approach'" formControlName="approach" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="organs" [placeholder]="'Select Organ'" [label]="'Organ'" formControlName="organ" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="intraOpCourses" [placeholder]="'Select Intra-operative Course'" [label]="'Intra-operative Course'" formControlName="intraOperativeCourse" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Blood Transfusion (Units)'" [label]="'Blood Transfusion (Units)'" formControlName="bloodTransfusionUnits" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Intra-op Adverse Events'" [label]="'Intra-op Adverse Events'" formControlName="intraOpAdverseEvents" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Recommendations'" [label]="'Post-op Recommendations'" formControlName="postOpRecommendations" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" formControlName="postOpAdverseEvents" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" formControlName="dischargeDate" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Final Diagnosis'" [label]="'Final Diagnosis'" formControlName="finalDiagnosis" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" formControlName="dischargeInstructions" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" class="col-md-6">
+                    </app-admin-general-input>
+                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Step 4: Follow-Up -->
+        <div *ngIf="currentStep === 4" class="step-content" formGroupName="followUp">
+
+            <h3 class="step-heading">Follow-Up</h3>
+            <div class="step-content-inner">
+                <div class="row g-3">
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-drop-down [data]="patientRemarks" [placeholder]="'Select Patient Remarks'" [label]="'Patient Remarks'" formControlName="patientRemarksStatus" [error]="formErrors.patientRemarksStatus" class="col-md-6">
+                    </app-admin-drop-down>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Patient Remarks'" [label]="'Details of Patient Remarks'" formControlName="patientRemarksDetails" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Examination Findings'" [label]="'Examination Findings'" formControlName="examinationFindings" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Wound Status'" [label]="'Wound Status'" formControlName="woundStatus" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Catheters'" [label]="'Catheters'" formControlName="catheters" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Lab Results'" [label]="'Lab Results'" formControlName="labResults" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Imaging Results'" [label]="'Imaging Results'" formControlName="imagingResults" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Image Path'" [label]="'Image Path'" formControlName="imagePath" class="col-md-6">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Advice'" [label]="'Advice'" formControlName="advice" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" formControlName="newDecision" class="col-md-12">
+                    </app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Next Follow-up Date'" [label]="'Next Follow-up Date'" formControlName="nextFollowUpDate" class="col-md-6">
+                    </app-admin-general-input>
+                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <!-- Navigation Buttons -->
+    <div class="form-navigation">
+        <button *ngIf="currentStep > 1" class="btn btn-outline-primary" (click)="prevStep()">
       <i class="fas fa-arrow-left"></i> Previous
     </button>
-    
-    <button *ngIf="currentStep < steps.length" class="btn btn-primary" (click)="nextStep()">
+
+        <button *ngIf="currentStep < steps.length" class="btn btn-primary" (click)="nextStep()">
       Next <i class="fas fa-arrow-right"></i>
     </button>
-    
-    <!-- <button *ngIf="currentStep === steps.length && isEditMode && patientId" class="btn btn-danger" (click)="deletePatient()">
+
+        <!-- <button *ngIf="currentStep === steps.length && isEditMode && patientId" class="btn btn-danger" (click)="deletePatient()">
       <i class="fas fa-trash"></i> Delete
     </button> -->
-    
-    <button *ngIf="currentStep === steps.length" class="btn btn-success" (click)="savePatient()">
+
+        <button *ngIf="currentStep === steps.length" class="btn btn-success" (click)="savePatient()" [disabled]="BtnDisabled">
       <i class="fas fa-save"></i> Save
     </button>
-  </div>
+    </div>
 </div>
