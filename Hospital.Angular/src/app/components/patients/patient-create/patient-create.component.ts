@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/ad
 import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admin-upload-file.component';
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-patient-create',
@@ -195,6 +196,8 @@ export class PatientCreateComponent implements OnInit {
     name: '',
   };
   form: FormGroup<any>;
+  @Output() RefreshData = new EventEmitter<boolean>();
+  @Input() isModal: boolean = false;
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
@@ -204,7 +207,8 @@ export class PatientCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private adminService: AdminService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -733,13 +737,23 @@ export class PatientCreateComponent implements OnInit {
       this.patientService.updatePatientFull(formData).subscribe(() => {
         this.BtnDisabled = false;
         this.toastr.success('Patient updated successfully!', 'Success');
-        this.router.navigate(['/admin/patients']);
+        if (this.isModal) {
+          this.RefreshData.emit(true);
+          this.modalService.dismissAll();
+        } else {
+          this.router.navigate(['/admin/patients']);
+        }
       });
     } else {
       this.patientService.AddNewPatientFull(formData).subscribe(() => {
         this.BtnDisabled = false;
         this.toastr.success('Patient created successfully!', 'Success');
-        this.router.navigate(['/admin/patients']);
+        if (this.isModal) {
+          this.RefreshData.emit(true);
+          this.modalService.dismissAll();
+        } else {
+          this.router.navigate(['/admin/patients']);
+        }
       });
     }
   }
@@ -767,7 +781,15 @@ export class PatientCreateComponent implements OnInit {
   
 
   navigateBack(): void {
-    this.router.navigate(['/admin/patients']);
+    if (this.isModal) {
+      this.modalService.dismissAll();
+    } else {
+      this.router.navigate(['/admin/patients']);
+    }
+  }
+
+  closeModal(): void {
+    this.modalService.dismissAll();
   }
 
 

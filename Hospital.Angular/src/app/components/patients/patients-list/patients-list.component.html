@@ -57,5 +57,5 @@
 </ng-template>
 
 <ng-template #PatientCreateFullModal let-modal>
-    <app-patient-create></app-patient-create>
+    <app-patient-create (RefreshData)="RefreshData($event)" [isModal]="true"></app-patient-create>
 </ng-template>
