@@ -92,6 +92,10 @@ export class PatientCreateComponent implements OnInit {
     { id: 3, name: 'Regressing' },
     { id: 4, name: 'On & off' }
   ];
+  hospitalBranches = [
+    { id: 1, name: 'Al-Hussien' },
+    { id: 2, name: 'Saied Galal' },
+  ];
   bmis = [
     { id: 1, name: 'low' },
     { id: 2, name: 'Average' },
@@ -194,6 +198,15 @@ export class PatientCreateComponent implements OnInit {
     patientRemarksStatus: '',
     nationalId: '',
     name: '',
+    age: '',
+    gender: '',
+    hospitalBranch: '',
+    chiefComplaint: '',
+    hPI: '',  
+    provisionalDiagnosis: '',
+    intervention: '',
+    interventionDetails: '',
+    advice: ''
   };
   form: FormGroup<any>;
   @Output() RefreshData = new EventEmitter<boolean>();
@@ -267,8 +280,8 @@ export class PatientCreateComponent implements OnInit {
       patient: this.fb.group({
         name: ['', Validators.required],
         birthDate: [null],
-        age: [null],
-        gender: [''],
+        age: ['', Validators.required],
+        gender: ['', Validators.required],
         nationalId: ['', [Validators.required]],
         address: null,
         governorate: [''],
@@ -382,13 +395,15 @@ export class PatientCreateComponent implements OnInit {
 
   createAdmissionFormGroup(): FormGroup {
     return this.fb.group({
-      hospitalFileNumber: ['', [Validators.required, CustomValidators.regexPattern(RegexType.noSpace)]],
-      admissionDate: ['', [Validators.required]],
-      dischargeDate: ['', [Validators.required]],
-      chiefComplaint: null,
+      hospitalFileNumber: null,
+      admissionDate: null,
+      dischargeDate: null,
+      hospitalStates: null,
+      hospitalBranch: ['', [Validators.required]],
+      chiefComplaint: ['', [Validators.required]],
       duration: null,
-      course: ['', [Validators.required]],
-      hPI: null,
+      course: null,
+      hPI: ['', [Validators.required]],
       comorbidities: null,
       currentMedications: null,
       pastHistory: null,
@@ -423,7 +438,7 @@ export class PatientCreateComponent implements OnInit {
       mRI: null,
       isotopeStudies: null,
       otherImaging: null,
-      provisionalDiagnosis: null,
+      provisionalDiagnosis: ['', [Validators.required]],
       medicalDecision: null,
       scheduledDate: null,
       fileModel: null
@@ -642,7 +657,7 @@ export class PatientCreateComponent implements OnInit {
         delete this.formErrors.dischargeDate;
         
         // Calculate and set the duration
-        this.calculateDuration(admission, discharge);
+        this.calculateStates(admission, discharge);
       }
     } else {
       // Clear errors if either date is missing
@@ -651,13 +666,12 @@ export class PatientCreateComponent implements OnInit {
     }
   }
 
-  calculateDuration(admission: Date, discharge: Date) {
+  calculateStates(admission: Date, discharge: Date) {
     // Calculate difference in days
     const timeDiff = discharge.getTime() - admission.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     
-    // Set the duration in the form
-    this.admission.get('duration').setValue(`${daysDiff} days`);
+    this.admission.get('hospitalStates').setValue(`${daysDiff} days`);
   }
 
   savePatient(): void {
