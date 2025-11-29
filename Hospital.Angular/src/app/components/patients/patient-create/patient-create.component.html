@@ -209,13 +209,13 @@
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Recommendations'" [label]="'Post-op Recommendations'" formControlName="postOpRecommendations" class="col-md-12">
                     </app-admin-general-input>
 
-                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" class="col-md-6">
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" [error]="formErrors.postOpDay0_1" class="col-md-6">
                     </app-admin-drop-down>
 
-                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" class="col-md-6">
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" [error]="formErrors.postOpDay2_5" class="col-md-6">
                     </app-admin-drop-down>
 
-                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" class="col-md-6">
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" [error]="formErrors.postOpDayOver5" class="col-md-6">
                     </app-admin-drop-down>
 
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" formControlName="postOpAdverseEvents" class="col-md-12">
@@ -227,16 +227,16 @@
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Final Diagnosis'" [label]="'Final Diagnosis'" formControlName="finalDiagnosis" class="col-md-12">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" formControlName="dischargeInstructions" class="col-md-12">
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" formControlName="dischargeInstructions" [error]="formErrors.dischargeInstructions" class="col-md-12">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" class="col-md-6">
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" [error]="formErrors.followUpDoctor" class="col-md-6">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" class="col-md-6">
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" [error]="formErrors.followUpDoctorPhone" class="col-md-6">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" class="col-md-6">
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" [error]="formErrors.followUpAppointment" class="col-md-6">
                     </app-admin-general-input>
                     <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
                     <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>

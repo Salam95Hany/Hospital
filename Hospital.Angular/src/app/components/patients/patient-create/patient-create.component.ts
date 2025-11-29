@@ -391,6 +391,46 @@ export class PatientCreateComponent implements OnInit {
     this.admission.get('dischargeDate').valueChanges.subscribe(() => {
       this.validateAdmissionDates();
     });
+
+    // Subscribe to surgical discharge date to toggle required validators
+    const surgicalDischargeCtrl = this.surgicalIntervention.get('dischargeDate');
+    if (surgicalDischargeCtrl) {
+      // Initialize validators based on initial value
+      this.updateSurgicalValidatorsBasedOnDischarge();
+
+      surgicalDischargeCtrl.valueChanges.subscribe(() => {
+        this.updateSurgicalValidatorsBasedOnDischarge();
+      });
+    }
+  }
+
+  /**
+   * When a discharge date is selected in Surgical step, make related fields mandatory.
+   * If not selected, clear their required validators.
+   */
+  private updateSurgicalValidatorsBasedOnDischarge(): void {
+    const fieldsToToggle = [
+      'postOpDay0_1',
+      'postOpDay2_5',
+      'postOpDayOver5',
+      'dischargeInstructions',
+      'followUpDoctor',
+      'followUpDoctorPhone',
+      'followUpAppointment'
+    ];
+
+    const dischargeSelected = !!this.surgicalIntervention.get('dischargeDate')?.value;
+
+    fieldsToToggle.forEach(key => {
+      const ctrl = this.surgicalIntervention.get(key);
+      if (!ctrl) return;
+      if (dischargeSelected) {
+        ctrl.setValidators([Validators.required]);
+      } else {
+        ctrl.clearValidators();
+      }
+      ctrl.updateValueAndValidity({ emitEvent: false });
+    });
   }
 
   createAdmissionFormGroup(): FormGroup {
