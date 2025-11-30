@@ -66,8 +66,9 @@ export class AdmissionCreateComponent implements OnInit {
   ImportedFiles: FilesModel[] = [];
   formErrors = {
     hospitalFileNumber: '',
-    admissionDate: '',
-    course: ''
+    chiefComplaint: '',
+    hPI: '',
+    provisionalDiagnosis: ''
   };
 
 
@@ -126,13 +127,13 @@ export class AdmissionCreateComponent implements OnInit {
     this.ItemForm = this.fb.group({
       admissionId: 0,
       patientId: 0,
-      hospitalFileNumber: ['', [Validators.required, CustomValidators.regexPattern(RegexType.noSpace)]],
-      admissionDate: ['', [Validators.required]],
+      hospitalFileNumber:null,
+      admissionDate: null,
       dischargeDate: null,
-      chiefComplaint: null,
+      chiefComplaint: ['', [Validators.required]],
       duration: null,
-      course: ['', [Validators.required]],
-      hPI: null,
+      course: null,
+      hPI: ['', [Validators.required]],
       comorbidities: null,
       currentMedications: null,
       pastHistory: null,
@@ -167,7 +168,7 @@ export class AdmissionCreateComponent implements OnInit {
       mRI: null,
       isotopeStudies: null,
       otherImaging: null,
-      provisionalDiagnosis: null,
+      provisionalDiagnosis: ['', [Validators.required]],
       medicalDecision: null,
       scheduledDate: null,
       insertUser: null,

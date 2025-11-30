@@ -34,6 +34,7 @@ export class AdmissionListComponent {
   isFilter = true;
   BtnDisabled = false;
   showSlider = false;
+  ReloadFilter = false;
   PatientId: number;
   AdmissionId: number;
   searchTerm: string = '';
@@ -71,11 +72,15 @@ export class AdmissionListComponent {
     this.adminService.GetAllAdmissionData(this.PagingFilter, this.PatientId).subscribe(res => {
       this.Admissions = res.results;
       this.TotalCount = res.totalCount;
+      this.ReloadFilter = false;
     });
   }
 
   GetAdmissionByPatientId(item: any) {
     this.PatientId = item.id;
+    this.PagingFilter.filterList = [];
+    this.PagingFilter.currentpage = 1;
+    this.ReloadFilter = true;
     this.GetAllAdmissionData();
   }
 

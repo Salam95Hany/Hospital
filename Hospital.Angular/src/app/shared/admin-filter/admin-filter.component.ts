@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FilterModel } from '../../models/FilterModel';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -28,12 +28,20 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
     },
   ],
 })
-export class AdminFilterComponent {
+export class AdminFilterComponent implements OnChanges {
   @Input() FilterList: FilterModel[] = [];
+  @Input() ReloadFilter = false;
   @Output() FilterChecked = new EventEmitter<FilterModel[]>();
   SelectedFilter: FilterModel[] = [];
 
   constructor() { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    debugger;
+    if (changes['ReloadFilter'] && this.ReloadFilter) {
+      this.removeAllFilters();
+    }
+  }
 
   updateFilters(filter?: FilterModel, range?: any) {
     let updatedFilters = [...this.SelectedFilter];
