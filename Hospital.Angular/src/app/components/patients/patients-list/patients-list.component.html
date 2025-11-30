@@ -55,3 +55,7 @@
 <ng-template #PatientCreateModal let-modal>
     <app-paitent-data (RefreshData)="RefreshData($event)" [PatientId]="PatientId"></app-paitent-data>
 </ng-template>
+
+<ng-template #PatientCreateFullModal let-modal>
+    <app-patient-create (RefreshData)="RefreshData($event)" [isModal]="true"></app-patient-create>
+</ng-template>

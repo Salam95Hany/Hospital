@@ -147,6 +147,8 @@ namespace Hospital.Services.PatientsService
                 DischargeDate = Model.DischargeDate,
                 ChiefComplaint = Model.ChiefComplaint,
                 Duration = Model.Duration,
+                HospitalBranch = Model.HospitalBranch,
+                HospitalStates = Model.HospitalStates,
                 Course = Model.Course,
                 HPI = Model.HPI,
                 Comorbidities = Model.Comorbidities,

@@ -459,8 +459,8 @@ p {
 }
 
 .modal.details-size-modal .modal-dialog {
-    max-width: 80%;
-    width: 80%;
+    max-width: 95%;
+    width: 95%;
 }
 
 .modal.details-size-modal .modal-content {

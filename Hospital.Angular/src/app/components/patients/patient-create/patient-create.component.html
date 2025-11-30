@@ -1,9 +1,19 @@
 <div class="patient-create-container">
-    <div class="patient-create-header">
-        <h2 class="patient-create-title">Add New Patient</h2>
-        <button class="btn btn-outline-secondary" (click)="navigateBack()">
-      <i class="fas fa-arrow-left"></i> Back to List
-    </button>
+    <div class="patient-create-header d-flex justify-content-between align-items-center">
+        <h2 class="patient-create-title mb-0">Add New Patient</h2>
+        <ng-container *ngIf="!isModal; else modalClose">
+          <button class="btn btn-outline-secondary" (click)="navigateBack()">
+            <i class="fas fa-arrow-left"></i> Back to List
+          </button>
+        </ng-container>
+        <ng-template #modalClose>
+          <!-- <button type="button" class="btn btn-outline-danger" (click)="closeModal()" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </button> -->
+          <div class="cursor-pointer text-danger fs-2" (click)="closeModal()">
+        <i class="fas fa-times-circle"></i>
+    </div>
+        </ng-template>
     </div>
 
     <!-- Steps Progress Bar -->
@@ -28,8 +38,8 @@
                 <div class="row g-3">
                     <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" type="date" label="Birth Date" formControlName="birthDate"></app-admin-general-input>
-                    <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age"></app-admin-general-input>
-                    <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{name:'Male'}, {name:'Female'}]" placeholder="Select Gender" formControlName="gender"></app-admin-drop-down>
+                    <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age" [error]="formErrors.age"></app-admin-general-input>
+                    <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{name:'Male'}, {name:'Female'}]" placeholder="Select Gender" formControlName="gender" [error]="formErrors.gender"></app-admin-drop-down>
                     <app-admin-general-input class="col-md-6" label="National ID" placeholder="Enter National ID" formControlName="nationalId" [error]="formErrors.nationalId"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" label="Address" placeholder="Enter address" formControlName="address"></app-admin-general-input>
                     <app-admin-drop-down class="col-md-6" label="Governorate" [data]="governorates" placeholder="Select Governorate" formControlName="governorate"></app-admin-drop-down>
@@ -48,19 +58,16 @@
             <h3 class="step-heading">Admission Details</h3>
             <div class="step-content-inner">
                 <div class="row g-3">
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Hospital File Number'" [label]="'Hospital File Number'" class="col-md-6" formControlName="hospitalFileNumber" [error]="formErrors.hospitalFileNumber"></app-admin-general-input>
-
-                    <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-6" formControlName="admissionDate" [error]="formErrors.admissionDate"></app-admin-general-input>
-
-                    <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-6" formControlName="dischargeDate" [error]="formErrors.dischargeDate"></app-admin-general-input>
-
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint"></app-admin-general-input>
+                    
+                    <app-admin-general-input [data]="hospitalBranches" [placeholder]="'Select Branch'" [label]="'Hospital Branch'" class="col-md-6" formControlName="hospitalBranch" [error]="formErrors.hospitalBranch"></app-admin-general-input>
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint" [error]="formErrors.chiefComplaint"></app-admin-general-input>
 
                     <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-6" formControlName="duration"></app-admin-general-input>
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Hospital States'" [label]="'Hospital States'" class="col-md-6" formControlName="hospitalStates"></app-admin-general-input>
 
                     <app-admin-drop-down [data]="courses" [placeholder]="'Select Course'" [label]="'Course'" class="col-md-6" formControlName="course" [error]="formErrors.course"></app-admin-drop-down>
 
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'HPI'" [label]="'HPI'" class="col-md-12" formControlName="hPI"></app-admin-general-input>
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'HPI'" [label]="'HPI'" class="col-md-12" formControlName="hPI" [error]="formErrors.hPI"></app-admin-general-input>
 
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Current Medications'" [label]="'Current Medications'" class="col-md-12" formControlName="currentMedications"></app-admin-general-input>
 
@@ -90,7 +97,7 @@
 
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Lab Results'" [label]="'Other Lab Results'" class="col-md-12" formControlName="otherLabResults"></app-admin-general-input>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Provisional Diagnosis'" [label]="'Provisional Diagnosis'" class="col-md-6" formControlName="provisionalDiagnosis"></app-admin-general-input>
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Provisional Diagnosis'" [label]="'Provisional Diagnosis'" class="col-md-6" formControlName="provisionalDiagnosis" [error]="formErrors.provisionalDiagnosis"></app-admin-general-input>
 
                     <app-admin-general-input [type]="'text'" [placeholder]="'Medical Decision'" [label]="'Medical Decision'" class="col-md-6" formControlName="medicalDecision"></app-admin-general-input>
 
@@ -133,8 +140,11 @@
                     <app-admin-general-input [type]="'text'" [placeholder]="'Isotope Studies'" [label]="'Isotope Studies'" class="col-md-6" formControlName="isotopeStudies"></app-admin-general-input>
 
                     <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date for Intervention/Procedure'" [label]="'Scheduled Date for Intervention/Procedure'" class="col-md-6" formControlName="scheduledDate"></app-admin-general-input>
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Hospital File Number'" [label]="'Hospital File Number'" class="col-md-6" formControlName="hospitalFileNumber" [error]="formErrors.hospitalFileNumber"></app-admin-general-input>
 
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Other Imaging'" [label]="'Other Imaging'" class="col-md-12 mb-2" formControlName="otherImaging"></app-admin-general-input>
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-6" formControlName="admissionDate" [error]="formErrors.admissionDate"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-6" formControlName="dischargeDate" [error]="formErrors.dischargeDate"></app-admin-general-input>
                     <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
                     <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
                 </div>
@@ -169,10 +179,10 @@
                     <app-admin-drop-down [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-6">
                     </app-admin-drop-down>
 
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Intervention'" [label]="'Intervention'" formControlName="intervention" class="col-md-12">
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Intervention'" [label]="'Intervention'" formControlName="intervention" class="col-md-12" [error]="formErrors.intervention">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Intervention'" [label]="'Details of Intervention'" formControlName="interventionDetails" class="col-md-12">
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Intervention'" [label]="'Details of Intervention'" formControlName="interventionDetails" class="col-md-12" [error]="formErrors.interventionDetails">
                     </app-admin-general-input>
 
                     <app-admin-drop-down [data]="tubesFixed" [placeholder]="'Select Tubes Fixed'" [label]="'Tubes Fixed'" formControlName="tubesFixed" class="col-md-6">
@@ -199,13 +209,13 @@
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Recommendations'" [label]="'Post-op Recommendations'" formControlName="postOpRecommendations" class="col-md-12">
                     </app-admin-general-input>
 
-                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" class="col-md-6">
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" [error]="formErrors.postOpDay0_1" class="col-md-6">
                     </app-admin-drop-down>
 
-                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" class="col-md-6">
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" [error]="formErrors.postOpDay2_5" class="col-md-6">
                     </app-admin-drop-down>
 
-                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" class="col-md-6">
+                    <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" [error]="formErrors.postOpDayOver5" class="col-md-6">
                     </app-admin-drop-down>
 
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" formControlName="postOpAdverseEvents" class="col-md-12">
@@ -217,16 +227,16 @@
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'Final Diagnosis'" [label]="'Final Diagnosis'" formControlName="finalDiagnosis" class="col-md-12">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" formControlName="dischargeInstructions" class="col-md-12">
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" formControlName="dischargeInstructions" [error]="formErrors.dischargeInstructions" class="col-md-12">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" class="col-md-6">
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" [error]="formErrors.followUpDoctor" class="col-md-6">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" class="col-md-6">
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" [error]="formErrors.followUpDoctorPhone" class="col-md-6">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" class="col-md-6">
+                    <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" [error]="formErrors.followUpAppointment" class="col-md-6">
                     </app-admin-general-input>
                     <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
                     <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
@@ -268,7 +278,7 @@
                     <app-admin-general-input [type]="'text'" [placeholder]="'Image Path'" [label]="'Image Path'" formControlName="imagePath" class="col-md-6">
                     </app-admin-general-input>
 
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Advice'" [label]="'Advice'" formControlName="advice" class="col-md-12">
+                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Advice'" [label]="'Advice'" formControlName="advice" class="col-md-12" [error]="formErrors.advice">
                     </app-admin-general-input>
 
                     <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" formControlName="newDecision" class="col-md-12">

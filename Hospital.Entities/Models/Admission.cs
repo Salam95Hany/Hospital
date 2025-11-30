@@ -18,12 +18,14 @@ namespace Hospital.Entities.Models
 
         // Admission Data
         public string? HospitalFileNumber { get; set; }
+        public string HospitalBranch { get; set; }
         public DateTime? AdmissionDate { get; set; }
         public DateTime? DischargeDate { get; set; }
 
         // Medical History
         public string? ChiefComplaint { get; set; }
         public string? Duration { get; set; }
+        public string? HospitalStates { get; set; }
 
         // NEW: Course as enum or string for checkboxes
         public string? Course { get; set; }

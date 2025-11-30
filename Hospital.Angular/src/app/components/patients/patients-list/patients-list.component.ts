@@ -11,12 +11,13 @@ import { TemplateRef, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { PaitentDataComponent } from '../../paitent-data/paitent-data.component';
+import { PatientCreateComponent } from '../patient-create/patient-create.component';
 import { AdminFilterComponent } from '../../../shared/admin-filter/admin-filter.component';
 
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent],
+  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent, PatientCreateComponent],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })
@@ -42,6 +43,7 @@ export class PatientsListComponent implements OnInit {
 
   PatientId: any;
   @ViewChild('PatientCreateModal', { read: TemplateRef }) PatientCreateModalRef!: TemplateRef<any>;
+  @ViewChild('PatientCreateFullModal', { read: TemplateRef }) PatientCreateFullModalRef!: TemplateRef<any>;
 
 
   constructor(
@@ -92,7 +94,8 @@ export class PatientsListComponent implements OnInit {
 
 
   navigateToAddPatient(): void {
-    this.router.navigate(['/admin/patients/add']);
+    // Open the full create workflow in a large modal instead of routing
+    this.OpenPatientCreateFullModal(this.PatientCreateFullModalRef);
   }
 
   viewPatient(id: number | undefined): void {
@@ -149,6 +152,19 @@ export class PatientsListComponent implements OnInit {
         }
       }
     }
+  }
+
+  OpenPatientCreateFullModal(content?: any) {
+    const tpl = content || this.PatientCreateFullModalRef;
+    if (!tpl) {
+      console.error('PatientCreateFullModal template not found');
+      return;
+    }
+    this.modalService.open(tpl, {
+      windowClass: 'details-size-modal',
+      scrollable: true,
+      centered: true
+    });
   }
   RefreshData(item: boolean) {
   this.loadPatients();
