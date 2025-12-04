@@ -59,7 +59,7 @@
             <div class="step-content-inner">
                 <div class="row g-3">
                     
-                    <app-admin-general-input [data]="hospitalBranches" [placeholder]="'Select Branch'" [label]="'Hospital Branch'" class="col-md-6" formControlName="hospitalBranch" [error]="formErrors.hospitalBranch"></app-admin-general-input>
+                    <app-admin-drop-down [data]="hospitalBranches" [placeholder]="'Select Branch'" [label]="'Hospital Branch'" class="col-md-6" formControlName="hospitalBranch" [error]="formErrors.hospitalBranch"></app-admin-drop-down>
                     <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint" [error]="formErrors.chiefComplaint"></app-admin-general-input>
 
                     <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-6" formControlName="duration"></app-admin-general-input>
