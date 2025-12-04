@@ -18,7 +18,7 @@ namespace Hospital.Entities.Models
 
         // Admission Data
         public string? HospitalFileNumber { get; set; }
-        public string HospitalBranch { get; set; }
+        public string? HospitalBranch { get; set; }
         public DateTime? AdmissionDate { get; set; }
         public DateTime? DischargeDate { get; set; }
 

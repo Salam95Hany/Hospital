@@ -2,16 +2,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdminGeneralInputComponent } from "../../../shared/admin-general-input/admin-general-input.component";
 import { AdminDropDownComponent } from "../../../shared/admin-drop-down/admin-drop-down.component";
 import { FormService } from '../../../services/form.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CustomValidators, RegexType } from '../../../services/custom-validators';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
 import { PatientService } from '../../../services/patient.service';
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe } from '@angular/common';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { NgbDropdownModule, NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
@@ -19,7 +18,9 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 @Component({
   selector: 'app-admission-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule, AdminSliderImageComponent, AdminUploadFileComponent],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule, AdminSliderImageComponent, AdminUploadFileComponent,
+    NgbDropdownModule, NgFor, FormsModule, NgClass, NgIf
+  ],
   templateUrl: './admission-create.component.html',
   styleUrl: './admission-create.component.css',
   providers: [DatePipe]
@@ -59,16 +60,23 @@ export class AdmissionCreateComponent implements OnInit {
     { id: 'Sugar', name: 'Sugar' },
     { id: 'Others', name: 'Others' }
   ];
+  Branches = [
+    { id: 'الحسن الجامعي', name: 'الحسن الجامعي' },
+    { id: 'باب النزهة الجامعي', name: 'باب النزهة الجامعي' }
+  ];
   UserId: any;
   ItemForm: FormGroup;
   SelectedFile: UploadFileModel;
   BtnDisabled = false;
   ImportedFiles: FilesModel[] = [];
+  selectedValue = 'Select Urine Analysis';
+  UrineInputValue = '';
   formErrors = {
     hospitalFileNumber: '',
     chiefComplaint: '',
     hPI: '',
-    provisionalDiagnosis: ''
+    provisionalDiagnosis: '',
+    hospitalBranch: ''
   };
 
 
@@ -127,11 +135,13 @@ export class AdmissionCreateComponent implements OnInit {
     this.ItemForm = this.fb.group({
       admissionId: 0,
       patientId: 0,
-      hospitalFileNumber:null,
+      hospitalFileNumber: null,
       admissionDate: null,
       dischargeDate: null,
+      hospitalBranch: ['', [Validators.required]],
       chiefComplaint: ['', [Validators.required]],
       duration: null,
+      hospitalStates: null,
       course: null,
       hPI: ['', [Validators.required]],
       comorbidities: null,
@@ -181,10 +191,18 @@ export class AdmissionCreateComponent implements OnInit {
   }
 
   FillEditForm(item: any) {
+    debugger;
+    if (item.urineAnalysis) {
+      const urineParts = item.urineAnalysis.split(';');
+      this.selectedValue = urineParts[0];
+      this.UrineInputValue = urineParts[1];
+    }
     this.ItemForm.patchValue({
       admissionId: item.admissionId ?? 0,
       patientId: item.patientId ?? 0,
       hospitalFileNumber: item.hospitalFileNumber ?? '',
+      hospitalBranch: item.hospitalBranch ?? '',
+      hospitalStates: item.hospitalStates ?? '',
       admissionDate: this.datePipe.transform(item.admissionDate, 'yyyy-MM-dd') ?? '',
       dischargeDate: this.datePipe.transform(item.dischargeDate, 'yyyy-MM-dd') ?? '',
       chiefComplaint: item.chiefComplaint ?? null,
@@ -280,10 +298,21 @@ export class AdmissionCreateComponent implements OnInit {
   }
 
   AddNewItem() {
+    debugger;
     this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
     let isValid = this.validateForm();
     if (!isValid)
       return;
+
+    if (this.selectedValue != 'Select Urine Analysis') {
+      if (this.UrineInputValue) {
+        const urineAnalysisValue = this.selectedValue + ';' + this.UrineInputValue;
+        this.ItemForm.patchValue({ urineAnalysis: urineAnalysisValue });
+      } else {
+        this.toaster.error('Please enter value for urine analysis');
+        return;
+      }
+    }
 
     if (this.AdmissionId)
       this.ItemForm.patchValue({ admissionId: this.AdmissionId });
@@ -324,5 +353,10 @@ export class AdmissionCreateComponent implements OnInit {
           this.toaster.error(data.message);
       });
     }
+  }
+
+  OnUrineAnalysisSelect(item: any) {
+    this.selectedValue = item.id;
+    // this.ItemForm.patchValue({ urineAnalysis: this.selectedValue + (this.UrineInputValue ? ' : ' + this.UrineInputValue : '') });
   }
 }

@@ -15,11 +15,12 @@ import { AdmissionCreateComponent } from "../admission-create/admission-create.c
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
+import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-admission-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
+  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,RoleCheckerDirective,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
     AdminGeneralInputComponent, AdmissionCreateComponent, AdminSliderImageComponent],
   templateUrl: './admission-list.component.html',

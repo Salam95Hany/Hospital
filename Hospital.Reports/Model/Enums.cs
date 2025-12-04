@@ -8,7 +8,6 @@ namespace Hospital.Reports.Model
 {
     public enum ReportType
     {
-        BeneFactorPdf,
-        BeneFactorExcel,
+        TestReportPdf,
     }
 }

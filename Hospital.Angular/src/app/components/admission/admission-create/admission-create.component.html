@@ -13,9 +13,13 @@
     <div class="step-content form-card" data-step="1" style="display: block;">
         <form [formGroup]="ItemForm" autocomplete="off">
             <div class="row g-3">
+                <app-admin-drop-down [data]="Branches" [placeholder]="'Select Hospital Branch'" [label]="'Hospital Branch'" class="col-md-6" formControlName="hospitalBranch" [error]="formErrors.hospitalBranch"></app-admin-drop-down>
+
                 <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint" [error]="formErrors.chiefComplaint"></app-admin-general-input>
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Duration'" [label]="'Duration'" class="col-md-2" formControlName="duration"></app-admin-general-input>
+
+                <app-admin-general-input [type]="'text'" [placeholder]="'Hospital States'" [label]="'Hospital States'" class="col-md-6" formControlName="hospitalStates"></app-admin-general-input>
 
                 <app-admin-drop-down [data]="courses" [placeholder]="'Select Course'" [label]="'Course'" class="col-md-2" formControlName="course"></app-admin-drop-down>
 
@@ -45,7 +49,28 @@
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'DRE/Vaginal Examination'" [label]="'DRE/Vaginal Examination'" class="col-md-6" formControlName="dREVaginalExamination"></app-admin-general-input>
 
-                <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down>
+                <!-- <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down> -->
+                <div class="col-md-6">
+                    <label class="form-label">Urine Analysis</label>
+                    <div ngbDropdown class="dropdown-as-input">
+                        <button type="button" style="padding-left: 45px;" id="dropdownBasic1" class="input-box" ngbDropdownToggle [ngClass]="{'padding-rem': selectedValue != 'Select Urine Analysis','padding-rem2': selectedValue == 'Select Urine Analysis'}">
+                            <span>{{selectedValue}}</span>
+                            <input *ngIf="selectedValue != 'Select Urine Analysis'" type="text" class="form-control w-25 me-2 custom-border" placeholder="Enter Value"
+                                [(ngModel)]="UrineInputValue" [ngModelOptions]="{standalone: true}"
+                                (click)="$event.stopPropagation()">
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="w-100">
+                            <div class="dropdown-h large-scroll">
+                                <ng-container *ngFor="let item of urineAnalyses">
+                                    <div class="d-flex dropdown-item cursor-pointer" [class]="item.id==selectedValue?'active DropDownSelected':''" (click)="selectedValue = item.id;UrineInputValue = ''">
+                                        <a>{{item.name}}</a>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Culture and Sensitivity'" [label]="'Culture and Sensitivity'" class="col-md-2" formControlName="cultureAndSensitivity"></app-admin-general-input>
 

@@ -43,25 +43,25 @@
                         </a>
                     </li>
                     <ul class="list-unstyled m-0 menu-list-collapsed" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed_1">
-                        <li>
+                        <li appRole [roles]="['SupperAdmin', 'Admin','ReadOnly']">
                             <a class="side-menu-list-link sub-link" routerLink="/admin/patients" routerLinkActive="active">
                                 <i class="fas fa-users"></i>
                                 <span class="side-menu-text">Patients</span>
                             </a>
                         </li>
-                        <li>
+                        <li appRole [roles]="['SupperAdmin', 'Admin','ReadOnly']">
                             <a class="side-menu-list-link sub-link" routerLink="/admin/admissions" routerLinkActive="active">
                                 <i class="fas fa-users"></i>
                                 <span class="side-menu-text">Admissions</span>
                             </a>
                         </li>
-                        <li>
+                        <li appRole [roles]="['SupperAdmin', 'Admin','ReadOnly']">
                             <a class="side-menu-list-link sub-link" routerLink="/admin/surgical-intervention" routerLinkActive="active">
                                 <i class="fas fa-users"></i>
                                 <span class="side-menu-text">Surgical Interventions</span>
                             </a>
                         </li>
-                        <li>
+                        <li appRole [roles]="['SupperAdmin', 'Admin','FollowUpOnly','ReadOnly']">
                             <a class="side-menu-list-link sub-link" routerLink="/admin/follow-up" routerLinkActive="active">
                                 <i class="fas fa-user-md"></i>
                                 <span class="side-menu-text">Follow Up</span>

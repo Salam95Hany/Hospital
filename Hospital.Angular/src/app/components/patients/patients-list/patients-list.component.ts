@@ -13,11 +13,14 @@ import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { PaitentDataComponent } from '../../paitent-data/paitent-data.component';
 import { PatientCreateComponent } from '../patient-create/patient-create.component';
 import { AdminFilterComponent } from '../../../shared/admin-filter/admin-filter.component';
+import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent, PatientCreateComponent],
+  imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent, PatientCreateComponent,
+    RoleCheckerDirective
+  ],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })

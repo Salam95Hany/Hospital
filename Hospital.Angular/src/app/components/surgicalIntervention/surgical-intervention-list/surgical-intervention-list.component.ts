@@ -14,13 +14,14 @@ import { SurgicalInterventionCreateComponent } from '../surgical-intervention-cr
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
+import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-surgical-intervention-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent,
-    AdminSliderImageComponent],
+    AdminSliderImageComponent,RoleCheckerDirective],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
   providers: [DatePipe]

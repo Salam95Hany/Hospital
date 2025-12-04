@@ -28,7 +28,9 @@ export class DoctorsListComponent implements OnInit {
   DoctorsData: any[] = [];
   Roles = [
     { id: 'SupperAdmin', name: 'SupperAdmin' },
-    { id: 'Admin', name: 'Admin' }
+    { id: 'Admin', name: 'Admin' },
+    { id: 'ReadOnly', name: 'ReadOnly' },
+    { id: 'FollowUpOnly', name: 'FollowUpOnly' },
   ];
   isFilter = true;
   BtnDisabled = false;

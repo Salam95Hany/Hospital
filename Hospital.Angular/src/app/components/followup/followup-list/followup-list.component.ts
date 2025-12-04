@@ -16,13 +16,14 @@ import { FilterModel } from '../../../models/FilterModel';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
+import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-followup-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
-    AdminGeneralInputComponent, FollowupCreateComponent, AdminSliderImageComponent],
+    AdminGeneralInputComponent, FollowupCreateComponent, AdminSliderImageComponent,RoleCheckerDirective],
   templateUrl: './followup-list.component.html',
   styleUrl: './followup-list.component.css',
   providers: [DatePipe]

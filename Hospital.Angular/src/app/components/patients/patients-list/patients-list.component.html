@@ -1,7 +1,7 @@
 <div class="patients-container">
     <div class="patients-header">
         <div class="d-flex align-items-center flex-wrap gap-2">
-            <button class="btn btn-primary add-patient-btn" (click)="navigateToAddPatient()">
+            <button class="btn btn-primary add-patient-btn" (click)="navigateToAddPatient()" appRole [roles]="['SupperAdmin', 'Admin']">
                 <i class="fas fa-plus-circle"></i> Add Patient
             </button>
             <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
@@ -24,7 +24,7 @@
                     <th>Age</th>
                     <th>Governorate</th>
                     <th>Gender</th>
-                    <th>Actions</th>
+                    <th appRole [roles]="['SupperAdmin', 'Admin']">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,8 +34,8 @@
                     <td>{{ patient.age }}</td>
                     <td>{{ patient.governorate }}</td>
                     <td>{{ patient.gender }}</td>
-                    <td class="actions-cell">
-                       
+                    <td class="actions-cell" appRole [roles]="['SupperAdmin', 'Admin']">
+
                         <button class="btn btn-sm btn-warning" (click)="OpenPatentCreateModal(PatientCreateModal,patient.id)">
               <i class="fas fa-edit"></i>
             </button>
