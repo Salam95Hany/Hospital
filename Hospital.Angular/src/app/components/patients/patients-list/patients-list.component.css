@@ -207,3 +207,34 @@
     transform: translateY(0);
   }
 }
+
+/* Offcanvas panel styles */
+.offcanvas-backdrop.show {
+  opacity: 0.4;
+}
+
+.patient-info-panel {
+  width: 720px;
+  max-width: 100vw;
+  box-shadow: -6px 0 18px rgba(0,0,0,0.12);
+  border-left: 1px solid #e9ecef;
+}
+
+.patient-info-panel .offcanvas-header {
+  background: linear-gradient(180deg, #f8f9fa, #f6f7f9);
+  border-bottom: 1px solid #e9ecef;
+}
+
+.patient-info-panel .offcanvas-title {
+  color: #2c3e50;
+}
+
+.patient-info-panel .offcanvas-body {
+  padding: 12px;
+  background: #fafbfc;
+  overflow-y: auto;
+}
+
+.patient-info-panel .offcanvas-footer {
+  background: #fff;
+}

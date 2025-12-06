@@ -265,3 +265,31 @@ textarea.form-control {
     transform: translateY(0);
   }
 }
+
+/* Read-only mode: prevent editing of any controls inside step content */
+.patient-create-container.readonly .step-content-inner {
+  pointer-events: none;
+  user-select: none;
+}
+
+.patient-create-container.readonly input,
+.patient-create-container.readonly select,
+.patient-create-container.readonly textarea {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.patient-create-container.readonly .form-control,
+.patient-create-container.readonly .form-select,
+.patient-create-container.readonly textarea.form-control {
+  border-color: #e1e5ea;
+}
+
+.patient-create-container.readonly .btn {
+  cursor: default;
+}
+.patient-create-container.readonly .step-content-inner {
+  overflow-y: visible;
+  max-height: none;
+  padding-right: 0;
+}

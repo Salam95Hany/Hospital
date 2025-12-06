@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,7 +29,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./patient-create.component.css'],
   providers: [DatePipe]
 })
-export class PatientCreateComponent implements OnInit {
+export class PatientCreateComponent implements OnInit, OnChanges {
   patientData: PatientData = new PatientData();
   patientForm: FormGroup;
   currentStep: number = 1;
@@ -68,6 +68,10 @@ export class PatientCreateComponent implements OnInit {
     files: [],
     deletedFiles: []
   };
+  // Read-only visibility flags
+  hasAdmissionDetails: boolean = false;
+  hasSurgicalDetails: boolean = false;
+  hasFollowUpDetails: boolean = false;
   steps = [
     { title: 'Patient Information', isCompleted: false },
     { title: 'Admission Details', isCompleted: false },
@@ -83,8 +87,9 @@ export class PatientCreateComponent implements OnInit {
   maritalStatuses = [
     { id: 1, name: 'Single' }, { id: 2, name: 'Married' }, { id: 3, name: 'Divorced' }, { id: 4, name: 'Widowed' }, { id: 5, name: 'Child' }
   ];
-  patientId: number | null = null;
+  @Input() patientId: number | null = null;
   isEditMode: boolean = false;
+  @Input() isReadOnly: boolean = false;
 
   courses = [
     { id: 1, name: 'Progressing' },
@@ -241,6 +246,20 @@ export class PatientCreateComponent implements OnInit {
       this.setupHospitalFileNumberValidation();
     }
 
+    // If patientId is provided via input (embedded usage), attempt to load last details
+    this.tryLoadDataFromInput();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['patientId'] || changes['isReadOnly']) {
+      this.tryLoadDataFromInput();
+    }
+  }
+
+  private tryLoadDataFromInput(): void {
+    if (this.patientId && this.patientForm) {
+      this.loadLastDetails(this.patientId);
+    }
   }
 
   private setupHospitalFileNumberValidation(): void {
@@ -302,6 +321,11 @@ export class PatientCreateComponent implements OnInit {
       this.admissionFiles.actionId = this.patientId;
       this.surgicalFiles.actionId = this.patientId;
       this.followUpFiles.actionId = this.patientId;
+    }
+
+    // Disable all controls in read-only mode
+    if (this.isReadOnly) {
+      this.patientForm.disable({ emitEvent: false });
     }
   }
   OnFileChange(selectedFile: UploadFileModel) {
@@ -402,6 +426,161 @@ export class PatientCreateComponent implements OnInit {
         this.updateSurgicalValidatorsBasedOnDischarge();
       });
     }
+  }
+
+  private loadLastDetails(id: number): void {
+    // Fetch last details and patch the form groups to mirror the create controls
+    this.patientService.getPatientLastDetailsById(id).subscribe({
+      next: (res: any) => {
+        const data = res?.results ?? res ?? {};
+        const pas = (data?.Patient || data?.patient) || {};
+        const adm = (data?.LastAdmission || data?.lastAdmission) || {};
+        const surg = (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention) || {};
+        const fol = (data?.LastFollowUp || data?.lastFollowUp) || {};
+
+        // Patient group
+        this.patient.patchValue({
+          name: pas.name ?? pas.Name ?? null,
+          birthDate: this.datePipe.transform(pas.birthDate ?? pas.BirthDate, 'yyyy-MM-dd') ?? null,
+          age: pas.age ?? pas.Age ?? null,
+          gender: pas.gender ?? pas.Gender ?? null,
+          nationalId: pas.nationalId ?? pas.NationalId ?? null,
+          address: pas.address ?? pas.Address ?? null,
+          governorate: pas.governorate ?? pas.Governorate ?? null,
+          occupation: pas.occupation ?? pas.Occupation ?? null,
+          maritalStatus: pas.maritalStatus ?? pas.MaritalStatus ?? null,
+          childrenCount: pas.childrenCount ?? pas.ChildrenCount ?? null,
+          internalNumber: pas.internalNumber ?? pas.InternalNumber ?? null,
+        });
+
+        // Admission group
+        this.admission.patchValue({
+          hospitalBranch: adm.hospitalBranch ?? adm.HospitalBranch ?? null,
+          chiefComplaint: adm.chiefComplaint ?? adm.ChiefComplaint ?? null,
+          duration: adm.duration ?? adm.Duration ?? null,
+          hospitalStates: adm.hospitalStates ?? adm.HospitalStates ?? null,
+          course: adm.course ?? adm.Course ?? null,
+          hPI: adm.hPI ?? adm.HPI ?? null,
+          currentMedications: adm.currentMedications ?? adm.CurrentMedications ?? null,
+          pastHistory: adm.pastHistory ?? adm.PastHistory ?? null,
+          familyHistory: adm.familyHistory ?? adm.FamilyHistory ?? null,
+          bMI: adm.bMI ?? adm.BMI ?? null,
+          pulse: adm.pulse ?? adm.Pulse ?? null,
+          bloodPressure: adm.bloodPressure ?? adm.BloodPressure ?? null,
+          temperature: adm.temperature ?? adm.Temperature ?? null,
+          generalExamination: adm.generalExamination ?? adm.GeneralExamination ?? null,
+          abdominalExamination: adm.abdominalExamination ?? adm.AbdominalExamination ?? null,
+          genitalExamination: adm.genitalExamination ?? adm.GenitalExamination ?? null,
+          dREVaginalExamination: adm.dREVaginalExamination ?? adm.DREVaginalExamination ?? null,
+          otherLabResults: adm.otherLabResults ?? adm.OtherLabResults ?? null,
+          provisionalDiagnosis: adm.provisionalDiagnosis ?? adm.ProvisionalDiagnosis ?? null,
+          medicalDecision: adm.medicalDecision ?? adm.MedicalDecision ?? null,
+          cultureAndSensitivity: adm.cultureAndSensitivity ?? adm.CultureAndSensitivity ?? null,
+          serumCreatinine: adm.serumCreatinine ?? adm.SerumCreatinine ?? null,
+          hemoglobin: adm.hemoglobin ?? adm.Hemoglobin ?? null,
+          totalLeukocyteCount: adm.totalLeukocyteCount ?? adm.TotalLeukocyteCount ?? null,
+          platelets: adm.platelets ?? adm.Platelets ?? null,
+          pT_PTT_INR: adm.pT_PTT_INR ?? adm.PT_PTT_INR ?? null,
+          liverEnzymes: adm.liverEnzymes ?? adm.LiverEnzymes ?? null,
+          fastingBloodSugar: adm.fastingBloodSugar ?? adm.FastingBloodSugar ?? null,
+          postPrandialBloodSugar: adm.postPrandialBloodSugar ?? adm.PostPrandialBloodSugar ?? null,
+          hbA1c: adm.hbA1c ?? adm.HbA1c ?? null,
+          pSATotal: adm.pSATotal ?? adm.PSATotal ?? null,
+          pSAFree: adm.pSAFree ?? adm.PSAFree ?? null,
+          pSARatio: adm.pSARatio ?? adm.PSARatio ?? null,
+          pUT: adm.pUT ?? adm.PUT ?? null,
+          ultrasound: adm.ultrasound ?? adm.Ultrasound ?? null,
+          tRUS: adm.tRUS ?? adm.TRUS ?? null,
+          cT: adm.cT ?? adm.CT ?? null,
+          mRI: adm.mRI ?? adm.MRI ?? null,
+          isotopeStudies: adm.isotopeStudies ?? adm.IsotopeStudies ?? null,
+          otherImaging: adm.otherImaging ?? adm.OtherImaging ?? null,
+          scheduledDate: this.datePipe.transform(adm.scheduledDate ?? adm.ScheduledDate, 'yyyy-MM-dd') ?? null,
+          hospitalFileNumber: adm.hospitalFileNumber ?? adm.HospitalFileNumber ?? null,
+          admissionDate: this.datePipe.transform(adm.admissionDate ?? adm.AdmissionDate, 'yyyy-MM-dd') ?? null,
+          dischargeDate: this.datePipe.transform(adm.dischargeDate ?? adm.DischargeDate, 'yyyy-MM-dd') ?? null,
+        });
+
+        // Surgical group
+        this.surgicalIntervention.patchValue({
+          interventionDate: this.datePipe.transform(surg.interventionDate ?? surg.InterventionDate, 'yyyy-MM-dd') ?? null,
+          theater: surg.theater ?? surg.Theater ?? null,
+          mainSurgeon: surg.mainSurgeon ?? surg.MainSurgeon ?? null,
+          assistants: surg.assistants ?? surg.Assistants ?? null,
+          resident: surg.resident ?? surg.Resident ?? null,
+          otherSurgeons: surg.otherSurgeons ?? surg.OtherSurgeons ?? null,
+          offFieldSupervisor: surg.offFieldSupervisor ?? surg.OffFieldSupervisor ?? null,
+          anesthesia: surg.anesthesia ?? surg.Anesthesia ?? null,
+          intervention: surg.intervention ?? surg.Intervention ?? null,
+          interventionDetails: surg.interventionDetails ?? surg.InterventionDetails ?? null,
+          tubesFixed: surg.tubesFixed ?? surg.TubesFixed ?? null,
+          category: surg.category ?? surg.Category ?? null,
+          approach: surg.approach ?? surg.Approach ?? null,
+          organ: surg.organ ?? surg.Organ ?? null,
+          intraOperativeCourse: surg.intraOperativeCourse ?? surg.IntraOperativeCourse ?? null,
+          intraOpAdverseEvents: surg.intraOpAdverseEvents ?? surg.IntraOpAdverseEvents ?? null,
+          bloodTransfusionUnits: surg.bloodTransfusionUnits ?? surg.BloodTransfusionUnits ?? null,
+          postOpRecommendations: surg.postOpRecommendations ?? surg.PostOpRecommendations ?? null,
+          postOpDay0_1: surg.postOpDay0_1 ?? surg.PostOpDay0_1 ?? null,
+          postOpDay2_5: surg.postOpDay2_5 ?? surg.PostOpDay2_5 ?? null,
+          postOpDayOver5: surg.postOpDayOver5 ?? surg.PostOpDayOver5 ?? null,
+          postOpAdverseEvents: surg.postOpAdverseEvents ?? surg.PostOpAdverseEvents ?? null,
+          dischargeDate: this.datePipe.transform(surg.dischargeDate ?? surg.DischargeDate, 'yyyy-MM-dd') ?? null,
+          finalDiagnosis: surg.finalDiagnosis ?? surg.FinalDiagnosis ?? null,
+          dischargeInstructions: surg.dischargeInstructions ?? surg.DischargeInstructions ?? null,
+          followUpDoctor: surg.followUpDoctor ?? surg.FollowUpDoctor ?? null,
+          followUpDoctorPhone: surg.followUpDoctorPhone ?? surg.FollowUpDoctorPhone ?? null,
+          followUpAppointment: this.datePipe.transform(surg.followUpAppointment ?? surg.FollowUpAppointment, 'yyyy-MM-dd') ?? null,
+        });
+
+        // Follow-up group
+        this.followUp.patchValue({
+          followUpDate: this.datePipe.transform(fol.followUpDate ?? fol.FollowUpDate, 'yyyy-MM-dd') ?? null,
+          patientRemarksStatus: fol.patientRemarksStatus ?? fol.PatientRemarksStatus ?? null,
+          patientRemarksDetails: fol.patientRemarksDetails ?? fol.PatientRemarksDetails ?? null,
+          examinationFindings: fol.examinationFindings ?? fol.ExaminationFindings ?? null,
+          woundStatus: fol.woundStatus ?? fol.WoundStatus ?? null,
+          catheters: fol.catheters ?? fol.Catheters ?? null,
+          labResults: fol.labResults ?? fol.LabResults ?? null,
+          imagingResults: fol.imagingResults ?? fol.ImagingResults ?? null,
+          imagePath: fol.imagePath ?? fol.ImagePath ?? null,
+          advice: fol.advice ?? fol.Advice ?? null,
+          newDecision: fol.newDecision ?? fol.NewDecision ?? null,
+          nextFollowUpDate: this.datePipe.transform(fol.nextFollowUpDate ?? fol.NextFollowUpDate, 'yyyy-MM-dd') ?? null,
+        });
+
+        // Fetch files for slider if available
+        this.GetFilesByActionId();
+
+        // Disable form if read-only
+        if (this.isReadOnly) {
+          this.patientForm.disable({ emitEvent: false });
+        }
+
+        // Set visibility flags for read-only based on patched values
+        const admVal = this.admission?.value;
+        const surgVal = this.surgicalIntervention?.value;
+        const folVal = this.followUp?.value;
+
+        this.hasAdmissionDetails = this.hasAnyValue(admVal);
+        this.hasSurgicalDetails = this.hasAnyValue(surgVal);
+        this.hasFollowUpDetails = this.hasAnyValue(folVal);
+      },
+      error: (err) => {
+        // Non-blocking: leave form empty in case of error
+        console.error('Failed to load last details', err);
+      }
+    });
+  }
+
+  private hasAnyValue(obj: any): boolean {
+    if (!obj || typeof obj !== 'object') return false;
+    return Object.values(obj).some((v) => {
+      if (v === null || v === undefined) return false;
+      if (typeof v === 'string') return v.trim().length > 0;
+      if (Array.isArray(v)) return v.length > 0;
+      return true; // numbers, booleans, dates considered present
+    });
   }
 
   /**

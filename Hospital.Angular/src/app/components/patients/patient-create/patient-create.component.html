@@ -1,6 +1,6 @@
-<div class="patient-create-container">
+<div class="patient-create-container" [class.readonly]="isReadOnly">
     <div class="patient-create-header d-flex justify-content-between align-items-center">
-        <h2 class="patient-create-title mb-0">Add New Patient</h2>
+        <h2 class="patient-create-title mb-0">{{ isReadOnly ? 'Patient Details' : (isEditMode ? 'Edit Patient' : 'Add New Patient') }}</h2>
         <ng-container *ngIf="!isModal; else modalClose">
           <button class="btn btn-outline-secondary" (click)="navigateBack()">
             <i class="fas fa-arrow-left"></i> Back to List
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Steps Progress Bar -->
-    <div class="steps-container">
+    <div class="steps-container" *ngIf="!isReadOnly">
         <div class="steps-progress">
             <div class="progress-bar" [style.width.%]="((currentStep - 1) / (steps.length - 1)) * 100"></div>
         </div>
@@ -32,9 +32,9 @@
     <!-- Form Steps -->
     <form [formGroup]="patientForm" (ngSubmit)="savePatient()">
         <!-- Step 1: Patient Information -->
-        <div *ngIf="currentStep === 1" class="step-content" formGroupName="patient">
+        <div *ngIf="isReadOnly || currentStep === 1" class="step-content" formGroupName="patient">
             <h3 class="step-heading">Patient Information</h3>
-            <div class="step-content-inner">
+            <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
                     <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" type="date" label="Birth Date" formControlName="birthDate"></app-admin-general-input>
@@ -46,17 +46,17 @@
                     <app-admin-general-input class="col-md-6" label="Occupation" placeholder="Enter occupation" formControlName="occupation"></app-admin-general-input>
                     <app-admin-drop-down class="col-md-6" label="Marital Status" [data]="maritalStatuses" placeholder="Select Marital Status" formControlName="maritalStatus"></app-admin-drop-down>
                     <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
-                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
-                </div>
+                    <app-admin-upload-file *ngIf="!isReadOnly" (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+        </div>
             </div>
         </div>
 
         <!-- Step 2: Admission Details -->
-        <div *ngIf="currentStep === 2" class="step-content" formGroupName="admission">
+        <div *ngIf="isReadOnly || currentStep === 2" class="step-content" formGroupName="admission">
 
             <h3 class="step-heading">Admission Details</h3>
-            <div class="step-content-inner">
+            <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
                     
                     <app-admin-drop-down [data]="hospitalBranches" [placeholder]="'Select Branch'" [label]="'Hospital Branch'" class="col-md-6" formControlName="hospitalBranch" [error]="formErrors.hospitalBranch"></app-admin-drop-down>
@@ -145,18 +145,18 @@
                     <app-admin-general-input [type]="'date'" [placeholder]="'Admission Date'" [label]="'Admission Date'" class="col-md-6" formControlName="admissionDate" [error]="formErrors.admissionDate"></app-admin-general-input>
 
                     <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" class="col-md-6" formControlName="dischargeDate" [error]="formErrors.dischargeDate"></app-admin-general-input>
-                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                    <app-admin-upload-file *ngIf="!isReadOnly" (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
                 </div>
             </div>
         </div>
 
 
         <!-- Step 3: Surgical Intervention -->
-        <div *ngIf="currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
+        <div *ngIf="isReadOnly ? hasSurgicalDetails : currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
 
             <h3 class="step-heading">Surgical Intervention</h3>
-            <div class="step-content-inner">
+            <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
                     <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-6">
                     </app-admin-general-input>
@@ -238,18 +238,18 @@
 
                     <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" [error]="formErrors.followUpAppointment" class="col-md-6">
                     </app-admin-general-input>
-                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                    <app-admin-upload-file *ngIf="!isReadOnly" (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
                 </div>
             </div>
         </div>
 
 
         <!-- Step 4: Follow-Up -->
-        <div *ngIf="currentStep === 4" class="step-content" formGroupName="followUp">
+        <div *ngIf="isReadOnly ? hasFollowUpDetails : currentStep === 4" class="step-content" formGroupName="followUp">
 
             <h3 class="step-heading">Follow-Up</h3>
-            <div class="step-content-inner">
+            <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
                     <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">
                     </app-admin-general-input>
@@ -286,8 +286,8 @@
 
                     <app-admin-general-input [type]="'date'" [placeholder]="'Next Follow-up Date'" [label]="'Next Follow-up Date'" formControlName="nextFollowUpDate" class="col-md-6">
                     </app-admin-general-input>
-                    <app-admin-upload-file (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-                    <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                    <app-admin-upload-file *ngIf="!isReadOnly" (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
+                    <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
                 </div>
             </div>
         </div>
@@ -295,7 +295,7 @@
     </form>
 
     <!-- Navigation Buttons -->
-    <div class="form-navigation">
+    <div class="form-navigation" *ngIf="!isReadOnly">
         <button *ngIf="currentStep > 1" class="btn btn-outline-primary" (click)="prevStep()">
       <i class="fas fa-arrow-left"></i> Previous
     </button>

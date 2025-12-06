@@ -57,13 +57,15 @@
 
 <!-- Side info panel -->
 <div class="offcanvas-backdrop fade show" *ngIf="isInfoOpen" (click)="closePatientInfo()"></div>
-<div class="offcanvas offcanvas-end show" tabindex="-1" *ngIf="isInfoOpen" style="visibility: visible;">
+<div class="offcanvas offcanvas-end show patient-info-panel" tabindex="-1" *ngIf="isInfoOpen" aria-labelledby="patientInfoPanelLabel" style="visibility: visible;">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title">Patient Info</h5>
-    <button type="button" class="btn-close text-reset" aria-label="Close" (click)="closePatientInfo()"></button>
+    <h5 class="offcanvas-title d-flex align-items-center gap-2" id="patientInfoPanelLabel">
+      <i class="fas fa-address-card text-primary"></i>
+      <span>Patient Details</span>
+    </h5>
   </div>
   <div class="offcanvas-body">
-    <app-patient-last-details [patientId]="selectedPatientId"></app-patient-last-details>
+    <app-patient-create [patientId]="selectedPatientId" [isModal]="true" [isReadOnly]="true"></app-patient-create>
   </div>
   <div class="offcanvas-footer p-2 border-top text-end">
     <button class="btn btn-outline-secondary" (click)="closePatientInfo()">

@@ -7,53 +7,57 @@
 </div>
 
 <div *ngIf="!loading && !error && data" class="patient-last-details">
-  <div class="section">
-    <h6 class="section-title">Patient</h6>
-    <div class="section-body">
-      <div class="row g-2">
-        <div class="col-12"><strong>Name:</strong> {{ (data?.Patient || data?.patient)?.name }}</div>
-        <div class="col-6"><strong>Internal #:</strong> {{ (data?.Patient || data?.patient)?.internalNumber }}</div>
-        <div class="col-6"><strong>Gender:</strong> {{ (data?.Patient || data?.patient)?.gender }}</div>
-        <div class="col-6"><strong>Age:</strong> {{ (data?.Patient || data?.patient)?.age }}</div>
-        <div class="col-6"><strong>Governorate:</strong> {{ (data?.Patient || data?.patient)?.governorate }}</div>
+  <!-- Patient Information -->
+  <h3 class="step-heading">Patient Information</h3>
+  <section class="card">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-12 display-field"><label>Name</label><div class="value">{{ (data?.Patient || data?.patient)?.name || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Internal #</label><div class="value">{{ (data?.Patient || data?.patient)?.internalNumber || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Gender</label><div class="value">{{ (data?.Patient || data?.patient)?.gender || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Age</label><div class="value">{{ (data?.Patient || data?.patient)?.age ?? '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Governorate</label><div class="value">{{ (data?.Patient || data?.patient)?.governorate || '-' }}</div></div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="section" *ngIf="data?.LastAdmission || data?.lastAdmission">
-    <h6 class="section-title">Last Admission</h6>
-    <div class="section-body">
-      <div class="row g-2">
-        <div class="col-6"><strong>Admission Date:</strong> {{ formatDate((data?.LastAdmission || data?.lastAdmission)?.AdmissionDate || (data?.LastAdmission || data?.lastAdmission)?.admissionDate) }}</div>
-        <div class="col-6"><strong>Discharge Date:</strong> {{ formatDate((data?.LastAdmission || data?.lastAdmission)?.DischargeDate || (data?.LastAdmission || data?.lastAdmission)?.dischargeDate) }}</div>
-        <div class="col-12"><strong>Provisional Diagnosis:</strong> {{ (data?.LastAdmission || data?.lastAdmission)?.ProvisionalDiagnosis || (data?.LastAdmission || data?.lastAdmission)?.provisionalDiagnosis }}</div>
-        <div class="col-12"><strong>Medical Decision:</strong> {{ (data?.LastAdmission || data?.lastAdmission)?.MedicalDecision || (data?.LastAdmission || data?.lastAdmission)?.medicalDecision }}</div>
+  <!-- Admission Details -->
+  <h3 class="step-heading" *ngIf="data?.LastAdmission || data?.lastAdmission">Admission Details</h3>
+  <section class="card" *ngIf="data?.LastAdmission || data?.lastAdmission">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6 display-field"><label>Admission Date</label><div class="value">{{ formatDate((data?.LastAdmission || data?.lastAdmission)?.AdmissionDate || (data?.LastAdmission || data?.lastAdmission)?.admissionDate) || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Discharge Date</label><div class="value">{{ formatDate((data?.LastAdmission || data?.lastAdmission)?.DischargeDate || (data?.LastAdmission || data?.lastAdmission)?.dischargeDate) || '-' }}</div></div>
+        <div class="col-12 display-field"><label>Provisional Diagnosis</label><div class="value">{{ (data?.LastAdmission || data?.lastAdmission)?.ProvisionalDiagnosis || (data?.LastAdmission || data?.lastAdmission)?.provisionalDiagnosis || '-' }}</div></div>
+        <div class="col-12 display-field"><label>Medical Decision</label><div class="value">{{ (data?.LastAdmission || data?.lastAdmission)?.MedicalDecision || (data?.LastAdmission || data?.lastAdmission)?.medicalDecision || '-' }}</div></div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="section" *ngIf="data?.LastSurgicalIntervention || data?.lastSurgicalIntervention">
-    <h6 class="section-title">Last Surgical Intervention</h6>
-    <div class="section-body">
-      <div class="row g-2">
-        <div class="col-6"><strong>Intervention Date:</strong> {{ formatDate((data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.InterventionDate || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.interventionDate) }}</div>
-        <div class="col-6"><strong>Theater:</strong> {{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.Theater || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.theater }}</div>
-        <div class="col-12"><strong>Intervention:</strong> {{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.Intervention || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.intervention }}</div>
-        <div class="col-12"><strong>Final Diagnosis:</strong> {{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.FinalDiagnosis || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.finalDiagnosis }}</div>
-        <div class="col-12"><strong>Discharge Instructions:</strong> {{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.DischargeInstructions || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.dischargeInstructions }}</div>
+  <!-- Surgical Intervention -->
+  <h3 class="step-heading" *ngIf="data?.LastSurgicalIntervention || data?.lastSurgicalIntervention">Surgical Intervention</h3>
+  <section class="card" *ngIf="data?.LastSurgicalIntervention || data?.lastSurgicalIntervention">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6 display-field"><label>Intervention Date</label><div class="value">{{ formatDate((data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.InterventionDate || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.interventionDate) || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Theater</label><div class="value">{{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.Theater || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.theater || '-' }}</div></div>
+        <div class="col-12 display-field"><label>Intervention</label><div class="value">{{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.Intervention || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.intervention || '-' }}</div></div>
+        <div class="col-12 display-field"><label>Final Diagnosis</label><div class="value">{{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.FinalDiagnosis || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.finalDiagnosis || '-' }}</div></div>
+        <div class="col-12 display-field"><label>Discharge Instructions</label><div class="value">{{ (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.DischargeInstructions || (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention)?.dischargeInstructions || '-' }}</div></div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="section" *ngIf="data?.LastFollowUp || data?.lastFollowUp">
-    <h6 class="section-title">Last Follow-Up</h6>
-    <div class="section-body">
-      <div class="row g-2">
-        <div class="col-6"><strong>Follow-Up Date:</strong> {{ formatDate((data?.LastFollowUp || data?.lastFollowUp)?.FollowUpDate || (data?.LastFollowUp || data?.lastFollowUp)?.followUpDate) }}</div>
-        <div class="col-6"><strong>Remarks:</strong> {{ (data?.LastFollowUp || data?.lastFollowUp)?.PatientRemarksStatus || (data?.LastFollowUp || data?.lastFollowUp)?.patientRemarksStatus }}</div>
-        <div class="col-12"><strong>Advice:</strong> {{ (data?.LastFollowUp || data?.lastFollowUp)?.Advice || (data?.LastFollowUp || data?.lastFollowUp)?.advice }}</div>
-        <div class="col-6"><strong>Next Follow-Up:</strong> {{ formatDate((data?.LastFollowUp || data?.lastFollowUp)?.NextFollowUpDate || (data?.LastFollowUp || data?.lastFollowUp)?.nextFollowUpDate) }}</div>
+  <!-- Follow-Up -->
+  <h3 class="step-heading" *ngIf="data?.LastFollowUp || data?.lastFollowUp">Follow-Up</h3>
+  <section class="card" *ngIf="data?.LastFollowUp || data?.lastFollowUp">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6 display-field"><label>Follow-Up Date</label><div class="value">{{ formatDate((data?.LastFollowUp || data?.lastFollowUp)?.FollowUpDate || (data?.LastFollowUp || data?.lastFollowUp)?.followUpDate) || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Remarks</label><div class="value">{{ (data?.LastFollowUp || data?.lastFollowUp)?.PatientRemarksStatus || (data?.LastFollowUp || data?.lastFollowUp)?.patientRemarksStatus || '-' }}</div></div>
+        <div class="col-12 display-field"><label>Advice</label><div class="value">{{ (data?.LastFollowUp || data?.lastFollowUp)?.Advice || (data?.LastFollowUp || data?.lastFollowUp)?.advice || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Next Follow-Up</label><div class="value">{{ formatDate((data?.LastFollowUp || data?.lastFollowUp)?.NextFollowUpDate || (data?.LastFollowUp || data?.lastFollowUp)?.nextFollowUpDate) || '-' }}</div></div>
       </div>
     </div>
-  </div>
+  </section>
 </div>
