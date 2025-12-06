@@ -11,6 +11,7 @@ import { TemplateRef, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { PaitentDataComponent } from '../../paitent-data/paitent-data.component';
+import { PatientLastDetailsComponent } from '../../patient-last-details/patient-last-details.component';
 import { PatientCreateComponent } from '../patient-create/patient-create.component';
 import { AdminFilterComponent } from '../../../shared/admin-filter/admin-filter.component';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
@@ -19,7 +20,7 @@ import { RoleCheckerDirective } from '../../../directives/role-checker.directive
   selector: 'app-patients-list',
   standalone: true,
   imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent, PatientCreateComponent,
-    RoleCheckerDirective
+    RoleCheckerDirective, PatientLastDetailsComponent
   ],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
@@ -47,6 +48,10 @@ export class PatientsListComponent implements OnInit {
   PatientId: any;
   @ViewChild('PatientCreateModal', { read: TemplateRef }) PatientCreateModalRef!: TemplateRef<any>;
   @ViewChild('PatientCreateFullModal', { read: TemplateRef }) PatientCreateFullModalRef!: TemplateRef<any>;
+
+  // Side info panel state
+  isInfoOpen = false;
+  selectedPatientId: number | null = null;
 
 
   constructor(
@@ -111,6 +116,18 @@ export class PatientsListComponent implements OnInit {
     if (id) {
       this.router.navigate(['/admin/patients/edit', id]);
     }
+  }
+
+  openPatientInfo(id: number | undefined): void {
+    if (id) {
+      this.selectedPatientId = id;
+      this.isInfoOpen = true;
+    }
+  }
+
+  closePatientInfo(): void {
+    this.isInfoOpen = false;
+    this.selectedPatientId = null;
   }
 
 

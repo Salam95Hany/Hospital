@@ -662,8 +662,13 @@ namespace Hospital.Services.PatientsService
         {
             try
             {
-                var patient = await _unitOfWork.Repository<Patient>()
-                    .GetByIdAsync(patientId);
+                var patient = await _unitOfWork.Repository<Patient>().GetByIdWithIncludeAsync(
+                p => p.PatientId == patientId,
+                q => q
+                .Include(p => p.Admissions)
+                  .ThenInclude(a => a.SurgicalInterventions)
+                    .ThenInclude(si => si.FollowUps),cancellationToken
+                );
 
                 if (patient == null)
                 {

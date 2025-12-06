@@ -128,5 +128,24 @@ namespace Hospital.Services.Repositories
 
             return await query.ToListAsync(cancellationToken);
         }
+
+        public async Task<T?> GetByIdWithIncludeAsync(Expression<Func<T, bool>> predicate,Func<IQueryable<T>, IQueryable<T>> include,CancellationToken cancellationToken)
+        {
+            IQueryable<T> query = _dbContext.Set<T>();
+
+            if (include != null)
+                query = include(query);
+
+            return await query.FirstOrDefaultAsync(predicate, cancellationToken);
+        }
+        public async Task<List<T>> GetAllWithIncludeAsync(Func<IQueryable<T>, IQueryable<T>> include,CancellationToken cancellationToken)
+        {
+            IQueryable<T> query = _dbContext.Set<T>();
+
+            if (include != null)
+                query = include(query);
+
+            return await query.ToListAsync(cancellationToken);
+        }
     }
 }
