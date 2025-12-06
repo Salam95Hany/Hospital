@@ -23,5 +23,6 @@ namespace Hospital.Interfaces.IPatients
         Task<ApiResponseModel<DashboardCardDto>> GetDashboardStatistics();
         Task<Patient> GetPatientByInternalNumber(string internalNumber);
         Task<List<Admission>> GetHospitalFileNumber(string hospitalFileNumber);
+        Task<ApiResponseModel<PatientLastDetailsDto>> GetPatientWithLastDetailsAsync(int patientId, CancellationToken cancellationToken = default);
     }
 }

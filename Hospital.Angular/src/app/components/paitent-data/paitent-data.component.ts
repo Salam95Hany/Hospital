@@ -56,6 +56,7 @@ patientData: PatientData = new PatientData();
   // full payload returned from getPatientById (contains patient, admissions, surgical, followUp)
   loadedPatientFull: any = null;
   patientDataOnly: any;
+  loadedPatientFullLast: any;
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
@@ -81,8 +82,8 @@ patientData: PatientData = new PatientData();
       patient: this.fb.group({
         name: ['', Validators.required],
         birthDate: [null],
-        age: [null],
-        gender: [''],
+        age: ['', Validators.required],
+        gender: ['', Validators.required],
         nationalId: ['', [Validators.required]],
         address: [''],
         governorate: [''],
@@ -282,6 +283,16 @@ get patient(): FormGroup {
             this.patientForm.patchValue({ patient: this.patientDataOnly || {} });
           }
         }
+      }, err => {
+       
+      });
+    }
+  }
+
+  getPatientDataLastById(): any {
+    if (this.PatientId) {
+      this.patientService.getPatientLastDetailsById(this.PatientId).subscribe(res => {
+        
       }, err => {
        
       });

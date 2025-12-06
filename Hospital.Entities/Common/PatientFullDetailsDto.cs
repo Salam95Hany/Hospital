@@ -14,4 +14,11 @@ namespace Hospital.Entities.Common
         public List<SurgicalIntervention> SurgicalInterventions { get; set; } = new List<SurgicalIntervention>();
         public List<FollowUp> FollowUps { get; set; } = new List<FollowUp>();
     }
+    public class PatientLastDetailsDto
+    {
+        public Patient Patient { get; set; }
+        public Admission LastAdmission { get; set; }
+        public SurgicalIntervention LastSurgicalIntervention { get; set; }
+        public FollowUp LastFollowUp { get; set; }
+    }
 }

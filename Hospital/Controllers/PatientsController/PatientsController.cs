@@ -57,6 +57,12 @@ namespace Hospital.Controllers.PatientsController
             return await _PatientsService.GetPatientByIdWithIncludeAsync(patientId, cancellationToken);
         }
 
+        [HttpGet("GetPatientWithLastDetailsAsync/{patientId}")]
+        public async Task<ApiResponseModel<PatientLastDetailsDto>> GetPatientWithLastDetailsAsync(int patientId, CancellationToken cancellationToken = default)
+        {
+            return await _PatientsService.GetPatientWithLastDetailsAsync(patientId, cancellationToken);
+        }
+
         [HttpPost("GetSearchAutoCompleteData")]
         public async Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model)
         {

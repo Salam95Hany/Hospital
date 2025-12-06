@@ -127,6 +127,10 @@ export class PatientService {
     return this.http.get<any>(`${this.apiUrl}Patients/GetPatientByIdWithInclude/${id}`);
   }
 
+  getPatientLastDetailsById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}Patients/GetPatientWithLastDetailsAsync/${id}`);
+  }
+
 
   deletePatientWithAllData(patientId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}Patients/DeletePatientWithAllData/${patientId}`);

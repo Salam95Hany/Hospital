@@ -658,6 +658,51 @@ namespace Hospital.Services.PatientsService
                 return ApiResponseModel<PatientFullDetailsDto>.Failure(GenericErrors.NotFound);
             }
         }
+        public async Task<ApiResponseModel<PatientLastDetailsDto>> GetPatientWithLastDetailsAsync(int patientId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var patient = await _unitOfWork.Repository<Patient>()
+                    .GetByIdAsync(patientId);
+
+                if (patient == null)
+                {
+                    return ApiResponseModel<PatientLastDetailsDto>
+                        .Failure(GenericErrors.NotFound);
+                }
+
+                // ✅ Get LAST admission (by Id or CreatedDate)
+                var lastAdmission = patient.Admissions?
+                    .OrderByDescending(a => a.AdmissionId)   // or a.CreatedDate
+                    .FirstOrDefault();
+
+                // ✅ Get LAST surgical intervention
+                var lastSurgical = lastAdmission?.SurgicalInterventions?
+                    .OrderByDescending(si => si.SurgicalInterventionId)  // or si.CreatedDate
+                    .FirstOrDefault();
+
+                // ✅ Get LAST follow-up
+                var lastFollowUp = lastSurgical?.FollowUps?
+                    .OrderByDescending(f => f.FollowUpId)   // or f.CreatedDate
+                    .FirstOrDefault();
+
+                var result = new PatientLastDetailsDto
+                {
+                    Patient = patient,
+                    LastAdmission = lastAdmission,
+                    LastSurgicalIntervention = lastSurgical,
+                    LastFollowUp = lastFollowUp
+                };
+
+                return ApiResponseModel<PatientLastDetailsDto>
+                    .Success(GenericErrors.AlreadyExists, result);
+            }
+            catch (Exception)
+            {
+                return ApiResponseModel<PatientLastDetailsDto>
+                    .Failure(GenericErrors.NotFound);
+            }
+        }
 
         public async Task<ApiResponseModel<List<SearchAutoCompleteDto>>> GetSearchAutoCompleteData(SearchAutoCompleteRequest Model)
         {
