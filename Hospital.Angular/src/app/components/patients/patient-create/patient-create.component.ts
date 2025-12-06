@@ -16,7 +16,7 @@ import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/ad
 import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admin-upload-file.component';
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-patient-create',
@@ -24,7 +24,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [CommonModule, FormsModule,
     ReactiveFormsModule,
     AdminGeneralInputComponent,
-    AdminDropDownComponent,AdminSliderImageComponent, AdminUploadFileComponent],
+    AdminDropDownComponent,AdminSliderImageComponent, AdminUploadFileComponent, NgbDropdownModule],
   templateUrl: './patient-create.component.html',
   styleUrls: ['./patient-create.component.css'],
   providers: [DatePipe]
@@ -68,6 +68,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     files: [],
     deletedFiles: []
   };
+  // Urine Analysis custom control state
+  selectedValue: any = 'Select Urine Analysis';
+  selectedUrineName: string = '';
+  UrineInputValue: string = '';
   // Read-only visibility flags
   hasAdmissionDetails: boolean = false;
   hasSurgicalDetails: boolean = false;
@@ -327,6 +331,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     if (this.isReadOnly) {
       this.patientForm.disable({ emitEvent: false });
     }
+
+    // Initialize Urine Analysis display from form value, if any
+    const uVal = this.admission.get('urineAnalysis')?.value;
+    this.applyUrineInitialValue(uVal);
   }
   OnFileChange(selectedFile: UploadFileModel) {
     // Store files based on current step
@@ -460,7 +468,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
           duration: adm.duration ?? adm.Duration ?? null,
           hospitalStates: adm.hospitalStates ?? adm.HospitalStates ?? null,
           course: adm.course ?? adm.Course ?? null,
-          hPI: adm.hPI ?? adm.HPI ?? null,
+          hPI: adm.hpi ?? adm.Hpi ?? null,
           currentMedications: adm.currentMedications ?? adm.CurrentMedications ?? null,
           pastHistory: adm.pastHistory ?? adm.PastHistory ?? null,
           familyHistory: adm.familyHistory ?? adm.FamilyHistory ?? null,
@@ -475,6 +483,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
           otherLabResults: adm.otherLabResults ?? adm.OtherLabResults ?? null,
           provisionalDiagnosis: adm.provisionalDiagnosis ?? adm.ProvisionalDiagnosis ?? null,
           medicalDecision: adm.medicalDecision ?? adm.MedicalDecision ?? null,
+          urineAnalysis: adm.urineAnalysis ?? adm.UrineAnalysis ?? null,
           cultureAndSensitivity: adm.cultureAndSensitivity ?? adm.CultureAndSensitivity ?? null,
           serumCreatinine: adm.serumCreatinine ?? adm.SerumCreatinine ?? null,
           hemoglobin: adm.hemoglobin ?? adm.Hemoglobin ?? null,
@@ -557,6 +566,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
           this.patientForm.disable({ emitEvent: false });
         }
 
+        // Initialize Urine Analysis display from loaded value
+        const uVal = this.admission.get('urineAnalysis')?.value;
+        this.applyUrineInitialValue(uVal);
+
         // Set visibility flags for read-only based on patched values
         const admVal = this.admission?.value;
         const surgVal = this.surgicalIntervention?.value;
@@ -571,6 +584,52 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         console.error('Failed to load last details', err);
       }
     });
+  }
+
+  // Urine Analysis helpers
+  onSelectUrine(item: { id: number; name: string }) {
+    this.selectedValue = item.id;
+    this.selectedUrineName = item.name;
+    this.UrineInputValue = '';
+    this.updateUrineAnalysisControl();
+  }
+
+  onUrineValueChange(value: string) {
+    this.UrineInputValue = value ?? '';
+    this.updateUrineAnalysisControl();
+  }
+
+  getUrineDisplayText(): string {
+    return this.selectedUrineName || (typeof this.selectedValue === 'string' ? this.selectedValue : '') || 'Select Urine Analysis';
+  }
+
+  private updateUrineAnalysisControl() {
+    const name = this.selectedUrineName || '';
+    const val = this.UrineInputValue?.trim();
+    const combined = name ? (val ? `${name}: ${val}` : name) : null;
+    this.admission.get('urineAnalysis')?.setValue(combined);
+  }
+
+  private applyUrineInitialValue(uVal: any) {
+    const str = (uVal ?? '').toString();
+    if (!str) {
+      this.selectedValue = 'Select Urine Analysis';
+      this.selectedUrineName = '';
+      this.UrineInputValue = '';
+      return;
+    }
+    const parts = str.split(':');
+    const name = parts[0].trim();
+    const extra = parts.slice(1).join(':').trim();
+    const match = this.urineAnalyses.find(a => (a.name || '').toLowerCase() === name.toLowerCase());
+    if (match) {
+      this.selectedValue = match.id;
+      this.selectedUrineName = match.name;
+    } else {
+      this.selectedValue = name || 'Select Urine Analysis';
+      this.selectedUrineName = name;
+    }
+    this.UrineInputValue = extra || '';
   }
 
   private hasAnyValue(obj: any): boolean {

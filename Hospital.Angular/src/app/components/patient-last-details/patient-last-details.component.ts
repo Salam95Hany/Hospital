@@ -48,5 +48,19 @@ export class PatientLastDetailsComponent implements OnInit {
     if (!value) return '';
     return this.datePipe.transform(value, 'yyyy-MM-dd') || '';
   }
-}
 
+  formatUrine(value: any): string {
+    if (value === null || value === undefined) return '';
+    let s = String(value);
+    // Remove stray occurrences of the word 'enter' (case-insensitive)
+    s = s.replace(/enter/gi, '').replace(/\s+/g, ' ').trim();
+    if (!s) return '';
+    // Normalize separator to colon for readability
+    if (s.includes(';')) {
+      const [name, ...rest] = s.split(';');
+      const val = rest.join(';').trim();
+      return val ? `${name.trim()}: ${val}` : name.trim();
+    }
+    return s;
+  }
+}

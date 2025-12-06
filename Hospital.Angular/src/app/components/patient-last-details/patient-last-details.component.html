@@ -30,6 +30,8 @@
         <div class="col-md-6 display-field"><label>Discharge Date</label><div class="value">{{ formatDate((data?.LastAdmission || data?.lastAdmission)?.DischargeDate || (data?.LastAdmission || data?.lastAdmission)?.dischargeDate) || '-' }}</div></div>
         <div class="col-12 display-field"><label>Provisional Diagnosis</label><div class="value">{{ (data?.LastAdmission || data?.lastAdmission)?.ProvisionalDiagnosis || (data?.LastAdmission || data?.lastAdmission)?.provisionalDiagnosis || '-' }}</div></div>
         <div class="col-12 display-field"><label>Medical Decision</label><div class="value">{{ (data?.LastAdmission || data?.lastAdmission)?.MedicalDecision || (data?.LastAdmission || data?.lastAdmission)?.medicalDecision || '-' }}</div></div>
+        <div class="col-12 display-field"><label>HPI</label><div class="value">{{ (data?.LastAdmission || data?.lastAdmission)?.HPI || (data?.LastAdmission || data?.lastAdmission)?.hpi || '-' }}</div></div>
+        <div class="col-md-6 display-field"><label>Urine Analysis</label><div class="value">{{ formatUrine((data?.LastAdmission || data?.lastAdmission)?.UrineAnalysis || (data?.LastAdmission || data?.lastAdmission)?.urineAnalysis) || '-' }}</div></div>
       </div>
     </div>
   </section>

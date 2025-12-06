@@ -77,7 +77,29 @@
 
                     <app-admin-drop-down [data]="comorbidities" [placeholder]="'Select Current Comorbidities'" [label]="'Current Comorbidities'" class="col-md-6" formControlName="comorbidities"></app-admin-drop-down>
 
-                    <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down>
+                      <div class="col-md-6">
+  <label class="form-label">Urine Analysis</label>
+  <div ngbDropdown class="dropdown-as-input" [class.readonly]="isReadOnly">
+    <button type="button" style="padding-left: 45px;" id="dropdownBasic1" class="input-box" ngbDropdownToggle
+      [ngClass]="{'padding-rem': getUrineDisplayText() != 'Select Urine Analysis','padding-rem2': getUrineDisplayText() == 'Select Urine Analysis'}">
+      <span>{{getUrineDisplayText()}}</span>
+      <input *ngIf="getUrineDisplayText() != 'Select Urine Analysis' && !isReadOnly" type="text" class="form-control w-25 me-2 custom-border" placeholder="Enter Value"
+        [(ngModel)]="UrineInputValue" [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="onUrineValueChange($event)" (click)="$event.stopPropagation()">
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="w-100">
+      <div class="dropdown-h large-scroll">
+        <ng-container *ngFor="let item of urineAnalyses">
+          <div class="d-flex dropdown-item cursor-pointer" [class]="item.id==selectedValue?'active DropDownSelected':''" (click)="onSelectUrine(item)">
+            <a>{{item.name}}</a>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <input type="hidden" formControlName="urineAnalysis" />
+</div>
+
 
                     <app-admin-drop-down [data]="bmis" [placeholder]="'Select BMI'" [label]="'BMI'" class="col-md-6" formControlName="bMI"></app-admin-drop-down>
 
