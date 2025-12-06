@@ -10,7 +10,7 @@
           <!-- <button type="button" class="btn btn-outline-danger" (click)="closeModal()" aria-label="Close">
             <i class="fas fa-times"></i>
           </button> -->
-          <div class="cursor-pointer text-danger fs-2" (click)="closeModal()">
+          <div class="cursor-pointer text-danger fs-2" (click)="closeModal()" *ngIf="!isReadOnly">
         <i class="fas fa-times-circle"></i>
     </div>
         </ng-template>
