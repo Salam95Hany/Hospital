@@ -99,7 +99,15 @@ export class SurgicalInterventionCreateComponent {
   ItemForm: FormGroup;
   formErrors = {
     interventionDate: '',
-    theater: ''
+    theater: '',
+    // Ensure errors can surface for dynamically-required fields when discharge date is set
+    postOpDay0_1: '',
+    postOpDay2_5: '',
+    postOpDayOver5: '',
+    dischargeInstructions: '',
+    followUpDoctor: '',
+    followUpDoctorPhone: '',
+    followUpAppointment: ''
   };
 
 
@@ -109,6 +117,15 @@ export class SurgicalInterventionCreateComponent {
   ngOnInit(): void {
     this.UserId = this.authService.userId;
     this.FormInit();
+    // Initialize discharge-date driven validators and subscribe to changes
+    const dischargeCtrl = this.ItemForm.get('dischargeDate');
+    if (dischargeCtrl) {
+      this.updateValidatorsBasedOnDischarge();
+      dischargeCtrl.valueChanges.subscribe(() => {
+        this.updateValidatorsBasedOnDischarge();
+      });
+    }
+
     if (this.SurgicalInterventionId) {
       this.GetSurgicalInterventionById();
       this.GetFilesByActionId();
@@ -153,6 +170,35 @@ export class SurgicalInterventionCreateComponent {
 
     this.ItemForm.valueChanges.subscribe(() => {
       this.formErrors = this.formService.validateForm(this.ItemForm, this.formErrors, true);
+    });
+  }
+
+  /**
+   * Toggle required validators for specific fields when a discharge date is selected.
+   * Mirrors PatientCreate behavior: selecting discharge date makes post-op and follow-up fields mandatory.
+   */
+  private updateValidatorsBasedOnDischarge(): void {
+    const fieldsToToggle = [
+      'postOpDay0_1',
+      'postOpDay2_5',
+      'postOpDayOver5',
+      'dischargeInstructions',
+      'followUpDoctor',
+      'followUpDoctorPhone',
+      'followUpAppointment'
+    ];
+
+    const dischargeSelected = !!this.ItemForm.get('dischargeDate')?.value;
+
+    fieldsToToggle.forEach(key => {
+      const ctrl = this.ItemForm.get(key);
+      if (!ctrl) return;
+      if (dischargeSelected) {
+        ctrl.setValidators([Validators.required]);
+      } else {
+        ctrl.clearValidators();
+      }
+      ctrl.updateValueAndValidity({ emitEvent: false });
     });
   }
 
