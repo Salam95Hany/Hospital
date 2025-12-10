@@ -1,0 +1,127 @@
+<app-admin-breadcrumb [Title]="'Users'"></app-admin-breadcrumb>
+
+<div class="patients-container">
+    <div class="patients-header">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <button class="btn btn-primary add-patient-btn" (click)="OpenCreateModal(CreateModal,null)">
+                <i class="fas fa-plus-circle"></i> Add User
+            </button>
+            <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter" *ngIf="DoctorsData.length > 0">
+                <i class="fas fa-filter"></i> {{ isFilter ? 'Show' : 'Hide' }} Filters
+            </button>
+        </div>
+        <div>
+            <app-admin-pagination (pageChanged)="OnPageChanged($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
+        </div>
+    </div>
+    <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
+        <app-admin-filter [FilterList]="FilterList" (FilterChecked)="OnFilterChecked($event)"></app-admin-filter>
+    </div>
+
+    <div class="patients-table-container">
+        <table class="table patients-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Last Login Date</th>
+                    <th>Status</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of DoctorsData">
+                    <td>{{ item.userName }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.phoneNumber }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>{{ item.loginFullDate }}</td>
+                    <td>
+                        <span class="badge-status" [ngClass]="{'badge-active': item?.isActive , 'badge-inactive' : !item?.isActive}">
+                            {{item?.isActive ? 'Active' : 'Inactive'}}
+                        </span>
+                    </td>
+                    <td>{{ item.role }}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-sm btn-warning" (click)="OpenCreateModal(CreateModal,item)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.userId)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="DoctorsData.length === 0">
+                    <td colspan="7" class="text-center">No data found</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #CreateModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <i class="fas fa-{{!UserId ? 'plus':'edit'}}"></i>
+            <span>{{!UserId ? 'Add' : 'Edit'}} User</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="step-content form-card" data-step="1" style="display: block;">
+            <form [formGroup]="ItemForm" autocomplete="off">
+                <div class="row g-3">
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Name'" [label]="'Name'" class="col-md-6" formControlName="userName" [error]="formErrors.userName"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Phone Number'" [label]="'Phone Number'" class="col-md-6" formControlName="phoneNumber" [allowNumbersOnly]="true" [error]="formErrors.phoneNumber"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Email'" [label]="'Email'" class="col-md-6" formControlName="email" [error]="formErrors.email"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'password'" [placeholder]="'Password'" [label]="'Password'" class="col-md-6" formControlName="password" [error]="formErrors.password"></app-admin-general-input>
+
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Address'" [label]="'Address'" class="col-md-6" formControlName="address" [error]="formErrors.address"></app-admin-general-input>
+
+                    <app-admin-drop-down [data]="Roles" [placeholder]="'Select Role'" [label]="'Role'" class="col-md-6" formControlName="role" [error]="formErrors.role"></app-admin-drop-down>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer flex-nowrap gap-2">
+        <button class="btn btn-danger" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i> Cancel
+        </button>
+        <button class="btn btn-success" (click)="AddNewItem()" [disabled]="BtnDisabled">
+            <i class="fas fa-save"></i> Save
+        </button>
+
+    </div>
+</ng-template>
+
+<ng-template #deleteItemModal let-modal>
+    <div class="modal-header modal-header-bg justify-content-between">
+        <h2 class="d-flex align-items-center gap-2">
+            <span>Confirm Action</span>
+        </h2>
+        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <p class="fs-5 m-0">Are you sure you want to remove this item?</p>
+    </div>
+    <div class="modal-footer justify-content-start">
+        <button type="button" class="btn btn-success" (click)="DeleteItem()" [disabled]="BtnDisabled">
+            <i class="fas fa-check"></i>
+            <span class="me-2">Yes</span>
+        </button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">
+            <i class="fas fa-times"></i>
+            <span class="me-2">No</span>
+        </button>
+    </div>
+</ng-template>

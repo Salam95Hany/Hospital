@@ -119,5 +119,42 @@ namespace Hospital.Reports.Service
             string WEBurl = Path.Combine(_environment.WebRootPath, @"ExportFiles\", $"{fileTitle}_{DateTime.Now:yyyyMMddHHmmssfff}{extension}");
             return WEBurl;
         }
+
+        public List<string> GetMainSurgeons(string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            var result = new List<string>();
+
+            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                var sheet = package.Workbook.Worksheets[0];
+                int colIndex = -1;
+                int totalColumns = sheet.Dimension.Columns;
+
+                for (int col = 1; col <= totalColumns; col++)
+                {
+                    if (sheet.Cells[1, col].Text.Trim() == "Main Surgeon")
+                    {
+                        colIndex = col;
+                        break;
+                    }
+                }
+
+                if (colIndex == -1)
+                    throw new Exception("Column 'Main Surgeon' not found in sheet!");
+
+                int totalRows = sheet.Dimension.Rows;
+
+                for (int row = 2; row <= totalRows; row++)
+                {
+                    var val = sheet.Cells[row, colIndex].Text.Trim();
+                    if (!string.IsNullOrEmpty(val))
+                        result.Add(val);
+                }
+            }
+
+            return result;
+        }
     }
 }

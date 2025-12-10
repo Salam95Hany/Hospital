@@ -44,6 +44,7 @@ export class AdminSideMenuComponent implements OnInit {
 
     const doctorRoutes = [
       '/admin/doctors',
+      '/admin/users',
     ];
 
     if (patientRoutes.some(r => currentUrl.startsWith(r))) {

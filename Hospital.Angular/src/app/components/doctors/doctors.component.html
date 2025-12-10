@@ -23,33 +23,19 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Address</th>
-                    <th>Last Login Date</th>
-                    <th>Status</th>
-                    <th>Role</th>
+                    <th>Academic Degree</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of DoctorsData">
-                    <td>{{ item.userName }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.phoneNumber }}</td>
-                    <td>{{ item.address }}</td>
-                    <td>{{ item.loginFullDate }}</td>
-                    <td>
-                        <span class="badge-status" [ngClass]="{'badge-active': item?.isActive , 'badge-inactive' : !item?.isActive}">
-                            {{item?.isActive ? 'Active' : 'Inactive'}}
-                        </span>
-                    </td>
-                    <td>{{ item.role }}</td>
+                    <td>{{ item.doctorName }}</td>
+                    <td>{{ item.academicDegree }}</td>
                     <td class="actions-cell">
                         <button class="btn btn-sm btn-warning" (click)="OpenCreateModal(CreateModal,item)">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.userId)">
+                        <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.doctorId)">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -76,17 +62,9 @@
         <div class="step-content form-card" data-step="1" style="display: block;">
             <form [formGroup]="ItemForm" autocomplete="off">
                 <div class="row g-3">
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Name'" [label]="'Name'" class="col-md-6" formControlName="userName" [error]="formErrors.userName"></app-admin-general-input>
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Name'" [label]="'Name'" class="col-md-6" formControlName="doctorName" [error]="formErrors.doctorName"></app-admin-general-input>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Phone Number'" [label]="'Phone Number'" class="col-md-6" formControlName="phoneNumber" [allowNumbersOnly]="true" [error]="formErrors.phoneNumber"></app-admin-general-input>
-
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Email'" [label]="'Email'" class="col-md-6" formControlName="email" [error]="formErrors.email"></app-admin-general-input>
-
-                    <app-admin-general-input [type]="'password'" [placeholder]="'Password'" [label]="'Password'" class="col-md-6" formControlName="password" [error]="formErrors.password"></app-admin-general-input>
-
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Address'" [label]="'Address'" class="col-md-6" formControlName="address" [error]="formErrors.address"></app-admin-general-input>
-
-                    <app-admin-drop-down [data]="Roles" [placeholder]="'Select Role'" [label]="'Role'" class="col-md-6" formControlName="role" [error]="formErrors.role"></app-admin-drop-down>
+                    <app-admin-general-input [type]="'text'" [placeholder]="'Academic Degree'" [label]="'Academic Degree'" class="col-md-6" formControlName="academicDegree" [error]="formErrors.academicDegree"></app-admin-general-input>
                 </div>
             </form>
         </div>

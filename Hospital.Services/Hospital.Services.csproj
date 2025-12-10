@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hospital.Interfaces\Hospital.Interfaces.csproj" />
+    <ProjectReference Include="..\Hospital.Reports\Hospital.Reports.csproj" />
   </ItemGroup>
 
 </Project>

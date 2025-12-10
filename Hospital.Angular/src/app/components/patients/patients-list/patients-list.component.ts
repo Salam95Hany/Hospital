@@ -20,7 +20,7 @@ import { RoleCheckerDirective } from '../../../directives/role-checker.directive
   selector: 'app-patients-list',
   standalone: true,
   imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent, PatientCreateComponent,
-    RoleCheckerDirective, PatientLastDetailsComponent
+    RoleCheckerDirective
   ],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']

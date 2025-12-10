@@ -11,5 +11,6 @@ namespace Hospital.Reports.Interface
     public interface IExportManagerService
     {
         string Export(ExportTemplateBase exportTemplateBase, DataTable data);
+        List<string> GetMainSurgeons(string filePath);
     }
 }

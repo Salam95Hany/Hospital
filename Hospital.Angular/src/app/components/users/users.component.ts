@@ -1,30 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AdminPaginationComponent } from "../../../shared/admin-pagination/admin-pagination.component";
-import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.component";
-import { PagingFilterModel } from '../../../models/PagingFilterModel';
-import { FilterModel } from '../../../models/FilterModel';
-import { DoctorService } from '../../../services/doctor.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AdminBreadcrumbComponent } from "../../../shared/admin-breadcrumb/admin-breadcrumb.component";
-import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
-import { FormService } from '../../../services/form.service';
-import { AuthService } from '../../../auth/auth.service';
-import { CustomValidators, RegexType } from '../../../services/custom-validators';
-import { AdminDropDownComponent } from '../../../shared/admin-drop-down/admin-drop-down.component';
+import { AdminPaginationComponent } from '../../shared/admin-pagination/admin-pagination.component';
+import { AdminBreadcrumbComponent } from '../../shared/admin-breadcrumb/admin-breadcrumb.component';
+import { AdminFilterComponent } from '../../shared/admin-filter/admin-filter.component';
+import { AdminDropDownComponent } from '../../shared/admin-drop-down/admin-drop-down.component';
+import { AdminGeneralInputComponent } from '../../shared/admin-general-input/admin-general-input.component';
+import { PagingFilterModel } from '../../models/PagingFilterModel';
+import { FilterModel } from '../../models/FilterModel';
+import { DoctorService } from '../../services/doctor.service';
+import { FormService } from '../../services/form.service';
+import { AuthService } from '../../auth/auth.service';
+import { CustomValidators, RegexType } from '../../services/custom-validators';
+
 
 @Component({
-  selector: 'app-doctors-list',
+  selector: 'app-users',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, CommonModule, ReactiveFormsModule,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
     AdminGeneralInputComponent, AdminDropDownComponent],
-  templateUrl: './doctors-list.component.html',
-  styleUrls: ['./doctors-list.component.css']
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.css']
 })
-export class DoctorsListComponent implements OnInit {
+export class UsersComponent implements OnInit {
   DoctorsData: any[] = [];
   Roles = [
     { id: 'SupperAdmin', name: 'SupperAdmin' },
@@ -116,7 +117,7 @@ export class DoctorsListComponent implements OnInit {
     }
     this.UserId = item?.userId;
     this.modalService.open(content, {
-      windowClass: 'details-size-modal',
+      size: 'xl',
       scrollable: true,
       centered: true
     })

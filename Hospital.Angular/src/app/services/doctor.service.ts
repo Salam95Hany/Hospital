@@ -40,4 +40,23 @@ export class DoctorService {
   ChangeUserPassword(Model: any) {
     return this.http.post<ApiResponseModel<any>>(this.apiURL + 'Auth/ChangeUserPassword', Model);
   }
+
+  // ========================================= Doctors =========================================
+
+  GetAllDoctorData(PagingFilter: PagingFilterModel) {
+    return this.http.post<ApiResponseModel<any>>(this.apiURL + 'Doctors/GetAllDoctorData', PagingFilter);
+  }
+
+  AddNewDoctor(Model: any) {
+    return this.http.post<ApiResponseModel<any>>(this.apiURL + 'Doctors/AddNewDoctor', Model);
+  }
+
+  UpdateDoctor(Model: any) {
+    return this.http.post<ApiResponseModel<any>>(this.apiURL + 'Doctors/UpdateDoctor', Model);
+  }
+
+  DeleteDoctor(DoctorId: string) {
+    return this.http.get<ApiResponseModel<any>>(this.apiURL + 'Doctors/DeleteDoctor?DoctorId=' + DoctorId);
+  }
 }
+

@@ -3,7 +3,6 @@ import { AdminLayoutComponent } from './components/admin-layout/admin-layout.com
 import { DashboardComponent } from './components/dashboard.component';
 import { PatientsListComponent } from './components/patients/patients-list/patients-list.component';
 import { PatientCreateComponent } from './components/patients/patient-create/patient-create.component';
-import { DoctorsListComponent } from './components/doctors/doctors-list/doctors-list.component';
 import { AdmissionListComponent } from './components/admission/admission-list/admission-list.component';
 import { SurgicalInterventionListComponent } from './components/surgicalIntervention/surgical-intervention-list/surgical-intervention-list.component';
 import { FollowupListComponent } from './components/followup/followup-list/followup-list.component';
@@ -11,6 +10,8 @@ import { LoginPageComponent } from './auth/login-page/login-page.component';
 import { NotAuthorizedComponent } from './auth/not-authorized/not-authorized.component';
 import { authGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { UsersComponent } from './components/users/users.component';
+import { DoctorsComponent } from './components/doctors/doctors.component';
 
 export const routes: Routes = [
   { path: '', component: LoginPageComponent },
@@ -52,8 +53,14 @@ export const routes: Routes = [
         data: { roles: ["SupperAdmin", "Admin", "ReadOnly"] },
       },
       {
+        path: 'users',
+        component: UsersComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin"] },
+      },
+      {
         path: 'doctors',
-        component: DoctorsListComponent,
+        component: DoctorsComponent,
         canActivate: [authGuard],
         data: { roles: ["SupperAdmin"] },
       },
