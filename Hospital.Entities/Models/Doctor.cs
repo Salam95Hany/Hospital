@@ -15,5 +15,7 @@ namespace Hospital.Entities.Models
         public string DoctorName { get; set; }
         public string? AcademicDegree { get; set; }
         public bool IsDeleted { get; set; }
+
+        public ICollection<SurgicalIntervention> SurgicalInterventions { get; set; } = new List<SurgicalIntervention>();
     }
 }

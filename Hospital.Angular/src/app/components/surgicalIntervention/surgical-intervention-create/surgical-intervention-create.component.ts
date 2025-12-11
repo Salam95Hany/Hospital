@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 import { AdminGeneralInputComponent } from "../../../shared/admin-general-input/admin-general-input.component";
 import { AdminDropDownComponent } from "../../../shared/admin-drop-down/admin-drop-down.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,6 +23,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 export class SurgicalInterventionCreateComponent {
   @Input() AdmissionId: any;
   @Input() SurgicalInterventionId: any;
+  @Input() DoctorsData: { id: string, name: string }[] = [];
   @Output() RefreshData = new EventEmitter<boolean>();
 
   theatres = [
@@ -100,15 +101,16 @@ export class SurgicalInterventionCreateComponent {
   formErrors = {
     interventionDate: '',
     theater: '',
-    // Ensure errors can surface for dynamically-required fields when discharge date is set
     postOpDay0_1: '',
     postOpDay2_5: '',
     postOpDayOver5: '',
     dischargeInstructions: '',
     followUpDoctor: '',
     followUpDoctorPhone: '',
-    followUpAppointment: ''
+    followUpAppointment: '',
+    doctorId: ''
   };
+  
 
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
@@ -117,7 +119,6 @@ export class SurgicalInterventionCreateComponent {
   ngOnInit(): void {
     this.UserId = this.authService.userId;
     this.FormInit();
-    // Initialize discharge-date driven validators and subscribe to changes
     const dischargeCtrl = this.ItemForm.get('dischargeDate');
     if (dischargeCtrl) {
       this.updateValidatorsBasedOnDischarge();
@@ -130,13 +131,15 @@ export class SurgicalInterventionCreateComponent {
       this.GetSurgicalInterventionById();
       this.GetFilesByActionId();
     }
-
   }
+
+
 
   FormInit() {
     this.ItemForm = this.fb.group({
       surgicalInterventionId: 0,
       admissionId: 0,
+      doctorId: [null, [Validators.required]],
       interventionDate: [null, [Validators.required]],
       theater: [null, [Validators.required]],
       mainSurgeon: [null],
@@ -165,7 +168,8 @@ export class SurgicalInterventionCreateComponent {
       followUpDoctor: [null],
       followUpDoctorPhone: [null],
       followUpAppointment: [null],
-      fileModel: null
+      fileModel: null,
+      insertUser: null
     });
 
     this.ItemForm.valueChanges.subscribe(() => {
@@ -206,6 +210,7 @@ export class SurgicalInterventionCreateComponent {
     this.ItemForm.patchValue({
       surgicalInterventionId: item.surgicalInterventionId ?? 0,
       admissionId: item.admissionId ?? null,
+      doctorId: item.doctorId?.toString() ?? null,
       interventionDate: this.datePipe.transform(item.interventionDate, 'yyyy-MM-dd') ?? '',
       theater: item.theater ?? null,
       mainSurgeon: item.mainSurgeon ?? null,
@@ -234,7 +239,8 @@ export class SurgicalInterventionCreateComponent {
       followUpDoctor: item.followUpDoctor ?? null,
       followUpDoctorPhone: item.followUpDoctorPhone ?? null,
       followUpAppointment: this.datePipe.transform(item.followUpAppointment, 'yyyy-MM-dd') ?? '',
-      fileModel: null
+      fileModel: null,
+      insertUser: null
     });
   }
 

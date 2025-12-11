@@ -33,7 +33,6 @@ export class PatientLastDetailsComponent implements OnInit {
     this.error = null;
     this.patientService.getPatientLastDetailsById(this.patientId).subscribe({
       next: (res) => {
-        debugger
         this.data = res?.results ?? res;
         this.loading = false;
       },

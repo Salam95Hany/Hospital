@@ -114,7 +114,7 @@ namespace Hospital.Services
                 Entity.Advice = Model.Advice;
                 Entity.NewDecision = Model.NewDecision;
                 Entity.NextFollowUpDate = Model.NextFollowUpDate;
-                Entity.UpdateUser = Model.UpdateUser;
+                Entity.UpdateUser = Model.InsertUser;
                 Entity.UpdateDate = DateTime.UtcNow;
 
                 await _unitOfWork.CompleteAsync();

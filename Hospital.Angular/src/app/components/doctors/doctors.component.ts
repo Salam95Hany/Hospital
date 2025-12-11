@@ -129,7 +129,6 @@ export class DoctorsComponent {
   }
 
   AddNewItem() {
-    debugger;
     this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
     let isValid = this.validateForm();
     if (!isValid)

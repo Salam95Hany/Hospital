@@ -38,6 +38,7 @@ namespace Hospital.Services
                 Theater = i.Theater,
                 CreatedBy = i.CreatedBy?.UserName,
                 CreatedDate = i.InsertDate,
+                DoctorName = i.Doctor?.DoctorName
             }).ToList();
 
             return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
@@ -57,6 +58,7 @@ namespace Hospital.Services
                 var surgicalIntervention = new SurgicalIntervention
                 {
                     AdmissionId = Model.AdmissionId,
+                    DoctorId = Model.DoctorId,
                     InterventionDate = Model.InterventionDate,
                     Theater = Model.Theater,
                     MainSurgeon = Model.MainSurgeon,
@@ -119,6 +121,7 @@ namespace Hospital.Services
                     return ApiResponseModel<string>.Failure(GenericErrors.NotFound);
 
                 Entity.InterventionDate = Model.InterventionDate;
+                Entity.DoctorId = Model.DoctorId;
                 Entity.Theater = Model.Theater;
                 Entity.MainSurgeon = Model.MainSurgeon;
                 Entity.Assistants = Model.Assistants;
@@ -146,7 +149,7 @@ namespace Hospital.Services
                 Entity.FollowUpDoctor = Model.FollowUpDoctor;
                 Entity.FollowUpDoctorPhone = Model.FollowUpDoctorPhone;
                 Entity.FollowUpAppointment = Model.FollowUpAppointment;
-                Entity.UpdateUser = Model.UpdateUser;
+                Entity.UpdateUser = Model.InsertUser;
                 Entity.UpdateDate = DateTime.UtcNow;
 
                 await _unitOfWork.CompleteAsync();

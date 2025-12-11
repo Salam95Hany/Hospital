@@ -77,7 +77,10 @@
                 <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" [error]="formErrors.postOpDayOver5" class="col-md-6">
                 </app-admin-drop-down>
 
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" formControlName="postOpAdverseEvents"  class="col-md-12">
+                <app-admin-drop-down [data]="DoctorsData" [placeholder]="'Select Doctor'" [label]="'Doctor'" formControlName="doctorId" [error]="formErrors.doctorId" class="col-md-6">
+                </app-admin-drop-down>
+
+                <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" formControlName="postOpAdverseEvents" class="col-md-12">
                 </app-admin-general-input>
 
                 <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" formControlName="dischargeDate" class="col-md-6">

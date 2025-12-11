@@ -61,8 +61,8 @@ export class AdmissionCreateComponent implements OnInit {
     { id: 'Others', name: 'Others' }
   ];
   Branches = [
-    { id: 'الحسن الجامعي', name: 'الحسن الجامعي' },
-    { id: 'باب النزهة الجامعي', name: 'باب النزهة الجامعي' }
+    { id: 'Al-Hussien', name: 'Al-Hussien' },
+    { id: 'Saied Galal', name: 'Saied Galal' },
   ];
   UserId: any;
   ItemForm: FormGroup;
@@ -191,7 +191,6 @@ export class AdmissionCreateComponent implements OnInit {
   }
 
   FillEditForm(item: any) {
-    debugger;
     if (item.urineAnalysis) {
       const urineParts = item.urineAnalysis.split(';');
       this.selectedValue = urineParts[0];
@@ -246,7 +245,8 @@ export class AdmissionCreateComponent implements OnInit {
       provisionalDiagnosis: item.provisionalDiagnosis ?? null,
       medicalDecision: item.medicalDecision ?? null,
       scheduledDate: this.datePipe.transform(item.scheduledDate, 'yyyy-MM-dd') ?? '',
-      fileModel: null
+      fileModel: null,
+      insertUser: null
     });
   }
 
@@ -298,7 +298,6 @@ export class AdmissionCreateComponent implements OnInit {
   }
 
   AddNewItem() {
-    debugger;
     this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
     let isValid = this.validateForm();
     if (!isValid)

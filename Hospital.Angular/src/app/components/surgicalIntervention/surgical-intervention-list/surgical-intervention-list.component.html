@@ -38,6 +38,7 @@
                 <tr>
                     <th>Internal Number</th>
                     <th>Patient Name</th>
+                    <th>Doctor</th>
                     <th>Intervention Date</th>
                     <th>Theater</th>
                     <th>Created By</th>
@@ -49,6 +50,7 @@
                 <tr *ngFor="let item of SurgicalInterventions">
                     <td>{{ item.internalNumber }}</td>
                     <td>{{ item.patientName }}</td>
+                    <td>{{ item.doctorName }}</td>
                     <td>{{ item.interventionDate | date }}</td>
                     <td>{{ item.theater }}</td>
                     <td>{{ item.createdBy }}</td>
@@ -74,7 +76,7 @@
 </div>
 
 <ng-template #SurgicalCreateModal let-modal>
-    <app-surgical-intervention-create (RefreshData)="RefreshData($event)" [AdmissionId]="AdmissionId" [SurgicalInterventionId]="SurgicalInterventionId"></app-surgical-intervention-create>
+    <app-surgical-intervention-create (RefreshData)="RefreshData($event)" [AdmissionId]="AdmissionId" [SurgicalInterventionId]="SurgicalInterventionId" [DoctorsData]="DoctorsData"></app-surgical-intervention-create>
 </ng-template>
 
 <ng-template #SurgicalDetailsModal let-modal>
@@ -151,6 +153,9 @@
                 </app-admin-general-input>
 
                 <app-admin-general-input [placeholder]="'Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.postOpDayOver5 ?? ''">
+                </app-admin-general-input>
+
+                <app-admin-general-input [placeholder]="'Doctor'" [label]="'Doctor'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.doctorName ?? ''">
                 </app-admin-general-input>
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.postOpAdverseEvents ?? ''">

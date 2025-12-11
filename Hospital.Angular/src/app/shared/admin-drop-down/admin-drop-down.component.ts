@@ -47,8 +47,7 @@ export class AdminDropDownComponent {
   }
 
   writeValue(value: any): void {
-    // Find the option by name (string value) instead of ID
-    var option = this.data?.find(x => x.name === value);
+    var option = this.data?.find(x => x.id === value);
 
     if (value)
       this.selectedValue = value;
@@ -73,7 +72,7 @@ export class AdminDropDownComponent {
   }
 
   selectOption(option: any): void {
-    this.selectedValue = option.name;
+    this.selectedValue = option.id;
     this.onChange(this.selectedValue);
     this.onTouched();
     this.selectedName = option.name;

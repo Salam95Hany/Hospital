@@ -70,7 +70,8 @@ export class FollowupCreateComponent {
       advice: [null],
       newDecision: [null],
       nextFollowUpDate: [null],
-      fileModel: null
+      fileModel: null,
+      insertUser: null
     });
 
     this.ItemForm.valueChanges.subscribe(() => {
@@ -94,7 +95,8 @@ export class FollowupCreateComponent {
       advice: item.advice ?? null,
       newDecision: item.newDecision ?? null,
       nextFollowUpDate: this.datePipe.transform(item.nextFollowUpDate, 'yyyy-MM-dd') ?? '',
-      fileModel: null
+      fileModel: null,
+      insertUser: null
     });
   }
 

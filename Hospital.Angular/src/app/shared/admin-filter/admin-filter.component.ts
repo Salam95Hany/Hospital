@@ -37,7 +37,6 @@ export class AdminFilterComponent implements OnChanges {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    debugger;
     if (changes['ReloadFilter'] && this.ReloadFilter) {
       this.removeAllFilters();
     }

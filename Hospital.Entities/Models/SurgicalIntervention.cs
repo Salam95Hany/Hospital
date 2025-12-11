@@ -14,7 +14,7 @@ namespace Hospital.Entities.Models
         [Key]
         public int SurgicalInterventionId { get; set; }
         public int AdmissionId { get; set; }
-
+        public int DoctorId { get; set; }
         public DateTime? InterventionDate { get; set; }
         public string? Theater { get; set; }
         public string? MainSurgeon { get; set; }
@@ -58,6 +58,9 @@ namespace Hospital.Entities.Models
 
         [ForeignKey("AdmissionId")]
         public virtual Admission? Admission { get; set; }
+
+        [ForeignKey("DoctorId")]
+        public virtual Doctor? Doctor { get; set; }
 
         public ICollection<FollowUp> FollowUps { get; set; } = new List<FollowUp>();
 

@@ -15,13 +15,14 @@ import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
+import { DoctorService } from '../../../services/doctor.service';
 
 @Component({
   selector: 'app-surgical-intervention-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent,
-    AdminSliderImageComponent,RoleCheckerDirective],
+    AdminSliderImageComponent, RoleCheckerDirective],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
   providers: [DatePipe]
@@ -29,6 +30,7 @@ import { RoleCheckerDirective } from '../../../directives/role-checker.directive
 export class SurgicalInterventionListComponent implements OnInit {
   SurgicalInterventions: any[] = [];
   ImportedFiles: FilesModel[] = [];
+  DoctorsData: { id: string, name: string }[] = [];
   SurgicalObj: any;
   PatientId: number;
   AdmissionId: number;
@@ -45,6 +47,11 @@ export class SurgicalInterventionListComponent implements OnInit {
     currentpage: 1,
     pagesize: 10
   };
+  DoctorPagingFilter: PagingFilterModel = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 1000
+  };
   FilterList: FilterModel[] = [
     // {
     //   categoryDisplayName: "Name",
@@ -58,9 +65,18 @@ export class SurgicalInterventionListComponent implements OnInit {
     }
   ];
 
-  constructor(private adminService: AdminService, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe) { }
+  constructor(private adminService: AdminService, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe,
+    private doctorService: DoctorService
+  ) { }
 
   ngOnInit(): void {
+    this.GetAllDoctorData();
+  }
+
+  GetAllDoctorData(): void {
+    this.doctorService.GetAllDoctorData(this.DoctorPagingFilter).subscribe(res => {
+      this.DoctorsData = res.results.map(i => { return { id: i.doctorId?.toString(), name: i.doctorName } });
+    });
   }
 
   OpenSurgicalCreateModal(content: any, surgicalInterventionId: any) {
@@ -99,6 +115,8 @@ export class SurgicalInterventionListComponent implements OnInit {
             this.SurgicalObj[key] = this.datePipe.transform(value, 'yyyy-MM-dd');
           }
         });
+
+        this.SurgicalObj.doctorName = this.DoctorsData.find(d => d.id == this.SurgicalObj.doctorId)?.name ?? '';
       }
     });
   }

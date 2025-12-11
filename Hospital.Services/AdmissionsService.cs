@@ -106,7 +106,7 @@ namespace Hospital.Services
                     MedicalDecision = Model.MedicalDecision,
                     ScheduledDate = Model.ScheduledDate,
                     IsDeleted = false,
-                    InsertUser = null,
+                    InsertUser = Model.InsertUser,
                     InsertDate = DateTime.UtcNow
                 };
 
@@ -185,7 +185,7 @@ namespace Hospital.Services
                 Entity.ProvisionalDiagnosis = Model.ProvisionalDiagnosis;
                 Entity.MedicalDecision = Model.MedicalDecision;
                 Entity.ScheduledDate = Model.ScheduledDate;
-                Entity.UpdateUser = null;
+                Entity.UpdateUser = Model.InsertUser;
                 Entity.UpdateDate = DateTime.UtcNow;
 
                 await _unitOfWork.CompleteAsync();

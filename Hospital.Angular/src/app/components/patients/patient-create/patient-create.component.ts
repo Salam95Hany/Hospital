@@ -24,7 +24,7 @@ import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [CommonModule, FormsModule,
     ReactiveFormsModule,
     AdminGeneralInputComponent,
-    AdminDropDownComponent,AdminSliderImageComponent, AdminUploadFileComponent, NgbDropdownModule],
+    AdminDropDownComponent, AdminSliderImageComponent, AdminUploadFileComponent, NgbDropdownModule],
   templateUrl: './patient-create.component.html',
   styleUrls: ['./patient-create.component.css'],
   providers: [DatePipe]
@@ -44,7 +44,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     files: [],
     deletedFiles: []
   };
-  
+
   admissionFiles: UploadFileModel = {
     actionId: null,
     actionType: ActionTypes.Admission,
@@ -52,7 +52,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     files: [],
     deletedFiles: []
   };
-  
+
   surgicalFiles: UploadFileModel = {
     actionId: null,
     actionType: ActionTypes.SurgicalIntervention,
@@ -60,7 +60,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     files: [],
     deletedFiles: []
   };
-  
+
   followUpFiles: UploadFileModel = {
     actionId: null,
     actionType: ActionTypes.FollowUp,
@@ -83,123 +83,150 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     { title: 'Follow-Up', isCompleted: false }
   ];
   governorates = [
-    { id: 1, name: 'Cairo' }, { id: 2, name: 'Giza' }, { id: 3, name: 'Alexandria' }, { id: 4, name: 'Dakahlia' }, { id: 5, name: 'Red Sea' }, { id: 6, name: 'Beheira' }, { id: 7, name: 'Fayoum' },
-    { id: 8, name: 'Gharbia' }, { id: 9, name: 'Ismailia' }, { id: 10, name: 'Menofia' }, { id: 11, name: 'Minya' }, { id: 12, name: 'Qalyubia' }, { id: 13, name: 'New Valley' }, { id: 14, name: 'Suez' },
-    { id: 15, name: 'Aswan' }, { id: 16, name: 'Assiut' }, { id: 17, name: 'Beni Suef' }, { id: 18, name: 'Port Said' }, { id: 19, name: 'Damietta' }, { id: 20, name: 'Sharkia' }, { id: 21, name: 'Sohag' },
-    { id: 22, name: 'Kafr El Sheikh' }, { id: 23, name: 'Luxor' }, { id: 24, name: 'Qena' }, { id: 25, name: 'North Sinai' }, { id: 26, name: 'South Sinai' }, { id: 27, name: 'Matrouh' }
+    { id: 'Cairo', name: 'Cairo' },
+    { id: 'Giza', name: 'Giza' },
+    { id: 'Alexandria', name: '' },
+    { id: 'Dakahlia', name: '' },
+    { id: 'Red Sea', name: 'Red Sea' },
+    { id: 'Beheira', name: 'Beheira' },
+    { id: 'Fayoum', name: 'Fayoum' },
+    { id: 'Gharbia', name: 'Gharbia' },
+    { id: 'Ismailia', name: 'Ismailia' },
+    { id: 'Menofia', name: 'Menofia' },
+    { id: 'Minya', name: 'Minya' },
+    { id: 'Qalyubia', name: 'Qalyubia' },
+    { id: 'New Valley', name: 'New Valley' },
+    { id: 'Suez', name: 'Suez' },
+    { id: 'Aswan', name: 'Aswan' },
+    { id: 'Assiut', name: 'Assiut' },
+    { id: 'Beni Suef', name: 'Beni Suef' },
+    { id: 'Port Said', name: 'Port Said' },
+    { id: 'Damietta', name: 'Damietta' },
+    { id: 'Sharkia', name: 'Sharkia' },
+    { id: 'Sohag', name: 'Sohag' },
+    { id: 'Kafr El Sheikh', name: 'Kafr El Sheikh' },
+    { id: 'Luxor', name: 'Luxor' },
+    { id: 'Qena', name: 'Qena' },
+    { id: 'North Sinai', name: 'North Sinai' },
+    { id: 'South Sinai', name: 'South Sinai' },
+    { id: 'Matrouh', name: 'Matrouh' }
   ];
   maritalStatuses = [
-    { id: 1, name: 'Single' }, { id: 2, name: 'Married' }, { id: 3, name: 'Divorced' }, { id: 4, name: 'Widowed' }, { id: 5, name: 'Child' }
+    { id: 'Single', name: 'Single' },
+    { id: 'Married', name: 'Married' },
+    { id: 'Divorced', name: 'Divorced' },
+    { id: 'Widowed', name: 'Widowed' },
+    { id: 'Child', name: 'Child' }
   ];
   @Input() patientId: number | null = null;
   isEditMode: boolean = false;
   @Input() isReadOnly: boolean = false;
 
   courses = [
-    { id: 1, name: 'Progressing' },
-    { id: 2, name: 'Stationary' },
-    { id: 3, name: 'Regressing' },
-    { id: 4, name: 'On & off' }
+    { id: 'Progressing', name: 'Progressing' },
+    { id: 'Stationary', name: 'Stationary' },
+    { id: 'Regressing', name: 'Regressing' },
+    { id: 'On & off', name: 'On & off' }
   ];
   hospitalBranches = [
-    { id: 1, name: 'Al-Hussien' },
-    { id: 2, name: 'Saied Galal' },
+    { id: 'Al-Hussien', name: 'Al-Hussien' },
+    { id: 'Saied Galal', name: 'Saied Galal' },
   ];
   bmis = [
-    { id: 1, name: 'low' },
-    { id: 2, name: 'Average' },
-    { id: 3, name: 'Overweight' },
-    { id: 4, name: 'Obese' },
-    { id: 5, name: 'Morbidly obese' }
+    { id: 'low', name: 'low' },
+    { id: 'Average', name: 'Average' },
+    { id: 'Overweight', name: 'Overweight' },
+    { id: 'Obese', name: 'Obese' },
+    { id: 'Morbidly obese', name: 'Morbidly obese' }
   ];
   comorbidities = [
-    { id: 1, name: 'Diabetes' },
-    { id: 2, name: 'Hypertension' },
-    { id: 3, name: 'Cardiac' },
-    { id: 4, name: 'Chest' },
-    { id: 5, name: 'Renal insufficiency' },
-    { id: 6, name: 'Orthopedic' },
-    { id: 7, name: 'Neurologic' },
-    { id: 8, name: 'Others' }
+    { id: 'Diabetes', name: 'Diabetes' },
+    { id: 'Hypertension', name: 'Hypertension' },
+    { id: 'Cardiac', name: 'Cardiac' },
+    { id: 'Chest', name: 'Chest' },
+    { id: 'Renal insufficiency', name: 'Renal insufficiency' },
+    { id: 'Orthopedic', name: 'Orthopedic' },
+    { id: 'Neurologic', name: 'Neurologic' },
+    { id: 'Others', name: 'Others' }
   ];
   urineAnalyses = [
-    { id: 1, name: 'Pus cells' },
-    { id: 2, name: 'RBCs' },
-    { id: 3, name: 'Crystals' },
-    { id: 4, name: 'Albumin' },
-    { id: 5, name: 'Sugar' },
-    { id: 6, name: 'Others' }
+    { id: 'Pus cells', name: 'Pus cells' },
+    { id: 'RBCs', name: 'RBCs' },
+    { id: 'Crystals', name: 'Crystals' },
+    { id: 'Albumin', name: 'Albumin' },
+    { id: 'Sugar', name: 'Sugar' },
+    { id: 'Others', name: 'Others' }
   ];
   theatres = [
-    { id: 1, name: 'A' },
-    { id: 2, name: 'B' },
-    { id: 3, name: 'C' },
-    { id: 4, name: 'Main' },
-    { id: 5, name: 'Dpt' },
-    { id: 6, name: 'US' }
+    { id: 'A', name: 'A' },
+    { id: 'B', name: 'B' },
+    { id: 'C', name: 'C' },
+    { id: 'Main', name: 'Main' },
+    { id: 'Dpt', name: 'Dpt' },
+    { id: 'US', name: 'US' }
   ];
   anaesthesias = [
-    { id: 1, name: 'General' },
-    { id: 2, name: 'Regional' },
-    { id: 3, name: 'Local' }
+    { id: 'General', name: 'General' },
+    { id: 'Regional', name: 'Regional' },
+    { id: 'Local', name: 'Local' }
   ];
   tubesFixed = [
-    { id: 1, name: 'Drain' },
-    { id: 2, name: 'Urethral catheter' },
-    { id: 3, name: 'S. Pubic catheter' },
-    { id: 4, name: 'Ureteric catheter' },
-    { id: 5, name: 'Ureteric Stent' },
-    { id: 6, name: 'Nephrostomy' },
-    { id: 7, name: 'Others' }
+    { id: 'Drain', name: 'Drain' },
+    { id: 'Urethral catheter', name: 'Urethral catheter' },
+    { id: 'S. Pubic catheter', name: 'S. Pubic catheter' },
+    { id: 'Ureteric catheter', name: 'Ureteric catheter' },
+    { id: 'Ureteric Stent', name: 'Ureteric Stent' },
+    { id: 'Nephrostomy', name: 'Nephrostomy' },
+    { id: 'Others', name: 'Others' }
   ];
   categories = [
-    { id: 1, name: 'Urolithiasis' },
-    { id: 2, name: 'Oncology' },
-    { id: 3, name: 'LUTD' },
-    { id: 4, name: 'Reconstructive' },
-    { id: 5, name: 'Andrology' },
-    { id: 6, name: 'Pediatric' }
+    { id: 'Urolithiasis', name: 'Urolithiasis' },
+    { id: 'Oncology', name: 'Oncology' },
+    { id: 'LUTD', name: 'LUTD' },
+    { id: 'Reconstructive', name: 'Reconstructive' },
+    { id: 'Andrology', name: 'Andrology' },
+    { id: 'Pediatric', name: 'Pediatric' }
   ];
   approaches = [
-    { id: 1, name: 'Endourology' },
-    { id: 2, name: 'Open Surgery' },
-    { id: 3, name: 'Laparoscopy' },
-    { id: 4, name: 'Microscopic' }
+    { id: 'Endourology', name: 'Endourology' },
+    { id: 'Open Surgery', name: 'Open Surgery' },
+    { id: 'Laparoscopy', name: 'Laparoscopy' },
+    { id: 'Microscopic', name: 'Microscopic' }
   ];
   organs = [
-    { id: 1, name: 'Adrenal' },
-    { id: 2, name: 'Kidney' },
-    { id: 3, name: 'Ureter' },
-    { id: 4, name: 'Bladder' },
-    { id: 5, name: 'Prostate' },
-    { id: 6, name: 'Urethra' },
-    { id: 7, name: 'Penis' },
-    { id: 8, name: 'Scrotum/Testes' },
-    { id: 9, name: 'Others' }
+    { id: 'Adrenal', name: 'Adrenal' },
+    { id: 'Kidney', name: 'Kidney' },
+    { id: 'Ureter', name: 'Ureter' },
+    { id: 'Bladder', name: 'Bladder' },
+    { id: 'Prostate', name: 'Prostate' },
+    { id: 'Urethra', name: 'Urethra' },
+    { id: 'Penis', name: 'Penis' },
+    { id: 'Scrotum/Testes', name: 'Scrotum/Testes' },
+    { id: 'Others', name: 'Others' }
   ];
   intraOpCourses = [
-    { id: 1, name: 'Smooth' },
-    { id: 2, name: 'Minor adv. Events' },
-    { id: 3, name: 'Moderate adv. Events' },
-    { id: 4, name: 'Major dv. events' }
+    { id: 'Smooth', name: 'Smooth' },
+    { id: 'Minor adv. Events', name: 'Minor adv. Events' },
+    { id: 'Moderate adv. Events', name: 'Moderate adv. Events' },
+    { id: 'Major dv. events', name: 'Major dv. events' }
   ];
   postOpCourses = [
-    { id: 1, name: 'Smooth' },
-    { id: 2, name: 'Minor adv. Events' },
-    { id: 3, name: 'Moderate adv. Events' },
-    { id: 4, name: 'Major dv. events' }
+    { id: 'Smooth', name: 'Smooth' },
+    { id: 'Minor adv. Events', name: 'Minor adv. Events' },
+    { id: 'Moderate adv. Events', name: 'Moderate adv. Events' },
+    { id: 'Major dv. events', name: 'Major dv. events' }
   ];
   patientRemarks = [
-    { id: 1, name: 'Better' },
-    { id: 2, name: 'Worse' },
-    { id: 3, name: 'The same' },
-    { id: 4, name: 'Details' }
+    { id: 'Better', name: 'Better' },
+    { id: 'Worse', name: 'Worse' },
+    { id: 'The same', name: 'The same' },
+    { id: 'Details', name: 'Details' }
   ];
 
   formErrors = {
     hospitalFileNumber: '',
     admissionDate: '',
-    dischargeDate : '',
+    dischargeDate: '',
     course: '',
     interventionDate: '',
     theater: '',
@@ -211,7 +238,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     gender: '',
     hospitalBranch: '',
     chiefComplaint: '',
-    hPI: '',  
+    hPI: '',
     provisionalDiagnosis: '',
     intervention: '',
     interventionDetails: '',
@@ -242,7 +269,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         this.GetFilesByActionId();
       }
     });
-    
+
     this.initForm();
     this.setupFormValueChanges();
     // Duplicate check for hospital file number in admission step when creating a new patient
@@ -318,7 +345,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       surgicalIntervention: this.createSurgicalInterventionFormGroup(),
       followUp: this.createFollowUpFormGroup()
     });
-    
+
     // Set actionId for file objects if patientId exists
     if (this.patientId) {
       this.patientFiles.actionId = this.patientId;
@@ -352,7 +379,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         this.followUpFiles = selectedFile;
         break;
     }
-    
+
     // Also keep the SelectedFile for backward compatibility
     this.SelectedFile = selectedFile;
   }
@@ -364,9 +391,9 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       ActionTypes.SurgicalIntervention,
       ActionTypes.FollowUp
     ];
-    
+
     this.ImportedFiles = [];
-    
+
     actionTypes.forEach(actionType => {
       this.adminService.GetFilesByActionId(this.patientId, actionType).subscribe(res => {
         if (res.results) {
@@ -791,21 +818,21 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     return this.patientForm.get('followUp') as FormGroup;
   }
 
-  
+
 
   deletePatient(): void {
     if (this.patientId) {
       if (confirm('Are you sure you want to delete this patient and all related data?')) {
         this.patientService.deletePatientWithAllData(this.patientId).subscribe({
-        next: () => {
-          this.toastr.success('Patient deleted successfully!', 'Success');
-          this.router.navigate(['/admin/patients']);
-        },
-        error: (error) => {
-          console.error('Delete error:', error);
-          this.toastr.error('Failed to delete patient', 'Error');
-        }
-      });
+          next: () => {
+            this.toastr.success('Patient deleted successfully!', 'Success');
+            this.router.navigate(['/admin/patients']);
+          },
+          error: (error) => {
+            console.error('Delete error:', error);
+            this.toastr.error('Failed to delete patient', 'Error');
+          }
+        });
       }
     }
   }
@@ -833,7 +860,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   validateCurrentStep(): boolean {
     const currentFormGroup = this.getCurrentStepFormGroup();
     if (!currentFormGroup) return false;
-    
+
     this.markFormGroupTouched(currentFormGroup);
     return currentFormGroup.valid;
   }
@@ -933,7 +960,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         // Clear the error if dates are valid
         this.admission.get('dischargeDate').setErrors(null);
         delete this.formErrors.dischargeDate;
-        
+
         // Calculate and set the duration
         this.calculateStates(admission, discharge);
       }
@@ -948,13 +975,13 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     // Calculate difference in days
     const timeDiff = discharge.getTime() - admission.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    
+
     this.admission.get('hospitalStates').setValue(`${daysDiff} days`);
   }
 
   savePatient(): void {
     this.patientForm = this.formService.TrimFormInputValue(this.patientForm);
-    
+
     // Mark all form groups as touched to trigger validation
     this.markFormGroupTouched(this.patientForm.get('patient') as FormGroup);
     this.markFormGroupTouched(this.admission);
@@ -973,16 +1000,16 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     setModel(this.admission, this.admissionFiles, ActionTypes.Admission);
     setModel(this.surgicalIntervention, this.surgicalFiles, ActionTypes.SurgicalIntervention);
     setModel(this.followUp, this.followUpFiles, ActionTypes.FollowUp);
-    
+
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
     const admissionValid = this.admission.valid;
     const interventionValid = this.surgicalIntervention.valid;
     const followUpValid = this.followUp.valid;
-    
+
     if (!patientValid || !admissionValid || !interventionValid || !followUpValid) {
-        // Show validation errors for individual fields
-        this.showValidationErrors();
-        return;
+      // Show validation errors for individual fields
+      this.showValidationErrors();
+      return;
     }
     // Build PascalCase payload with per-step FileModel for correct binding
     const patientGroup = this.patientForm.get('patient') as FormGroup;
@@ -1023,7 +1050,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         const isFile = typeof File !== 'undefined' && v instanceof File;
         console.log(k, isFile ? `File(${(v as File).name})` : v);
       }
-    } catch {}
+    } catch { }
     this.BtnDisabled = true;
     if (this.isEditMode && this.patientId) {
       this.patientService.updatePatientFull(formData).subscribe(() => {
@@ -1049,7 +1076,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       });
     }
   }
-  
+
   toApiFileModel(model: UploadFileModel, actionType: ActionTypes) {
     const isFileBlob = (value: any): boolean => value instanceof File || value instanceof Blob;
     return {
@@ -1070,7 +1097,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       }))
     };
   }
-  
+
 
   navigateBack(): void {
     if (this.isModal) {
@@ -1085,6 +1112,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   }
 
 
-  
+
 
 }
