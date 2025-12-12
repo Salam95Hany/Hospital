@@ -2,17 +2,17 @@
     <div class="patient-create-header d-flex justify-content-between align-items-center">
         <h2 class="patient-create-title mb-0">{{ isReadOnly ? 'Patient Details' : (isEditMode ? 'Edit Patient' : 'Add New Patient') }}</h2>
         <ng-container *ngIf="!isModal; else modalClose">
-          <button class="btn btn-outline-secondary" (click)="navigateBack()">
+            <button class="btn btn-outline-secondary" (click)="navigateBack()">
             <i class="fas fa-arrow-left"></i> Back to List
           </button>
         </ng-container>
         <ng-template #modalClose>
-          <!-- <button type="button" class="btn btn-outline-danger" (click)="closeModal()" aria-label="Close">
+            <!-- <button type="button" class="btn btn-outline-danger" (click)="closeModal()" aria-label="Close">
             <i class="fas fa-times"></i>
           </button> -->
-          <div class="cursor-pointer text-danger fs-2" (click)="closeModal()" *ngIf="!isReadOnly">
-        <i class="fas fa-times-circle"></i>
-    </div>
+            <div class="cursor-pointer text-danger fs-2" (click)="closeModal()" *ngIf="!isReadOnly">
+                <i class="fas fa-times-circle"></i>
+            </div>
         </ng-template>
     </div>
 
@@ -39,7 +39,7 @@
                     <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" type="date" label="Birth Date" formControlName="birthDate"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age" [error]="formErrors.age"></app-admin-general-input>
-                    <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{name:'Male'}, {name:'Female'}]" placeholder="Select Gender" formControlName="gender" [error]="formErrors.gender"></app-admin-drop-down>
+                    <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{id:'Male',name:'Male'}, {id:'Female',name:'Female'}]" placeholder="Select Gender" formControlName="gender" [error]="formErrors.gender"></app-admin-drop-down>
                     <app-admin-general-input class="col-md-6" label="National ID" placeholder="Enter National ID" formControlName="nationalId" [error]="formErrors.nationalId"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" label="Address" placeholder="Enter address" formControlName="address"></app-admin-general-input>
                     <app-admin-drop-down class="col-md-6" label="Governorate" [data]="governorates" placeholder="Select Governorate" formControlName="governorate"></app-admin-drop-down>
@@ -48,7 +48,7 @@
                     <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
                     <app-admin-upload-file *ngIf="!isReadOnly" (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
                     <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
-        </div>
+                </div>
             </div>
         </div>
 
@@ -58,7 +58,7 @@
             <h3 class="step-heading">Admission Details</h3>
             <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
-                    
+
                     <app-admin-drop-down [data]="hospitalBranches" [placeholder]="'Select Branch'" [label]="'Hospital Branch'" class="col-md-6" formControlName="hospitalBranch" [error]="formErrors.hospitalBranch"></app-admin-drop-down>
                     <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-6" formControlName="chiefComplaint" [error]="formErrors.chiefComplaint"></app-admin-general-input>
 
@@ -77,28 +77,27 @@
 
                     <app-admin-drop-down [data]="comorbidities" [placeholder]="'Select Current Comorbidities'" [label]="'Current Comorbidities'" class="col-md-6" formControlName="comorbidities"></app-admin-drop-down>
 
-                      <div class="col-md-6">
-  <label class="form-label">Urine Analysis</label>
-  <div ngbDropdown class="dropdown-as-input" [class.readonly]="isReadOnly">
-    <button type="button" style="padding-left: 45px;" id="dropdownBasic1" class="input-box" ngbDropdownToggle
-      [ngClass]="{'padding-rem': getUrineDisplayText() != 'Select Urine Analysis','padding-rem2': getUrineDisplayText() == 'Select Urine Analysis'}">
+                    <div class="col-md-6">
+                        <label class="form-label">Urine Analysis</label>
+                        <div ngbDropdown class="dropdown-as-input" [class.readonly]="isReadOnly">
+                            <button type="button" style="padding-left: 45px;" id="dropdownBasic1" class="input-box" ngbDropdownToggle [ngClass]="{'padding-rem': getUrineDisplayText() != 'Select Urine Analysis','padding-rem2': getUrineDisplayText() == 'Select Urine Analysis'}">
       <span>{{getUrineDisplayText()}}</span>
       <input *ngIf="getUrineDisplayText() != 'Select Urine Analysis' && !isReadOnly" type="text" class="form-control w-25 me-2 custom-border" placeholder="Enter Value"
         [(ngModel)]="UrineInputValue" [ngModelOptions]="{standalone: true}"
         (ngModelChange)="onUrineValueChange($event)" (click)="$event.stopPropagation()">
     </button>
-    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="w-100">
-      <div class="dropdown-h large-scroll">
-        <ng-container *ngFor="let item of urineAnalyses">
-          <div class="d-flex dropdown-item cursor-pointer" [class]="item.id==selectedValue?'active DropDownSelected':''" (click)="onSelectUrine(item)">
-            <a>{{item.name}}</a>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-  </div>
-  <input type="hidden" formControlName="urineAnalysis" />
-</div>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="w-100">
+                                <div class="dropdown-h large-scroll">
+                                    <ng-container *ngFor="let item of urineAnalyses">
+                                        <div class="d-flex dropdown-item cursor-pointer" [class]="item.id==selectedValue?'active DropDownSelected':''" (click)="onSelectUrine(item)">
+                                            <a>{{item.name}}</a>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" formControlName="urineAnalysis" />
+                    </div>
 
 
                     <app-admin-drop-down [data]="bmis" [placeholder]="'Select BMI'" [label]="'BMI'" class="col-md-6" formControlName="bMI"></app-admin-drop-down>
