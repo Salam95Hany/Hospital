@@ -15,9 +15,12 @@ namespace Hospital.Entities.Specifications.Patients
         {
 
             var searchText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "SearchText")?.ItemId;
+            var addressText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Address Text")?.ItemId;
 
             if (!string.IsNullOrEmpty(searchText))
                 AddCriteria(fc => fc.InternalNumber.Contains(searchText));
+            if (!string.IsNullOrEmpty(addressText))
+                AddCriteria(fc => fc.Governorate.Contains(addressText));
 
             AddInclude(fc => fc.CreatedBy);
 

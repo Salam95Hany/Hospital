@@ -39,8 +39,13 @@ export class PatientsListComponent implements OnInit {
   };
   FilterList: FilterModel[] = [
     {
-      categoryDisplayName: "Code",
+      categoryDisplayName: "Internal Number",
       categoryName: "SearchText",
+      filterType: "SearchText"
+    },
+    {
+      categoryDisplayName: "Address",
+      categoryName: "Address Text",
       filterType: "SearchText"
     }
   ];
