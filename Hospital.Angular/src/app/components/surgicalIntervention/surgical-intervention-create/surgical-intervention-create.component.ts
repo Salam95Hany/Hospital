@@ -6,7 +6,7 @@ import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgFor } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
@@ -15,7 +15,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 @Component({
   selector: 'app-surgical-intervention-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent, NgFor],
   templateUrl: './surgical-intervention-create.component.html',
   styleUrl: './surgical-intervention-create.component.css',
   providers: [DatePipe]
@@ -95,6 +95,7 @@ export class SurgicalInterventionCreateComponent {
 
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
+  SelectedDoctors: { id: number, name: string }[] = [];
   UserId: any;
   BtnDisabled = false;
   ItemForm: FormGroup;
@@ -110,7 +111,7 @@ export class SurgicalInterventionCreateComponent {
     followUpAppointment: '',
     doctorId: ''
   };
-  
+
 
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
@@ -207,6 +208,16 @@ export class SurgicalInterventionCreateComponent {
   }
 
   FillEditForm(item: any) {
+    this.SelectedDoctors = [];
+    if (item.doctorId) {
+      let doctorIds = item.doctorId.split(',');
+      doctorIds.forEach((id: string) => {
+        let doctor = this.DoctorsData.find(i => i.id == id);
+        if (doctor) {
+          this.SelectedDoctors.push({ id: +doctor.id, name: doctor.name });
+        }
+      });
+    }
     this.ItemForm.patchValue({
       surgicalInterventionId: item.surgicalInterventionId ?? 0,
       admissionId: item.admissionId ?? null,
@@ -292,6 +303,7 @@ export class SurgicalInterventionCreateComponent {
   }
 
   AddNewItem() {
+    debugger;
     this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
     let isValid = this.validateForm();
     if (!isValid)
@@ -304,6 +316,7 @@ export class SurgicalInterventionCreateComponent {
       this.ItemForm.patchValue({ surgicalInterventionId: this.SurgicalInterventionId });
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
+    this.ItemForm.patchValue({ doctorId: this.SelectedDoctors.map(i => i.id).join(',') });
 
     if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
       this.ItemForm.patchValue({ fileModel: this.SelectedFile });
@@ -335,6 +348,21 @@ export class SurgicalInterventionCreateComponent {
         else
           this.toaster.error(data.message);
       });
+    }
+  }
+
+  OnDoctorChange(doctorId: string) {
+    let obj = this.DoctorsData.find(i => i.id == doctorId);
+    let checked = this.SelectedDoctors.find(i => i.id == +doctorId);
+    if (obj && !checked) {
+      this.SelectedDoctors.push({ id: +obj.id, name: obj.name });
+    }
+  }
+
+  RemoveSelectedDoctor(doctorId: number) {
+    this.SelectedDoctors = this.SelectedDoctors.filter(i => i.id != doctorId);
+    if (this.SelectedDoctors.length === 0) {
+      this.ItemForm.patchValue({ doctorId: null });
     }
   }
 }

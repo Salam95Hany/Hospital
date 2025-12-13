@@ -31,8 +31,6 @@
         <table class="table patients-table">
             <thead>
                 <tr>
-                    <th>Internal Number</th>
-                    <th>Patient Name</th>
                     <th>Hospital File Number</th>
                     <th>Admission Date</th>
                     <th>Discharge Date</th>
@@ -43,8 +41,6 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of Admissions">
-                    <td>{{ item.internalNumber }}</td>
-                    <td>{{ item.patientName }}</td>
                     <td>{{ item.hospitalFileNumber }}</td>
                     <td>{{ item.admissionDate | date }}</td>
                     <td>{{ item.dischargeDate | date }}</td>

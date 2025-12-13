@@ -47,7 +47,7 @@ export class AdmissionListComponent {
   };
   FilterList: FilterModel[] = [
     {
-      categoryDisplayName: "Name",
+      categoryDisplayName: "Hospital File Number",
       categoryName: "SearchText",
       filterType: "SearchText"
     },

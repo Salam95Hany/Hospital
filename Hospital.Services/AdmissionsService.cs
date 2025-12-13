@@ -56,6 +56,10 @@ namespace Hospital.Services
         {
             try
             {
+                var AdmissionIsExist = await _unitOfWork.Repository<Admission>().CountAsync(i => i.PatientId == Model.PatientId && Model.AdmissionDate.HasValue && i.AdmissionDate.Value.Date == Model.AdmissionDate.Value.Date);
+                if (AdmissionIsExist > 0)
+                    return ApiResponseModel<string>.Failure(GenericErrors.AdmissionExist);
+
                 var admission = new Admission
                 {
                     PatientId = Model.PatientId,
@@ -137,6 +141,17 @@ namespace Hospital.Services
                 var Entity = await _unitOfWork.Repository<Admission>().GetByIdAsync(Model.AdmissionId);
                 if (Entity == null)
                     return ApiResponseModel<string>.Failure(GenericErrors.NotFound);
+
+                var OldAdmissionDate = Entity.AdmissionDate;
+                bool isDateChanged = OldAdmissionDate.HasValue && Model.AdmissionDate.HasValue && OldAdmissionDate.Value.Date != Model.AdmissionDate.Value.Date;
+                if (isDateChanged)
+                {
+                    var admissionExists = await _unitOfWork.Repository<Admission>().CountAsync(i => i.PatientId == Model.PatientId && i.AdmissionId != Model.AdmissionId && i.AdmissionDate.HasValue 
+                    && Model.AdmissionDate.HasValue && i.AdmissionDate.Value.Date == Model.AdmissionDate.Value.Date);
+
+                    if (admissionExists > 0)
+                        return ApiResponseModel<string>.Failure(GenericErrors.AdmissionExist);
+                }
 
                 Entity.PatientId = Model.PatientId;
                 Entity.HospitalFileNumber = Model.HospitalFileNumber;

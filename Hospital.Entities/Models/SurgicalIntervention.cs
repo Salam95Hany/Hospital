@@ -14,7 +14,6 @@ namespace Hospital.Entities.Models
         [Key]
         public int SurgicalInterventionId { get; set; }
         public int AdmissionId { get; set; }
-        public int DoctorId { get; set; }
         public DateTime? InterventionDate { get; set; }
         public string? Theater { get; set; }
         public string? MainSurgeon { get; set; }
@@ -52,15 +51,14 @@ namespace Hospital.Entities.Models
         public string? FollowUpDoctor { get; set; }
         public string? FollowUpDoctorPhone { get; set; }
         public DateTime? FollowUpAppointment { get; set; }
+        [NotMapped]
+        public string DoctorId { get; set; }
 
         [NotMapped]
         public UploadFileModel? FileModel { get; set; }
 
         [ForeignKey("AdmissionId")]
         public virtual Admission? Admission { get; set; }
-
-        [ForeignKey("DoctorId")]
-        public virtual Doctor? Doctor { get; set; }
 
         public ICollection<FollowUp> FollowUps { get; set; } = new List<FollowUp>();
 

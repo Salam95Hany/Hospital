@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +70,8 @@ export class FormService {
       max: 'The entered value is greater than the maximum allowed',
       invalid_URL: 'Invalid URL',
       endDateLessThanStartDate: (error: string) => error || 'The end date must be greater than the start date',
+      dateLessThan: (error: string) => error || 'The end date must be greater than the start date',
+      dateGreaterThanToday: (error: string) => error || 'The end date must be greater than the start date',
       regexPattern: (error: string) => error || 'Invalid input pattern',
       arrayLength: (error: string) => error || 'Invalid number of items',
       invalidExtension: (matches: any[]) => {
@@ -122,7 +124,7 @@ export class FormService {
           if (!checkDirty || (control.dirty || control.touched)) {
             for (const key in control.errors) {
 
-              if (key && !['invalid_characters', 'invalidExtension', 'endDateLessThanStartDate', 'regexPattern', 'dateGreaterThan', 'dateLessThan', 'arrayLength'].includes(key)) {
+              if (key && !['invalid_characters', 'invalidExtension', 'endDateLessThanStartDate', 'regexPattern', 'dateGreaterThanToday', 'dateLessThan', 'arrayLength'].includes(key)) {
                 formErrors[field] = formErrors[field] || messages[key];
               }
               else {

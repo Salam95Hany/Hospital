@@ -23,7 +23,7 @@ import { RoleCheckerDirective } from '../../../directives/role-checker.directive
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
-    AdminGeneralInputComponent, FollowupCreateComponent, AdminSliderImageComponent],
+    AdminGeneralInputComponent, FollowupCreateComponent, AdminSliderImageComponent,RoleCheckerDirective],
   templateUrl: './followup-list.component.html',
   styleUrl: './followup-list.component.css',
   providers: [DatePipe]

@@ -518,3 +518,36 @@ swiper-container[dir="rtl"]::part(button-prev) {
     right: 0;
     left: auto;
 }
+
+.selected-items-container {
+    padding: 0.5rem 0;
+}
+
+.selected-items-container::after {
+    color: #6c757d;
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+.selected-item-chip.chip-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #82dbe9 100%);
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
+}
+
+.selected-item-chip.chip-info:hover {
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+.chip-remove-btn {
+    width: 20px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.chip-label {
+    line-height: 1;
+    white-space: nowrap;
+}

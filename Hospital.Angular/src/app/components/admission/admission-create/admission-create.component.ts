@@ -14,6 +14,7 @@ import { NgbDropdownModule, NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstr
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
+import { CustomValidators } from '../../../services/custom-validators';
 
 @Component({
   selector: 'app-admission-create',
@@ -76,7 +77,10 @@ export class AdmissionCreateComponent implements OnInit {
     chiefComplaint: '',
     hPI: '',
     provisionalDiagnosis: '',
-    hospitalBranch: ''
+    hospitalBranch: '',
+    admissionDate: '',
+    dischargeDate: '',
+    scheduledDate: ''
   };
 
 
@@ -125,7 +129,6 @@ export class AdmissionCreateComponent implements OnInit {
           const { duplicate, ...otherErrors } = ctrl.errors || {};
           const newErrors = Object.keys(otherErrors).length ? otherErrors : null;
           ctrl.setErrors(newErrors);
-          this.formErrors.hospitalFileNumber = '';
           this.BtnDisabled = false;
         }
       });
@@ -135,9 +138,9 @@ export class AdmissionCreateComponent implements OnInit {
     this.ItemForm = this.fb.group({
       admissionId: 0,
       patientId: 0,
-      hospitalFileNumber: null,
-      admissionDate: null,
-      dischargeDate: null,
+      hospitalFileNumber: ['', [Validators.required]],
+      admissionDate: ['', [CustomValidators.dateLessThanToday(new Date(), 'Admission date must be after or equal today')]],
+      dischargeDate: ['', [CustomValidators.dateLessThanToday(new Date(), 'Discharge date must be after or equal today')]],
       hospitalBranch: ['', [Validators.required]],
       chiefComplaint: ['', [Validators.required]],
       duration: null,
@@ -180,12 +183,15 @@ export class AdmissionCreateComponent implements OnInit {
       otherImaging: null,
       provisionalDiagnosis: ['', [Validators.required]],
       medicalDecision: null,
-      scheduledDate: null,
+      scheduledDate: ['', [CustomValidators.dateLessThanToday(new Date(), 'Scheduled date must be after or equal today')]],
       insertUser: null,
       fileModel: null
+    }, {
+      validators: [CustomValidators.endDateGreaterThanStartDate('admissionDate', 'dischargeDate', 'Discharge date must be after admission date')],
     });
 
     this.ItemForm.valueChanges.subscribe((data) => {
+      debugger;
       this.formErrors = this.formService.validateForm(this.ItemForm, this.formErrors, true);
     });
   }

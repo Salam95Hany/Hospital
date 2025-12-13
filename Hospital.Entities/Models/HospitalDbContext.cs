@@ -21,7 +21,9 @@ namespace Hospital.Entities.Models
         public DbSet<FollowUp> FollowUps { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<SurgicalDoctor> SurgicalDoctors { get; set; }
         
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

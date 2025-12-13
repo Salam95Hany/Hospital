@@ -60,5 +60,7 @@ namespace Hospital.Services.Common
         public static Error ApplySort = new("Sorting applied successfully");
 
         public static Error ChangeStatusSuccess = new("Status changed successfully");
+
+        public static Error AdmissionExist = new("This patient already has an admission on this date");
     }
 }

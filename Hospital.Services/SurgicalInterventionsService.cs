@@ -38,7 +38,6 @@ namespace Hospital.Services
                 Theater = i.Theater,
                 CreatedBy = i.CreatedBy?.UserName,
                 CreatedDate = i.InsertDate,
-                DoctorName = i.Doctor?.DoctorName
             }).ToList();
 
             return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
@@ -47,6 +46,12 @@ namespace Hospital.Services
         public async Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId)
         {
             var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalInterventionId);
+            var SurgicalDoctors = await _unitOfWork.Repository<SurgicalDoctor>().WhereAsync(i => i.SurgicalInterventionId == SurgicalInterventionId);
+            if (SurgicalDoctors.Count > 0)
+            {
+                var DoctorIds = string.Join(",", SurgicalDoctors.Select(i => i.DoctorId).ToList());
+                Results.DoctorId = DoctorIds;
+            }
 
             return ApiResponseModel<SurgicalIntervention>.Success(GenericErrors.GetSuccess, Results);
         }
@@ -58,7 +63,6 @@ namespace Hospital.Services
                 var surgicalIntervention = new SurgicalIntervention
                 {
                     AdmissionId = Model.AdmissionId,
-                    DoctorId = Model.DoctorId,
                     InterventionDate = Model.InterventionDate,
                     Theater = Model.Theater,
                     MainSurgeon = Model.MainSurgeon,
@@ -95,9 +99,28 @@ namespace Hospital.Services
                 await _unitOfWork.Repository<SurgicalIntervention>().AddAsync(surgicalIntervention);
                 await _unitOfWork.CompleteAsync();
 
+                if (!string.IsNullOrEmpty(Model.DoctorId))
+                {
+                    var SurgicalDoctors = new List<SurgicalDoctor>();
+                    var DoctorIds = Model.DoctorId.Split(',');
+                    foreach (var doctorId in DoctorIds)
+                    {
+                        var surgicalDoctor = new SurgicalDoctor
+                        {
+                            SurgicalInterventionId = surgicalIntervention.SurgicalInterventionId,
+                            DoctorId = int.Parse(doctorId),
+                        };
+
+                        SurgicalDoctors.Add(surgicalDoctor);
+                    }
+
+                    await _unitOfWork.Repository<SurgicalDoctor>().AddRangeAsync(SurgicalDoctors);
+                    await _unitOfWork.CompleteAsync();
+                }
+
                 if (Model.FileModel != null)
                 {
-                    Model.FileModel.InsertUser = "997d4e26-da04-4dd6-819b-bb745219694b";
+                    Model.FileModel.InsertUser = Model.InsertUser;
                     Model.FileModel.ActionId = surgicalIntervention.SurgicalInterventionId;
                     Model.FileModel.ActionType = ActionTypes.SurgicalIntervention;
                     var Attachments = await _attachmentsService.AddActionFiles(Model.FileModel);
@@ -121,7 +144,6 @@ namespace Hospital.Services
                     return ApiResponseModel<string>.Failure(GenericErrors.NotFound);
 
                 Entity.InterventionDate = Model.InterventionDate;
-                Entity.DoctorId = Model.DoctorId;
                 Entity.Theater = Model.Theater;
                 Entity.MainSurgeon = Model.MainSurgeon;
                 Entity.Assistants = Model.Assistants;
@@ -151,6 +173,27 @@ namespace Hospital.Services
                 Entity.FollowUpAppointment = Model.FollowUpAppointment;
                 Entity.UpdateUser = Model.InsertUser;
                 Entity.UpdateDate = DateTime.UtcNow;
+
+                if (!string.IsNullOrEmpty(Model.DoctorId))
+                {
+                    await _unitOfWork.Repository<SurgicalDoctor>().DeleteWhereAsync(i => i.SurgicalInterventionId == Entity.SurgicalInterventionId);
+
+                    var SurgicalDoctors = new List<SurgicalDoctor>();
+                    var DoctorIds = Model.DoctorId.Split(',');
+                    foreach (var doctorId in DoctorIds)
+                    {
+                        var surgicalDoctor = new SurgicalDoctor
+                        {
+                            SurgicalInterventionId = Entity.SurgicalInterventionId,
+                            DoctorId = int.Parse(doctorId),
+                        };
+
+                        SurgicalDoctors.Add(surgicalDoctor);
+                    }
+
+                    await _unitOfWork.Repository<SurgicalDoctor>().AddRangeAsync(SurgicalDoctors);
+                }
+
 
                 await _unitOfWork.CompleteAsync();
 
@@ -186,7 +229,7 @@ namespace Hospital.Services
                     FollowEntity.ForEach(i => i.IsDeleted = true);
 
                 Entity.IsDeleted = true;
-
+                await _unitOfWork.Repository<SurgicalDoctor>().DeleteWhereAsync(i => i.SurgicalInterventionId == Entity.SurgicalInterventionId);
                 await _unitOfWork.CompleteAsync();
                 await transaction.CommitAsync();
 

@@ -18,6 +18,58 @@ export class CustomValidators extends Validators {
             return null;
         };
     }
+
+    static endDateGreaterThanStartDate(startDateCName: string, endDateCName: string, message = null): ValidatorFn {
+        return (formGroup: AbstractControl) => {
+            const startDate_C = formGroup.get(startDateCName);
+            const endDate_C = formGroup.get(endDateCName);
+
+            if (startDate_C?.value && endDate_C?.value) {
+                const startDate = new Date(startDate_C?.value);
+                const endDate = new Date(endDate_C?.value);
+
+                if (startDate >= endDate) {
+                    endDate_C.setErrors({ endDateLessThanStartDate: message });
+                } else {
+                    endDate_C.setErrors(null);
+                    return null;
+                }
+            }
+
+            return null;
+        };
+    }
+
+    static dateGreaterThanToday(specificDate: Date, message: string): ValidatorFn {
+    return (control: AbstractControl) => {
+        debugger;
+      if (control.value) {
+        const inputDate = new Date(control.value);
+        specificDate.setHours(0, 0, 0, 0);
+        inputDate.setHours(0, 0, 0, 0);
+        if (inputDate >= specificDate) {
+          return { dateGreaterThan: message };
+        }
+      }
+      return null;
+    };
+  }
+
+  static dateLessThanToday(specificDate: Date, message: string): ValidatorFn {
+    return (control: AbstractControl) => {
+        debugger;
+      if (control.value) {
+        const inputDate = new Date(control.value);
+        specificDate.setHours(0, 0, 0, 0);
+        inputDate.setHours(0, 0, 0, 0);
+        if (inputDate < specificDate) {
+          return { dateLessThan: message };
+        }
+      }
+      return null;
+    };
+  }
+
 }
 
 export interface RegexModel {

@@ -22,7 +22,6 @@ namespace Hospital.Entities.Specifications.SurgicalInterventions
 
             AddInclude("Admission.Patient");
             AddInclude(i => i.CreatedBy);
-            AddInclude(i => i.Doctor);
 
             ApplyOrderBy(fc => fc.InsertDate);
             if (applyPaging)

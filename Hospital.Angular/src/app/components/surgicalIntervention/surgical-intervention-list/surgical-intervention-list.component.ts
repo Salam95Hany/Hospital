@@ -31,6 +31,7 @@ export class SurgicalInterventionListComponent implements OnInit {
   SurgicalInterventions: any[] = [];
   ImportedFiles: FilesModel[] = [];
   DoctorsData: { id: string, name: string }[] = [];
+  SelectedDoctors: { id: number, name: string }[] = [];
   SurgicalObj: any;
   PatientId: number;
   AdmissionId: number;
@@ -117,6 +118,15 @@ export class SurgicalInterventionListComponent implements OnInit {
         });
 
         this.SurgicalObj.doctorName = this.DoctorsData.find(d => d.id == this.SurgicalObj.doctorId)?.name ?? '';
+        if (this.SurgicalObj.doctorId) {
+          let doctorIds = this.SurgicalObj.doctorId.split(',');
+          doctorIds.forEach((id: string) => {
+            let doctor = this.DoctorsData.find(i => i.id == id);
+            if (doctor) {
+              this.SelectedDoctors.push({ id: +doctor.id, name: doctor.name });
+            }
+          });
+        }
       }
     });
   }

@@ -76,6 +76,6 @@ export class AdminDropDownComponent {
     this.onChange(this.selectedValue);
     this.onTouched();
     this.selectedName = option.name;
-    this.valueChanged.emit(option.name);
+    this.valueChanged.emit(option.id);
   }
 }

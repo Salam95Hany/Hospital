@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { FilesModel, UploadFileModel } from '../../models/UploadFileModel';
 import { AuthService } from '../../auth/auth.service';
 import { AdminService } from '../../services/admin.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-upload-file',
@@ -22,12 +23,15 @@ export class AdminUploadFileComponent implements OnInit {
     deletedFiles: []
   };
   isDragOver = false;
+  allowedExtensions = [
+    '.jpg', '.JPG', '.png', '.PNG', '.bmp', '.jpeg', '.JPEG', '.jfif', '.webp'
+  ];
 
-  constructor(private authService: AuthService, private adminService: AdminService) {
+  constructor(private authService: AuthService, private adminService: AdminService, private toastr: ToastrService) {
     this.SelectedFiles.insertUser = this.authService.userId;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onAreaClick() {
     this.fileInput.nativeElement.click();
@@ -59,6 +63,12 @@ export class AdminUploadFileComponent implements OnInit {
 
   handleFiles(files: File[]) {
     files.forEach(i => {
+      const extension = '.' + i.name.split('.').pop()?.toLowerCase();
+
+      if (!this.allowedExtensions.includes(extension)) {
+        this.toastr.error(`This file type is not allowed: ${i.name}`);
+        return;
+      }
       let obj: FilesModel = {
         attachmentId: null,
         existFileName: i.name,
