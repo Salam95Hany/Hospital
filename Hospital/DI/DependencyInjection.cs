@@ -4,6 +4,7 @@ using Hospital.Interfaces;
 using Hospital.Interfaces.Auth;
 using Hospital.Interfaces.Common;
 using Hospital.Interfaces.IPatients;
+using Hospital.Interfaces.Reports;
 using Hospital.Interfaces.Repositories;
 using Hospital.Reports.Interface;
 using Hospital.Reports.Service;
@@ -11,6 +12,7 @@ using Hospital.Services;
 using Hospital.Services.Auth;
 using Hospital.Services.Common;
 using Hospital.Services.PatientsService;
+using Hospital.Services.Reports;
 using Hospital.Services.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -68,6 +70,8 @@ namespace Hospital.DI
             services.AddScoped<IFollowUpsService, FollowUpsService>();
             services.AddScoped<IAttachmentsService, AttachmentsService>();
             services.AddScoped<IDoctorsService, DoctorsService>();
+            services.AddScoped<IReportsDataService, ReportsDataService>();
+
 
 
             #region ReportsDI
