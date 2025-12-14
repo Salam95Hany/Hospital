@@ -318,7 +318,9 @@ namespace Hospital.Services.PatientsService
                 Name = p.Name,
                 Age = p.Age,
                 Governorate = p.Governorate,
-                Gender = p.Gender
+                Gender = p.Gender,
+                CreatedBy = p.CreatedBy?.UserName,
+                UpdatedBy = p.UpdatedBy?.UserName
             }).ToList();
 
             return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);
@@ -396,7 +398,7 @@ namespace Hospital.Services.PatientsService
             existingPatient.Occupation = patientModel.Occupation;
             existingPatient.MaritalStatus = patientModel.MaritalStatus;
             existingPatient.ChildrenCount = patientModel.ChildrenCount;
-            existingPatient.UpdateUser = patientModel.UpdateUser;
+            existingPatient.UpdateUser = patientModel.InsertUser;
             existingPatient.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.Repository<Patient>().Update(existingPatient);

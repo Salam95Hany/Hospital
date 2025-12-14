@@ -85,8 +85,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   governorates = [
     { id: 'Cairo', name: 'Cairo' },
     { id: 'Giza', name: 'Giza' },
-    { id: 'Alexandria', name: '' },
-    { id: 'Dakahlia', name: '' },
+    { id: 'Alexandria', name: 'Alexandria' },
+    { id: 'Dakahlia', name: 'Dakahlia' },
     { id: 'Red Sea', name: 'Red Sea' },
     { id: 'Beheira', name: 'Beheira' },
     { id: 'Fayoum', name: 'Fayoum' },
@@ -1021,18 +1021,22 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     const apiPayload: any = {
       Patient: {
         ...patientData,
+        InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
         FileModel: patientGroup?.get('fileModel')?.value || null,
       },
       Admission: {
         ...admissionData,
+        InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
         FileModel: this.admission?.get('fileModel')?.value || null,
       },
       SurgicalIntervention: {
         ...surgicalData,
+        InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
         FileModel: this.surgicalIntervention?.get('fileModel')?.value || null,
       },
       FollowUp: {
         ...followUpData,
+        InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
         FileModel: this.followUp?.get('fileModel')?.value || null,
       }
     };
@@ -1082,7 +1086,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     return {
       ActionId: (this.patientId ?? model.actionId) ?? 0,
       ActionType: actionType,
-      InsertUser: this.authService.UserModel?.userName ?? this.authService.userId ?? '',
+      InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
       Files: (model.files || []).map(f => ({
         AttachmentId: (f.attachmentId !== undefined && f.attachmentId !== null) ? Number(f.attachmentId) : null,
         ActionType: actionType,

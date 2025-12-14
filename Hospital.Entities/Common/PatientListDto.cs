@@ -14,5 +14,8 @@ namespace Hospital.Entities.Common
         public int? Age { get; set; }
         public string Governorate { get; set; }
         public string Gender { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+
     }
 }

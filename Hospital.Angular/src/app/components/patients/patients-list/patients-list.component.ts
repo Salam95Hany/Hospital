@@ -39,7 +39,7 @@ export class PatientsListComponent implements OnInit {
   };
   FilterList: FilterModel[] = [
     {
-      categoryDisplayName: "Internal Number",
+      categoryDisplayName: "Code",
       categoryName: "SearchText",
       filterType: "SearchText"
     },
