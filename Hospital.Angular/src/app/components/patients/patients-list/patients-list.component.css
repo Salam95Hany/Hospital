@@ -82,6 +82,18 @@
   table-layout: fixed;
 }
 
+/* Sticky header for better readability */
+.patients-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #f8f9fa;
+}
+
+.patients-table thead {
+  box-shadow: 0 1px 0 #e5e7eb;
+}
+
 .patients-table th:nth-child(1),
 .patients-table td:nth-child(1) {
   width: 120px; /* Internal Number */
@@ -109,6 +121,16 @@
 
 .patients-table th:nth-child(6),
 .patients-table td:nth-child(6) {
+  width: 160px; /* CreatedBy */
+}
+
+.patients-table th:nth-child(7),
+.patients-table td:nth-child(7) {
+  width: 160px; /* UpdatedBy */
+}
+
+.patients-table th:nth-child(8),
+.patients-table td:nth-child(8) {
   width: 180px; /* Actions */
   text-align: center;
 }
@@ -140,6 +162,11 @@
   text-overflow: ellipsis;
 }
 
+/* Zebra striping */
+.patients-table tbody tr:nth-child(even) {
+  background-color: #fcfdff;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .patients-table-container {
@@ -167,9 +194,17 @@
     width: 120px;
   }
   
+  .patients-table th:nth-child(8),
+  .patients-table td:nth-child(8) {
+    width: 140px; /* Actions */
+  }
+
+  /* Hide CreatedBy and UpdatedBy on small screens */
   .patients-table th:nth-child(6),
-  .patients-table td:nth-child(6) {
-    width: 140px;
+  .patients-table td:nth-child(6),
+  .patients-table th:nth-child(7),
+  .patients-table td:nth-child(7) {
+    display: none;
   }
 }
 
@@ -195,6 +230,27 @@
 
 .actions-cell button:hover {
   transform: translateY(-2px);
+}
+
+/* Empty state styling */
+.empty-state {
+  padding: 24px 0;
+  color: #5f6b7a;
+}
+
+.empty-state i {
+  font-size: 28px;
+  color: #3498db;
+  margin-bottom: 8px;
+}
+
+.empty-state h6 {
+  margin: 0 0 4px;
+  color: #2c3e50;
+}
+
+.empty-state p {
+  margin: 0 0 12px;
 }
 
 @keyframes fadeIn {
