@@ -12,6 +12,7 @@ import { AdminDropDownComponent } from '../../../shared/admin-drop-down/admin-dr
 import { ToastrService } from 'ngx-toastr';
 import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
 import { AdminService } from '../../../services/admin.service';
+import { DoctorService } from '../../../services/doctor.service';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admin-upload-file.component';
 import { of } from 'rxjs';
@@ -67,6 +68,14 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     insertUser: '',
     files: [],
     deletedFiles: []
+  };
+  // Doctors multi-select for Surgical step
+  DoctorsData: { id: string, name: string }[] = [];
+  SelectedDoctors: { id: number, name: string }[] = [];
+  DoctorPagingFilter: { filterList: any[]; currentpage: number; pagesize: number } = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 1000
   };
   // Urine Analysis custom control state
   selectedValue: any = 'Select Urine Analysis';
@@ -242,7 +251,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     provisionalDiagnosis: '',
     intervention: '',
     interventionDetails: '',
-    advice: ''
+    advice: '',
+    doctorId: ''
   };
   form: FormGroup<any>;
   @Output() RefreshData = new EventEmitter<boolean>();
@@ -257,7 +267,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     private toastr: ToastrService,
     private adminService: AdminService,
     private datePipe: DatePipe,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private doctorService: DoctorService
   ) { }
 
   ngOnInit(): void {
@@ -271,6 +282,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     });
 
     this.initForm();
+    // Load doctors for multi-select in Surgical step
+    this.loadDoctors();
     this.setupFormValueChanges();
     // Duplicate check for hospital file number in admission step when creating a new patient
     if (!this.patientId) {
@@ -539,6 +552,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
         // Surgical group
         this.surgicalIntervention.patchValue({
+          doctorId: (surg.doctorId ?? surg.DoctorId ?? null) ? (surg.doctorId ?? surg.DoctorId).toString() : null,
           interventionDate: this.datePipe.transform(surg.interventionDate ?? surg.InterventionDate, 'yyyy-MM-dd') ?? null,
           theater: surg.theater ?? surg.Theater ?? null,
           mainSurgeon: surg.mainSurgeon ?? surg.MainSurgeon ?? null,
@@ -568,6 +582,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
           followUpDoctorPhone: surg.followUpDoctorPhone ?? surg.FollowUpDoctorPhone ?? null,
           followUpAppointment: this.datePipe.transform(surg.followUpAppointment ?? surg.FollowUpAppointment, 'yyyy-MM-dd') ?? null,
         });
+
+        // Populate SelectedDoctors chips from doctorId string
+        const docStr = (this.surgicalIntervention?.get('doctorId')?.value || '').toString();
+        if (docStr) this.setSelectedDoctorsFromDoctorIdString(docStr);
 
         // Follow-up group
         this.followUp.patchValue({
@@ -752,6 +770,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
   createSurgicalInterventionFormGroup(): FormGroup {
     return this.fb.group({
+      doctorId: [null, [Validators.required]],
       interventionDate: [null],
       theater: [null],
       mainSurgeon: [null],
@@ -1001,6 +1020,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     setModel(this.surgicalIntervention, this.surgicalFiles, ActionTypes.SurgicalIntervention);
     setModel(this.followUp, this.followUpFiles, ActionTypes.FollowUp);
 
+    // Ensure doctorId is a comma-separated list from SelectedDoctors
+    const docList = this.SelectedDoctors.map(d => d.id).join(',');
+    this.surgicalIntervention.get('doctorId')?.setValue(docList || null);
+
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
     const admissionValid = this.admission.valid;
     const interventionValid = this.surgicalIntervention.valid;
@@ -1102,6 +1125,33 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     };
   }
 
+  // Multi-doctor selection handlers (mirror surgical-intervention-create)
+  OnDoctorChange(doctorId: string) {
+    const obj = this.DoctorsData.find(i => i.id == doctorId);
+    const checked = this.SelectedDoctors.find(i => i.id == +doctorId);
+    if (obj && !checked) {
+      this.SelectedDoctors.push({ id: +obj.id, name: obj.name });
+    }
+  }
+
+  RemoveSelectedDoctor(doctorId: number) {
+    this.SelectedDoctors = this.SelectedDoctors.filter(i => i.id != doctorId);
+    if (this.SelectedDoctors.length === 0) {
+      this.surgicalIntervention.patchValue({ doctorId: null });
+    }
+  }
+
+  private setSelectedDoctorsFromDoctorIdString(ids: string) {
+    this.SelectedDoctors = [];
+    const doctorIds = (ids || '').toString().split(',').map(s => s.trim()).filter(Boolean);
+    doctorIds.forEach(id => {
+      const doctor = this.DoctorsData.find(i => i.id == id);
+      if (doctor) {
+        this.SelectedDoctors.push({ id: +doctor.id, name: doctor.name });
+      }
+    });
+  }
+
 
   navigateBack(): void {
     if (this.isModal) {
@@ -1115,7 +1165,13 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     this.modalService.dismissAll();
   }
 
-
-
-
+private loadDoctors(): void {
+    this.doctorService.GetAllDoctorData(this.DoctorPagingFilter).subscribe(res => {
+      this.DoctorsData = (res?.results || []).map((i: any) => ({ id: i.doctorId?.toString(), name: i.doctorName }));
+      // After doctors load, ensure SelectedDoctors reflects any existing form value
+      const docStr = (this.surgicalIntervention?.get('doctorId')?.value || '').toString();
+      if (docStr) this.setSelectedDoctorsFromDoctorIdString(docStr);
+    });
+  }
 }
+  

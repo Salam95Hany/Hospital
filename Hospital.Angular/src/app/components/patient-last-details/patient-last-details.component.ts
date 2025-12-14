@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { PatientService } from '../../services/patient.service';
+import { DoctorService } from '../../services/doctor.service';
 
 @Component({
   selector: 'app-patient-last-details',
@@ -16,10 +17,19 @@ export class PatientLastDetailsComponent implements OnInit {
   loading = false;
   error: string | null = null;
   data: any = null;
+  // Doctors lookup similar to surgical list component
+  DoctorsData: { id: string, name: string }[] = [];
+  DoctorPagingFilter: { filterList: any[]; currentpage: number; pagesize: number } = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 1000
+  };
+  lastSurgicalDoctorNames: string[] = [];
 
-  constructor(private patientService: PatientService, private datePipe: DatePipe) {}
+  constructor(private patientService: PatientService, private datePipe: DatePipe, private doctorService: DoctorService) {}
 
   ngOnInit(): void {
+    this.loadDoctors();
     this.fetch();
   }
 
@@ -35,12 +45,35 @@ export class PatientLastDetailsComponent implements OnInit {
       next: (res) => {
         this.data = res?.results ?? res;
         this.loading = false;
+        this.computeDoctorNames();
       },
       error: (err) => {
         this.error = 'Failed to load patient details';
         this.loading = false;
       }
     });
+  }
+
+  private loadDoctors(): void {
+    this.doctorService.GetAllDoctorData(this.DoctorPagingFilter).subscribe(res => {
+      const list = (res?.results || []);
+      this.DoctorsData = list.map((i: any) => ({ id: i.doctorId?.toString(), name: i.doctorName }));
+      this.computeDoctorNames();
+    });
+  }
+
+  private computeDoctorNames(): void {
+    // Compute names for last surgical intervention doctorId CSV if both data and DoctorsData are available
+    const surg = (this.data?.LastSurgicalIntervention || this.data?.lastSurgicalIntervention) || null;
+    const idsCsv: string = surg?.doctorId ?? surg?.DoctorId ?? '';
+    if (!idsCsv || this.DoctorsData.length === 0) {
+      this.lastSurgicalDoctorNames = [];
+      return;
+    }
+    const ids = idsCsv.toString().split(',').map(s => s.trim()).filter(Boolean);
+    this.lastSurgicalDoctorNames = ids
+      .map(id => this.DoctorsData.find(d => d.id === id)?.name)
+      .filter((name): name is string => !!name);
   }
 
   formatDate(value: any): string {

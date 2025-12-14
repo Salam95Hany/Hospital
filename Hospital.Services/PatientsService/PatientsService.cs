@@ -255,6 +255,24 @@ namespace Hospital.Services.PatientsService
                 interventionModel.FileModel.ActionType = ActionTypes.SurgicalIntervention;
                 var Attachments = await _attachmentsService.AddActionFiles(interventionModel.FileModel);
             }
+            if (!string.IsNullOrEmpty(interventionModel.DoctorId))
+            {
+                var SurgicalDoctors = new List<SurgicalDoctor>();
+                var DoctorIds = interventionModel.DoctorId.Split(',');
+                foreach (var doctorId in DoctorIds)
+                {
+                    var surgicalDoctor = new SurgicalDoctor
+                    {
+                        SurgicalInterventionId = surgicalIntervention.SurgicalInterventionId,
+                        DoctorId = int.Parse(doctorId),
+                    };
+
+                    SurgicalDoctors.Add(surgicalDoctor);
+                }
+
+                await _unitOfWork.Repository<SurgicalDoctor>().AddRangeAsync(SurgicalDoctors);
+                await _unitOfWork.CompleteAsync();
+            }
 
             return surgicalIntervention.SurgicalInterventionId;
         }
@@ -693,6 +711,8 @@ namespace Hospital.Services.PatientsService
                     .OrderByDescending(f => f.FollowUpId)   // or f.CreatedDate
                     .FirstOrDefault();
 
+                var SurgicalDoctors = await _unitOfWork.Repository<SurgicalDoctor>().WhereAsync(i => i.SurgicalInterventionId == lastSurgical.SurgicalInterventionId);
+
                 var result = new PatientLastDetailsDto
                 {
                     Patient = patient,
@@ -700,6 +720,11 @@ namespace Hospital.Services.PatientsService
                     LastSurgicalIntervention = lastSurgical,
                     LastFollowUp = lastFollowUp
                 };
+                if (SurgicalDoctors.Count > 0)
+                {
+                    var DoctorIds = string.Join(",", SurgicalDoctors.Select(i => i.DoctorId).ToList());
+                    result.LastSurgicalIntervention.DoctorId = DoctorIds;
+                }
 
                 return ApiResponseModel<PatientLastDetailsDto>
                     .Success(GenericErrors.AlreadyExists, result);
