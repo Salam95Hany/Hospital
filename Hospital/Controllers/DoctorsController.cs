@@ -46,7 +46,7 @@ namespace Hospital.Controllers
         [HttpGet("GetMainSurgeons")]
         public async Task<bool> GetMainSurgeons(string filePath)
         {
-            var results = await _doctorsService.GetMainSurgeons(filePath);
+            var results = await _doctorsService.GetMainSurgeons2(filePath);
             return results;
         }
     }

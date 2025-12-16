@@ -129,28 +129,89 @@ namespace Hospital.Reports.Service
             using (var package = new ExcelPackage(new FileInfo(filePath)))
             {
                 var sheet = package.Workbook.Worksheets[0];
-                int colIndex = -1;
+                int totalRows = sheet.Dimension.Rows;
                 int totalColumns = sheet.Dimension.Columns;
+
+                // Define ALL the columns we want to extract doctors from
+                var targetColumnHeaders = new List<string>
+        {
+            "Main Surgeon",
+            "Assistants",
+            "Resident",
+            "Off-field supervisor"
+        };
+
+                // Find column indices for ALL target columns
+                var columnIndices = new List<int>();
 
                 for (int col = 1; col <= totalColumns; col++)
                 {
-                    if (sheet.Cells[1, col].Text.Trim() == "Main Surgeon")
+                    var header = sheet.Cells[1, col].Text.Trim();
+                    if (targetColumnHeaders.Contains(header))
                     {
-                        colIndex = col;
-                        break;
+                        columnIndices.Add(col);
                     }
                 }
 
-                if (colIndex == -1)
-                    throw new Exception("Column 'Main Surgeon' not found in sheet!");
+                // If no columns found, throw exception
+                if (!columnIndices.Any())
+                    throw new Exception("No doctor columns found in sheet!");
 
-                int totalRows = sheet.Dimension.Rows;
-
-                for (int row = 2; row <= totalRows; row++)
+                // Extract data from ALL found columns
+                foreach (int colIndex in columnIndices)
                 {
-                    var val = sheet.Cells[row, colIndex].Text.Trim();
-                    if (!string.IsNullOrEmpty(val))
-                        result.Add(val);
+                    for (int row = 2; row <= totalRows; row++)
+                    {
+                        var doctorName = sheet.Cells[row, colIndex].Text.Trim();
+                        if (!string.IsNullOrEmpty(doctorName))
+                        {
+                            result.Add(doctorName);
+                        }
+                    }
+                }
+            }
+
+            // Remove duplicates while preserving order
+            return result.Distinct().ToList();
+        }
+
+        public List<(string DoctorName, string AcademicDegree)> GetDoctorsWithRoles(string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var result = new List<(string, string)>();
+
+            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                var sheet = package.Workbook.Worksheets[0]; // Use index 1 for first sheet
+
+                if (sheet.Dimension == null) return result;
+
+                // Define column mappings: Excel header -> AcademicDegree value
+                var columnMapping = new Dictionary<string, string>
+                {
+                    ["Main Surgeon"] = "Main Surgeon",
+                    ["Assistants"] = "Assistant",
+                    ["Resident"] = "Resident",
+                    ["Off-field supervisor"] = "Supervisor"
+                };
+
+                // Scan first row for headers
+                for (int col = 1; col <= sheet.Dimension.Columns; col++)
+                {
+                    var header = sheet.Cells[1, col].Text.Trim();
+
+                    if (columnMapping.TryGetValue(header, out string academicDegree))
+                    {
+                        // Collect all non-empty names in this column
+                        for (int row = 2; row <= sheet.Dimension.Rows; row++)
+                        {
+                            var doctorName = sheet.Cells[row, col].Text.Trim();
+                            if (!string.IsNullOrEmpty(doctorName))
+                            {
+                                result.Add((doctorName, academicDegree));
+                            }
+                        }
+                    }
                 }
             }
 

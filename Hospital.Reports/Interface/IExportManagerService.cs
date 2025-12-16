@@ -12,5 +12,6 @@ namespace Hospital.Reports.Interface
     {
         string Export(ExportTemplateBase exportTemplateBase, DataTable data);
         List<string> GetMainSurgeons(string filePath);
+        List<(string DoctorName, string AcademicDegree)> GetDoctorsWithRoles(string filePath);
     }
 }
