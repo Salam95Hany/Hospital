@@ -81,6 +81,12 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   SelectedAssistants: { id: number, name: string }[] = [];
   SelectedResident: { id: number, name: string }[] = [];
   SelectedSupervisor: { id: number, name: string }[] = [];
+
+  // Bind to admin-drop-down to control displayed selection
+  mainSurgeonSelectorValue: any = '';
+  assistantSelectorValue: any = '';
+  residentSelectorValue: any = '';
+  supervisorSelectorValue: any = '';
   DoctorPagingFilter: { filterList: any[]; currentpage: number; pagesize: number } = {
     filterList: [],
     currentpage: 1,
@@ -1174,6 +1180,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     this.SelectedAssistants = this.SelectedAssistants.filter(i => i.id != doctorId);
     const idsCsv = this.SelectedAssistants.map(a => a.id).join(',');
     this.surgicalIntervention.patchValue({ assistants: idsCsv || null });
+    // Clear dropdown display selection
+    this.assistantSelectorValue = '';
   }
 
   OnResidentChange(doctorId: string) {
@@ -1204,18 +1212,24 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     this.SelectedMainSurgeon = this.SelectedMainSurgeon.filter(i => i.id != doctorId);
     const idsCsv = this.SelectedMainSurgeon.map(a => a.id).join(',');
     this.surgicalIntervention.patchValue({ mainSurgeon: idsCsv || null });
+    // Clear dropdown display selection
+    this.mainSurgeonSelectorValue = '';
   }
 
   RemoveSelectedResident(doctorId: number) {
     this.SelectedResident = this.SelectedResident.filter(i => i.id != doctorId);
     const idsCsv = this.SelectedResident.map(a => a.id).join(',');
     this.surgicalIntervention.patchValue({ resident: idsCsv || null });
+    // Clear dropdown display selection
+    this.residentSelectorValue = '';
   }
 
   RemoveSelectedSupervisor(doctorId: number) {
     this.SelectedSupervisor = this.SelectedSupervisor.filter(i => i.id != doctorId);
     const idsCsv = this.SelectedSupervisor.map(a => a.id).join(',');
     this.surgicalIntervention.patchValue({ offFieldSupervisor: idsCsv || null });
+    // Clear dropdown display selection
+    this.supervisorSelectorValue = '';
   }
 
 
