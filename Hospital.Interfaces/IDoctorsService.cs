@@ -10,5 +10,7 @@ namespace Hospital.Interfaces
         Task<ApiResponseModel<string>> UpdateDoctor(Doctor Model);
         Task<ApiResponseModel<string>> DeleteDoctor(int DoctorId);
         Task<bool> GetMainSurgeons(string filePath);
+
+        Task<bool> GetMainSurgeons2(string filePath);
     }
 }

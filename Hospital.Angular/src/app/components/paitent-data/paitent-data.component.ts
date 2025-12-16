@@ -231,10 +231,15 @@ get patient(): FormGroup {
     payload = {
       ...(original.patient || {}),
       ...(patientGroup?.value || {}),
+      insertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
       fileModel: this.SelectedFile || null
     };
   } else {
-    payload = patientGroup ? patientGroup.value : this.patientForm.value;
+    const base = patientGroup ? patientGroup.value : this.patientForm.value;
+    payload = {
+      ...base,
+      insertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? ''
+    };
   }
 
   

@@ -108,21 +108,68 @@ namespace Hospital.Services
             try
             {
                 var doctorList = new List<Doctor>();
-                var SheetData = _exportManagerService.GetMainSurgeons(@"C:\Users\salam.hany.CAIRODC\Downloads\Users.xlsx");
-                foreach (var doctor in SheetData)
+                var SheetData = _exportManagerService.GetMainSurgeons(filePath); // Use parameter
+
+                // Get existing doctors from database to avoid duplicates
+                var existingDoctors = await _unitOfWork.Repository<Doctor>()
+                    .GetAllAsync();
+                var existingDoctorNames = existingDoctors
+                    .Select(d => d.DoctorName)
+                    .ToHashSet();
+
+                foreach (var doctorName in SheetData)
                 {
-                    var followUp = new Doctor
+                    // Skip if doctor already exists in database
+                    if (existingDoctorNames.Contains(doctorName))
+                        continue;
+
+                    var doctor = new Doctor
                     {
-                        DoctorName = doctor,
-                        AcademicDegree = null,
+                        DoctorName = doctorName,
+                        AcademicDegree = null, // Leave as null or set default
                         IsDeleted = false,
                         InsertUser = "b0aaf719-a21c-453c-b67b-8a97c0f2e91d",
                         InsertDate = DateTime.UtcNow
                     };
 
-                    doctorList.Add(followUp);
+                    doctorList.Add(doctor);
                 }
 
+                if (doctorList.Any())
+                {
+                    await _unitOfWork.Repository<Doctor>().AddRangeAsync(doctorList);
+                    await _unitOfWork.CompleteAsync();
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> GetMainSurgeons2(string filePath)
+        {
+            try
+            {
+                var doctorRoles = _exportManagerService.GetDoctorsWithRoles(filePath);
+
+                if (!doctorRoles.Any())
+                    return true; // No data is not an error
+
+                var doctorList = new List<Doctor>();
+
+                foreach (var (doctorName, academicDegree) in doctorRoles)
+                {
+                    doctorList.Add(new Doctor
+                    {
+                        DoctorName = doctorName,
+                        AcademicDegree = academicDegree,
+                        IsDeleted = false,
+                        InsertUser = "b0aaf719-a21c-453c-b67b-8a97c0f2e91d",
+                        InsertDate = DateTime.UtcNow
+                    });
+                }
 
                 await _unitOfWork.Repository<Doctor>().AddRangeAsync(doctorList);
                 await _unitOfWork.CompleteAsync();

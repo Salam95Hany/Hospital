@@ -15,6 +15,7 @@ import { PatientLastDetailsComponent } from '../../patient-last-details/patient-
 import { PatientCreateComponent } from '../patient-create/patient-create.component';
 import { AdminFilterComponent } from '../../../shared/admin-filter/admin-filter.component';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-patients-list',
@@ -39,7 +40,7 @@ export class PatientsListComponent implements OnInit {
   };
   FilterList: FilterModel[] = [
     {
-      categoryDisplayName: "Internal Number",
+      categoryDisplayName: "Code",
       categoryName: "SearchText",
       filterType: "SearchText"
     },
@@ -57,15 +58,20 @@ export class PatientsListComponent implements OnInit {
   // Side info panel state
   isInfoOpen = false;
   selectedPatientId: number | null = null;
+  canManage = false;
 
 
   constructor(
     private patientService: PatientService,
-    private router: Router, private toastr: ToastrService,private modalService: NgbModal
+    private router: Router,
+    private toastr: ToastrService,
+    private modalService: NgbModal,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.loadPatients();
+    this.canManage = this.authService.isInRole(['SupperAdmin', 'Admin']);
     //this.GetAllPatientsBasicInfoFilter();
   }
 
@@ -75,7 +81,12 @@ export class PatientsListComponent implements OnInit {
       this.TotalCount = response.totalCount;
       this.filteredPatients = this.patients;
     });
-  } 
+  }
+
+  getEmptyColspan(): number {
+    // 8 columns when Actions are visible; 7 when hidden
+    return this.canManage ? 8 : 7;
+  }
 
   // GetAllPatientsBasicInfoFilter() {
   //   this.patientService.GetAllPatientsBasicInfoFilter(this.PagingFilter).subscribe(data => {

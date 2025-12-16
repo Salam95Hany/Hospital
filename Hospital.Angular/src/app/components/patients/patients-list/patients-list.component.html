@@ -19,11 +19,13 @@
         <table class="table patients-table">
             <thead>
                 <tr>
-                    <th>Internal Number</th>
+                    <th>Patient Code</th>
                     <th>Name</th>
                     <th>Age</th>
                     <th>Governorate</th>
                     <th>Gender</th>
+                    <th>CreatedBy</th>
+                    <th>UpdatedBy</th>
                     <th appRole [roles]="['SupperAdmin', 'Admin']">Actions</th>
                 </tr>
             </thead>
@@ -34,21 +36,32 @@
                     <td>{{ patient.age }}</td>
                     <td>{{ patient.governorate }}</td>
                     <td>{{ patient.gender }}</td>
+                    <td>{{ patient.createdBy }}</td>
+                    <td>{{ patient.updatedBy }}</td>
                     <td class="actions-cell" appRole [roles]="['SupperAdmin', 'Admin']">
                         <button class="btn btn-sm btn-info" title="View" (click)="openPatientInfo(patient.id)">
               <i class="fas fa-eye"></i>
             </button>
 
-                        <button class="btn btn-sm btn-warning" (click)="OpenPatentCreateModal(PatientCreateModal,patient.id)">
+                        <button class="btn btn-sm btn-warning" title="Edit" (click)="OpenPatentCreateModal(PatientCreateModal,patient.id)">
               <i class="fas fa-edit"></i>
             </button>
-                        <button class="btn btn-sm btn-danger" (click)="deletePatient(patient.id)">
+                        <button class="btn btn-sm btn-danger" title="Delete" (click)="deletePatient(patient.id)">
               <i class="fas fa-trash"></i>
             </button>
                     </td>
                 </tr>
                 <tr *ngIf="filteredPatients.length === 0">
-                    <td colspan="6" class="text-center">No patients found</td>
+                    <td [attr.colspan]="getEmptyColspan()" class="text-center">
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h6>No patients found</h6>
+                            <p class="text-muted">Try adjusting filters or add a new patient.</p>
+                            <button *ngIf="canManage" class="btn btn-primary btn-sm" (click)="navigateToAddPatient()">
+                                <i class="fas fa-user-plus"></i> Add Patient
+                            </button>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

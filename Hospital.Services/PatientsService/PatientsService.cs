@@ -255,6 +255,24 @@ namespace Hospital.Services.PatientsService
                 interventionModel.FileModel.ActionType = ActionTypes.SurgicalIntervention;
                 var Attachments = await _attachmentsService.AddActionFiles(interventionModel.FileModel);
             }
+            if (!string.IsNullOrEmpty(interventionModel.DoctorId))
+            {
+                var SurgicalDoctors = new List<SurgicalDoctor>();
+                var DoctorIds = interventionModel.DoctorId.Split(',');
+                foreach (var doctorId in DoctorIds)
+                {
+                    var surgicalDoctor = new SurgicalDoctor
+                    {
+                        SurgicalInterventionId = surgicalIntervention.SurgicalInterventionId,
+                        DoctorId = int.Parse(doctorId),
+                    };
+
+                    SurgicalDoctors.Add(surgicalDoctor);
+                }
+
+                await _unitOfWork.Repository<SurgicalDoctor>().AddRangeAsync(SurgicalDoctors);
+                await _unitOfWork.CompleteAsync();
+            }
 
             return surgicalIntervention.SurgicalInterventionId;
         }
@@ -318,7 +336,9 @@ namespace Hospital.Services.PatientsService
                 Name = p.Name,
                 Age = p.Age,
                 Governorate = p.Governorate,
-                Gender = p.Gender
+                Gender = p.Gender,
+                CreatedBy = p.CreatedBy?.UserName,
+                UpdatedBy = p.UpdatedBy?.UserName
             }).ToList();
 
             return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);
@@ -396,7 +416,7 @@ namespace Hospital.Services.PatientsService
             existingPatient.Occupation = patientModel.Occupation;
             existingPatient.MaritalStatus = patientModel.MaritalStatus;
             existingPatient.ChildrenCount = patientModel.ChildrenCount;
-            existingPatient.UpdateUser = patientModel.UpdateUser;
+            existingPatient.UpdateUser = patientModel.InsertUser;
             existingPatient.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.Repository<Patient>().Update(existingPatient);
@@ -691,6 +711,8 @@ namespace Hospital.Services.PatientsService
                     .OrderByDescending(f => f.FollowUpId)   // or f.CreatedDate
                     .FirstOrDefault();
 
+                var SurgicalDoctors = await _unitOfWork.Repository<SurgicalDoctor>().WhereAsync(i => i.SurgicalInterventionId == lastSurgical.SurgicalInterventionId);
+
                 var result = new PatientLastDetailsDto
                 {
                     Patient = patient,
@@ -698,6 +720,11 @@ namespace Hospital.Services.PatientsService
                     LastSurgicalIntervention = lastSurgical,
                     LastFollowUp = lastFollowUp
                 };
+                if (SurgicalDoctors.Count > 0)
+                {
+                    var DoctorIds = string.Join(",", SurgicalDoctors.Select(i => i.DoctorId).ToList());
+                    result.LastSurgicalIntervention.DoctorId = DoctorIds;
+                }
 
                 return ApiResponseModel<PatientLastDetailsDto>
                     .Success(GenericErrors.AlreadyExists, result);

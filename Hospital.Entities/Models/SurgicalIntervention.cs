@@ -52,7 +52,7 @@ namespace Hospital.Entities.Models
         public string? FollowUpDoctorPhone { get; set; }
         public DateTime? FollowUpAppointment { get; set; }
         [NotMapped]
-        public string DoctorId { get; set; }
+        public string? DoctorId { get; set; }
 
         [NotMapped]
         public UploadFileModel? FileModel { get; set; }
