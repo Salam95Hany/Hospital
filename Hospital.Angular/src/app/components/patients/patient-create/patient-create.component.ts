@@ -70,8 +70,17 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     deletedFiles: []
   };
   // Doctors multi-select for Surgical step
-  DoctorsData: { id: string, name: string }[] = [];
-  SelectedDoctors: { id: number, name: string }[] = [];
+  //DoctorsData: { id: string, name: string }[] = [];
+  DoctorsData: { id: string, name: string, academicDegree: string }[] = [];
+  MainSurgeonDoctors: { id: string, name: string, academicDegree: string }[] = [];
+  AssistantDoctors: { id: string, name: string, academicDegree: string }[] = [];
+  ResidentDoctors: { id: string, name: string, academicDegree: string }[] = [];
+  SupervisorDoctors: { id: string, name: string, academicDegree: string }[] = [];
+
+  SelectedMainSurgeon: { id: number, name: string }[] = [];
+  SelectedAssistants: { id: number, name: string }[] = [];
+  SelectedResident: { id: number, name: string }[] = [];
+  SelectedSupervisor: { id: number, name: string }[] = [];
   DoctorPagingFilter: { filterList: any[]; currentpage: number; pagesize: number } = {
     filterList: [],
     currentpage: 1,
@@ -552,7 +561,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
         // Surgical group
         this.surgicalIntervention.patchValue({
-          doctorId: (surg.doctorId ?? surg.DoctorId ?? null) ? (surg.doctorId ?? surg.DoctorId).toString() : null,
           interventionDate: this.datePipe.transform(surg.interventionDate ?? surg.InterventionDate, 'yyyy-MM-dd') ?? null,
           theater: surg.theater ?? surg.Theater ?? null,
           mainSurgeon: surg.mainSurgeon ?? surg.MainSurgeon ?? null,
@@ -583,9 +591,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
           followUpAppointment: this.datePipe.transform(surg.followUpAppointment ?? surg.FollowUpAppointment, 'yyyy-MM-dd') ?? null,
         });
 
-        // Populate SelectedDoctors chips from doctorId string
-        const docStr = (this.surgicalIntervention?.get('doctorId')?.value || '').toString();
-        if (docStr) this.setSelectedDoctorsFromDoctorIdString(docStr);
+        // Role-based chips no longer derive from a doctorId CSV
 
         // Follow-up group
         this.followUp.patchValue({
@@ -770,7 +776,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
   createSurgicalInterventionFormGroup(): FormGroup {
     return this.fb.group({
-      doctorId: [null, [Validators.required]],
       interventionDate: [null],
       theater: [null],
       mainSurgeon: [null],
@@ -1020,8 +1025,23 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     setModel(this.surgicalIntervention, this.surgicalFiles, ActionTypes.SurgicalIntervention);
     setModel(this.followUp, this.followUpFiles, ActionTypes.FollowUp);
 
-    // Ensure doctorId is a comma-separated list from SelectedDoctors
-    const docList = this.SelectedDoctors.map(d => d.id).join(',');
+    // Sync role form controls to CSV of IDs from chip selections
+    const mainIds = this.SelectedMainSurgeon.map(a => a.id).join(',');
+    const assistantsIds = this.SelectedAssistants.map(a => a.id).join(',');
+    const residentIds = this.SelectedResident.map(a => a.id).join(',');
+    const supervisorIds = this.SelectedSupervisor.map(a => a.id).join(',');
+    this.surgicalIntervention.get('mainSurgeon')?.setValue(mainIds || null);
+    this.surgicalIntervention.get('assistants')?.setValue(assistantsIds || null);
+    this.surgicalIntervention.get('resident')?.setValue(residentIds || null);
+    this.surgicalIntervention.get('offFieldSupervisor')?.setValue(supervisorIds || null);
+
+    // Build doctorId CSV from unique IDs across all role selections
+    const uniqueIds = new Set<number>();
+    this.SelectedMainSurgeon.forEach(d => uniqueIds.add(d.id));
+    this.SelectedAssistants.forEach(d => uniqueIds.add(d.id));
+    this.SelectedResident.forEach(d => uniqueIds.add(d.id));
+    this.SelectedSupervisor.forEach(d => uniqueIds.add(d.id));
+    const docList = Array.from(uniqueIds).join(',');
     this.surgicalIntervention.get('doctorId')?.setValue(docList || null);
 
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
@@ -1125,31 +1145,77 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     };
   }
 
-  // Multi-doctor selection handlers (mirror surgical-intervention-create)
-  OnDoctorChange(doctorId: string) {
-    const obj = this.DoctorsData.find(i => i.id == doctorId);
-    const checked = this.SelectedDoctors.find(i => i.id == +doctorId);
-    if (obj && !checked) {
-      this.SelectedDoctors.push({ id: +obj.id, name: obj.name });
-    }
-  }
-
-  RemoveSelectedDoctor(doctorId: number) {
-    this.SelectedDoctors = this.SelectedDoctors.filter(i => i.id != doctorId);
-    if (this.SelectedDoctors.length === 0) {
-      this.surgicalIntervention.patchValue({ doctorId: null });
-    }
-  }
-
-  private setSelectedDoctorsFromDoctorIdString(ids: string) {
-    this.SelectedDoctors = [];
-    const doctorIds = (ids || '').toString().split(',').map(s => s.trim()).filter(Boolean);
-    doctorIds.forEach(id => {
-      const doctor = this.DoctorsData.find(i => i.id == id);
-      if (doctor) {
-        this.SelectedDoctors.push({ id: +doctor.id, name: doctor.name });
+  // Role-based doctor selection handlers
+  OnMainSurgeonChange(doctorId: string) {
+    const doc = this.MainSurgeonDoctors.find(i => i.id == doctorId);
+    if (doc) {
+      const exists = this.SelectedMainSurgeon.find(i => i.id == +doctorId);
+      if (!exists) {
+        this.SelectedMainSurgeon.push({ id: +doc.id, name: doc.name });
       }
-    });
+      const idsCsv = this.SelectedMainSurgeon.map(a => a.id).join(',');
+      this.surgicalIntervention.patchValue({ mainSurgeon: idsCsv });
+    }
+  }
+
+  OnAssistantChange(doctorId: string) {
+    const doc = this.AssistantDoctors.find(i => i.id == doctorId);
+    if (doc) {
+      const exists = this.SelectedAssistants.find(i => i.id == +doctorId);
+      if (!exists) {
+        this.SelectedAssistants.push({ id: +doc.id, name: doc.name });
+      }
+      const idsCsv = this.SelectedAssistants.map(a => a.id).join(',');
+      this.surgicalIntervention.patchValue({ assistants: idsCsv });
+    }
+  }
+
+  RemoveSelectedAssistant(doctorId: number) {
+    this.SelectedAssistants = this.SelectedAssistants.filter(i => i.id != doctorId);
+    const idsCsv = this.SelectedAssistants.map(a => a.id).join(',');
+    this.surgicalIntervention.patchValue({ assistants: idsCsv || null });
+  }
+
+  OnResidentChange(doctorId: string) {
+    const doc = this.ResidentDoctors.find(i => i.id == doctorId);
+    if (doc) {
+      const exists = this.SelectedResident.find(i => i.id == +doctorId);
+      if (!exists) {
+        this.SelectedResident.push({ id: +doc.id, name: doc.name });
+      }
+      const idsCsv = this.SelectedResident.map(a => a.id).join(',');
+      this.surgicalIntervention.patchValue({ resident: idsCsv });
+    }
+  }
+
+  OnSupervisorChange(doctorId: string) {
+    const doc = this.SupervisorDoctors.find(i => i.id == doctorId);
+    if (doc) {
+      const exists = this.SelectedSupervisor.find(i => i.id == +doctorId);
+      if (!exists) {
+        this.SelectedSupervisor.push({ id: +doc.id, name: doc.name });
+      }
+      const idsCsv = this.SelectedSupervisor.map(a => a.id).join(',');
+      this.surgicalIntervention.patchValue({ offFieldSupervisor: idsCsv });
+    }
+  }
+
+  RemoveSelectedMainSurgeon(doctorId: number) {
+    this.SelectedMainSurgeon = this.SelectedMainSurgeon.filter(i => i.id != doctorId);
+    const idsCsv = this.SelectedMainSurgeon.map(a => a.id).join(',');
+    this.surgicalIntervention.patchValue({ mainSurgeon: idsCsv || null });
+  }
+
+  RemoveSelectedResident(doctorId: number) {
+    this.SelectedResident = this.SelectedResident.filter(i => i.id != doctorId);
+    const idsCsv = this.SelectedResident.map(a => a.id).join(',');
+    this.surgicalIntervention.patchValue({ resident: idsCsv || null });
+  }
+
+  RemoveSelectedSupervisor(doctorId: number) {
+    this.SelectedSupervisor = this.SelectedSupervisor.filter(i => i.id != doctorId);
+    const idsCsv = this.SelectedSupervisor.map(a => a.id).join(',');
+    this.surgicalIntervention.patchValue({ offFieldSupervisor: idsCsv || null });
   }
 
 
@@ -1167,11 +1233,33 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
 private loadDoctors(): void {
     this.doctorService.GetAllDoctorData(this.DoctorPagingFilter).subscribe(res => {
-      this.DoctorsData = (res?.results || []).map((i: any) => ({ id: i.doctorId?.toString(), name: i.doctorName }));
-      // After doctors load, ensure SelectedDoctors reflects any existing form value
-      const docStr = (this.surgicalIntervention?.get('doctorId')?.value || '').toString();
-      if (docStr) this.setSelectedDoctorsFromDoctorIdString(docStr);
+      const all = (res?.results || []).map((i: any) => ({ id: i.doctorId?.toString(), name: i.doctorName, academicDegree: (i.academicDegree || '').toString() }));
+      debugger
+      this.DoctorsData = all;
+      // Use the same full list for four independent role selectors
+      this.MainSurgeonDoctors = all.filter(d => this.roleMatches('main surgeon', d.academicDegree));
+      this.AssistantDoctors = all.filter(d => this.roleMatches('assistants', d.academicDegree));
+      this.ResidentDoctors = all.filter(d => this.roleMatches('resident', d.academicDegree));
+      this.SupervisorDoctors = all.filter(d => this.roleMatches('off-field supervisor', d.academicDegree));
     });
+  }
+
+  private roleMatches(targetRole: string, actual: string): boolean {
+    const t = (targetRole || '').toLowerCase();
+    const a = (actual || '').toLowerCase().trim();
+    if (!a) return false;
+    switch (t) {
+      case 'main surgeon':
+        return a === 'main surgeon' || (a.includes('main') && a.includes('surgeon'));
+      case 'assistants':
+        return a === 'assistants' || a === 'assistant' || a.includes('assistant');
+      case 'resident':
+        return a === 'resident' || a.includes('resident');
+      case 'off-field supervisor':
+        return a === 'off-field supervisor' || a === 'off field supervisor' || a === 'supervisor' || a.includes('supervisor');
+      default:
+        return a === t;
+    }
   }
 }
   

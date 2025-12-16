@@ -185,11 +185,11 @@
                     <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-6">
                     </app-admin-drop-down>
 
-                    <app-admin-drop-down [data]="DoctorsData" [placeholder]="'Select Doctor'" [label]="'Doctor'" formControlName="doctorId" (valueChanged)="OnDoctorChange($event)" [error]="formErrors.doctorId" class="col-md-6">
+                    <app-admin-drop-down [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" (valueChanged)="OnMainSurgeonChange($event)" class="col-md-6">
                         <div class="selected-items-container">
                             <div class="d-flex align-items-center flex-wrap gap-2">
-                                <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedDoctors; let i = index">
-                                    <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedDoctor(selected.id)">
+                                <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedMainSurgeon; let i = index">
+                                    <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedMainSurgeon(selected.id)">
                                         <i class="fas fa-times"></i>
                                     </button>
                                     <span class="chip-label me-2">{{selected.name}}</span>
@@ -198,17 +198,46 @@
                         </div>
                     </app-admin-drop-down>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" class="col-md-6">
-                    </app-admin-general-input>
+                    <app-admin-drop-down [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" (valueChanged)="OnAssistantChange($event)" class="col-md-6">
+                        <div class="selected-items-container">
+                            <div class="d-flex align-items-center flex-wrap gap-2">
+                                <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedAssistants; let i = index">
+                                    <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedAssistant(selected.id)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <span class="chip-label me-2">{{selected.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </app-admin-drop-down>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Assistants'" [label]="'Assistants'" formControlName="assistants" class="col-md-6">
-                    </app-admin-general-input>
+                    <app-admin-drop-down [data]="ResidentDoctors" [placeholder]="'Select Resident'" [label]="'Resident'" (valueChanged)="OnResidentChange($event)" class="col-md-6">
+                        <div class="selected-items-container">
+                            <div class="d-flex align-items-center flex-wrap gap-2">
+                                <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedResident; let i = index">
+                                    <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedResident(selected.id)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <span class="chip-label me-2">{{selected.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </app-admin-drop-down>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Resident'" [label]="'Resident'" formControlName="resident" class="col-md-6">
-                    </app-admin-general-input>
+                    <app-admin-drop-down [data]="SupervisorDoctors" [placeholder]="'Select Off-Field Supervisor'" [label]="'Off-Field Supervisor'" (valueChanged)="OnSupervisorChange($event)" class="col-md-6">
+                        <div class="selected-items-container">
+                            <div class="d-flex align-items-center flex-wrap gap-2">
+                                <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedSupervisor; let i = index">
+                                    <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedSupervisor(selected.id)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <span class="chip-label me-2">{{selected.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </app-admin-drop-down>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Off-Field Supervisor'" [label]="'Off-Field Supervisor'" formControlName="offFieldSupervisor" class="col-md-6">
-                    </app-admin-general-input>
+                    
 
                     <app-admin-drop-down [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-6">
                     </app-admin-drop-down>
