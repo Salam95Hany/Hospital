@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hospital.Reports.Model
+namespace Hospital.Reports.Interface
 {
-    public enum ReportType
+    public interface IPDFHelper
     {
-        SurgicalIntervention,
+        string SaveHTMLResult(string HTML);
     }
 }

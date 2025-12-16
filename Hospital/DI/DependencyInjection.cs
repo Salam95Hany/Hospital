@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
+using RazorLight;
 using System.Text;
 
 namespace Hospital.DI
@@ -76,12 +77,23 @@ namespace Hospital.DI
 
             #region ReportsDI
 
+            services.AddSingleton<IRazorLightEngine>(serviceProvider =>
+            {
+                var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
+                var templatePath = Path.Combine(env.WebRootPath, "TemplatesHTML");
+                return new RazorLightEngineBuilder()
+                    .UseFileSystemProject(templatePath)
+                    .UseMemoryCachingProvider()
+                    .Build();
+            });
             services.Scan(scan => scan
             .FromApplicationDependencies()
             .AddClasses(c => c.AssignableTo<IReportGenerator>()).AsImplementedInterfaces().WithTransientLifetime());
             QuestPDF.Settings.License = LicenseType.Community;
             services.AddScoped<IReportGeneratorFactory, ReportGeneratorFactory>();
             services.AddScoped<IExportManagerService, ExportManagerService>();
+            services.AddScoped<IPDFHelper, PDFHelper>();
+
 
             #endregion
 
