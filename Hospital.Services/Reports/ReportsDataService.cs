@@ -17,19 +17,17 @@ namespace Hospital.Services.Reports
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Dictionary<string, string>> GetAdmissionTempData(int PatientId, int AdmissionId, int SurgicalId, int FollowUpId)
+        public async Task<Dictionary<string, string>> GetAdmissionTempData(int PatientId, int AdmissionId, int SurgicalId)
         {
             var Patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(PatientId);
             var Admission = await _unitOfWork.Repository<Admission>().GetByIdAsync(AdmissionId);
             var Surgical = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalId);
-            var FollowUp = await _unitOfWork.Repository<FollowUp>().GetByIdAsync(FollowUpId);
 
             var result = new Dictionary<string, string>();
 
             AddProps(result, Patient);
             AddProps(result, Admission);
             AddProps(result, Surgical);
-            AddProps(result, FollowUp);
 
             return result;
         }
