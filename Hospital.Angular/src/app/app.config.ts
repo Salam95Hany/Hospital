@@ -3,8 +3,9 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 
 // export const appConfig: ApplicationConfig = {
 //   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
@@ -13,6 +14,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    provideAnimations(),
     provideHttpClient(),
     provideToastr(),
     provideToastr({
@@ -24,7 +26,16 @@ export const appConfig: ApplicationConfig = {
     }),
     importProvidersFrom(
       BrowserAnimationsModule,
-      PaginationModule.forRoot()
+      PaginationModule.forRoot(),
+      NgxLoadingModule.forRoot({
+        animationType: ngxLoadingAnimationTypes.circleSwish,
+        backdropBackgroundColour: 'rgba(0, 0, 0, 0.5)',
+        backdropBorderRadius: '4px',
+        primaryColour: '#3b82f6',
+        secondaryColour: '#8b5cf6',
+        tertiaryColour: '#ec4899',
+        fullScreenBackdrop: true,
+      })
     )
   ]
 };

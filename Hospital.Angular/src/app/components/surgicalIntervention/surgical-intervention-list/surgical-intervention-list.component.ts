@@ -18,13 +18,14 @@ import { RoleCheckerDirective } from '../../../directives/role-checker.directive
 import { DoctorService } from '../../../services/doctor.service';
 import { DownloadFileService } from '../../../services/download-file.service';
 import { SearchReportModel } from '../../../models/SearchReportModel';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @Component({
   selector: 'app-surgical-intervention-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent,
-    AdminSliderImageComponent, RoleCheckerDirective],
+    AdminSliderImageComponent, RoleCheckerDirective,NgxLoadingModule],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
   providers: [DatePipe]
@@ -41,7 +42,7 @@ export class SurgicalInterventionListComponent implements OnInit {
   searchTerm: string = '';
   isFilter = true;
   showSlider = false;
-  BtnDisabled = false;
+  showLoader = false;
   selectedPatient: any = null;
   selectedAdmission: any = null;
   TotalCount = 0;
@@ -207,9 +208,9 @@ export class SurgicalInterventionListComponent implements OnInit {
   }
 
   DeleteItem() {
-    this.BtnDisabled = true;
+    this.showLoader = true;
     this.adminService.DeleteSurgicalIntervention(this.SurgicalInterventionId).subscribe(res => {
-      this.BtnDisabled = false;
+      this.showLoader = false;
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllSurgicalIntervention();
@@ -239,9 +240,9 @@ export class SurgicalInterventionListComponent implements OnInit {
     ];
     let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd-HHmmss');
     let fileName = 'SurgicalIntervention' + '_' + today;
-    this.BtnDisabled = true;
+    this.showLoader = true;
     this.fileService.DownloadFile(this.ReportModel, fileName + '.pdf').subscribe(data => {
-      this.BtnDisabled = false;
+      this.showLoader = false;
     });
   }
 }
