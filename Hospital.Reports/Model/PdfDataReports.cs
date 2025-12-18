@@ -24,14 +24,17 @@ namespace Hospital.Reports.Model
             return value;
         }
 
-        public bool IsArabicWord(string text)
+        public string GetTdDirectionStyle(string text)
         {
-            if (string.IsNullOrWhiteSpace(text)) return false;
+            if (string.IsNullOrWhiteSpace(text))
+                return "dir='ltr' style='padding-left:5px;'";
 
-            if (text.Any(c => c >= 0x0600 && c <= 0x06FF))
-                return true;
+            bool hasArabic = text.Any(c => c >= 0x0600 && c <= 0x06FF);
+
+            if (hasArabic)
+                return "dir='rtl' style='padding-right:5px;'";
             else
-                return false;
+                return "dir='ltr' style='padding-left:5px;'";
         }
     }
 }

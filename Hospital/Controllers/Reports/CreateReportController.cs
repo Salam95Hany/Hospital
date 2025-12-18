@@ -32,7 +32,6 @@ namespace Hospital.Controllers.Reports
                 return null;
             }
 
-            return Ok(FilePath);
             var FileExtenstion = Path.GetExtension(FilePath);
             return new TempPhysicalFileResult(FilePath, $"application/{FileExtenstion}");
         }

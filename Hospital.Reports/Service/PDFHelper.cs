@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.Reports.Service
 {
-    public class PDFHelper: IPDFHelper
+    public class PDFHelper : IPDFHelper
     {
         private readonly IWebHostEnvironment _environment;
         private readonly PdfFont _pdfFont;
@@ -95,6 +95,7 @@ namespace Hospital.Reports.Service
                 {
                     FontProvider fontProvider = new FontProvider();
                     fontProvider.AddFont(_pdfFont.GetFontProgram());
+                    fontProvider.AddFont(System.IO.Path.Combine(_environment.WebRootPath, "Fonts", "Cairo-Black.ttf"));
                     ConverterProperties properties = new ConverterProperties();
                     properties.SetCharset("UTF-8");
                     properties.SetFontProvider(fontProvider);
@@ -115,7 +116,7 @@ namespace Hospital.Reports.Service
                 throw;
             }
         }
-        
+
 
         public string ClearAngularAttrFromHTML(string HTML)
         {
@@ -127,6 +128,7 @@ namespace Hospital.Reports.Service
                 HTML = Regex.Replace(HTML, "( _nghost-ng-cli-universal-c| _ngcontent-ng-cli-universal-c)[1-9]*=\"\"", "");
                 HTML = Regex.Replace(HTML, "<!--([a-z]+)(?![^>]*\\/>)[^>]*-->", "");
                 HTML = Regex.Replace(HTML, @"\s_ngcontent-[a-zA-Z0-9\-]+?=""[^""]*""", "");
+                HTML = HTML.Replace("&#x27;", "");
 
                 return HTML;
             }

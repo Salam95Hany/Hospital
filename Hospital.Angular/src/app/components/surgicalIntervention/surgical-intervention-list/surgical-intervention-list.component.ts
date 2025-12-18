@@ -16,6 +16,8 @@ import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 import { DoctorService } from '../../../services/doctor.service';
+import { DownloadFileService } from '../../../services/download-file.service';
+import { SearchReportModel } from '../../../models/SearchReportModel';
 
 @Component({
   selector: 'app-surgical-intervention-list',
@@ -54,20 +56,19 @@ export class SurgicalInterventionListComponent implements OnInit {
     pagesize: 1000
   };
   FilterList: FilterModel[] = [
-    // {
-    //   categoryDisplayName: "Name",
-    //   categoryName: "SearchText",
-    //   filterType: "SearchText"
-    // },
     {
       categoryDisplayName: "Intervention Date",
       categoryName: "Intervention Date",
       filterType: "DateRange"
     }
   ];
+  ReportModel: SearchReportModel = {
+    reportType: 'SurgicalIntervention',
+    queryString: []
+  };
 
   constructor(private adminService: AdminService, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe,
-    private doctorService: DoctorService
+    private doctorService: DoctorService, private fileService: DownloadFileService
   ) { }
 
   ngOnInit(): void {
@@ -215,6 +216,32 @@ export class SurgicalInterventionListComponent implements OnInit {
         this.modalService.dismissAll();
       } else
         this.toaster.error(res.message);
+    });
+  }
+
+  DownloadPdfFile(surgicalId: any) {
+    if (!this.PatientId) {
+      this.toaster.warning('Please select patient');
+      return;
+    }
+    if (!this.AdmissionId) {
+      this.toaster.warning('Please select admission');
+      return;
+    }
+    if (this.SurgicalInterventions.length == 0) {
+      this.toaster.warning('No data found to export');
+      return;
+    }
+    this.ReportModel.queryString = [
+      { key: 'PatientId', value: this.PatientId.toString() },
+      { key: 'AdmissionId', value: this.AdmissionId.toString() },
+      { key: 'SurgicalId', value: surgicalId.toString() }
+    ];
+    let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd-HHmmss');
+    let fileName = 'SurgicalIntervention' + '_' + today;
+    this.BtnDisabled = true;
+    this.fileService.DownloadFile(this.ReportModel, fileName + '.pdf').subscribe(data => {
+      this.BtnDisabled = false;
     });
   }
 }

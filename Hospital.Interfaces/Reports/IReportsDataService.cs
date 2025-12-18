@@ -9,6 +9,6 @@ namespace Hospital.Interfaces.Reports
 {
     public interface IReportsDataService
     {
-        Task<Dictionary<string, string>> GetAdmissionTempData(int PatientId, int AdmissionId, int SurgicalId);
+        Task<Dictionary<string, string>> GetAdmissionTempData(int? PatientId, int? AdmissionId, int? SurgicalId, int? FollowUpId);
     }
 }
