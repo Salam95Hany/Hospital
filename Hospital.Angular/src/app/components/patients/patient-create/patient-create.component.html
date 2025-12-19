@@ -185,7 +185,7 @@
                     <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-6">
                     </app-admin-drop-down>
 
-<app-admin-drop-down [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" [(ngModel)]="mainSurgeonSelectorValue" (valueChanged)="OnMainSurgeonChange($event)" class="col-md-6">
+<app-admin-drop-down [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" [(ngModel)]="mainSurgeonSelectorValue" [ngModelOptions]="{standalone: true}" (valueChanged)="OnMainSurgeonChange($event)" class="col-md-6">
                         <div class="selected-items-container">
                             <div class="d-flex align-items-center flex-wrap gap-2">
                                 <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedMainSurgeon; let i = index">
@@ -198,7 +198,7 @@
                         </div>
                     </app-admin-drop-down>
 
-<app-admin-drop-down [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" [(ngModel)]="assistantSelectorValue" (valueChanged)="OnAssistantChange($event)" class="col-md-6">
+<app-admin-drop-down [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" [(ngModel)]="assistantSelectorValue" [ngModelOptions]="{standalone: true}" (valueChanged)="OnAssistantChange($event)" class="col-md-6">
                         <div class="selected-items-container">
                             <div class="d-flex align-items-center flex-wrap gap-2">
                                 <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedAssistants; let i = index">
@@ -211,7 +211,7 @@
                         </div>
                     </app-admin-drop-down>
 
-<app-admin-drop-down [data]="ResidentDoctors" [placeholder]="'Select Resident'" [label]="'Resident'" [(ngModel)]="residentSelectorValue" (valueChanged)="OnResidentChange($event)" class="col-md-6">
+<app-admin-drop-down [data]="ResidentDoctors" [placeholder]="'Select Resident'" [label]="'Resident'" [(ngModel)]="residentSelectorValue" [ngModelOptions]="{standalone: true}" (valueChanged)="OnResidentChange($event)" class="col-md-6">
                         <div class="selected-items-container">
                             <div class="d-flex align-items-center flex-wrap gap-2">
                                 <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedResident; let i = index">
@@ -224,7 +224,7 @@
                         </div>
                     </app-admin-drop-down>
 
-<app-admin-drop-down [data]="SupervisorDoctors" [placeholder]="'Select Off-Field Supervisor'" [label]="'Off-Field Supervisor'" [(ngModel)]="supervisorSelectorValue" (valueChanged)="OnSupervisorChange($event)" class="col-md-6">
+<app-admin-drop-down [data]="SupervisorDoctors" [placeholder]="'Select Off-Field Supervisor'" [label]="'Off-Field Supervisor'" [(ngModel)]="supervisorSelectorValue" [ngModelOptions]="{standalone: true}" (valueChanged)="OnSupervisorChange($event)" class="col-md-6">
                         <div class="selected-items-container">
                             <div class="d-flex align-items-center flex-wrap gap-2">
                                 <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedSupervisor; let i = index">
