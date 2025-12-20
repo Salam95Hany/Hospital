@@ -33,8 +33,12 @@ import { NgxLoadingModule } from 'ngx-loading';
 export class SurgicalInterventionListComponent implements OnInit {
   SurgicalInterventions: any[] = [];
   ImportedFiles: FilesModel[] = [];
-  DoctorsData: { id: string, name: string }[] = [];
+  DoctorsData: { id: string, name: string, academicDegree: string }[] = [];
   SelectedDoctors: { id: number, name: string }[] = [];
+  SelectedMainSurgeon: { id: number, name: string }[] = [];
+  SelectedAssistants: { id: number, name: string }[] = [];
+  SelectedResident: { id: number, name: string }[] = [];
+  SelectedSupervisor: { id: number, name: string }[] = [];
   SurgicalObj: any;
   PatientId: number;
   AdmissionId: number;
@@ -78,7 +82,7 @@ export class SurgicalInterventionListComponent implements OnInit {
 
   GetAllDoctorData(): void {
     this.doctorService.GetAllDoctorData(this.DoctorPagingFilter).subscribe(res => {
-      this.DoctorsData = res.results.map(i => { return { id: i.doctorId?.toString(), name: i.doctorName } });
+      this.DoctorsData = res.results.map(i => { return { id: i.doctorId?.toString(), name: i.doctorName, academicDegree: (i.academicDegree || '').toString() } });
     });
   }
 
@@ -119,16 +123,41 @@ export class SurgicalInterventionListComponent implements OnInit {
           }
         });
 
-        this.SurgicalObj.doctorName = this.DoctorsData.find(d => d.id == this.SurgicalObj.doctorId)?.name ?? '';
-        if (this.SurgicalObj.doctorId) {
-          let doctorIds = this.SurgicalObj.doctorId.split(',');
-          doctorIds.forEach((id: string) => {
-            let doctor = this.DoctorsData.find(i => i.id == id);
-            if (doctor) {
-              this.SelectedDoctors.push({ id: +doctor.id, name: doctor.name });
-            }
-          });
-        }
+        this.SelectedDoctors = [];
+        this.SelectedMainSurgeon = [];
+        this.SelectedAssistants = [];
+        this.SelectedResident = [];
+        this.SelectedSupervisor = [];
+        const mapCsv = (csv: string | null | undefined): { id: number, name: string }[] => {
+          const raw = (csv ?? '').toString();
+          if (!raw.trim()) return [];
+          const ids = raw.split(',').map(s => s.trim()).filter(Boolean);
+          return ids.map(idStr => {
+            const doc = this.DoctorsData.find(d => d.id == idStr);
+            const id = Number(idStr);
+            return { id, name: doc?.name ?? '' };
+          }).filter(d => !!d.id);
+        };
+        const extract = (arr: any[] | undefined): { id: number, name: string }[] => {
+          const list = Array.isArray(arr) ? arr : [];
+          return list
+            .map(d => ({ id: Number(d?.doctorId ?? d?.DoctorId ?? 0), name: (d?.doctorName ?? d?.DoctorName ?? '').toString() }))
+            .filter(d => !!d.id && !!d.name);
+        };
+        const ms = extract(this.SurgicalObj?.mainSurgeonDetails ?? this.SurgicalObj?.MainSurgeonDetails);
+        const asst = extract(this.SurgicalObj?.assistantsDetails ?? this.SurgicalObj?.AssistantsDetails);
+        const resi = extract(this.SurgicalObj?.residentDetails ?? this.SurgicalObj?.ResidentDetails);
+        const sup = extract(this.SurgicalObj?.offFieldSupervisorDetails ?? this.SurgicalObj?.OffFieldSupervisorDetails);
+        this.SelectedMainSurgeon = ms.length ? ms : mapCsv(this.SurgicalObj?.mainSurgeon);
+        this.SelectedAssistants = asst.length ? asst : mapCsv(this.SurgicalObj?.assistants);
+        this.SelectedResident = resi.length ? resi : mapCsv(this.SurgicalObj?.resident);
+        this.SelectedSupervisor = sup.length ? sup : mapCsv(this.SurgicalObj?.offFieldSupervisor);
+        const unionIds = new Set<number>();
+        [...this.SelectedMainSurgeon, ...this.SelectedAssistants, ...this.SelectedResident, ...this.SelectedSupervisor].forEach(d => unionIds.add(d.id));
+        this.SelectedDoctors = Array.from(unionIds).map(id => {
+          const doc = this.DoctorsData.find(d => +d.id === id);
+          return { id, name: doc?.name ?? '' };
+        });
       }
     });
   }

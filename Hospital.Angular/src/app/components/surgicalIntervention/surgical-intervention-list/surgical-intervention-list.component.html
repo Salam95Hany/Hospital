@@ -151,10 +151,40 @@
                 </app-admin-general-input>
 
                 <div class="col-md-6">
-                    <label class="form-label">Doctor</label>
+                    <label class="form-label">Main Surgeon(s)</label>
                     <div class="selected-items-container">
                         <div class="d-flex align-items-center flex-wrap gap-2">
-                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedDoctors;let i = index">
+                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedMainSurgeon;let i = index">
+                                <span class="chip-label me-2">{{selected.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Assistants</label>
+                    <div class="selected-items-container">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedAssistants;let i = index">
+                                <span class="chip-label me-2">{{selected.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Resident(s)</label>
+                    <div class="selected-items-container">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedResident;let i = index">
+                                <span class="chip-label me-2">{{selected.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Off-Field Supervisor(s)</label>
+                    <div class="selected-items-container">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedSupervisor;let i = index">
                                 <span class="chip-label me-2">{{selected.name}}</span>
                             </div>
                         </div>
