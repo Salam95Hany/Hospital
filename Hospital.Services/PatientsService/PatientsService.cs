@@ -678,16 +678,74 @@ namespace Hospital.Services.PatientsService
                 return ApiResponseModel<PatientFullDetailsDto>.Failure(GenericErrors.NotFound);
             }
         }
+        //public async Task<ApiResponseModel<PatientLastDetailsDto>> GetPatientWithLastDetailsAsync(int patientId, CancellationToken cancellationToken = default)
+        //{
+        //    try
+        //    {
+        //        var patient = await _unitOfWork.Repository<Patient>().GetByIdWithIncludeAsync(
+        //        p => p.PatientId == patientId,
+        //        q => q
+        //        .Include(p => p.Admissions)
+        //          .ThenInclude(a => a.SurgicalInterventions)
+        //            .ThenInclude(si => si.FollowUps),cancellationToken
+        //        );
+
+        //        if (patient == null)
+        //        {
+        //            return ApiResponseModel<PatientLastDetailsDto>
+        //                .Failure(GenericErrors.NotFound);
+        //        }
+
+        //        // ✅ Get LAST admission (by Id or CreatedDate)
+        //        var lastAdmission = patient.Admissions?
+        //            .OrderByDescending(a => a.AdmissionId)   // or a.CreatedDate
+        //            .FirstOrDefault();
+
+        //        // ✅ Get LAST surgical intervention
+        //        var lastSurgical = lastAdmission?.SurgicalInterventions?
+        //            .OrderByDescending(si => si.SurgicalInterventionId)  // or si.CreatedDate
+        //            .FirstOrDefault();
+
+        //        // ✅ Get LAST follow-up
+        //        var lastFollowUp = lastSurgical?.FollowUps?
+        //            .OrderByDescending(f => f.FollowUpId)   // or f.CreatedDate
+        //            .FirstOrDefault();
+
+        //        var SurgicalDoctors = await _unitOfWork.Repository<SurgicalDoctor>().WhereAsync(i => i.SurgicalInterventionId == lastSurgical.SurgicalInterventionId);
+
+        //        var result = new PatientLastDetailsDto
+        //        {
+        //            Patient = patient,
+        //            LastAdmission = lastAdmission,
+        //            LastSurgicalIntervention = lastSurgical,
+        //            LastFollowUp = lastFollowUp
+        //        };
+        //        if (SurgicalDoctors.Count > 0)
+        //        {
+        //            var DoctorIds = string.Join(",", SurgicalDoctors.Select(i => i.DoctorId).ToList());
+        //            result.LastSurgicalIntervention.DoctorId = DoctorIds;
+        //        }
+
+        //        return ApiResponseModel<PatientLastDetailsDto>
+        //            .Success(GenericErrors.AlreadyExists, result);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return ApiResponseModel<PatientLastDetailsDto>
+        //            .Failure(GenericErrors.NotFound);
+        //    }
+        //}
         public async Task<ApiResponseModel<PatientLastDetailsDto>> GetPatientWithLastDetailsAsync(int patientId, CancellationToken cancellationToken = default)
         {
             try
             {
                 var patient = await _unitOfWork.Repository<Patient>().GetByIdWithIncludeAsync(
-                p => p.PatientId == patientId,
-                q => q
-                .Include(p => p.Admissions)
-                  .ThenInclude(a => a.SurgicalInterventions)
-                    .ThenInclude(si => si.FollowUps),cancellationToken
+                    p => p.PatientId == patientId,
+                    q => q
+                        .Include(p => p.Admissions)
+                            .ThenInclude(a => a.SurgicalInterventions)
+                                .ThenInclude(si => si.FollowUps),
+                    cancellationToken
                 );
 
                 if (patient == null)
@@ -696,22 +754,76 @@ namespace Hospital.Services.PatientsService
                         .Failure(GenericErrors.NotFound);
                 }
 
-                // ✅ Get LAST admission (by Id or CreatedDate)
+                // ✅ Get LAST admission
                 var lastAdmission = patient.Admissions?
-                    .OrderByDescending(a => a.AdmissionId)   // or a.CreatedDate
+                    .OrderByDescending(a => a.AdmissionId)
                     .FirstOrDefault();
 
                 // ✅ Get LAST surgical intervention
                 var lastSurgical = lastAdmission?.SurgicalInterventions?
-                    .OrderByDescending(si => si.SurgicalInterventionId)  // or si.CreatedDate
+                    .OrderByDescending(si => si.SurgicalInterventionId)
                     .FirstOrDefault();
 
                 // ✅ Get LAST follow-up
                 var lastFollowUp = lastSurgical?.FollowUps?
-                    .OrderByDescending(f => f.FollowUpId)   // or f.CreatedDate
+                    .OrderByDescending(f => f.FollowUpId)
                     .FirstOrDefault();
 
-                var SurgicalDoctors = await _unitOfWork.Repository<SurgicalDoctor>().WhereAsync(i => i.SurgicalInterventionId == lastSurgical.SurgicalInterventionId);
+                // ✅ Get all doctor IDs from the surgical intervention
+                if (lastSurgical != null)
+                {
+                    var allDoctorIds = new List<int>();
+
+                    // Collect all doctor IDs from the comma-separated strings
+                    if (!string.IsNullOrEmpty(lastSurgical.MainSurgeon))
+                        allDoctorIds.AddRange(lastSurgical.MainSurgeon.Split(',').Select(id => int.Parse(id.Trim())));
+
+                    if (!string.IsNullOrEmpty(lastSurgical.Assistants))
+                        allDoctorIds.AddRange(lastSurgical.Assistants.Split(',').Select(id => int.Parse(id.Trim())));
+
+                    if (!string.IsNullOrEmpty(lastSurgical.Resident))
+                        allDoctorIds.AddRange(lastSurgical.Resident.Split(',').Select(id => int.Parse(id.Trim())));
+
+                    if (!string.IsNullOrEmpty(lastSurgical.OffFieldSupervisor))
+                        allDoctorIds.AddRange(lastSurgical.OffFieldSupervisor.Split(',').Select(id => int.Parse(id.Trim())));
+
+                    // Remove duplicates
+                    allDoctorIds = allDoctorIds.Distinct().ToList();
+
+                    if (allDoctorIds.Any())
+                    {
+                        // Fetch all doctors in one query
+                        var doctors = await _unitOfWork.Repository<Doctor>()
+                            .WhereAsync(d => allDoctorIds.Contains(d.DoctorId) && !d.IsDeleted);
+
+                        // Create a dictionary for quick lookup
+                        var doctorDictionary = doctors.ToDictionary(d => d.DoctorId, d => d);
+
+                        // Helper method to get doctor details
+                        List<DoctorDetailsDto> GetDoctorDetails(string? doctorIds)
+                        {
+                            if (string.IsNullOrEmpty(doctorIds))
+                                return new List<DoctorDetailsDto>();
+
+                            return doctorIds.Split(',')
+                                .Select(id => int.Parse(id.Trim()))
+                                .Where(id => doctorDictionary.ContainsKey(id))
+                                .Select(id => new DoctorDetailsDto
+                                {
+                                    DoctorId = doctorDictionary[id].DoctorId,
+                                    DoctorName = doctorDictionary[id].DoctorName,
+                                    AcademicDegree = doctorDictionary[id].AcademicDegree
+                                })
+                                .ToList();
+                        }
+
+                        // Populate doctor details for each role
+                        lastSurgical.MainSurgeonDetails = GetDoctorDetails(lastSurgical.MainSurgeon);
+                        lastSurgical.AssistantsDetails = GetDoctorDetails(lastSurgical.Assistants);
+                        lastSurgical.ResidentDetails = GetDoctorDetails(lastSurgical.Resident);
+                        lastSurgical.OffFieldSupervisorDetails = GetDoctorDetails(lastSurgical.OffFieldSupervisor);
+                    }
+                }
 
                 var result = new PatientLastDetailsDto
                 {
@@ -720,11 +832,6 @@ namespace Hospital.Services.PatientsService
                     LastSurgicalIntervention = lastSurgical,
                     LastFollowUp = lastFollowUp
                 };
-                if (SurgicalDoctors.Count > 0)
-                {
-                    var DoctorIds = string.Join(",", SurgicalDoctors.Select(i => i.DoctorId).ToList());
-                    result.LastSurgicalIntervention.DoctorId = DoctorIds;
-                }
 
                 return ApiResponseModel<PatientLastDetailsDto>
                     .Success(GenericErrors.AlreadyExists, result);

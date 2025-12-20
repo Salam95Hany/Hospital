@@ -62,5 +62,17 @@ namespace Hospital.Entities.Models
 
         public ICollection<FollowUp> FollowUps { get; set; } = new List<FollowUp>();
 
+        [NotMapped] // If in entity class
+        public List<DoctorDetailsDto>? MainSurgeonDetails { get; set; }
+
+        [NotMapped]
+        public List<DoctorDetailsDto>? AssistantsDetails { get; set; }
+
+        [NotMapped]
+        public List<DoctorDetailsDto>? ResidentDetails { get; set; }
+
+        [NotMapped]
+        public List<DoctorDetailsDto>? OffFieldSupervisorDetails { get; set; }
+
     }
 }

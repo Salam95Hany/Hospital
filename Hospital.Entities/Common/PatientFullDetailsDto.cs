@@ -21,4 +21,11 @@ namespace Hospital.Entities.Common
         public SurgicalIntervention LastSurgicalIntervention { get; set; }
         public FollowUp LastFollowUp { get; set; }
     }
+
+    public class DoctorDetailsDto
+    {
+        public int DoctorId { get; set; }
+        public string DoctorName { get; set; }
+        public string? AcademicDegree { get; set; }
+    }
 }
