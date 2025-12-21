@@ -93,16 +93,16 @@
                 <app-admin-general-input [placeholder]="'Theater'" [label]="'Theater'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.theater ?? ''">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'text'" [placeholder]="'Main Surgeon'" [label]="'Main Surgeon'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.mainSurgeon ?? ''">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Main Surgeon'" [label]="'Main Surgeon'" class="col-md-4" [disabled]="true" [valueBind]="mainSurgeonNames">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'text'" [placeholder]="'Assistants'" [label]="'Assistants'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.assistants ?? ''">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Assistants'" [label]="'Assistants'" class="col-md-4" [disabled]="true" [valueBind]="assistantsNames">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'text'" [placeholder]="'Resident'" [label]="'Resident'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.resident ?? ''">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Resident'" [label]="'Resident'" class="col-md-4" [disabled]="true" [valueBind]="residentNames">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'text'" [placeholder]="'Off-Field Supervisor'" [label]="'Off-Field Supervisor'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.offFieldSupervisor ?? ''">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Off-Field Supervisor'" [label]="'Off-Field Supervisor'" class="col-md-4" [disabled]="true" [valueBind]="supervisorNames">
                 </app-admin-general-input>
 
                 <app-admin-general-input [placeholder]="'Anesthesia'" [label]="'Anesthesia'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.anesthesia ?? ''">
@@ -150,7 +150,7 @@
                 <app-admin-general-input [placeholder]="'Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" class="col-md-4" [disabled]="true" [valueBind]="SurgicalObj?.postOpDayOver5 ?? ''">
                 </app-admin-general-input>
 
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <label class="form-label">Main Surgeon(s)</label>
                     <div class="selected-items-container">
                         <div class="d-flex align-items-center flex-wrap gap-2">
@@ -189,7 +189,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" class="col-md-12" [disabled]="true" [valueBind]="SurgicalObj?.postOpAdverseEvents ?? ''">

@@ -43,17 +43,82 @@ namespace Hospital.Services
             return ApiResponseModel<List<SurgicalInterventionDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
         }
 
+        //public async Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId)
+        //{
+        //    var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalInterventionId);
+        //    var SurgicalDoctors = await _unitOfWork.Repository<SurgicalDoctor>().WhereAsync(i => i.SurgicalInterventionId == SurgicalInterventionId);
+        //    if (SurgicalDoctors.Count > 0)
+        //    {
+        //        var DoctorIds = string.Join(",", SurgicalDoctors.Select(i => i.DoctorId).ToList());
+        //        Results.DoctorId = DoctorIds;
+        //    }
+
+        //    return ApiResponseModel<SurgicalIntervention>.Success(GenericErrors.GetSuccess, Results);
+        //}
         public async Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId)
         {
-            var Results = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalInterventionId);
-            var SurgicalDoctors = await _unitOfWork.Repository<SurgicalDoctor>().WhereAsync(i => i.SurgicalInterventionId == SurgicalInterventionId);
-            if (SurgicalDoctors.Count > 0)
+            var surgicalIntervention = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalInterventionId);
+
+            if (surgicalIntervention == null)
             {
-                var DoctorIds = string.Join(",", SurgicalDoctors.Select(i => i.DoctorId).ToList());
-                Results.DoctorId = DoctorIds;
+                return ApiResponseModel<SurgicalIntervention>
+                    .Failure(GenericErrors.NotFound);
             }
 
-            return ApiResponseModel<SurgicalIntervention>.Success(GenericErrors.GetSuccess, Results);
+            // Collect all doctor IDs from the comma-separated strings
+            var allDoctorIds = new List<int>();
+
+            if (!string.IsNullOrEmpty(surgicalIntervention.MainSurgeon))
+                allDoctorIds.AddRange(surgicalIntervention.MainSurgeon.Split(',').Select(id => int.Parse(id.Trim())));
+
+            if (!string.IsNullOrEmpty(surgicalIntervention.Assistants))
+                allDoctorIds.AddRange(surgicalIntervention.Assistants.Split(',').Select(id => int.Parse(id.Trim())));
+
+            if (!string.IsNullOrEmpty(surgicalIntervention.Resident))
+                allDoctorIds.AddRange(surgicalIntervention.Resident.Split(',').Select(id => int.Parse(id.Trim())));
+
+            if (!string.IsNullOrEmpty(surgicalIntervention.OffFieldSupervisor))
+                allDoctorIds.AddRange(surgicalIntervention.OffFieldSupervisor.Split(',').Select(id => int.Parse(id.Trim())));
+
+            // Remove duplicates
+            allDoctorIds = allDoctorIds.Distinct().ToList();
+
+            if (allDoctorIds.Any())
+            {
+                // Fetch all doctors in one query
+                var doctors = await _unitOfWork.Repository<Doctor>()
+                    .WhereAsync(d => allDoctorIds.Contains(d.DoctorId) && !d.IsDeleted);
+
+                // Create a dictionary for quick lookup
+                var doctorDictionary = doctors.ToDictionary(d => d.DoctorId, d => d);
+
+                // Helper method to get doctor details
+                List<DoctorDetailsDto> GetDoctorDetails(string? doctorIds)
+                {
+                    if (string.IsNullOrEmpty(doctorIds))
+                        return new List<DoctorDetailsDto>();
+
+                    return doctorIds.Split(',')
+                        .Select(id => int.Parse(id.Trim()))
+                        .Where(id => doctorDictionary.ContainsKey(id))
+                        .Select(id => new DoctorDetailsDto
+                        {
+                            DoctorId = doctorDictionary[id].DoctorId,
+                            DoctorName = doctorDictionary[id].DoctorName,
+                            AcademicDegree = doctorDictionary[id].AcademicDegree
+                        })
+                        .ToList();
+                }
+
+                // Populate doctor details for each role in the SurgicalIntervention object
+                surgicalIntervention.MainSurgeonDetails = GetDoctorDetails(surgicalIntervention.MainSurgeon);
+                surgicalIntervention.AssistantsDetails = GetDoctorDetails(surgicalIntervention.Assistants);
+                surgicalIntervention.ResidentDetails = GetDoctorDetails(surgicalIntervention.Resident);
+                surgicalIntervention.OffFieldSupervisorDetails = GetDoctorDetails(surgicalIntervention.OffFieldSupervisor);
+            }
+
+            return ApiResponseModel<SurgicalIntervention>
+                .Success(GenericErrors.GetSuccess, surgicalIntervention);
         }
 
         public async Task<ApiResponseModel<string>> AddNewSurgicalIntervention(SurgicalIntervention Model)

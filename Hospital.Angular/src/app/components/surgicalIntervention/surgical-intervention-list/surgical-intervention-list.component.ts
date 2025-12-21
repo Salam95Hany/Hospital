@@ -39,6 +39,10 @@ export class SurgicalInterventionListComponent implements OnInit {
   SelectedAssistants: { id: number, name: string }[] = [];
   SelectedResident: { id: number, name: string }[] = [];
   SelectedSupervisor: { id: number, name: string }[] = [];
+  mainSurgeonNames: string = '';
+  assistantsNames: string = '';
+  residentNames: string = '';
+  supervisorNames: string = '';
   SurgicalObj: any;
   PatientId: number;
   AdmissionId: number;
@@ -152,6 +156,10 @@ export class SurgicalInterventionListComponent implements OnInit {
         this.SelectedAssistants = asst.length ? asst : mapCsv(this.SurgicalObj?.assistants);
         this.SelectedResident = resi.length ? resi : mapCsv(this.SurgicalObj?.resident);
         this.SelectedSupervisor = sup.length ? sup : mapCsv(this.SurgicalObj?.offFieldSupervisor);
+        this.mainSurgeonNames = this.SelectedMainSurgeon.map(s => s.name).join(', ');
+        this.assistantsNames = this.SelectedAssistants.map(s => s.name).join(', ');
+        this.residentNames = this.SelectedResident.map(s => s.name).join(', ');
+        this.supervisorNames = this.SelectedSupervisor.map(s => s.name).join(', ');
         const unionIds = new Set<number>();
         [...this.SelectedMainSurgeon, ...this.SelectedAssistants, ...this.SelectedResident, ...this.SelectedSupervisor].forEach(d => unionIds.add(d.id));
         this.SelectedDoctors = Array.from(unionIds).map(id => {
