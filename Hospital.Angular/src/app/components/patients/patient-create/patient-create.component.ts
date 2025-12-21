@@ -730,8 +730,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
   createAdmissionFormGroup(): FormGroup {
     return this.fb.group({
-      hospitalFileNumber: null,
-      admissionDate: null,
+      hospitalFileNumber: ['', [Validators.required]],
+      admissionDate: ['', [Validators.required]],
       dischargeDate: null,
       hospitalStates: null,
       hospitalBranch: ['', [Validators.required]],

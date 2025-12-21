@@ -139,7 +139,7 @@ export class AdmissionCreateComponent implements OnInit {
       admissionId: 0,
       patientId: 0,
       hospitalFileNumber: ['', [Validators.required]],
-      admissionDate: ['', [CustomValidators.dateLessThanToday(new Date(), 'Admission date must be after or equal today')]],
+      admissionDate: ['', [Validators.required, CustomValidators.dateLessThanToday(new Date(), 'Admission date must be after or equal today')]],
       dischargeDate: ['', [CustomValidators.dateLessThanToday(new Date(), 'Discharge date must be after or equal today')]],
       hospitalBranch: ['', [Validators.required]],
       chiefComplaint: ['', [Validators.required]],

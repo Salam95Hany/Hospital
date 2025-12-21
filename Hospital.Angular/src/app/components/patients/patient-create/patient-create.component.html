@@ -33,7 +33,7 @@
     <form [formGroup]="patientForm" (ngSubmit)="savePatient()">
         <!-- Step 1: Patient Information -->
         <div *ngIf="isReadOnly || currentStep === 1" class="step-content" formGroupName="patient">
-            <h3 class="step-heading">Patient Information</h3>
+            <h3 class="step-heading"><i class="fas fa-user text-primary"></i> Patient Information</h3>
             <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
                     <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
@@ -55,7 +55,7 @@
         <!-- Step 2: Admission Details -->
         <div *ngIf="isReadOnly || currentStep === 2" class="step-content" formGroupName="admission">
 
-            <h3 class="step-heading">Admission Details</h3>
+            <h3 class="step-heading"><i class="fas fa-procedures text-primary"></i> Admission Details</h3>
             <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
 
@@ -176,7 +176,7 @@
         <!-- Step 3: Surgical Intervention -->
         <div *ngIf="isReadOnly ? hasSurgicalDetails : currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
 
-            <h3 class="step-heading">Surgical Intervention</h3>
+            <h3 class="step-heading"><i class="fas fa-user-md text-primary"></i> Surgical Intervention</h3>
             <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
                     <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-6">
@@ -311,7 +311,7 @@
         <!-- Step 4: Follow-Up -->
         <div *ngIf="isReadOnly ? hasFollowUpDetails : currentStep === 4" class="step-content" formGroupName="followUp">
 
-            <h3 class="step-heading">Follow-Up</h3>
+            <h3 class="step-heading"><i class="fas fa-notes-medical text-primary"></i> Follow-Up</h3>
             <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
                     <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">
