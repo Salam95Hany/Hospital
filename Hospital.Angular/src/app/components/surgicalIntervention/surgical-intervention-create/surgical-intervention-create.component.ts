@@ -99,7 +99,6 @@ export class SurgicalInterventionCreateComponent {
 
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
-  SelectedDoctors: { id: number, name: string }[] = [];
   SelectedMainSurgeon: { id: number, name: string }[] = [];
   SelectedAssistants: { id: number, name: string }[] = [];
   SelectedResident: { id: number, name: string }[] = [];
@@ -120,8 +119,7 @@ export class SurgicalInterventionCreateComponent {
     dischargeInstructions: '',
     followUpDoctor: '',
     followUpDoctorPhone: '',
-    followUpAppointment: '',
-    doctorId: ''
+    followUpAppointment: ''
   };
 
 
@@ -157,7 +155,6 @@ export class SurgicalInterventionCreateComponent {
     this.ItemForm = this.fb.group({
       surgicalInterventionId: 0,
       admissionId: 0,
-      doctorId: [null, [Validators.required]],
       interventionDate: [null, [Validators.required]],
       theater: [null, [Validators.required]],
       mainSurgeon: [null],
@@ -225,7 +222,6 @@ export class SurgicalInterventionCreateComponent {
   }
 
   FillEditForm(item: any) {
-    this.SelectedDoctors = [];
     this.SelectedMainSurgeon = [];
     this.SelectedAssistants = [];
     this.SelectedResident = [];
@@ -254,16 +250,9 @@ export class SurgicalInterventionCreateComponent {
     this.SelectedAssistants = asst.length ? asst : mapCsv(item.assistants);
     this.SelectedResident = resi.length ? resi : mapCsv(item.resident);
     this.SelectedSupervisor = sup.length ? sup : mapCsv(item.offFieldSupervisor);
-    const unionIds = new Set<number>();
-    [...this.SelectedMainSurgeon, ...this.SelectedAssistants, ...this.SelectedResident, ...this.SelectedSupervisor].forEach(d => unionIds.add(d.id));
-    this.SelectedDoctors = Array.from(unionIds).map(id => {
-      const doc = this.DoctorsData.find(d => +d.id === id);
-      return { id, name: doc?.name ?? '' };
-    });
     this.ItemForm.patchValue({
       surgicalInterventionId: item.surgicalInterventionId ?? 0,
       admissionId: item.admissionId ?? null,
-      doctorId: item.doctorId?.toString() ?? null,
       interventionDate: this.datePipe.transform(item.interventionDate, 'yyyy-MM-dd') ?? '',
       theater: item.theater ?? null,
       mainSurgeon: (this.SelectedMainSurgeon.map(a => a.id).join(',')) || (item.mainSurgeon ?? null),
@@ -366,13 +355,6 @@ export class SurgicalInterventionCreateComponent {
     this.ItemForm.patchValue({ assistants: assistantsIds || null });
     this.ItemForm.patchValue({ resident: residentIds || null });
     this.ItemForm.patchValue({ offFieldSupervisor: supervisorIds || null });
-    const uniqueIds = new Set<number>();
-    this.SelectedMainSurgeon.forEach(d => uniqueIds.add(d.id));
-    this.SelectedAssistants.forEach(d => uniqueIds.add(d.id));
-    this.SelectedResident.forEach(d => uniqueIds.add(d.id));
-    this.SelectedSupervisor.forEach(d => uniqueIds.add(d.id));
-    const docList = Array.from(uniqueIds).join(',');
-    this.ItemForm.patchValue({ doctorId: docList || null });
 
     if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
       this.ItemForm.patchValue({ fileModel: this.SelectedFile });
@@ -407,20 +389,6 @@ export class SurgicalInterventionCreateComponent {
     }
   }
 
-  OnDoctorChange(doctorId: string) {
-    let obj = this.DoctorsData.find(i => i.id == doctorId);
-    let checked = this.SelectedDoctors.find(i => i.id == +doctorId);
-    if (obj && !checked) {
-      this.SelectedDoctors.push({ id: +obj.id, name: obj.name });
-    }
-  }
-
-  RemoveSelectedDoctor(doctorId: number) {
-    this.SelectedDoctors = this.SelectedDoctors.filter(i => i.id != doctorId);
-    if (this.SelectedDoctors.length === 0) {
-      this.ItemForm.patchValue({ doctorId: null });
-    }
-  }
 
   OnMainSurgeonChange(doctorId: string) {
     const doc = this.MainSurgeonDoctors.find(i => i.id == doctorId);
