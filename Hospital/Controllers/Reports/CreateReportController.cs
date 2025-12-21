@@ -2,7 +2,6 @@
 using Hospital.Reports.Interface;
 using Hospital.Reports.Model;
 using Hospital.Services.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.Controllers.Reports
