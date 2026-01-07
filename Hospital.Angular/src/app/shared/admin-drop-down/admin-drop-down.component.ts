@@ -66,6 +66,10 @@ export class AdminDropDownComponent {
     this.onTouched = fn;
   }
 
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   onInputChange(event: any) {
     const inputValue = event.target.value.toLowerCase();
     this.searchText = inputValue;

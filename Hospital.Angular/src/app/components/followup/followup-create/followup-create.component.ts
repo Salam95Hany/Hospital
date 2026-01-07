@@ -6,7 +6,7 @@ import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgIf } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
@@ -15,7 +15,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 @Component({
   selector: 'app-followup-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent,NgIf],
   templateUrl: './followup-create.component.html',
   styleUrl: './followup-create.component.css',
   providers: [DatePipe]
@@ -23,6 +23,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 export class FollowupCreateComponent {
   @Input() FollowUpId: any;
   @Input() SurgicalInterventionId: any;
+  @Input() DetailsMode = false;
   @Output() RefreshData = new EventEmitter<boolean>();
 
   patientRemarks = [
@@ -51,6 +52,9 @@ export class FollowupCreateComponent {
     if (this.FollowUpId) {
       this.GetFollowUpById();
       this.GetFilesByActionId();
+    }
+    if (this.DetailsMode) {
+      this.ItemForm.disable();
     }
   }
 

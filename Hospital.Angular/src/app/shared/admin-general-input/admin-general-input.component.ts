@@ -20,7 +20,6 @@ export class AdminGeneralInputComponent {
   @Input() type: 'text' | 'number' | 'date' | 'month' | 'textarea' = 'text';
   @Input() placeholder: string = '';
   @Input() label: string = '';
-  @Input() colSize: string = 'col-md-6';
   @Input() error: string | null = null;
   @Input() allowNumbersOnly: boolean = false;
   @Input() allowPaste: boolean = true;

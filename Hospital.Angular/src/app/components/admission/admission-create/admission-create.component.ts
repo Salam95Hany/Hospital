@@ -29,6 +29,7 @@ import { CustomValidators } from '../../../services/custom-validators';
 export class AdmissionCreateComponent implements OnInit {
   @Input() PatientId: any;
   @Input() AdmissionId: any;
+  @Input() DetailsMode = false;
   @Output() RefreshData = new EventEmitter<boolean>();
   courses = [
     { id: 'Progressing', name: 'Progressing' },
@@ -97,6 +98,9 @@ export class AdmissionCreateComponent implements OnInit {
     if (this.AdmissionId) {
       this.GetAdmissionById();
       this.GetFilesByActionId();
+    }
+    if (this.DetailsMode) {
+      this.ItemForm.disable();
     }
 
 

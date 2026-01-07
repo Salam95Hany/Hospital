@@ -76,58 +76,7 @@
 </ng-template>
 
 <ng-template #FollowUpDetailsModal let-modal>
-    <div class="modal-header modal-header-bg justify-content-between">
-        <h2 class="d-flex align-items-center gap-2">
-            <i class="fas fa-file-alt"></i>
-            <span>Follow-Up Details</span>
-        </h2>
-        <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
-            <i class="fas fa-times-circle"></i>
-        </div>
-    </div>
-    <div class="modal-body">
-        <div class="step-content form-card" style="display: block;">
-            <div class="row g-3">
-                <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" [valueBind]="FollowUpObj?.followUpDate ?? ''" [disabled]="true" class="col-md-4">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Patient Remarks'" [label]="'Patient Remarks'" [valueBind]="FollowUpObj?.patientRemarksStatus ?? ''" [disabled]="true" class="col-md-4">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Wound Status'" [label]="'Wound Status'" [valueBind]="FollowUpObj?.woundStatus ?? ''" [disabled]="true" class="col-md-4">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Catheters'" [label]="'Catheters'" [valueBind]="FollowUpObj?.catheters ?? ''" [disabled]="true" class="col-md-4">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Image Path'" [label]="'Image Path'" [valueBind]="FollowUpObj?.imagePath ?? ''" [disabled]="true" class="col-md-4">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'date'" [placeholder]="'Next Follow-up Date'" [label]="'Next Follow-up Date'" [valueBind]="FollowUpObj?.nextFollowUpDate ?? ''" [disabled]="true" class="col-md-4">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Patient Remarks'" [label]="'Details of Patient Remarks'" [valueBind]="FollowUpObj?.patientRemarksDetails ?? ''" [disabled]="true" class="col-md-12">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Examination Findings'" [label]="'Examination Findings'" [valueBind]="FollowUpObj?.examinationFindings ?? ''" [disabled]="true" class="col-md-12">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Lab Results'" [label]="'Lab Results'" [valueBind]="FollowUpObj?.labResults ?? ''" [disabled]="true" class="col-md-12">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Imaging Results'" [label]="'Imaging Results'" [valueBind]="FollowUpObj?.imagingResults ?? ''" [disabled]="true" class="col-md-12">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'Advice'" [label]="'Advice'" [valueBind]="FollowUpObj?.advice ?? ''" [disabled]="true" class="col-md-12">
-                </app-admin-general-input>
-
-                <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" [valueBind]="FollowUpObj?.newDecision ?? ''" [disabled]="true" class="col-md-12">
-                </app-admin-general-input>
-
-                <app-admin-slider-image *ngIf="showSlider" [Images]="ImportedFiles" [disabled]="true"></app-admin-slider-image>
-            </div>
-        </div>
-    </div>
+    <app-followup-create (RefreshData)="RefreshData($event)" [FollowUpId]="FollowUpId" [SurgicalInterventionId]="SurgicalInterventionId" [DetailsMode]="true"></app-followup-create>
 </ng-template>
 
 <ng-template #deleteItemModal let-modal>

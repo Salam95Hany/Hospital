@@ -6,7 +6,7 @@ import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe, NgFor } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
@@ -15,7 +15,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 @Component({
   selector: 'app-surgical-intervention-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, FormsModule, AdminUploadFileComponent, AdminSliderImageComponent, NgFor],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, FormsModule, AdminUploadFileComponent, AdminSliderImageComponent, NgFor,NgIf],
   templateUrl: './surgical-intervention-create.component.html',
   styleUrl: './surgical-intervention-create.component.css',
   providers: [DatePipe]
@@ -23,6 +23,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 export class SurgicalInterventionCreateComponent {
   @Input() AdmissionId: any;
   @Input() SurgicalInterventionId: any;
+  @Input() DetailsMode = false;
   @Input() DoctorsData: { id: string, name: string, academicDegree: string }[] = [];
   @Output() RefreshData = new EventEmitter<boolean>();
   MainSurgeonDoctors: { id: string, name: string }[] = [];
@@ -142,6 +143,9 @@ export class SurgicalInterventionCreateComponent {
     if (this.SurgicalInterventionId) {
       this.GetSurgicalInterventionById();
       this.GetFilesByActionId();
+    }
+    if (this.DetailsMode) {
+      this.ItemForm.disable();
     }
   }
 

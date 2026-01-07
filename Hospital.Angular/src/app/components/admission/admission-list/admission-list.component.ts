@@ -21,8 +21,7 @@ import { RoleCheckerDirective } from '../../../directives/role-checker.directive
   selector: 'app-admission-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,RoleCheckerDirective,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
-    AdminGeneralInputComponent, AdmissionCreateComponent, AdminSliderImageComponent],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdmissionCreateComponent],
   templateUrl: './admission-list.component.html',
   styleUrl: './admission-list.component.css',
   providers: [DatePipe]

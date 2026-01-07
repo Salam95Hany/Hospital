@@ -1,8 +1,9 @@
 <!-- <app-admin-breadcrumb [Title]="'Create Follow Up'"></app-admin-breadcrumb> -->
 <div class="modal-header modal-header-bg justify-content-between">
     <h2 class="d-flex align-items-center gap-2">
-        <i class="fas fa-{{!FollowUpId ? 'plus':'edit'}}"></i>
-        <span>{{!FollowUpId ? 'Add' : 'Edit'}} Follow-Up</span>
+        <i class="fas fa-{{DetailsMode ? 'file-alt' : !FollowUpId ? 'plus':'edit'}}"></i>
+        <span *ngIf="!DetailsMode">{{!FollowUpId ? 'Add' : 'Edit'}} Follow-Up</span>
+        <span *ngIf="DetailsMode">Follow-Up Details</span>
     </h2>
     <div class="cursor-pointer text-danger fs-2" (click)="DismissModal()">
         <i class="fas fa-times-circle"></i>
@@ -42,14 +43,14 @@
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" formControlName="newDecision" class="col-md-12">
                 </app-admin-general-input>
 
-                <app-admin-upload-file (FilesChenged)="OnFileChange($event)"></app-admin-upload-file>
+                <app-admin-upload-file (FilesChenged)="OnFileChange($event)" *ngIf="!DetailsMode"></app-admin-upload-file>
 
                 <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
             </div>
         </form>
     </div>
 </div>
-<div class="modal-footer flex-nowrap gap-2">
+<div class="modal-footer flex-nowrap gap-2" *ngIf="!DetailsMode">
     <button class="btn btn-danger" (click)="DismissModal()">
         <i class="fas fa-times-circle"></i> Cancel
     </button>
