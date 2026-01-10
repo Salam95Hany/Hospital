@@ -7,7 +7,7 @@
                 <app-search-autocomplete (itemSearch)="onPatientSelected($event)"></app-search-autocomplete>
             </div>
             <div class="col-md-4">
-                <app-search-autocomplete [mainTitle]="'Select Admission'" [inputPlaceholder]="'Enter Admission'" [searchDescripition]="'Start typing to search admission'" [searchType]="'Admission'" [itemId]="selectedPatient?.id" [selectedItem]="selectedAdmission" [disabled]="!selectedPatient"
+                <app-search-autocomplete [mainTitle]="'Select Admission'" [inputPlaceholder]="'Select Admission'" [searchDescripition]="'Start typing to search admission'" [searchType]="'Admission'" [itemId]="selectedPatient?.id" [selectedItem]="selectedAdmission" [disabled]="!selectedPatient"
                     (itemSearch)="onAdmissionSelected($event)"></app-search-autocomplete>
             </div>
         </div>

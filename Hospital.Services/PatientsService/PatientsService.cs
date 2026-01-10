@@ -658,7 +658,7 @@ namespace Hospital.Services.PatientsService
                     SurgicalInterventions = patient.Admissions
                         .SelectMany(a => a.SurgicalInterventions)
                         .ToList(),
-                   
+
                 };
 
                 return ApiResponseModel<PatientFullDetailsDto>.Success(GenericErrors.AlreadyExists, result);
@@ -843,49 +843,15 @@ namespace Hospital.Services.PatientsService
             }
             else
             {
-                string[] formats = { "dd/MM/yyyy", "MM/yyyy", "yyyy-MM", "yyyy/MM", "yyyy-MM-dd" };
-                DateTime Date;
+                var Results = await _unitOfWork.Repository<Admission>().WhereAsync(i => i.PatientId == Model.PatientId && i.IsDeleted == false);
 
-                if (!DateTime.TryParseExact(Model.SearchText, formats, CultureInfo.InvariantCulture,
-                    DateTimeStyles.None, out Date))
+                var Data = Results.Select(i => new SearchAutoCompleteDto
                 {
-                    return ApiResponseModel<List<SearchAutoCompleteDto>>.Failure(GenericErrors.TransFailed);
-                }
+                    Id = i.AdmissionId,
+                    Name = i.AdmissionDate.Value.ToString("dd/MM/yyyy") + $" ({i.HospitalFileNumber})"
+                }).ToList();
 
-                if (Model.SearchType == "Admission")
-                {
-                    var Results = await _unitOfWork.Repository<Admission>()
-                        .WhereAsync(i => i.PatientId == Model.PatientId &&
-                                         i.AdmissionDate.HasValue &&
-                                         i.AdmissionDate.Value.Month == Date.Month &&
-                                         i.AdmissionDate.Value.Year == Date.Year &&
-                                         i.IsDeleted == false, 31);
-
-                    var Data = Results.Select(i => new SearchAutoCompleteDto
-                    {
-                        Id = i.AdmissionId,
-                        Name = i.AdmissionDate.Value.ToString("dd/MM/yyyy") + $" ({i.HospitalFileNumber})"
-                    }).ToList();
-
-                    return ApiResponseModel<List<SearchAutoCompleteDto>>.Success(GenericErrors.GetSuccess, Data);
-                }
-                else
-                {
-                    var Results = await _unitOfWork.Repository<SurgicalIntervention>()
-                        .WhereAsync(i => i.AdmissionId == Model.AdmissionId &&
-                                         i.InterventionDate.HasValue &&
-                                         i.InterventionDate.Value.Month == Date.Month &&
-                                         i.InterventionDate.Value.Year == Date.Year &&
-                                         i.IsDeleted == false, 31);
-
-                    var Data = Results.Select(i => new SearchAutoCompleteDto
-                    {
-                        Id = i.SurgicalInterventionId,
-                        Name = i.InterventionDate.Value.ToString("dd/MM/yyyy") + $" ({i.Theater})"
-                    }).ToList();
-
-                    return ApiResponseModel<List<SearchAutoCompleteDto>>.Success(GenericErrors.GetSuccess, Data);
-                }
+                return ApiResponseModel<List<SearchAutoCompleteDto>>.Success(GenericErrors.GetSuccess, Data);
             }
         }
 
@@ -908,9 +874,9 @@ namespace Hospital.Services.PatientsService
 
         public async Task<List<Admission>> GetHospitalFileNumber(string hospitalFileNumber)
         {
-            var result = await _unitOfWork.Repository<Admission>().WhereAsync(i=>i.HospitalFileNumber == hospitalFileNumber);
+            var result = await _unitOfWork.Repository<Admission>().WhereAsync(i => i.HospitalFileNumber == hospitalFileNumber);
             return result;
-                
+
         }
 
     }

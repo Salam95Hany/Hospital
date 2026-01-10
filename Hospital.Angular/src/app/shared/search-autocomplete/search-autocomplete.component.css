@@ -325,3 +325,11 @@
 .z2-mfr-list::-webkit-scrollbar-thumb:hover {
     background: var(--colors-slate8);
 }
+
+.dropdown-icon {
+    transition: transform 0.2s ease;
+}
+
+.dropdown-icon.open {
+    transform: rotate(180deg);
+}

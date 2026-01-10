@@ -24,8 +24,7 @@ import { NgxLoadingModule } from 'ngx-loading';
   selector: 'app-surgical-intervention-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdminGeneralInputComponent,
-    AdminSliderImageComponent, RoleCheckerDirective,NgxLoadingModule],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, RoleCheckerDirective,NgxLoadingModule],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
   providers: [DatePipe]

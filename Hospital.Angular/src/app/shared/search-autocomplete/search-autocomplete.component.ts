@@ -61,6 +61,10 @@ export class SearchAutocompleteComponent implements OnInit, OnChanges {
   onInputFocus(): void {
     this.isInputFocused = true;
     this.isResultsOpen = true;
+
+    if (this.searchType === 'Admission' && this.itemId) {
+      this.loadAdmissionsForPatient();
+    }
   }
 
   onInputBlur(): void {
@@ -93,6 +97,21 @@ export class SearchAutocompleteComponent implements OnInit, OnChanges {
         this.isAutoCompleteLoading = false;
       });
     }, 500);
+  }
+
+  loadAdmissionsForPatient(): void {
+    // this.isAutoCompleteLoading = true;
+
+    const obj = {
+      SearchText: '',
+      SearchType: 'Admission',
+      PatientId: this.itemId
+    };
+
+    this.patientService.GetSearchAutoCompleteData(obj).subscribe(data => {
+      this.results = data.results;
+      this.isAutoCompleteLoading = false;
+    });
   }
 
   selectItem(item: any): void {
