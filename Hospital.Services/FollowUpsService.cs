@@ -30,12 +30,12 @@ namespace Hospital.Services
             var Data = Results.Select(i => new FollowUpDto
             {
                 FollowUpId = i.FollowUpId,
-                SurgicalInterventionId = i.SurgicalInterventionId,
-                AdmissionId = i.SurgicalInterventions.Admission.AdmissionId,
-                PatientId = i.SurgicalInterventions.Admission.Patient.PatientId,
+                SurgicalInterventionId = (int)i.SurgicalInterventionId,
+                AdmissionId = i.AdmissionId,
+                PatientId = i.Admission.Patient.PatientId,
                 FollowUpDate = i.FollowUpDate,
-                PatientName = i.SurgicalInterventions.Admission.Patient.Name,
-                InternalNumber = i.SurgicalInterventions.Admission.Patient.InternalNumber,
+                PatientName = i.Admission.Patient.Name,
+                InternalNumber = i.Admission.Patient.InternalNumber,
                 CreatedBy = i.CreatedBy?.UserName,
                 CreatedDate = i.InsertDate
             }).ToList();

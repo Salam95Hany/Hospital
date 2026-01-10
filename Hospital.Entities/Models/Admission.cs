@@ -94,5 +94,6 @@ namespace Hospital.Entities.Models
         public virtual Patient? Patient { get; set; }
 
         public ICollection<SurgicalIntervention> SurgicalInterventions { get; set; } = new List<SurgicalIntervention>();
+        public ICollection<FollowUp> FollowUps { get; set; } = new List<FollowUp>();
     }
 }

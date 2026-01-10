@@ -54,13 +54,6 @@ namespace Hospital.Services.PatientsService
                     surgicalInterventionId = await AddNewSurgicalIntervention(Model.SurgicalIntervention, admissionId.Value);
                 }
 
-                // Step 4: Save FollowUp with SurgicalInterventionId (if surgical intervention exists)
-                if (Model.FollowUp != null && surgicalInterventionId.HasValue)
-                {
-                    await AddNewFollowUp(Model.FollowUp, surgicalInterventionId.Value);
-                }
-
-
                 await transaction.CommitAsync(cancellationToken);
 
                 return ApiResponseModel<string>.Success(GenericErrors.AddSuccess);
@@ -666,8 +659,7 @@ namespace Hospital.Services.PatientsService
                         .SelectMany(a => a.SurgicalInterventions)
                         .ToList(),
                     FollowUps = patient.Admissions
-                        .SelectMany(a => a.SurgicalInterventions)
-                        .SelectMany(si => si.FollowUps)
+                        .SelectMany(a => a.FollowUps)
                         .ToList()
                 };
 
@@ -740,13 +732,8 @@ namespace Hospital.Services.PatientsService
             try
             {
                 var patient = await _unitOfWork.Repository<Patient>().GetByIdWithIncludeAsync(
-                    p => p.PatientId == patientId,
-                    q => q
-                        .Include(p => p.Admissions)
-                            .ThenInclude(a => a.SurgicalInterventions)
-                                .ThenInclude(si => si.FollowUps),
-                    cancellationToken
-                );
+                       p => p.PatientId == patientId,
+                       q => q.Include(p => p.Admissions).ThenInclude(a => a.SurgicalInterventions).Include(p => p.Admissions).ThenInclude(a => a.FollowUps), cancellationToken);
 
                 if (patient == null)
                 {
@@ -765,7 +752,7 @@ namespace Hospital.Services.PatientsService
                     .FirstOrDefault();
 
                 // ✅ Get LAST follow-up
-                var lastFollowUp = lastSurgical?.FollowUps?
+                var lastFollowUp = lastAdmission?.FollowUps?
                     .OrderByDescending(f => f.FollowUpId)
                     .FirstOrDefault();
 

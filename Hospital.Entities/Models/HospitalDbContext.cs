@@ -28,12 +28,12 @@ namespace Hospital.Entities.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Configure relationships
+
             modelBuilder.Entity<Patient>()
-                .HasMany(p => p.Admissions)
-                .WithOne(a => a.Patient)
-                .HasForeignKey(a => a.PatientId)
-                .OnDelete(DeleteBehavior.Cascade);
+        .HasMany(p => p.Admissions)
+        .WithOne(a => a.Patient)
+        .HasForeignKey(a => a.PatientId)
+        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Admission>()
                 .HasMany(a => a.SurgicalInterventions)
@@ -41,11 +41,18 @@ namespace Hospital.Entities.Models
                 .HasForeignKey(s => s.AdmissionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<SurgicalIntervention>()
+            modelBuilder.Entity<Admission>()
                 .HasMany(a => a.FollowUps)
-                .WithOne(f => f.SurgicalInterventions)
-                .HasForeignKey(f => f.SurgicalInterventionId)
+                .WithOne(f => f.Admission)
+                .HasForeignKey(f => f.AdmissionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SurgicalIntervention>()
+                .HasMany<FollowUp>()
+                .WithOne(f => f.SurgicalIntervention)
+                .HasForeignKey(f => f.SurgicalInterventionId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
         }
     }
 }

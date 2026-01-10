@@ -13,8 +13,8 @@ namespace Hospital.Entities.Models
     {
         [Key]
         public int FollowUpId { get; set; }
-        public int SurgicalInterventionId { get; set; }
-
+        public int AdmissionId { get; set; }
+        public int? SurgicalInterventionId { get; set; }
         public DateTime? FollowUpDate { get; set; }
 
         // NEW: Patient remarks as structured data
@@ -38,7 +38,10 @@ namespace Hospital.Entities.Models
         [NotMapped]
         public UploadFileModel? FileModel { get; set; }
 
+        [ForeignKey("AdmissionId")]
+        public virtual Admission? Admission { get; set; }
+
         [ForeignKey("SurgicalInterventionId")]
-        public SurgicalIntervention? SurgicalInterventions { get; set; }
+        public virtual SurgicalIntervention? SurgicalIntervention { get; set; }
     }
 }

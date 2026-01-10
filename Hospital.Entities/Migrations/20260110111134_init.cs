@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hospital.Entities.Migrations
 {
     /// <inheritdoc />
-    public partial class initmigration : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +51,39 @@ namespace Hospital.Entities.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attachments",
+                columns: table => new
+                {
+                    AttachmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ActionId = table.Column<int>(type: "int", nullable: false),
+                    ActionTypeId = table.Column<int>(type: "int", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExistFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileSize = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InsertUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InsertDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attachments", x => x.AttachmentId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurgicalDoctors",
+                columns: table => new
+                {
+                    SurgicalDoctorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SurgicalInterventionId = table.Column<int>(type: "int", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurgicalDoctors", x => x.SurgicalDoctorId);
                 });
 
             migrationBuilder.CreateTable(
@@ -160,26 +193,56 @@ namespace Hospital.Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Doctors",
+                columns: table => new
+                {
+                    DoctorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoctorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AcademicDegree = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctors", x => x.DoctorId);
+                    table.ForeignKey(
+                        name: "FK_Doctors_AspNetUsers_InsertUser",
+                        column: x => x.InsertUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Doctors_AspNetUsers_UpdateUser",
+                        column: x => x.UpdateUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
                     PatientId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NationalId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Governorate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Occupation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaritalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ChildrenCount = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InternalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NationalId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Governorate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Occupation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaritalStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChildrenCount = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InternalNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,34 +266,57 @@ namespace Hospital.Entities.Migrations
                     AdmissionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PatientId = table.Column<int>(type: "int", nullable: false),
-                    HospitalFileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HospitalFileNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HospitalBranch = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AdmissionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DischargeDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ChiefComplaint = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Course = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HPI = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CurrentMedications = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PastHistory = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FamilyHistory = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Comorbidities = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BMI = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ChiefComplaint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HospitalStates = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Course = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HPI = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Comorbidities = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrentMedications = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PastHistory = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FamilyHistory = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BMI = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Temperature = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Pulse = table.Column<int>(type: "int", nullable: true),
-                    BloodPressure = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GeneralExamination = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AbdominalExamination = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GenitalExamination = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DREVaginalExamination = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LabResults = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImagingResults = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProvisionalDiagnosis = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MedicalDecision = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BloodPressure = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GeneralExamination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AbdominalExamination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GenitalExamination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DREVaginalExamination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrineAnalysis = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CultureAndSensitivity = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SerumCreatinine = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Hemoglobin = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TotalLeukocyteCount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Platelets = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PT_PTT_INR = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LiverEnzymes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FastingBloodSugar = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PostPrandialBloodSugar = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    HbA1c = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PSATotal = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PSAFree = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PSARatio = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    OtherLabResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PUT = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ultrasound = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TRUS = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CT = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MRI = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsotopeStudies = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OtherImaging = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProvisionalDiagnosis = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MedicalDecision = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScheduledDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -261,35 +347,38 @@ namespace Hospital.Entities.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AdmissionId = table.Column<int>(type: "int", nullable: false),
                     InterventionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Theater = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MainSurgeon = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Assistants = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Resident = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Anesthesia = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Intervention = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InterventionDetails = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TubesFixed = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Approach = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Organ = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IntraOperativeCourse = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IntraOpAdverseEvents = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Theater = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MainSurgeon = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Assistants = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Resident = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OtherSurgeons = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OffFieldSupervisor = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Anesthesia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Intervention = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterventionDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TubesFixed = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Approach = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Organ = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IntraOperativeCourse = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IntraOpAdverseEvents = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BloodTransfusionUnits = table.Column<int>(type: "int", nullable: true),
-                    PostOpRecommendations = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostOpDay0_1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostOpDay2_5 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostOpDayOver5 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostOpAdverseEvents = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostOpRecommendations = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostOpDay0_1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostOpDay2_5 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostOpDayOver5 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostOpAdverseEvents = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DischargeDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FinalDiagnosis = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DischargeInstructions = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FollowUpDoctor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FollowUpDoctorPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FinalDiagnosis = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DischargeInstructions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FollowUpDoctor = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FollowUpDoctorPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FollowUpAppointment = table.Column<DateTime>(type: "datetime2", nullable: true),
                     InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -318,27 +407,35 @@ namespace Hospital.Entities.Migrations
                 {
                     FollowUpId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SurgicalInterventionId = table.Column<int>(type: "int", nullable: false),
-                    FollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PatientRemarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientRemarksDetails = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExaminationFindings = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WoundStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Catheters = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LabResults = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImagingResults = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Advice = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NewDecision = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdmissionId = table.Column<int>(type: "int", nullable: false),
+                    SurgicalInterventionId = table.Column<int>(type: "int", nullable: true),
+                    FollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PatientRemarksStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PatientRemarksDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExaminationFindings = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WoundStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Catheters = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LabResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagingResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Advice = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NewDecision = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NextFollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FollowUps", x => x.FollowUpId);
+                    table.ForeignKey(
+                        name: "FK_FollowUps_Admissions_AdmissionId",
+                        column: x => x.AdmissionId,
+                        principalTable: "Admissions",
+                        principalColumn: "AdmissionId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_FollowUps_AspNetUsers_InsertUser",
                         column: x => x.InsertUser,
@@ -354,7 +451,7 @@ namespace Hospital.Entities.Migrations
                         column: x => x.SurgicalInterventionId,
                         principalTable: "SurgicalInterventions",
                         principalColumn: "SurgicalInterventionId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
@@ -410,6 +507,21 @@ namespace Hospital.Entities.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctors_InsertUser",
+                table: "Doctors",
+                column: "InsertUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctors_UpdateUser",
+                table: "Doctors",
+                column: "UpdateUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FollowUps_AdmissionId",
+                table: "FollowUps",
+                column: "AdmissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FollowUps_InsertUser",
@@ -471,7 +583,16 @@ namespace Hospital.Entities.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Attachments");
+
+            migrationBuilder.DropTable(
+                name: "Doctors");
+
+            migrationBuilder.DropTable(
                 name: "FollowUps");
+
+            migrationBuilder.DropTable(
+                name: "SurgicalDoctors");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

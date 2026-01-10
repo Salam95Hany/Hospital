@@ -60,7 +60,6 @@ namespace Hospital.Entities.Models
         [ForeignKey("AdmissionId")]
         public virtual Admission? Admission { get; set; }
 
-        public ICollection<FollowUp> FollowUps { get; set; } = new List<FollowUp>();
 
         [NotMapped] // If in entity class
         public List<DoctorDetailsDto>? MainSurgeonDetails { get; set; }

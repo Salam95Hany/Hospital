@@ -309,7 +309,7 @@
 
 
         <!-- Step 4: Follow-Up -->
-        <div *ngIf="isReadOnly ? hasFollowUpDetails : currentStep === 4" class="step-content" formGroupName="followUp">
+        <!-- <div *ngIf="isReadOnly ? hasFollowUpDetails : currentStep === 4" class="step-content" formGroupName="followUp">
 
             <h3 class="step-heading"><i class="fas fa-notes-medical text-primary"></i> Follow-Up</h3>
             <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
@@ -347,7 +347,7 @@
                     <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </form>
 

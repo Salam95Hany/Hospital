@@ -166,7 +166,6 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("HospitalBranch")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HospitalFileNumber")
@@ -311,6 +310,45 @@ namespace Hospital.Entities.Migrations
                     b.ToTable("Attachments");
                 });
 
+            modelBuilder.Entity("Hospital.Entities.Models.Doctor", b =>
+                {
+                    b.Property<int>("DoctorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorId"));
+
+                    b.Property<string>("AcademicDegree")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DoctorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("InsertDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InsertUser")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUser")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("DoctorId");
+
+                    b.HasIndex("InsertUser");
+
+                    b.HasIndex("UpdateUser");
+
+                    b.ToTable("Doctors");
+                });
+
             modelBuilder.Entity("Hospital.Entities.Models.FollowUp", b =>
                 {
                     b.Property<int>("FollowUpId")
@@ -318,6 +356,9 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FollowUpId"));
+
+                    b.Property<int>("AdmissionId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Advice")
                         .HasColumnType("nvarchar(max)");
@@ -361,7 +402,7 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("PatientRemarksStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SurgicalInterventionId")
+                    b.Property<int?>("SurgicalInterventionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdateDate")
@@ -374,6 +415,8 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FollowUpId");
+
+                    b.HasIndex("AdmissionId");
 
                     b.HasIndex("InsertUser");
 
@@ -447,6 +490,25 @@ namespace Hospital.Entities.Migrations
                     b.HasIndex("UpdateUser");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("Hospital.Entities.Models.SurgicalDoctor", b =>
+                {
+                    b.Property<int>("SurgicalDoctorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SurgicalDoctorId"));
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SurgicalInterventionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SurgicalDoctorId");
+
+                    b.ToTable("SurgicalDoctors");
                 });
 
             modelBuilder.Entity("Hospital.Entities.Models.SurgicalIntervention", b =>
@@ -726,17 +788,11 @@ namespace Hospital.Entities.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("Hospital.Entities.Models.FollowUp", b =>
+            modelBuilder.Entity("Hospital.Entities.Models.Doctor", b =>
                 {
                     b.HasOne("Hospital.Entities.Auth.AdminUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("InsertUser");
-
-                    b.HasOne("Hospital.Entities.Models.SurgicalIntervention", "SurgicalInterventions")
-                        .WithMany("FollowUps")
-                        .HasForeignKey("SurgicalInterventionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.HasOne("Hospital.Entities.Auth.AdminUser", "UpdatedBy")
                         .WithMany()
@@ -744,7 +800,35 @@ namespace Hospital.Entities.Migrations
 
                     b.Navigation("CreatedBy");
 
-                    b.Navigation("SurgicalInterventions");
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("Hospital.Entities.Models.FollowUp", b =>
+                {
+                    b.HasOne("Hospital.Entities.Models.Admission", "Admission")
+                        .WithMany("FollowUps")
+                        .HasForeignKey("AdmissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hospital.Entities.Auth.AdminUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("InsertUser");
+
+                    b.HasOne("Hospital.Entities.Models.SurgicalIntervention", "SurgicalIntervention")
+                        .WithMany()
+                        .HasForeignKey("SurgicalInterventionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Hospital.Entities.Auth.AdminUser", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdateUser");
+
+                    b.Navigation("Admission");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("SurgicalIntervention");
 
                     b.Navigation("UpdatedBy");
                 });
@@ -840,17 +924,14 @@ namespace Hospital.Entities.Migrations
 
             modelBuilder.Entity("Hospital.Entities.Models.Admission", b =>
                 {
+                    b.Navigation("FollowUps");
+
                     b.Navigation("SurgicalInterventions");
                 });
 
             modelBuilder.Entity("Hospital.Entities.Models.Patient", b =>
                 {
                     b.Navigation("Admissions");
-                });
-
-            modelBuilder.Entity("Hospital.Entities.Models.SurgicalIntervention", b =>
-                {
-                    b.Navigation("FollowUps");
                 });
 #pragma warning restore 612, 618
         }
