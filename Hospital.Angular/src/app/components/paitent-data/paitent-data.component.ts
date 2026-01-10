@@ -36,13 +36,13 @@ patientData: PatientData = new PatientData();
   @Output() RefreshData = new EventEmitter<boolean>();
   
   governorates = [
-    { id: 1, name: 'Cairo' }, { id: 2, name: 'Giza' }, { id: 3, name: 'Alexandria' }, { id: 4, name: 'Dakahlia' }, { id: 5, name: 'Red Sea' }, { id: 6, name: 'Beheira' }, { id: 7, name: 'Fayoum' },
-    { id: 8, name: 'Gharbia' }, { id: 9, name: 'Ismailia' }, { id: 10, name: 'Menofia' }, { id: 11, name: 'Minya' }, { id: 12, name: 'Qalyubia' }, { id: 13, name: 'New Valley' }, { id: 14, name: 'Suez' },
-    { id: 15, name: 'Aswan' }, { id: 16, name: 'Assiut' }, { id: 17, name: 'Beni Suef' }, { id: 18, name: 'Port Said' }, { id: 19, name: 'Damietta' }, { id: 20, name: 'Sharkia' }, { id: 21, name: 'Sohag' },
-    { id: 22, name: 'Kafr El Sheikh' }, { id: 23, name: 'Luxor' }, { id: 24, name: 'Qena' }, { id: 25, name: 'North Sinai' }, { id: 26, name: 'South Sinai' }, { id: 27, name: 'Matrouh' }
+    { id: 'Cairo', name: 'Cairo' }, { id: 'Giza', name: 'Giza' }, { id: 'Alexandria', name: 'Alexandria' }, { id: 'Dakahlia', name: 'Dakahlia' }, { id: 'Red Sea', name: 'Red Sea' }, { id: 'Beheira', name: 'Beheira' }, { id: 'Fayoum', name: 'Fayoum' },
+    { id: 'Gharbia', name: 'Gharbia' }, { id: 'Ismailia', name: 'Ismailia' }, { id: 'Menofia', name: 'Menofia' }, { id: 'Minya', name: 'Minya' }, { id: 'Qalyubia', name: 'Qalyubia' }, { id: 'New Valley', name: 'New Valley' }, { id: 'Suez', name: 'Suez' },
+    { id: 'Aswan', name: 'Aswan' }, { id: 'Assiut', name: 'Assiut' }, { id: 'Beni Suef', name: 'Beni Suef' }, { id: 'Port Said', name: 'Port Said' }, { id: 'Damietta', name: 'Damietta' }, { id: 'Sharkia', name: 'Sharkia' }, { id: 'Sohag', name: 'Sohag' },
+    { id: 'Kafr El Sheikh', name: 'Kafr El Sheikh' }, { id: 'Luxor', name: 'Luxor' }, { id: 'Qena', name: 'Qena' }, { id: 'North Sinai', name: 'North Sinai' }, { id: 'South Sinai', name: 'South Sinai' }, { id: 'Matrouh', name: 'Matrouh' }
   ];
   maritalStatuses = [
-    { id: 1, name: 'Single' }, { id: 2, name: 'Married' }, { id: 3, name: 'Divorced' }, { id: 4, name: 'Widowed' }, { id: 5, name: 'Child' }
+    { id: 'Single', name: 'Single' }, { id: 'Married', name: 'Married' }, { id: 'Divorced', name: 'Divorced' }, { id: 'Widowed', name: 'Widowed' }, { id: 'Child', name: 'Child' }
   ];
   isEditMode: boolean = false;
 

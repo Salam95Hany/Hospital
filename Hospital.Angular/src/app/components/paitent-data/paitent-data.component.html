@@ -15,7 +15,7 @@
                     <app-admin-general-input class="col-md-6" label="Name" placeholder="Enter name" formControlName="name" [error]="formErrors.name"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" type="date" label="Birth Date" formControlName="birthDate"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age"></app-admin-general-input>
-                    <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{name:'Male'}, {name:'Female'}]" placeholder="Select Gender" formControlName="gender"></app-admin-drop-down>
+                    <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{id:'Male', name:'Male'}, {id:'Female', name:'Female'}]" placeholder="Select Gender" formControlName="gender"></app-admin-drop-down>
                     <app-admin-general-input class="col-md-6" label="National ID" placeholder="Enter National ID" formControlName="nationalId" [error]="formErrors.nationalId"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" label="Address" placeholder="Enter address" formControlName="address"></app-admin-general-input>
                     <app-admin-drop-down class="col-md-6" label="Governorate" [data]="governorates" placeholder="Select Governorate" formControlName="governorate"></app-admin-drop-down>

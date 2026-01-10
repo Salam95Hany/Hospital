@@ -658,9 +658,7 @@ namespace Hospital.Services.PatientsService
                     SurgicalInterventions = patient.Admissions
                         .SelectMany(a => a.SurgicalInterventions)
                         .ToList(),
-                    FollowUps = patient.Admissions
-                        .SelectMany(a => a.FollowUps)
-                        .ToList()
+                   
                 };
 
                 return ApiResponseModel<PatientFullDetailsDto>.Success(GenericErrors.AlreadyExists, result);
@@ -733,7 +731,7 @@ namespace Hospital.Services.PatientsService
             {
                 var patient = await _unitOfWork.Repository<Patient>().GetByIdWithIncludeAsync(
                        p => p.PatientId == patientId,
-                       q => q.Include(p => p.Admissions).ThenInclude(a => a.SurgicalInterventions).Include(p => p.Admissions).ThenInclude(a => a.FollowUps), cancellationToken);
+                       q => q.Include(p => p.Admissions).ThenInclude(a => a.SurgicalInterventions), cancellationToken);
 
                 if (patient == null)
                 {
