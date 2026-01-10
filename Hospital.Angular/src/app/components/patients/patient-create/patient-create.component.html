@@ -306,49 +306,6 @@
                 </div>
             </div>
         </div>
-
-
-        <!-- Step 4: Follow-Up -->
-        <!-- <div *ngIf="isReadOnly ? hasFollowUpDetails : currentStep === 4" class="step-content" formGroupName="followUp">
-
-            <h3 class="step-heading"><i class="fas fa-notes-medical text-primary"></i> Follow-Up</h3>
-            <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
-                <div class="row g-3">
-                    <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Date'" [label]="'Follow-up Date'" formControlName="followUpDate" [error]="formErrors.followUpDate" class="col-md-6">
-                    </app-admin-general-input>
-
-                    <app-admin-drop-down [data]="patientRemarks" [placeholder]="'Select Patient Remarks'" [label]="'Patient Remarks'" formControlName="patientRemarksStatus" [error]="formErrors.patientRemarksStatus" class="col-md-6">
-                    </app-admin-drop-down>
-
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Patient Remarks'" [label]="'Details of Patient Remarks'" formControlName="patientRemarksDetails" class="col-md-12">
-                    </app-admin-general-input>
-
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Examination Findings'" [label]="'Examination Findings'" formControlName="examinationFindings" class="col-md-12">
-                    </app-admin-general-input>
-
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Wound Status'" [label]="'Wound Status'" formControlName="woundStatus" class="col-md-6">
-                    </app-admin-general-input>
-
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Catheters'" [label]="'Catheters'" formControlName="catheters" class="col-md-6">
-                    </app-admin-general-input>
-
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Lab Results'" [label]="'Lab Results'" formControlName="labResults" class="col-md-12">
-                    </app-admin-general-input>
-
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'Advice'" [label]="'Advice'" formControlName="advice" class="col-md-12" [error]="formErrors.advice">
-                    </app-admin-general-input>
-
-                    <app-admin-general-input [type]="'textarea'" [placeholder]="'New Decision'" [label]="'New Decision'" formControlName="newDecision" class="col-md-12">
-                    </app-admin-general-input>
-
-                    <app-admin-general-input [type]="'date'" [placeholder]="'Next Follow-up Date'" [label]="'Next Follow-up Date'" formControlName="nextFollowUpDate" class="col-md-6">
-                    </app-admin-general-input>
-                    <app-admin-upload-file *ngIf="!isReadOnly" (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
-                    <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
-                </div>
-            </div>
-        </div> -->
-
     </form>
 
     <!-- Navigation Buttons -->

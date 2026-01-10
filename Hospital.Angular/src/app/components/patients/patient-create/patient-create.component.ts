@@ -3,7 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../services/patient.service';
-import { Admission, FollowUp, Patient, PatientData, SurgicalIntervention } from '../../../models/patient.model';
+import { Admission, Patient, PatientData, SurgicalIntervention } from '../../../models/patient.model';
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { CustomValidators, RegexType } from '../../../services/custom-validators';
@@ -62,13 +62,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     deletedFiles: []
   };
 
-  followUpFiles: UploadFileModel = {
-    actionId: null,
-    actionType: ActionTypes.FollowUp,
-    insertUser: '',
-    files: [],
-    deletedFiles: []
-  };
   // Doctors multi-select for Surgical step
   //DoctorsData: { id: string, name: string }[] = [];
   DoctorsData: { id: string, name: string, academicDegree: string }[] = [];
@@ -99,12 +92,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   // Read-only visibility flags
   hasAdmissionDetails: boolean = false;
   hasSurgicalDetails: boolean = false;
-  hasFollowUpDetails: boolean = false;
   steps = [
     { title: 'Patient Information', isCompleted: false },
     { title: 'Admission Details', isCompleted: false },
-    { title: 'Surgical Intervention', isCompleted: false },
-    { title: 'Follow-Up', isCompleted: false }
+    { title: 'Surgical Intervention', isCompleted: false }
   ];
   governorates = [
     { id: 'Cairo', name: 'Cairo' },
@@ -254,8 +245,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     course: '',
     interventionDate: '',
     theater: '',
-    followUpDate: '',
-    patientRemarksStatus: '',
     nationalId: '',
     name: '',
     age: '',
@@ -370,8 +359,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         fileModel: null
       }),
       admission: this.createAdmissionFormGroup(),
-      surgicalIntervention: this.createSurgicalInterventionFormGroup(),
-      followUp: this.createFollowUpFormGroup()
+      surgicalIntervention: this.createSurgicalInterventionFormGroup()
     });
 
     // Set actionId for file objects if patientId exists
@@ -379,7 +367,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       this.patientFiles.actionId = this.patientId;
       this.admissionFiles.actionId = this.patientId;
       this.surgicalFiles.actionId = this.patientId;
-      this.followUpFiles.actionId = this.patientId;
     }
 
     // Disable all controls in read-only mode
@@ -403,9 +390,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       case 3:
         this.surgicalFiles = selectedFile;
         break;
-      case 4:
-        this.followUpFiles = selectedFile;
-        break;
     }
 
     // Also keep the SelectedFile for backward compatibility
@@ -416,8 +400,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     const actionTypes = [
       ActionTypes.Patient,
       ActionTypes.Admission,
-      ActionTypes.SurgicalIntervention,
-      ActionTypes.FollowUp
+      ActionTypes.SurgicalIntervention
     ];
 
     this.ImportedFiles = [];
@@ -466,10 +449,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       this.clearErrorsForFormGroup(this.surgicalIntervention);
     });
 
-    this.followUp.valueChanges.subscribe(() => {
-      this.clearErrorsForFormGroup(this.followUp);
-    });
-
     // Subscribe to admission date changes specifically for validation
     this.admission.get('admissionDate').valueChanges.subscribe(() => {
       this.validateAdmissionDates();
@@ -499,7 +478,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         const pas = (data?.Patient || data?.patient) || {};
         const adm = (data?.LastAdmission || data?.lastAdmission) || {};
         const surg = (data?.LastSurgicalIntervention || data?.lastSurgicalIntervention) || {};
-        const fol = (data?.LastFollowUp || data?.lastFollowUp) || {};
 
         // Patient group
         this.patient.patchValue({
@@ -599,22 +577,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
         this.patchRoleSelectionsFromLastSurgical(surg);
 
-        // Follow-up group
-        this.followUp.patchValue({
-          followUpDate: this.datePipe.transform(fol.followUpDate ?? fol.FollowUpDate, 'yyyy-MM-dd') ?? null,
-          patientRemarksStatus: fol.patientRemarksStatus ?? fol.PatientRemarksStatus ?? null,
-          patientRemarksDetails: fol.patientRemarksDetails ?? fol.PatientRemarksDetails ?? null,
-          examinationFindings: fol.examinationFindings ?? fol.ExaminationFindings ?? null,
-          woundStatus: fol.woundStatus ?? fol.WoundStatus ?? null,
-          catheters: fol.catheters ?? fol.Catheters ?? null,
-          labResults: fol.labResults ?? fol.LabResults ?? null,
-          imagingResults: fol.imagingResults ?? fol.ImagingResults ?? null,
-          imagePath: fol.imagePath ?? fol.ImagePath ?? null,
-          advice: fol.advice ?? fol.Advice ?? null,
-          newDecision: fol.newDecision ?? fol.NewDecision ?? null,
-          nextFollowUpDate: this.datePipe.transform(fol.nextFollowUpDate ?? fol.NextFollowUpDate, 'yyyy-MM-dd') ?? null,
-        });
-
         // Fetch files for slider if available
         this.GetFilesByActionId();
 
@@ -634,7 +596,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
         this.hasAdmissionDetails = this.hasAnyValue(admVal);
         this.hasSurgicalDetails = this.hasAnyValue(surgVal);
-        this.hasFollowUpDetails = this.hasAnyValue(folVal);
+        //this.hasFollowUpDetails = this.hasAnyValue(folVal);
       },
       error: (err) => {
         // Non-blocking: leave form empty in case of error
@@ -903,8 +865,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         return this.patientForm.get('admission') as FormGroup;
       case 3:
         return this.patientForm.get('surgicalIntervention') as FormGroup;
-      case 4:
-        return this.patientForm.get('followUp') as FormGroup;
       default:
         return null;
     }
@@ -953,8 +913,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     const formGroups = [
       this.patientForm.get('patient') as FormGroup,
       this.admission,
-      this.surgicalIntervention,
-      this.followUp
+      this.surgicalIntervention
     ];
 
     formGroups.forEach(formGroup => {
@@ -1016,7 +975,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     this.markFormGroupTouched(this.patientForm.get('patient') as FormGroup);
     this.markFormGroupTouched(this.admission);
     this.markFormGroupTouched(this.surgicalIntervention);
-    this.markFormGroupTouched(this.followUp);
 
     // Attach files to their respective step objects with API-ready shape
     const setModel = (group: FormGroup, model: UploadFileModel, actionType: ActionTypes) => {
@@ -1029,7 +987,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     setModel(this.patientForm.get('patient') as FormGroup, this.patientFiles, ActionTypes.Patient);
     setModel(this.admission, this.admissionFiles, ActionTypes.Admission);
     setModel(this.surgicalIntervention, this.surgicalFiles, ActionTypes.SurgicalIntervention);
-    setModel(this.followUp, this.followUpFiles, ActionTypes.FollowUp);
 
     // Sync role form controls to CSV of IDs from chip selections
     const mainIds = this.SelectedMainSurgeon.map(a => a.id).join(',');
@@ -1053,9 +1010,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
     const admissionValid = this.admission.valid;
     const interventionValid = this.surgicalIntervention.valid;
-    const followUpValid = this.followUp.valid;
 
-    if (!patientValid || !admissionValid || !interventionValid || !followUpValid) {
+    if (!patientValid || !admissionValid || !interventionValid) {
       // Show validation errors for individual fields
       this.showValidationErrors();
       return;
@@ -1065,7 +1021,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     const { fileModel: _pFileModel, ...patientData } = (patientGroup?.value) || {};
     const { fileModel: _aFileModel, ...admissionData } = (this.admission?.value) || {};
     const { fileModel: _sFileModel, ...surgicalData } = (this.surgicalIntervention?.value) || {};
-    const { fileModel: _fFileModel, ...followUpData } = (this.followUp?.value) || {};
 
     const apiPayload: any = {
       Patient: {
@@ -1082,11 +1037,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         ...surgicalData,
         InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
         FileModel: this.surgicalIntervention?.get('fileModel')?.value || null,
-      },
-      FollowUp: {
-        ...followUpData,
-        InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
-        FileModel: this.followUp?.get('fileModel')?.value || null,
       }
     };
 
