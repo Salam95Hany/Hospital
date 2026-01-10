@@ -1,6 +1,6 @@
 <!-- <app-admin-breadcrumb [Title]="'Create Surgical Intervention'"></app-admin-breadcrumb> -->
 
-<div class="modal-header modal-header-bg justify-content-between">
+<div class="modal-header modal-header-bg justify-content-between" *ngIf="!PatientMode">
     <h2 class="d-flex align-items-center gap-2">
         <i class="fas fa-{{!DetailsMode ? !SurgicalInterventionId ? 'plus':'edit':'file-alt'}}"></i>
         <span *ngIf="!DetailsMode">{{!SurgicalInterventionId ? 'Add' : 'Edit'}} Surgical Intervention</span>
@@ -10,8 +10,8 @@
         <i class="fas fa-times-circle"></i>
     </div>
 </div>
-<div class="modal-body mb-2">
-    <div class="step-content form-card" data-step="1" style="display: block;">
+<div [ngClass]="{'modal-body mb-2': !PatientMode}">
+    <div [ngClass]="{'step-content form-card': !PatientMode}" data-step="1" style="display: block;">
         <form [formGroup]="ItemForm" autocomplete="off">
             <div class="row g-3">
                 <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-2">
@@ -145,12 +145,11 @@
         </form>
     </div>
 </div>
-<div class="modal-footer flex-nowrap gap-2" *ngIf="!DetailsMode">
+<div class="modal-footer flex-nowrap gap-2" *ngIf="!DetailsMode || !PatientMode">
     <button class="btn btn-danger" (click)="DismissModal()">
         <i class="fas fa-times-circle"></i> Cancel
     </button>
     <button class="btn btn-success" (click)="AddNewItem()" [disabled]="BtnDisabled">
         <i class="fas fa-save"></i> Save
     </button>
-
 </div>

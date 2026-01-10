@@ -6,7 +6,7 @@ import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
@@ -15,7 +15,9 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 @Component({
   selector: 'app-surgical-intervention-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, FormsModule, AdminUploadFileComponent, AdminSliderImageComponent, NgFor,NgIf],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, FormsModule, AdminUploadFileComponent, AdminSliderImageComponent, NgFor, NgIf,
+    NgClass
+  ],
   templateUrl: './surgical-intervention-create.component.html',
   styleUrl: './surgical-intervention-create.component.css',
   providers: [DatePipe]
@@ -24,6 +26,7 @@ export class SurgicalInterventionCreateComponent {
   @Input() AdmissionId: any;
   @Input() SurgicalInterventionId: any;
   @Input() DetailsMode = false;
+  @Input() PatientMode = false;
   @Input() DoctorsData: { id: string, name: string, academicDegree: string }[] = [];
   @Output() RefreshData = new EventEmitter<boolean>();
   MainSurgeonDoctors: { id: string, name: string }[] = [];
@@ -503,5 +506,34 @@ export class SurgicalInterventionCreateComponent {
       default:
         return a.includes(t);
     }
+  }
+
+  GetOutputData(): FormGroup<any> {
+    this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
+    let isValid = this.validateForm();
+    if (!isValid)
+      return null;
+
+    if (this.AdmissionId)
+      this.ItemForm.patchValue({ admissionId: this.AdmissionId });
+
+    if (this.SurgicalInterventionId)
+      this.ItemForm.patchValue({ surgicalInterventionId: this.SurgicalInterventionId });
+
+    this.ItemForm.patchValue({ insertUser: this.UserId });
+    const mainIds = this.SelectedMainSurgeon.map(a => a.id).join(',');
+    const assistantsIds = this.SelectedAssistants.map(a => a.id).join(',');
+    const residentIds = this.SelectedResident.map(a => a.id).join(',');
+    const supervisorIds = this.SelectedSupervisor.map(a => a.id).join(',');
+    this.ItemForm.patchValue({ mainSurgeon: mainIds || null });
+    this.ItemForm.patchValue({ assistants: assistantsIds || null });
+    this.ItemForm.patchValue({ resident: residentIds || null });
+    this.ItemForm.patchValue({ offFieldSupervisor: supervisorIds || null });
+
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+      this.ItemForm.patchValue({ fileModel: this.SelectedFile });
+    }
+
+    return this.ItemForm;
   }
 }

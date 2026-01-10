@@ -6,7 +6,7 @@ import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe, NgIf } from '@angular/common';
+import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
@@ -15,7 +15,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 @Component({
   selector: 'app-followup-create',
   standalone: true,
-  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent,NgIf],
+  imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, AdminUploadFileComponent, AdminSliderImageComponent, NgIf,NgClass],
   templateUrl: './followup-create.component.html',
   styleUrl: './followup-create.component.css',
   providers: [DatePipe]
@@ -24,6 +24,7 @@ export class FollowupCreateComponent {
   @Input() FollowUpId: any;
   @Input() SurgicalInterventionId: any;
   @Input() DetailsMode = false;
+  @Input() PatientMode = false;
   @Output() RefreshData = new EventEmitter<boolean>();
 
   patientRemarks = [
@@ -193,5 +194,23 @@ export class FollowupCreateComponent {
           this.toaster.error(data.message);
       });
     }
+  }
+
+  GetOutputData(): FormGroup<any> {
+    this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
+    let isValid = this.validateForm();
+    if (!isValid)
+      return null;
+
+    if (this.SurgicalInterventionId)
+      this.ItemForm.patchValue({ surgicalInterventionId: this.SurgicalInterventionId });
+
+    this.ItemForm.patchValue({ insertUser: this.UserId });
+
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+      this.ItemForm.patchValue({ fileModel: this.SelectedFile });
+    }
+
+    return this.ItemForm;
   }
 }

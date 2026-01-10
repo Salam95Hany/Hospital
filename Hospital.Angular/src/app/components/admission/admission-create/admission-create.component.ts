@@ -30,6 +30,7 @@ export class AdmissionCreateComponent implements OnInit {
   @Input() PatientId: any;
   @Input() AdmissionId: any;
   @Input() DetailsMode = false;
+  @Input() PatientMode = false;
   @Output() RefreshData = new EventEmitter<boolean>();
   courses = [
     { id: 'Progressing', name: 'Progressing' },
@@ -195,7 +196,6 @@ export class AdmissionCreateComponent implements OnInit {
     });
 
     this.ItemForm.valueChanges.subscribe((data) => {
-      debugger;
       this.formErrors = this.formService.validateForm(this.ItemForm, this.formErrors, true);
     });
   }
@@ -367,5 +367,36 @@ export class AdmissionCreateComponent implements OnInit {
   OnUrineAnalysisSelect(item: any) {
     this.selectedValue = item.id;
     // this.ItemForm.patchValue({ urineAnalysis: this.selectedValue + (this.UrineInputValue ? ' : ' + this.UrineInputValue : '') });
+  }
+
+  GetOutputData(): FormGroup<any> {
+    this.ItemForm = this.formService.TrimFormInputValue(this.ItemForm);
+    let isValid = this.validateForm();
+    if (!isValid)
+      return null;
+
+    if (this.selectedValue != 'Select Urine Analysis') {
+      if (this.UrineInputValue) {
+        const urineAnalysisValue = this.selectedValue + ';' + this.UrineInputValue;
+        this.ItemForm.patchValue({ urineAnalysis: urineAnalysisValue });
+      } else {
+        this.toaster.error('Please enter value for urine analysis');
+        return null;
+      }
+    }
+
+    if (this.AdmissionId)
+      this.ItemForm.patchValue({ admissionId: this.AdmissionId });
+
+    if (this.PatientId)
+      this.ItemForm.patchValue({ patientId: this.PatientId });
+
+    this.ItemForm.patchValue({ insertUser: this.UserId });
+
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0) {
+      this.ItemForm.patchValue({ fileModel: this.SelectedFile });
+    }
+
+    return this.ItemForm;
   }
 }
