@@ -141,7 +141,6 @@ namespace Hospital.Services.PatientsService
                 ChiefComplaint = Model.ChiefComplaint,
                 Duration = Model.Duration,
                 HospitalBranch = Model.HospitalBranch,
-                HospitalStates = Model.HospitalStates,
                 Course = Model.Course,
                 HPI = Model.HPI,
                 Comorbidities = Model.Comorbidities,
@@ -274,7 +273,6 @@ namespace Hospital.Services.PatientsService
         {
             var followUp = new FollowUp
             {
-                SurgicalInterventionId = surgicalInterventionId,
                 FollowUpDate = followUpModel.FollowUpDate,
                 PatientRemarksStatus = followUpModel.PatientRemarksStatus,
                 PatientRemarksDetails = followUpModel.PatientRemarksDetails,
@@ -572,8 +570,8 @@ namespace Hospital.Services.PatientsService
                         intervention.IsDeleted = true;
                         _unitOfWork.Repository<SurgicalIntervention>().Update(intervention);
 
-                        await _unitOfWork.Repository<FollowUp>()
-                            .DeleteWhereAsync(f => f.SurgicalInterventionId == intervention.SurgicalInterventionId);
+                        //await _unitOfWork.Repository<FollowUp>()
+                        //    .DeleteWhereAsync(f => f.SurgicalInterventionId == intervention.SurgicalInterventionId);
                     }
                 }
 
@@ -604,11 +602,11 @@ namespace Hospital.Services.PatientsService
                         .WhereAsync(si => si.AdmissionId == admission.AdmissionId);
 
                     // Step 3: Delete all followups for each surgical intervention
-                    foreach (var surgicalIntervention in surgicalInterventions)
-                    {
-                        await _unitOfWork.Repository<FollowUp>()
-                            .DeleteWhereAsync(f => f.SurgicalInterventionId == surgicalIntervention.SurgicalInterventionId);
-                    }
+                    //foreach (var surgicalIntervention in surgicalInterventions)
+                    //{
+                    //    await _unitOfWork.Repository<FollowUp>()
+                    //        .DeleteWhereAsync(f => f.SurgicalInterventionId == surgicalIntervention.SurgicalInterventionId);
+                    //}
 
                     // Step 4: Delete all surgical interventions for the admission
                     await _unitOfWork.Repository<SurgicalIntervention>()

@@ -22,7 +22,7 @@ import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/Upload
 })
 export class FollowupCreateComponent {
   @Input() FollowUpId: any;
-  @Input() SurgicalInterventionId: any;
+  @Input() AdmissionId: any;
   @Input() DetailsMode = false;
   @Input() PatientMode = false;
   @Output() RefreshData = new EventEmitter<boolean>();
@@ -62,7 +62,7 @@ export class FollowupCreateComponent {
   FormInit() {
     this.ItemForm = this.fb.group({
       followUpId: 0,
-      surgicalInterventionId: 0,
+      admissionId: 0,
       followUpDate: [null, [Validators.required]],
       patientRemarksStatus: [null, [Validators.required]],
       patientRemarksDetails: [null],
@@ -158,8 +158,8 @@ export class FollowupCreateComponent {
     if (!isValid)
       return;
 
-    if (this.SurgicalInterventionId)
-      this.ItemForm.patchValue({ surgicalInterventionId: this.SurgicalInterventionId });
+    if (this.AdmissionId)
+      this.ItemForm.patchValue({ admissionId: this.AdmissionId });
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 
@@ -202,8 +202,8 @@ export class FollowupCreateComponent {
     if (!isValid)
       return null;
 
-    if (this.SurgicalInterventionId)
-      this.ItemForm.patchValue({ surgicalInterventionId: this.SurgicalInterventionId });
+    if (this.AdmissionId)
+      this.ItemForm.patchValue({ admissionId: this.AdmissionId });
 
     this.ItemForm.patchValue({ insertUser: this.UserId });
 

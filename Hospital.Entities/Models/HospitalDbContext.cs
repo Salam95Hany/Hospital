@@ -47,12 +47,6 @@ namespace Hospital.Entities.Models
                 .HasForeignKey(f => f.AdmissionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<SurgicalIntervention>()
-                .HasMany<FollowUp>()
-                .WithOne(f => f.SurgicalIntervention)
-                .HasForeignKey(f => f.SurgicalInterventionId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
         }
     }
 }

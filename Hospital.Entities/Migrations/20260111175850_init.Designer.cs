@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Entities.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    [Migration("20260110111134_init")]
+    [Migration("20260111175850_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -174,7 +174,7 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("HospitalFileNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HospitalStates")
+                    b.Property<string>("ImagingResult")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("InsertDate")
@@ -405,9 +405,6 @@ namespace Hospital.Entities.Migrations
                     b.Property<string>("PatientRemarksStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SurgicalInterventionId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
@@ -422,8 +419,6 @@ namespace Hospital.Entities.Migrations
                     b.HasIndex("AdmissionId");
 
                     b.HasIndex("InsertUser");
-
-                    b.HasIndex("SurgicalInterventionId");
 
                     b.HasIndex("UpdateUser");
 
@@ -556,6 +551,9 @@ namespace Hospital.Entities.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FollowUpDoctorPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagingResult")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("InsertDate")
@@ -818,11 +816,6 @@ namespace Hospital.Entities.Migrations
                         .WithMany()
                         .HasForeignKey("InsertUser");
 
-                    b.HasOne("Hospital.Entities.Models.SurgicalIntervention", "SurgicalIntervention")
-                        .WithMany()
-                        .HasForeignKey("SurgicalInterventionId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Hospital.Entities.Auth.AdminUser", "UpdatedBy")
                         .WithMany()
                         .HasForeignKey("UpdateUser");
@@ -830,8 +823,6 @@ namespace Hospital.Entities.Migrations
                     b.Navigation("Admission");
 
                     b.Navigation("CreatedBy");
-
-                    b.Navigation("SurgicalIntervention");
 
                     b.Navigation("UpdatedBy");
                 });

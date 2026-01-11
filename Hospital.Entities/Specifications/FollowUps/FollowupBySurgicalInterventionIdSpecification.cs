@@ -9,7 +9,7 @@ namespace Hospital.Entities.Specifications.FollowUps
 {
     public class FollowupBySurgicalInterventionIdSpecification : BaseSpecification<FollowUp>
     {
-        public FollowupBySurgicalInterventionIdSpecification(List<int> Ids) : base(i => Ids.Contains((int)i.SurgicalInterventionId))
+        public FollowupBySurgicalInterventionIdSpecification(List<int> Ids) : base(i => Ids.Contains((int)i.AdmissionId))
         {
 
         }

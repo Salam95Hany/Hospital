@@ -20,6 +20,8 @@ namespace Hospital.Entities.Models
         public string? Assistants { get; set; }
         public string? Resident { get; set; }
 
+        public string? ImagingResult { get; set; }
+
         // NEW: Missing properties
         public string? OtherSurgeons { get; set; }
         public string? OffFieldSupervisor { get; set; }

@@ -20,17 +20,16 @@ namespace Hospital.Services
             _attachmentsService = attachmentsService;
         }
 
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int SurgicalInterventionId)
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int AdmissionId)
         {
-            var DataSpec = new FollowUpDataSpecification(PagingFilter, SurgicalInterventionId);
-            var CountSpec = new FollowUpDataSpecification(PagingFilter, SurgicalInterventionId, false);
+            var DataSpec = new FollowUpDataSpecification(PagingFilter, AdmissionId);
+            var CountSpec = new FollowUpDataSpecification(PagingFilter, AdmissionId, false);
             var Entity = _unitOfWork.Repository<FollowUp>();
             var TotalCount = await Entity.GetCountAsync(CountSpec);
             var Results = await Entity.GetAllWithSpecAsync(DataSpec);
             var Data = Results.Select(i => new FollowUpDto
             {
                 FollowUpId = i.FollowUpId,
-                SurgicalInterventionId = (int)i.SurgicalInterventionId,
                 AdmissionId = i.AdmissionId,
                 PatientId = i.Admission.Patient.PatientId,
                 FollowUpDate = i.FollowUpDate,
@@ -56,7 +55,8 @@ namespace Hospital.Services
             {
                 var followUp = new FollowUp
                 {
-                    SurgicalInterventionId = Model.SurgicalInterventionId,
+                    AdmissionId = Model.AdmissionId,
+                    //SurgicalInterventionId = Model.SurgicalInterventionId,
                     FollowUpDate = Model.FollowUpDate,
                     PatientRemarksStatus = Model.PatientRemarksStatus,
                     PatientRemarksDetails = Model.PatientRemarksDetails,

@@ -19,9 +19,9 @@ namespace Hospital.Controllers
         }
 
         [HttpPost("GetAllFollowUpData")]
-        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int SurgicalInterventionId)
+        public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int AdmissionId)
         {
-            var results = await _followUpsService.GetAllFollowUpData(PagingFilter, SurgicalInterventionId);
+            var results = await _followUpsService.GetAllFollowUpData(PagingFilter, AdmissionId);
             return results;
         }
 

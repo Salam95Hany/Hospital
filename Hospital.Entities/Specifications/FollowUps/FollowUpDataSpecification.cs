@@ -10,7 +10,7 @@ namespace Hospital.Entities.Specifications.FollowUps
 {
     public class FollowUpDataSpecification : BaseSpecification<FollowUp>
     {
-        public FollowUpDataSpecification(PagingFilterModel PagingFilter,int SurgicalInterventionId, bool applyPaging = true) : base(i => i.SurgicalInterventionId == SurgicalInterventionId && i.IsDeleted == false)
+        public FollowUpDataSpecification(PagingFilterModel PagingFilter,int AdmissionId, bool applyPaging = true) : base(i => i.AdmissionId == AdmissionId && i.IsDeleted == false)
         {
             var FollowUpDateFrom = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "FollowUp Date")?.From;
             var FollowUpDateTo = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "FollowUp Date")?.To;
@@ -20,7 +20,7 @@ namespace Hospital.Entities.Specifications.FollowUps
                 AddCriteria(fc => fc.FollowUpDate >= DateTime.Parse(FollowUpDateFrom) && fc.FollowUpDate <= DateTime.Parse(FollowUpDateTo));
             }
 
-            AddInclude("SurgicalInterventions.Admission.Patient");
+            AddInclude("Admission.Patient");
             AddInclude(i => i.CreatedBy);
 
             ApplyOrderBy(fc => fc.InsertDate);
