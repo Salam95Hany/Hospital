@@ -16,12 +16,15 @@ import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
+import { SearchReportModel } from '../../../models/SearchReportModel';
+import { NgxLoadingModule } from "ngx-loading";
+import { DownloadFileService } from '../../../services/download-file.service';
 
 @Component({
   selector: 'app-admission-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,RoleCheckerDirective,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdmissionCreateComponent],
+  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, RoleCheckerDirective,
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdmissionCreateComponent, NgxLoadingModule],
   templateUrl: './admission-list.component.html',
   styleUrl: './admission-list.component.css',
   providers: [DatePipe]
@@ -35,6 +38,7 @@ export class AdmissionListComponent {
   BtnDisabled = false;
   showSlider = false;
   ReloadFilter = false;
+  showLoader = false;
   PatientId: number;
   AdmissionId: number;
   searchTerm: string = '';
@@ -61,8 +65,14 @@ export class AdmissionListComponent {
       filterType: "DateRange"
     }
   ];
+  ReportModel: SearchReportModel = {
+      reportType: '',
+      queryString: []
+    };
 
-  constructor(private adminService: AdminService, private router: Router, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe) { }
+  constructor(private adminService: AdminService, private router: Router, private toaster: ToastrService, private modalService: NgbModal, private datePipe: DatePipe,
+    private fileService: DownloadFileService
+  ) { }
 
   ngOnInit(): void {
 
@@ -176,6 +186,20 @@ export class AdmissionListComponent {
         this.modalService.dismissAll();
       } else
         this.toaster.error(res.message);
+    });
+  }
+
+  DownloadPdfFile(admissionId: any) {
+    this.ReportModel.queryString = [
+      { key: 'PatientId', value: this.PatientId.toString() },
+      { key: 'AdmissionId', value: admissionId.toString() },
+    ];
+    this.ReportModel.reportType = 'PresentationForm';
+    let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd-HHmmss');
+    let fileName = 'PresentationForm' + '_' + today;
+    this.showLoader = true;
+    this.fileService.DownloadFile(this.ReportModel, fileName + '.pdf').subscribe(data => {
+      this.showLoader = false;
     });
   }
 }

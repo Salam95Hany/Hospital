@@ -16,13 +16,13 @@ using RazorLight;
 
 namespace Hospital.Reports.PdfTemplate
 {
-    public class SurgicalInterventionTempGenerator : ReportGenerator, IReportGenerator
+    public class InterventionReportTempGenerator : ReportGenerator, IReportGenerator
     {
         private readonly IWebHostEnvironment _environment;
         private readonly IReportsDataService _reportsDataService;
-        public ReportType ReportType => ReportType.SurgicalIntervention;
+        public override ReportType ReportType => ReportType.InterventionReport;
 
-        public SurgicalInterventionTempGenerator(IWebHostEnvironment environment, IReportsDataService reportsDataService, IRazorLightEngine razorEngine, IPDFHelper pDFHelper) : base(razorEngine, pDFHelper)
+        public InterventionReportTempGenerator(IWebHostEnvironment environment, IReportsDataService reportsDataService, IRazorLightEngine razorEngine, IPDFHelper pDFHelper) : base(razorEngine, pDFHelper)
         {
             _environment = environment;
             _reportsDataService = reportsDataService;
@@ -36,7 +36,7 @@ namespace Hospital.Reports.PdfTemplate
             var SurgicalId = Model.QueryString.FirstOrDefault(i => i.Key == "SurgicalId")?.Value;
             if (!string.IsNullOrEmpty(PatientId) && !string.IsNullOrEmpty(AdmissionId) && !string.IsNullOrEmpty(SurgicalId))
             {
-                var Results = await _reportsDataService.GetAdmissionTempData(int.Parse(PatientId), int.Parse(AdmissionId), int.Parse(SurgicalId), null);
+                var Results = await _reportsDataService.GetAdmissionTempData(int.Parse(PatientId), int.Parse(AdmissionId), int.Parse(SurgicalId));
                 var Data = new PdfDataReports
                 {
                     Data = Results,

@@ -24,7 +24,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Update="wwwroot\TemplatesHTML\SurgicalIntervention.cshtml">
+	  <Content Update="wwwroot\TemplatesHTML\PresentationForm.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="wwwroot\TemplatesHTML\DischargeSummary.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\TemplatesHTML\InterventionReport.cshtml">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>

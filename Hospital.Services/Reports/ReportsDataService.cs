@@ -17,33 +17,7 @@ namespace Hospital.Services.Reports
             _unitOfWork = unitOfWork;
         }
 
-        //public async Task<Dictionary<string, string>> GetAdmissionTempData(int? PatientId, int? AdmissionId, int? SurgicalId, int? FollowUpId)
-        //{
-        //    var result = new Dictionary<string, string>();
-        //    if (PatientId.HasValue)
-        //    {
-        //        var Patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(PatientId.Value);
-        //        AddProps(result, Patient);
-        //    }
-        //    if (AdmissionId.HasValue)
-        //    {
-        //        var Admission = await _unitOfWork.Repository<Admission>().GetByIdAsync(AdmissionId.Value);
-        //        AddProps(result, Admission);
-        //    }
-        //    if (SurgicalId.HasValue)
-        //    {
-        //        var Surgical = await _unitOfWork.Repository<SurgicalIntervention>().GetByIdAsync(SurgicalId.Value);
-        //        AddProps(result, Surgical);
-        //    }
-        //    if (FollowUpId.HasValue)
-        //    {
-        //        var FollowUp = await _unitOfWork.Repository<FollowUp>().GetByIdAsync(FollowUpId.Value);
-        //        AddProps(result, FollowUp);
-        //    }
-
-        //    return result;
-        //}
-        public async Task<Dictionary<string, string>> GetAdmissionTempData(int? PatientId, int? AdmissionId, int? SurgicalId, int? FollowUpId)
+        public async Task<Dictionary<string, string>> GetAdmissionTempData(int? PatientId, int? AdmissionId, int? SurgicalId = null)
         {
             var result = new Dictionary<string, string>();
 
@@ -122,12 +96,6 @@ namespace Hospital.Services.Reports
 
                     AddProps(result, Surgical);
                 }
-            }
-
-            if (FollowUpId.HasValue)
-            {
-                var FollowUp = await _unitOfWork.Repository<FollowUp>().GetByIdAsync(FollowUpId.Value);
-                AddProps(result, FollowUp);
             }
 
             return result;

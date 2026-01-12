@@ -56,6 +56,10 @@
                         <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.admissionId)" appRole [roles]="['SupperAdmin', 'Admin']">
                             <i class="fas fa-trash"></i>
                         </button>
+                        <button class="btn btn-sm btn-success download-btn me-1" (click)="DownloadPdfFile(item.admissionId)">
+                            <i class="fas fa-download"></i>
+                            <span class="me-1">Presentation Form</span>
+                        </button>
                     </td>
                 </tr>
                 <tr *ngIf="Admissions.length === 0">
@@ -97,3 +101,5 @@
         </button>
     </div>
 </ng-template>
+
+<ngx-loading [show]="showLoader"></ngx-loading>

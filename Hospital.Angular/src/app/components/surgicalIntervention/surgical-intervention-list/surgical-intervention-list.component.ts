@@ -24,7 +24,7 @@ import { NgxLoadingModule } from 'ngx-loading';
   selector: 'app-surgical-intervention-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, RoleCheckerDirective,NgxLoadingModule],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, RoleCheckerDirective, NgxLoadingModule],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
   providers: [DatePipe]
@@ -71,7 +71,7 @@ export class SurgicalInterventionListComponent implements OnInit {
     }
   ];
   ReportModel: SearchReportModel = {
-    reportType: 'SurgicalIntervention',
+    reportType: '',
     queryString: []
   };
 
@@ -256,26 +256,15 @@ export class SurgicalInterventionListComponent implements OnInit {
     });
   }
 
-  DownloadPdfFile(surgicalId: any) {
-    if (!this.PatientId) {
-      this.toaster.warning('Please select patient');
-      return;
-    }
-    if (!this.AdmissionId) {
-      this.toaster.warning('Please select admission');
-      return;
-    }
-    if (this.SurgicalInterventions.length == 0) {
-      this.toaster.warning('No data found to export');
-      return;
-    }
+  DownloadPdfFile(surgicalId: any, reportType: string) {
     this.ReportModel.queryString = [
       { key: 'PatientId', value: this.PatientId.toString() },
       { key: 'AdmissionId', value: this.AdmissionId.toString() },
       { key: 'SurgicalId', value: surgicalId.toString() }
     ];
+    this.ReportModel.reportType = reportType;
     let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd-HHmmss');
-    let fileName = 'SurgicalIntervention' + '_' + today;
+    let fileName = reportType + '_' + today;
     this.showLoader = true;
     this.fileService.DownloadFile(this.ReportModel, fileName + '.pdf').subscribe(data => {
       this.showLoader = false;

@@ -8,6 +8,8 @@ namespace Hospital.Reports.Model
 {
     public enum ReportType
     {
-        SurgicalIntervention,
+        InterventionReport,
+        DischargeSummary,
+        PresentationForm
     }
 }

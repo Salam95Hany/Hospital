@@ -7,9 +7,9 @@ namespace Hospital.Reports.Service
 {
     public abstract class ReportGenerator
     {
+        public abstract ReportType ReportType { get; }
         private readonly IRazorLightEngine _razorEngine;
         private readonly IPDFHelper _pDFHelper;
-        public ReportType ReportType { get; set; }
 
         protected ReportGenerator(IRazorLightEngine razorEngine, IPDFHelper pDFHelper)
         {

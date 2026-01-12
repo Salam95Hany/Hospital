@@ -54,11 +54,16 @@
                         <button class="btn btn-sm btn-warning" (click)="OpenSurgicalCreateModal(SurgicalCreateModal,item.surgicalInterventionId)" appRole [roles]="['SupperAdmin', 'Admin']">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" (click)="openDeleteItemModal(deleteItemModal,item.surgicalInterventionId)" appRole [roles]="['SupperAdmin', 'Admin']">
+                        <button class="btn btn-sm btn-danger me-1" (click)="openDeleteItemModal(deleteItemModal,item.surgicalInterventionId)" appRole [roles]="['SupperAdmin', 'Admin']">
                             <i class="fas fa-trash"></i>
                         </button>
-                        <button class="btn btn-sm btn-success" (click)="DownloadPdfFile(item.surgicalInterventionId)">
+                        <button class="btn btn-sm btn-success download-btn me-1" (click)="DownloadPdfFile(item.surgicalInterventionId,'InterventionReport')">
                             <i class="fas fa-download"></i>
+                            <span class="me-1">Intervention Report</span>
+                        </button>
+                        <button class="btn btn-sm btn-success download-btn me-1" (click)="DownloadPdfFile(item.surgicalInterventionId,'DischargeSummary')">
+                            <i class="fas fa-download"></i>
+                            <span class="me-1">Discharge Summary</span>
                         </button>
                     </td>
                 </tr>
