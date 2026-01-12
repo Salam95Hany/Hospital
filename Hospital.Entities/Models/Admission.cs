@@ -25,7 +25,6 @@ namespace Hospital.Entities.Models
         // Medical History
         public string? ChiefComplaint { get; set; }
         public string? Duration { get; set; }
-        public string? HospitalStates { get; set; }
 
         // NEW: Course as enum or string for checkboxes
         public string? Course { get; set; }
@@ -83,6 +82,7 @@ namespace Hospital.Entities.Models
         // Diagnosis and Planning
         public string? ProvisionalDiagnosis { get; set; }
         public string? MedicalDecision { get; set; }
+        public string? ImagingResult { get; set; }
         public DateTime? ScheduledDate { get; set; }
 
         [NotMapped]

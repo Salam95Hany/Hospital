@@ -32,12 +32,11 @@ export class FollowupListComponent {
   FollowUps: any[] = [];
   ImportedFiles: FilesModel[] = [];
   FollowUpObj: any;
-  SurgicalInterventionId: number;
+  AdmissionId: number;
   FollowUpId: number;
   searchTerm: string = '';
   selectedPatient: any = null;
   selectedAdmission: any = null;
-  selectedSurgicalInterventions: any = null;
   isFilter = true;
   showSlider = false;
   BtnDisabled = false;
@@ -67,10 +66,12 @@ export class FollowupListComponent {
   }
 
   GetAllFollowUpData(): void {
-    this.adminService.GetAllFollowUpData(this.PagingFilter, this.SurgicalInterventionId).subscribe(response => {
-      this.FollowUps = response.results;
-      this.TotalCount = response.totalCount;
-    });
+    if (this.AdmissionId) {
+      this.adminService.GetAllFollowUpData(this.PagingFilter, this.AdmissionId).subscribe(response => {
+        this.FollowUps = response.results;
+        this.TotalCount = response.totalCount;
+      });
+    }
   }
 
   GetFollowUpById() {
@@ -91,23 +92,22 @@ export class FollowupListComponent {
     this.selectedPatient = item;
     if (!item) {
       this.selectedAdmission = null;
-      this.SurgicalInterventionId = null;
-      this.selectedSurgicalInterventions = null;
+      this.AdmissionId = null;
+      this.FollowUps = [];
+      this.TotalCount = 0;
     }
   }
 
   onAdmissionSelected(item: any) {
     this.selectedAdmission = item;
-    if (!item) {
-      this.SurgicalInterventionId = null;
-      this.selectedSurgicalInterventions = null;
+    this.AdmissionId = item?.id;
+    if (this.AdmissionId) {
+      this.GetAllFollowUpData();
+    } else {
+      this.AdmissionId = null;
+      this.FollowUps = [];
+      this.TotalCount = 0;
     }
-  }
-
-  onSurgicalInterventionsSelected(item: any) {
-    this.SurgicalInterventionId = item?.id;
-    this.selectedSurgicalInterventions = item;
-    this.GetAllFollowUpData();
   }
 
   OpenFollowUpCreateModal(content: any, followUpId: any) {
@@ -118,11 +118,6 @@ export class FollowupListComponent {
 
     if (!this.selectedAdmission?.id) {
       this.toaster.warning('Please select admission');
-      return;
-    }
-
-    if (!this.selectedSurgicalInterventions?.id) {
-      this.toaster.warning('Please select surgical intervention');
       return;
     }
 

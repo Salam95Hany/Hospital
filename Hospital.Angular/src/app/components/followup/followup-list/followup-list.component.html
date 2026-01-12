@@ -10,10 +10,6 @@
                 <app-search-autocomplete [mainTitle]="'Select Admission'" [inputPlaceholder]="'Enter Admission'" [searchDescripition]="'Start typing to search admission'" [searchType]="'Admission'" [itemId]="selectedPatient?.id" [selectedItem]="selectedAdmission" [disabled]="!selectedPatient"
                     (itemSearch)="onAdmissionSelected($event)"></app-search-autocomplete>
             </div>
-            <div class="col-md-4">
-                <app-search-autocomplete [mainTitle]="'Select Surgical Interventions'" [inputPlaceholder]="'Enter Surgical Interventions'" [searchDescripition]="'Start typing to search surgical interventions'" [searchType]="'SurgicalInterventions'" [itemId]="selectedAdmission?.id"
-                    [selectedItem]="selectedSurgicalInterventions" [disabled]="!selectedAdmission" (itemSearch)="onSurgicalInterventionsSelected($event)"></app-search-autocomplete>
-            </div>
         </div>
     </div>
 </div>
@@ -72,11 +68,11 @@
 
 
 <ng-template #FollowUpCreateModal let-modal>
-    <app-followup-create (RefreshData)="RefreshData($event)" [FollowUpId]="FollowUpId" [SurgicalInterventionId]="SurgicalInterventionId"></app-followup-create>
+    <app-followup-create (RefreshData)="RefreshData($event)" [FollowUpId]="FollowUpId" [AdmissionId]="AdmissionId"></app-followup-create>
 </ng-template>
 
 <ng-template #FollowUpDetailsModal let-modal>
-    <app-followup-create (RefreshData)="RefreshData($event)" [FollowUpId]="FollowUpId" [SurgicalInterventionId]="SurgicalInterventionId" [DetailsMode]="true"></app-followup-create>
+    <app-followup-create (RefreshData)="RefreshData($event)" [FollowUpId]="FollowUpId" [AdmissionId]="AdmissionId" [DetailsMode]="true"></app-followup-create>
 </ng-template>
 
 <ng-template #deleteItemModal let-modal>

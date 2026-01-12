@@ -69,7 +69,6 @@ namespace Hospital.Services
                     ChiefComplaint = Model.ChiefComplaint,
                     Duration = Model.Duration,
                     HospitalBranch = Model.HospitalBranch,
-                    HospitalStates = Model.HospitalStates,
                     Course = Model.Course,
                     HPI = Model.HPI,
                     Comorbidities = Model.Comorbidities,
@@ -160,7 +159,6 @@ namespace Hospital.Services
                 Entity.ChiefComplaint = Model.ChiefComplaint;
                 Entity.Duration = Model.Duration;
                 Entity.HospitalBranch = Model.HospitalBranch;
-                Entity.HospitalStates = Model.HospitalStates;
                 Entity.Course = Model.Course;
                 Entity.HPI = Model.HPI;
                 Entity.Comorbidities = Model.Comorbidities;

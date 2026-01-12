@@ -166,7 +166,7 @@ namespace Hospital.Services
                         DoctorName = doctorName,
                         AcademicDegree = academicDegree,
                         IsDeleted = false,
-                        InsertUser = "b0aaf719-a21c-453c-b67b-8a97c0f2e91d",
+                        InsertUser = "006b7d3a-3088-4677-9f63-845decbb9013",
                         InsertDate = DateTime.UtcNow
                     });
                 }

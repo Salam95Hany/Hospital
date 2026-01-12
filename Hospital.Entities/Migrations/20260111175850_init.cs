@@ -272,7 +272,6 @@ namespace Hospital.Entities.Migrations
                     DischargeDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ChiefComplaint = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HospitalStates = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Course = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HPI = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Comorbidities = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -311,6 +310,7 @@ namespace Hospital.Entities.Migrations
                     OtherImaging = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProvisionalDiagnosis = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MedicalDecision = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagingResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScheduledDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -340,6 +340,52 @@ namespace Hospital.Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FollowUps",
+                columns: table => new
+                {
+                    FollowUpId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AdmissionId = table.Column<int>(type: "int", nullable: false),
+                    FollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PatientRemarksStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PatientRemarksDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExaminationFindings = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WoundStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Catheters = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LabResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagingResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Advice = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NewDecision = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NextFollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FollowUps", x => x.FollowUpId);
+                    table.ForeignKey(
+                        name: "FK_FollowUps_Admissions_AdmissionId",
+                        column: x => x.AdmissionId,
+                        principalTable: "Admissions",
+                        principalColumn: "AdmissionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FollowUps_AspNetUsers_InsertUser",
+                        column: x => x.InsertUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FollowUps_AspNetUsers_UpdateUser",
+                        column: x => x.UpdateUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SurgicalInterventions",
                 columns: table => new
                 {
@@ -351,6 +397,7 @@ namespace Hospital.Entities.Migrations
                     MainSurgeon = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Assistants = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Resident = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagingResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OtherSurgeons = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OffFieldSupervisor = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Anesthesia = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -399,59 +446,6 @@ namespace Hospital.Entities.Migrations
                         column: x => x.UpdateUser,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FollowUps",
-                columns: table => new
-                {
-                    FollowUpId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AdmissionId = table.Column<int>(type: "int", nullable: false),
-                    SurgicalInterventionId = table.Column<int>(type: "int", nullable: true),
-                    FollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PatientRemarksStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PatientRemarksDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExaminationFindings = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WoundStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Catheters = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LabResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImagingResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Advice = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NewDecision = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NextFollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    InsertUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    InsertDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FollowUps", x => x.FollowUpId);
-                    table.ForeignKey(
-                        name: "FK_FollowUps_Admissions_AdmissionId",
-                        column: x => x.AdmissionId,
-                        principalTable: "Admissions",
-                        principalColumn: "AdmissionId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FollowUps_AspNetUsers_InsertUser",
-                        column: x => x.InsertUser,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_FollowUps_AspNetUsers_UpdateUser",
-                        column: x => x.UpdateUser,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_FollowUps_SurgicalInterventions_SurgicalInterventionId",
-                        column: x => x.SurgicalInterventionId,
-                        principalTable: "SurgicalInterventions",
-                        principalColumn: "SurgicalInterventionId",
-                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
@@ -529,11 +523,6 @@ namespace Hospital.Entities.Migrations
                 column: "InsertUser");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FollowUps_SurgicalInterventionId",
-                table: "FollowUps",
-                column: "SurgicalInterventionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FollowUps_UpdateUser",
                 table: "FollowUps",
                 column: "UpdateUser");
@@ -595,10 +584,10 @@ namespace Hospital.Entities.Migrations
                 name: "SurgicalDoctors");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "SurgicalInterventions");
 
             migrationBuilder.DropTable(
-                name: "SurgicalInterventions");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Admissions");

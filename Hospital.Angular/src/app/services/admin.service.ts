@@ -59,8 +59,8 @@ export class AdminService {
 
   // ============================== FollowUps ==============================
 
-  GetAllFollowUpData(PagingFilter: PagingFilterModel, SurgicalInterventionId: number) {
-    return this.http.post<ApiResponseModel<any>>(this.Url + 'FollowUps/GetAllFollowUpData?SurgicalInterventionId=' + SurgicalInterventionId, PagingFilter);
+  GetAllFollowUpData(PagingFilter: PagingFilterModel, AdmissionId: number) {
+    return this.http.post<ApiResponseModel<any>>(this.Url + 'FollowUps/GetAllFollowUpData?AdmissionId=' + AdmissionId, PagingFilter);
   }
 
   GetFollowUpById(FollowUpId: number) {
