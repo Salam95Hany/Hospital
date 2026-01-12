@@ -100,7 +100,7 @@ export class SearchAutocompleteComponent implements OnInit, OnChanges {
   }
 
   loadAdmissionsForPatient(): void {
-    // this.isAutoCompleteLoading = true;
+    this.isAutoCompleteLoading = true;
 
     const obj = {
       SearchText: '',

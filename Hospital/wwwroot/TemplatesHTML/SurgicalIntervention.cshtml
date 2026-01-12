@@ -11,7 +11,7 @@
             <table width="100%" style="font-family:'Cairo Black';font-size:20px;">
                 <tr>
                     <td width="40%" align="center">
-                        Al-Azhar<br/> Urology Department
+                        Al-Azhar<br /> Urology Department
                     </td>
 
                     <td width="20%" align="center">
@@ -25,7 +25,7 @@
                     </td>
 
                     <td width="40%" align="center" style="font-weight:700">
-                        Patients' Database<br/> Intervention Report
+                        Patients' Database<br /> Intervention Report
                     </td>
                 </tr>
             </table>
@@ -36,7 +36,10 @@
         <td width="40%" style="padding-right:10px; padding-bottom:5px;">
             <table width="100%" style="border:1px solid;height:35px;">
                 <tr>
-                    <td style="padding-left:5px;">@_Model.GetDataFieldValue("NationalId")</td>
+                    <td style="padding-right:5px;" dir="rtl">
+                        <span style="font-size:12px;">الرقم القومي:</span>
+                        <span>@_Model.GetDataFieldValue("NationalId")</span>
+                    </td>
                 </tr>
             </table>
         </td>
