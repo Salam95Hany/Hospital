@@ -92,10 +92,10 @@ export class AdmissionCreateComponent implements OnInit {
   ngOnInit(): void {
     this.UserId = this.authService.userId;
     this.FormInit();
-    // Only enforce duplicate check when adding new admission (no AdmissionId)
     if (!this.AdmissionId) {
       this.setupHospitalFileNumberValidation();
     }
+    this.setupDurationBinding();
     if (this.AdmissionId) {
       this.GetAdmissionById();
       this.GetFilesByActionId();
@@ -110,7 +110,6 @@ export class AdmissionCreateComponent implements OnInit {
   private setupHospitalFileNumberValidation(): void {
     const ctrl = this.ItemForm.get('hospitalFileNumber');
     if (!ctrl) return;
-
     ctrl.valueChanges
       .pipe(
         debounceTime(300),
@@ -124,8 +123,23 @@ export class AdmissionCreateComponent implements OnInit {
         })
       )
       .subscribe((results: any[]) => {
-        const exists = Array.isArray(results) && results.length > 0;
-        if (exists) {
+        let hasConflict = false;
+        if (Array.isArray(results) && results.length > 0) {
+          if (this.PatientId) {
+            const currentPatientId = this.PatientId;
+            const otherPatientRecords = results.filter((r: any) => {
+              const pid = r.patientId ?? r.PatientId;
+              if (pid == null) {
+                return true;
+              }
+              return pid !== currentPatientId;
+            });
+            hasConflict = otherPatientRecords.length > 0;
+          } else {
+            hasConflict = true;
+          }
+        }
+        if (hasConflict) {
           this.formErrors.hospitalFileNumber = 'Hospital file number already exists';
           ctrl.setErrors({ ...(ctrl.errors || {}), duplicate: true });
           this.BtnDisabled = true;
@@ -139,6 +153,34 @@ export class AdmissionCreateComponent implements OnInit {
       });
   }
 
+  private setupDurationBinding(): void {
+    const admissionCtrl = this.ItemForm.get('admissionDate');
+    const dischargeCtrl = this.ItemForm.get('dischargeDate');
+    if (!admissionCtrl || !dischargeCtrl) return;
+
+    const updateDuration = () => {
+      const admissionDate = admissionCtrl.value;
+      const dischargeDate = dischargeCtrl.value;
+      if (admissionDate && dischargeDate) {
+        const admission = new Date(admissionDate);
+        const discharge = new Date(dischargeDate);
+        if (discharge >= admission) {
+          const diffMs = discharge.getTime() - admission.getTime();
+          const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+          this.ItemForm.get('duration')?.setValue(`${days} days`, { emitEvent: false });
+        } else {
+          this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
+        }
+      } else {
+        this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
+      }
+    };
+
+    admissionCtrl.valueChanges.subscribe(() => updateDuration());
+    dischargeCtrl.valueChanges.subscribe(() => updateDuration());
+    updateDuration();
+  }
+
   FormInit() {
     this.ItemForm = this.fb.group({
       admissionId: 0,
@@ -149,7 +191,6 @@ export class AdmissionCreateComponent implements OnInit {
       hospitalBranch: ['', [Validators.required]],
       chiefComplaint: ['', [Validators.required]],
       duration: null,
-      hospitalStates: null,
       course: null,
       hPI: ['', [Validators.required]],
       comorbidities: null,
@@ -211,7 +252,6 @@ export class AdmissionCreateComponent implements OnInit {
       patientId: item.patientId ?? 0,
       hospitalFileNumber: item.hospitalFileNumber ?? '',
       hospitalBranch: item.hospitalBranch ?? '',
-      hospitalStates: item.hospitalStates ?? '',
       admissionDate: this.datePipe.transform(item.admissionDate, 'yyyy-MM-dd') ?? '',
       dischargeDate: this.datePipe.transform(item.dischargeDate, 'yyyy-MM-dd') ?? '',
       chiefComplaint: item.chiefComplaint ?? null,

@@ -286,13 +286,9 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     });
 
     this.initForm();
-    // Load doctors for multi-select in Surgical step
     this.loadDoctors();
     this.setupFormValueChanges();
-    // Duplicate check for hospital file number in admission step when creating a new patient
-    if (!this.patientId) {
-      this.setupHospitalFileNumberValidation();
-    }
+    this.setupHospitalFileNumberValidation();
 
     // If patientId is provided via input (embedded usage), attempt to load last details
     this.tryLoadDataFromInput();
@@ -313,7 +309,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   private setupHospitalFileNumberValidation(): void {
     const ctrl = this.admission.get('hospitalFileNumber');
     if (!ctrl) return;
-
     ctrl.valueChanges
       .pipe(
         debounceTime(300),
@@ -327,8 +322,23 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         })
       )
       .subscribe((results: any[]) => {
-        const exists = Array.isArray(results) && results.length > 0;
-        if (exists) {
+        let hasConflict = false;
+        if (Array.isArray(results) && results.length > 0) {
+          if (this.patientId) {
+            const currentPatientId = this.patientId;
+            const otherPatientRecords = results.filter((r: any) => {
+              const pid = r.patientId ?? r.PatientId;
+              if (pid == null) {
+                return true;
+              }
+              return pid !== currentPatientId;
+            });
+            hasConflict = otherPatientRecords.length > 0;
+          } else {
+            hasConflict = true;
+          }
+        }
+        if (hasConflict) {
           this.formErrors.hospitalFileNumber = 'Hospital file number already exists';
           ctrl.setErrors({ ...(ctrl.errors || {}), duplicate: true });
           this.BtnDisabled = true;
@@ -499,7 +509,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
           hospitalBranch: adm.hospitalBranch ?? adm.HospitalBranch ?? null,
           chiefComplaint: adm.chiefComplaint ?? adm.ChiefComplaint ?? null,
           duration: adm.duration ?? adm.Duration ?? null,
-          hospitalStates: adm.hospitalStates ?? adm.HospitalStates ?? null,
           course: adm.course ?? adm.Course ?? null,
           hPI: adm.hpi ?? adm.Hpi ?? null,
           currentMedications: adm.currentMedications ?? adm.CurrentMedications ?? null,
@@ -695,7 +704,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       hospitalFileNumber: ['', [Validators.required]],
       admissionDate: ['', [Validators.required]],
       dischargeDate: null,
-      hospitalStates: null,
       hospitalBranch: ['', [Validators.required]],
       chiefComplaint: ['', [Validators.required]],
       duration: null,
@@ -961,11 +969,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   }
 
   calculateStates(admission: Date, discharge: Date) {
-    // Calculate difference in days
     const timeDiff = discharge.getTime() - admission.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-    this.admission.get('hospitalStates').setValue(`${daysDiff} days`);
+    this.admission.get('duration').setValue(`${daysDiff} days`);
   }
 
   savePatient(): void {
