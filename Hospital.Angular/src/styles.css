@@ -494,6 +494,18 @@ p {
     border-top: 1px solid #ddd;
 }
 
+.modal.doctor-height-modal .modal-content {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal.doctor-height-modal .modal-body {
+    overflow-y: auto;
+    flex-grow: 1;
+    max-height: 80vh;
+}
+
 swiper-container::part(button-next),
 swiper-container::part(button-prev) {
     background-color: transparent;

@@ -51,8 +51,8 @@
 <ng-template #CreateModal let-modal>
     <div class="modal-header modal-header-bg justify-content-between">
         <h2 class="d-flex align-items-center gap-2">
-            <i class="fas fa-{{!UserId ? 'plus':'edit'}}"></i>
-            <span>{{!UserId ? 'Add' : 'Edit'}} Doctor</span>
+            <i class="fas fa-{{!DoctorId ? 'plus':'edit'}}"></i>
+            <span>{{!DoctorId ? 'Add' : 'Edit'}} Doctor</span>
         </h2>
         <div class="cursor-pointer text-danger fs-2" (click)="modal.dismiss()">
             <i class="fas fa-times-circle"></i>
@@ -64,7 +64,7 @@
                 <div class="row g-3">
                     <app-admin-general-input [type]="'text'" [placeholder]="'Name'" [label]="'Name'" class="col-md-6" formControlName="doctorName" [error]="formErrors.doctorName"></app-admin-general-input>
 
-                    <app-admin-general-input [type]="'text'" [placeholder]="'Academic Degree'" [label]="'Academic Degree'" class="col-md-6" formControlName="academicDegree" [error]="formErrors.academicDegree"></app-admin-general-input>
+                    <app-admin-drop-down [data]="academicDegrees" [placeholder]="'Select Academic Degree'" [label]="'Academic Degree'" class="col-md-6" formControlName="academicDegree" [error]="formErrors.academicDegree"></app-admin-drop-down>
                 </div>
             </form>
         </div>

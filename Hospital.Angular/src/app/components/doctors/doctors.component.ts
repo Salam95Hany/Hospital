@@ -20,7 +20,7 @@ import { CustomValidators, RegexType } from '../../services/custom-validators';
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, CommonModule, ReactiveFormsModule,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
-    AdminGeneralInputComponent],
+    AdminGeneralInputComponent, AdminDropDownComponent],
   templateUrl: './doctors.component.html',
   styleUrl: './doctors.component.css'
 })
@@ -44,6 +44,12 @@ export class DoctorsComponent {
       filterType: "SearchText"
     }
   ];
+  academicDegrees = [
+    { id: 'Main Surgeon', name: 'Main Surgeon' },
+    { id: 'Resident', name: 'Resident' },
+    { id: 'Assistant', name: 'Assistant' },
+    { id: 'Supervisor', name: 'Supervisor' }
+  ];
   formErrors = {
     doctorName: '',
     academicDegree: ''
@@ -62,7 +68,7 @@ export class DoctorsComponent {
     this.ItemForm = this.fb.group({
       doctorId: null,
       doctorName: ['', [Validators.required, CustomValidators.regexPattern(RegexType.noSpace)]],
-      academicDegree: ['', [Validators.required, CustomValidators.regexPattern(RegexType.noSpace)]],
+      academicDegree: ['', [Validators.required]],
       insertUser: null
     });
 
@@ -94,6 +100,7 @@ export class DoctorsComponent {
     this.DoctorId = item?.doctorId;
     this.modalService.open(content, {
       size: 'xl',
+      windowClass: 'doctor-height-modal',
       scrollable: true,
       centered: true
     })
