@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
+ import { Component, EventEmitter, OnInit, Output, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +18,8 @@ import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admi
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+ import { AdmissionCreateComponent } from '../../admission/admission-create/admission-create.component';
+ import { SurgicalInterventionCreateComponent } from '../../surgicalIntervention/surgical-intervention-create/surgical-intervention-create.component';
 
 @Component({
   selector: 'app-patient-create',
@@ -25,12 +27,15 @@ import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [CommonModule, FormsModule,
     ReactiveFormsModule,
     AdminGeneralInputComponent,
-    AdminDropDownComponent, AdminSliderImageComponent, AdminUploadFileComponent, NgbDropdownModule],
+    AdminDropDownComponent, AdminSliderImageComponent, AdminUploadFileComponent, NgbDropdownModule,
+    AdmissionCreateComponent, SurgicalInterventionCreateComponent],
   templateUrl: './patient-create.component.html',
   styleUrls: ['./patient-create.component.css'],
   providers: [DatePipe]
 })
 export class PatientCreateComponent implements OnInit, OnChanges {
+  @ViewChild(AdmissionCreateComponent) admissionChild?: AdmissionCreateComponent;
+  @ViewChild(SurgicalInterventionCreateComponent) surgicalChild?: SurgicalInterventionCreateComponent;
   patientData: PatientData = new PatientData();
   patientForm: FormGroup;
   currentStep: number = 1;
@@ -359,7 +364,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         birthDate: [null],
         age: ['', Validators.required],
         gender: ['', Validators.required],
-        nationalId: ['', [Validators.required]],
+        nationalId: ['', [Validators.required, Validators.pattern(/^\d{14}$/)]],
         address: null,
         governorate: [''],
         occupation: null,
@@ -838,15 +843,20 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   }
   // Navigation Methods
   nextStep(): void {
-    // Validate current step before proceeding
-    if (this.validateCurrentStep()) {
-      if (this.currentStep < this.steps.length) {
-        this.steps[this.currentStep - 1].isCompleted = true;
-        this.currentStep++;
+    if (this.currentStep === 1) {
+      if (!this.validateCurrentStep()) {
+        this.showValidationErrors();
+        return;
       }
-    } else {
-      // Show validation errors
-      this.showValidationErrors();
+    } else if (this.currentStep === 2) {
+      const ok = this.integrateAdmissionFromChild();
+      if (!ok) {
+        return;
+      }
+    }
+    if (this.currentStep < this.steps.length) {
+      this.steps[this.currentStep - 1].isCompleted = true;
+      this.currentStep++;
     }
   }
 
@@ -913,6 +923,9 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     if (errors.required) {
       return 'This field is required';
     }
+    if (errors.pattern || errors.minlength || errors.maxlength) {
+      return 'Must be 14 digits';
+    }
     return '';
   }
 
@@ -976,6 +989,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   }
 
   savePatient(): void {
+    this.integrateSurgicalFromChild();
     this.patientForm = this.formService.TrimFormInputValue(this.patientForm);
 
     // Mark all form groups as touched to trigger validation
@@ -1085,6 +1099,39 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         }
       });
     }
+  }
+
+  private integrateAdmissionFromChild(): boolean {
+    if (!this.admissionChild) {
+      return this.validateCurrentStep();
+    }
+    const childForm = this.admissionChild.GetOutputData();
+    if (!childForm) {
+      return false;
+    }
+    this.admission.patchValue(childForm.value || {});
+    if (this.admissionChild.SelectedFile) {
+      this.admissionFiles = this.admissionChild.SelectedFile;
+    }
+    return true;
+  }
+
+  private integrateSurgicalFromChild(): void {
+    if (!this.surgicalChild) {
+      return;
+    }
+    const childForm = this.surgicalChild.GetOutputData();
+    if (!childForm) {
+      return;
+    }
+    this.surgicalIntervention.patchValue(childForm.value || {});
+    if (this.surgicalChild.SelectedFile) {
+      this.surgicalFiles = this.surgicalChild.SelectedFile;
+    }
+    this.SelectedMainSurgeon = (this.surgicalChild.SelectedMainSurgeon || []).map(d => ({ id: d.id, name: d.name }));
+    this.SelectedAssistants = (this.surgicalChild.SelectedAssistants || []).map(d => ({ id: d.id, name: d.name }));
+    this.SelectedResident = (this.surgicalChild.SelectedResident || []).map(d => ({ id: d.id, name: d.name }));
+    this.SelectedSupervisor = (this.surgicalChild.SelectedSupervisor || []).map(d => ({ id: d.id, name: d.name }));
   }
 
   toApiFileModel(model: UploadFileModel, actionType: ActionTypes) {

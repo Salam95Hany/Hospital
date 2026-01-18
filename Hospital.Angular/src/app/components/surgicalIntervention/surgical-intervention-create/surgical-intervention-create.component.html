@@ -145,7 +145,7 @@
         </form>
     </div>
 </div>
-<div class="modal-footer flex-nowrap gap-2" *ngIf="!DetailsMode || !PatientMode">
+<div class="modal-footer flex-nowrap gap-2" *ngIf="!DetailsMode && !PatientMode">
     <button class="btn btn-danger" (click)="DismissModal()">
         <i class="fas fa-times-circle"></i> Cancel
     </button>
