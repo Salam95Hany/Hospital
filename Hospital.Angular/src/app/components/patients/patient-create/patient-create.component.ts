@@ -364,7 +364,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         birthDate: [null],
         age: ['', Validators.required],
         gender: ['', Validators.required],
-        nationalId: ['', [Validators.required, Validators.pattern(/^\d{14}$/)]],
+            nationalId: ['', [Validators.pattern(/^\d{14}$/)]],
         address: null,
         governorate: [''],
         occupation: null,
@@ -481,6 +481,17 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
       surgicalDischargeCtrl.valueChanges.subscribe(() => {
         this.updateSurgicalValidatorsBasedOnDischarge();
+      });
+    }
+
+    const birthCtrl = this.patient.get('birthDate');
+    if (birthCtrl) {
+      birthCtrl.valueChanges.subscribe((val) => {
+        const ageCtrl = this.patient.get('age');
+        const computed = this.calculateAge(val);
+        if (ageCtrl) {
+          ageCtrl.setValue(computed, { emitEvent: false });
+        }
       });
     }
   }
@@ -702,6 +713,29 @@ export class PatientCreateComponent implements OnInit, OnChanges {
       }
       ctrl.updateValueAndValidity({ emitEvent: false });
     });
+  }
+
+  private calculateAge(dateValue: any): number | null {
+    if (!dateValue) return null;
+    let birth: Date;
+    if (typeof dateValue === 'string') {
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) {
+        const [dd, mm, yyyy] = dateValue.split('/');
+        birth = new Date(+yyyy, +mm - 1, +dd);
+      } else {
+        birth = new Date(dateValue);
+      }
+    } else {
+      birth = new Date(dateValue);
+    }
+    if (isNaN(birth.getTime())) return null;
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age >= 0 ? age : 0;
   }
 
   createAdmissionFormGroup(): FormGroup {

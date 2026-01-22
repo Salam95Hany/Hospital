@@ -64,8 +64,8 @@ export class AdmissionCreateComponent implements OnInit {
     { id: 'Others', name: 'Others' }
   ];
   Branches = [
-    { id: 'Al-Hussien', name: 'Al-Hussien' },
-    { id: 'Saied Galal', name: 'Saied Galal' },
+    { id: 'Al-Hussain', name: 'Al-Hussain' },
+    { id: 'Sayed Galal', name: 'Sayed Galal' },
   ];
   UserId: any;
   ItemForm: FormGroup;
@@ -96,16 +96,14 @@ export class AdmissionCreateComponent implements OnInit {
       this.setupHospitalFileNumberValidation();
     }
     this.setupDurationBinding();
+    this.setupPsaRatioBinding();
     if (this.AdmissionId) {
       this.GetAdmissionById();
       this.GetFilesByActionId();
     }
     if (this.DetailsMode) {
       this.ItemForm.disable();
-    }
-
-
-  }
+    }}
 
   private setupHospitalFileNumberValidation(): void {
     const ctrl = this.ItemForm.get('hospitalFileNumber');
@@ -179,6 +177,35 @@ export class AdmissionCreateComponent implements OnInit {
     admissionCtrl.valueChanges.subscribe(() => updateDuration());
     dischargeCtrl.valueChanges.subscribe(() => updateDuration());
     updateDuration();
+  }
+
+  private setupPsaRatioBinding(): void {
+    const freeCtrl = this.ItemForm.get('pSAFree');
+    const totalCtrl = this.ItemForm.get('pSATotal');
+    const ratioCtrl = this.ItemForm.get('pSARatio');
+    if (!freeCtrl || !totalCtrl || !ratioCtrl) return;
+
+    const parseNum = (v: any): number | null => {
+      if (v === null || v === undefined || v === '') return null;
+      if (typeof v === 'number') return isNaN(v) ? null : v;
+      const n = parseFloat(v);
+      return isNaN(n) ? null : n;
+    };
+
+    const updateRatio = () => {
+      const free = parseNum(freeCtrl.value);
+      const total = parseNum(totalCtrl.value);
+      if (free !== null && total !== null && total > 0) {
+        const ratioPercent = (free / total) * 100;
+        ratioCtrl.setValue(Number.isFinite(ratioPercent) ? ratioPercent.toFixed(2) : null, { emitEvent: false });
+      } else {
+        ratioCtrl.setValue(null, { emitEvent: false });
+      }
+    };
+
+    freeCtrl.valueChanges.subscribe(() => updateRatio());
+    totalCtrl.valueChanges.subscribe(() => updateRatio());
+    updateRatio();
   }
 
   FormInit() {
