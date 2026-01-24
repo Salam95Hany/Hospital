@@ -1,7 +1,18 @@
 <label class="form-label">{{ label }}</label>
 
-<input *ngIf="type !== 'textarea'" [type]="type" class="form-control input-box" (copy)="allowCopy" (paste)="allowPaste" (cut)="allowCut" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" (keypress)="NumbersOnly($event.key)"
-    [class.error]="error" [disabled]="disabled" />
+<ng-container *ngIf="type !== 'textarea'">
+    <ng-container *ngIf="suffix; else noSuffixInput">
+        <div class="input-group">
+            <input [type]="type" class="form-control input-box" (copy)="allowCopy" (paste)="allowPaste" (cut)="allowCut" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" (keypress)="NumbersOnly($event.key)"
+                [class.error]="error" [disabled]="disabled" />
+            <span class="input-group-text">{{ suffix }}</span>
+        </div>
+    </ng-container>
+    <ng-template #noSuffixInput>
+        <input [type]="type" class="form-control input-box" (copy)="allowCopy" (paste)="allowPaste" (cut)="allowCut" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" (keypress)="NumbersOnly($event.key)"
+            [class.error]="error" [disabled]="disabled" />
+    </ng-template>
+</ng-container>
 
 <textarea *ngIf="type === 'textarea'" class="form-control input-box" (copy)="allowCopy" (paste)="allowPaste" (cut)="allowCut" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" [class.error]="error" [disabled]="disabled">
 </textarea>

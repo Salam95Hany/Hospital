@@ -84,6 +84,13 @@ namespace Hospital.Services
                     GenitalExamination = Model.GenitalExamination,
                     DREVaginalExamination = Model.DREVaginalExamination,
                     UrineAnalysis = Model.UrineAnalysis,
+                    UrinePusCells = Model.UrinePusCells,
+                    UrineRBCs = Model.UrineRBCs,
+                    UrineCrystals = Model.UrineCrystals,
+                    UrineAlbumin = Model.UrineAlbumin,
+                    UrineSugar = Model.UrineSugar,
+                    UrineOthers = Model.UrineOthers,
+
                     CultureAndSensitivity = Model.CultureAndSensitivity,
                     SerumCreatinine = Model.SerumCreatinine,
                     Hemoglobin = Model.Hemoglobin,
@@ -174,6 +181,12 @@ namespace Hospital.Services
                 Entity.GenitalExamination = Model.GenitalExamination;
                 Entity.DREVaginalExamination = Model.DREVaginalExamination;
                 Entity.UrineAnalysis = Model.UrineAnalysis;
+                Entity.UrinePusCells = Model.UrinePusCells;
+                Entity.UrineRBCs = Model.UrineRBCs;
+                Entity.UrineCrystals = Model.UrineCrystals;
+                Entity.UrineAlbumin = Model.UrineAlbumin;
+                Entity.UrineSugar = Model.UrineSugar;
+                Entity.UrineOthers = Model.UrineOthers;
                 Entity.CultureAndSensitivity = Model.CultureAndSensitivity;
                 Entity.SerumCreatinine = Model.SerumCreatinine;
                 Entity.Hemoglobin = Model.Hemoglobin;

@@ -7,6 +7,8 @@ export class Patient {
     nationalIdImagePath?: string = ''; // NEW: For scanned national ID pictures
     address?: string = '';
     governorate?: string = '';
+    phone1?: string = '';
+    phone2?: string = '';
     occupation?: string = '';
     maritalStatus?: string = '';
     childrenCount?: string = '';
@@ -133,5 +135,6 @@ export interface PatientsList {
     name: string;
     age: number | null;
     governorate: string;
+    phone1: string;
     gender: string;
 }

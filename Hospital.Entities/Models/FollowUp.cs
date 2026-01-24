@@ -32,6 +32,8 @@ namespace Hospital.Entities.Models
         // Medical Decisions
         public string? Advice { get; set; }
         public string? NewDecision { get; set; }
+        public string? FollowUpDoctor { get; set; }
+        public string? FollowUpAppoint { get; set; }
         public DateTime? NextFollowUpDate { get; set; }
 
         [NotMapped]

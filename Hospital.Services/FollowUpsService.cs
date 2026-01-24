@@ -68,6 +68,8 @@ namespace Hospital.Services
                     ImagePath = Model.ImagePath,
                     Advice = Model.Advice,
                     NewDecision = Model.NewDecision,
+                    FollowUpDoctor = Model.FollowUpDoctor,
+                    FollowUpAppoint = Model.FollowUpAppoint,
                     NextFollowUpDate = Model.NextFollowUpDate,
                     IsDeleted = false,
                     InsertUser = Model.InsertUser,
@@ -112,6 +114,8 @@ namespace Hospital.Services
                 Entity.ImagingResults = Model.ImagingResults;
                 Entity.ImagePath = Model.ImagePath;
                 Entity.Advice = Model.Advice;
+                Entity.FollowUpDoctor = Model.FollowUpDoctor;
+                Entity.FollowUpAppoint = Model.FollowUpAppoint;
                 Entity.NewDecision = Model.NewDecision;
                 Entity.NextFollowUpDate = Model.NextFollowUpDate;
                 Entity.UpdateUser = Model.InsertUser;

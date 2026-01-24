@@ -48,25 +48,55 @@
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'DRE/Vaginal Examination'" [label]="'DRE/Vaginal Examination'" class="col-md-6" formControlName="dREVaginalExamination"></app-admin-general-input>
 
-                <!-- <app-admin-drop-down [data]="urineAnalyses" [placeholder]="'Select Urine Analysis'" [label]="'Urine Analysis'" class="col-md-6" formControlName="urineAnalysis"></app-admin-drop-down> -->
-                <div class="col-md-6">
+                <div class="col-12">
                     <label class="form-label">Urine Analysis</label>
-                    <div ngbDropdown class="dropdown-as-input">
-                        <button type="button" style="padding-left: 45px;" id="dropdownBasic1" class="input-box" ngbDropdownToggle [ngClass]="{'padding-rem': selectedValue != 'Select Urine Analysis','padding-rem2': selectedValue == 'Select Urine Analysis'}">
-                            <span>{{selectedValue}}</span>
-                            <input *ngIf="selectedValue != 'Select Urine Analysis'" type="text" class="form-control w-25 me-2 custom-border" placeholder="Enter Value"
-                                [(ngModel)]="UrineInputValue" [ngModelOptions]="{standalone: true}"
-                                (click)="$event.stopPropagation()">
-                        </button>
-                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="w-100">
-                            <div class="dropdown-h large-scroll">
-                                <ng-container *ngFor="let item of urineAnalyses">
-                                    <div class="d-flex dropdown-item cursor-pointer" [class]="item.id==selectedValue?'active DropDownSelected':''" (click)="selectedValue = item.id;UrineInputValue = ''">
-                                        <a>{{item.name}}</a>
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px;">Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pus cells</td>
+                                    <td>
+                                        <app-admin-general-input [type]="'text'" [placeholder]="'Enter Pus cells'" class="w-100" formControlName="urinePusCells"></app-admin-general-input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>RBCs</td>
+                                    <td>
+                                        <app-admin-general-input [type]="'text'" [placeholder]="'Enter RBCs'" class="w-100" formControlName="urineRBCs"></app-admin-general-input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Crystals</td>
+                                    <td>
+                                        <app-admin-general-input [type]="'text'" [placeholder]="'Enter Crystals'" class="w-100" formControlName="urineCrystals"></app-admin-general-input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Albumin</td>
+                                    <td>
+                                        <app-admin-general-input [type]="'text'" [placeholder]="'Enter Albumin'" class="w-100" formControlName="urineAlbumin"></app-admin-general-input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sugar</td>
+                                    <td>
+                                        <app-admin-general-input [type]="'text'" [placeholder]="'Enter Sugar'" class="w-100" formControlName="urineSugar"></app-admin-general-input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Others</td>
+                                    <td>
+                                        <app-admin-general-input [type]="'text'" [placeholder]="'Enter Others'" class="w-100" formControlName="urineOthers"></app-admin-general-input>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -95,7 +125,7 @@
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'PSA Free'" [label]="'PSA Free'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-2" formControlName="pSAFree"></app-admin-general-input>
 
-                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Ratio'" [label]="'PSA Ratio'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-2" formControlName="pSARatio"></app-admin-general-input>
+                <app-admin-general-input [type]="'text'" [placeholder]="'PSA Ratio (%)'" [label]="'PSA Ratio'" [allowNumbersOnly]="true" [allowPaste]="false" class="col-md-2" formControlName="pSARatio" suffix="%"></app-admin-general-input>
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Other Lab Results'" [label]="'Other Lab Results'" class="col-md-6" formControlName="otherLabResults"></app-admin-general-input>
 

@@ -98,7 +98,8 @@ export class SurgicalInterventionCreateComponent {
     { id: 'Smooth', name: 'Smooth' },
     { id: 'Minor adv. Events', name: 'Minor adv. Events' },
     { id: 'Moderate adv. Events', name: 'Moderate adv. Events' },
-    { id: 'Major dv. events', name: 'Major dv. events' }
+    { id: 'Major dv. events', name: 'Major dv. events' },
+    { id: 'N/A', name: 'N/A' }
   ];
 
   SelectedFile: UploadFileModel;
