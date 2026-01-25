@@ -20,8 +20,8 @@
                 <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-4">
                 </app-admin-drop-down>
 
-                <app-admin-drop-down [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" [error]="formErrors.mainSurgeon" class="col-md-4">
-                </app-admin-drop-down>
+                <app-admin-drop-down-multi-select [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" [error]="formErrors.mainSurgeon" class="col-md-4">
+                </app-admin-drop-down-multi-select>
 
                 <app-admin-drop-down-multi-select [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" formControlName="assistants" [showSearch]="true" class="col-md-4">
                 </app-admin-drop-down-multi-select>
