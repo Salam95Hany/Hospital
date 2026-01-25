@@ -1162,10 +1162,10 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     if (this.surgicalChild.SelectedFile) {
       this.surgicalFiles = this.surgicalChild.SelectedFile;
     }
-    this.SelectedMainSurgeon = (this.surgicalChild.SelectedMainSurgeon || []).map(d => ({ id: d.id, name: d.name }));
-    this.SelectedAssistants = (this.surgicalChild.SelectedAssistants || []).map(d => ({ id: d.id, name: d.name }));
-    this.SelectedResident = (this.surgicalChild.SelectedResident || []).map(d => ({ id: d.id, name: d.name }));
-    this.SelectedSupervisor = (this.surgicalChild.SelectedSupervisor || []).map(d => ({ id: d.id, name: d.name }));
+    // this.SelectedMainSurgeon = (this.surgicalChild.SelectedMainSurgeon || []).map(d => ({ id: d.id, name: d.name }));
+    // this.SelectedAssistants = (this.surgicalChild.SelectedAssistants || []).map(d => ({ id: d.id, name: d.name }));
+    // this.SelectedResident = (this.surgicalChild.SelectedResident || []).map(d => ({ id: d.id, name: d.name }));
+    // this.SelectedSupervisor = (this.surgicalChild.SelectedSupervisor || []).map(d => ({ id: d.id, name: d.name }));
   }
 
   toApiFileModel(model: UploadFileModel, actionType: ActionTypes) {

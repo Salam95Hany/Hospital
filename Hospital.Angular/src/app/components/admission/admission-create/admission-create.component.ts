@@ -15,12 +15,13 @@ import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/ad
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
 import { ActionTypes, FilesModel, UploadFileModel } from '../../../models/UploadFileModel';
 import { CustomValidators } from '../../../services/custom-validators';
+import { AdminDropDownMultiSelectComponent } from '../../../shared/admin-drop-down-multi-select/admin-drop-down-multi-select.component';
 
 @Component({
   selector: 'app-admission-create',
   standalone: true,
   imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule, AdminSliderImageComponent, AdminUploadFileComponent,
-    NgbDropdownModule, NgFor, FormsModule, NgClass, NgIf
+    NgbDropdownModule, NgFor, FormsModule, NgClass, NgIf,AdminDropDownMultiSelectComponent
   ],
   templateUrl: './admission-create.component.html',
   styleUrl: './admission-create.component.css',
