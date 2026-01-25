@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
 import { AdminService } from '../../../services/admin.service';
+import { DoctorService } from '../../../services/doctor.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -30,8 +31,7 @@ export class FollowupCreateComponent {
   patientRemarks = [
     { id: 'Better', name: 'Better' },
     { id: 'Worse', name: 'Worse' },
-    { id: 'The same', name: 'The same' },
-    { id: 'Details', name: 'Details' }
+    { id: 'The same', name: 'The same' }
   ];
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
@@ -42,14 +42,22 @@ export class FollowupCreateComponent {
     followUpDate: '',
     patientRemarksStatus: ''
   };
+  DoctorsData: { id: string, name: string, academicDegree: string }[] = [];
+  DoctorPagingFilter: { filterList: any[]; currentpage: number; pagesize: number } = {
+    filterList: [],
+    currentpage: 1,
+    pagesize: 1000
+  };
 
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
+    private doctorService: DoctorService,
     private toaster: ToastrService, private datePipe: DatePipe, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.UserId = this.authService.userId;
     this.FormInit();
+    this.loadDoctors();
     if (this.FollowUpId) {
       this.GetFollowUpById();
       this.GetFilesByActionId();
@@ -75,6 +83,8 @@ export class FollowupCreateComponent {
       advice: [null],
       newDecision: [null],
       nextFollowUpDate: [null],
+      followUpDoctor: [null],
+      followUpAppoint: [null],
       fileModel: null,
       insertUser: null
     });
@@ -100,8 +110,17 @@ export class FollowupCreateComponent {
       advice: item.advice ?? null,
       newDecision: item.newDecision ?? null,
       nextFollowUpDate: this.datePipe.transform(item.nextFollowUpDate, 'yyyy-MM-dd') ?? '',
+      followUpDoctor: item.followUpDoctor ?? item.FollowUpDoctor ?? null,
+      followUpAppoint: item.followUpAppoint ?? item.FollowUpAppoint ?? null,
       fileModel: null,
       insertUser: null
+    });
+  }
+
+  private loadDoctors(): void {
+    this.doctorService.GetAllDoctorData(this.DoctorPagingFilter).subscribe(res => {
+      const all = (res?.results || []).map((i: any) => ({ id: i.doctorId?.toString(), name: i.doctorName, academicDegree: (i.academicDegree || '').toString() }));
+      this.DoctorsData = all;
     });
   }
 

@@ -20,8 +20,19 @@
                 <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-4">
                 </app-admin-drop-down>
 
-                <app-admin-drop-down-multi-select [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" [showSearch]="true" formControlName="mainSurgeon" class="col-md-4">
-                </app-admin-drop-down-multi-select>
+                <app-admin-drop-down [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" [(ngModel)]="mainSurgeonSelectorValue" [ngModelOptions]="{standalone: true}" [disabled]="DetailsMode" (valueChanged)="OnMainSurgeonChange($event)" [error]="formErrors.mainSurgeon"
+                    class="col-md-2">
+                    <div class="selected-items-container">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedMainSurgeon; let i = index">
+                                <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedMainSurgeon(selected.id)" *ngIf="!DetailsMode">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <span class="chip-label me-2">{{selected.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </app-admin-drop-down>
 
                 <app-admin-drop-down-multi-select [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" formControlName="assistants" [showSearch]="true" class="col-md-4">
                 </app-admin-drop-down-multi-select>

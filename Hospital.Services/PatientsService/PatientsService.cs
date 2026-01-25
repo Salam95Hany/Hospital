@@ -103,6 +103,8 @@ namespace Hospital.Services.PatientsService
                 Name = patientModel.Name,
                 BirthDate = patientModel.BirthDate,
                 Age = patientModel.Age,
+                Phone1 = patientModel.Phone1,
+                Phone2 = patientModel.Phone2,
                 Gender = patientModel.Gender,
                 NationalId = patientModel.NationalId,
                 Address = patientModel.Address,
@@ -156,6 +158,12 @@ namespace Hospital.Services.PatientsService
                 GenitalExamination = Model.GenitalExamination,
                 DREVaginalExamination = Model.DREVaginalExamination,
                 UrineAnalysis = Model.UrineAnalysis,
+                UrinePusCells = Model.UrinePusCells,
+                UrineRBCs = Model.UrineRBCs,
+                UrineCrystals = Model.UrineCrystals,
+                UrineAlbumin = Model.UrineAlbumin,
+                UrineSugar = Model.UrineSugar,
+                UrineOthers = Model.UrineOthers,
                 CultureAndSensitivity = Model.CultureAndSensitivity,
                 SerumCreatinine = Model.SerumCreatinine,
                 Hemoglobin = Model.Hemoglobin,
@@ -326,6 +334,7 @@ namespace Hospital.Services.PatientsService
                 InternalNumber = p.InternalNumber,
                 Name = p.Name,
                 Age = p.Age,
+                Phone1 = p.Phone1,
                 Governorate = p.Governorate,
                 Gender = p.Gender,
                 CreatedBy = p.CreatedBy?.UserName,
@@ -400,6 +409,8 @@ namespace Hospital.Services.PatientsService
             existingPatient.Name = patientModel.Name;
             existingPatient.BirthDate = patientModel.BirthDate;
             existingPatient.Age = patientModel.Age;
+            existingPatient.Phone1 = patientModel.Phone1;
+            existingPatient.Phone2 = patientModel.Phone2;
             existingPatient.Gender = patientModel.Gender;
             existingPatient.NationalId = patientModel.NationalId;
             existingPatient.Address = patientModel.Address;

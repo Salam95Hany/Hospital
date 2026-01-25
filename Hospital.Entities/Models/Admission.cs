@@ -50,6 +50,12 @@ namespace Hospital.Entities.Models
 
         // Lab Investigations - NEW PROPERTIES
         public string? UrineAnalysis { get; set; }
+        public string? UrinePusCells { get; set; }
+        public string? UrineRBCs { get; set; }
+        public string? UrineCrystals { get; set; }
+        public string? UrineAlbumin { get; set; }
+        public string? UrineSugar { get; set; }
+        public string? UrineOthers { get; set; }
         public string? CultureAndSensitivity { get; set; }
         public decimal? SerumCreatinine { get; set; }
         public decimal? Hemoglobin { get; set; }

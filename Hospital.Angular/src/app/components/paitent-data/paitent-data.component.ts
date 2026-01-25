@@ -85,6 +85,8 @@ patientData: PatientData = new PatientData();
         age: ['', Validators.required],
         gender: ['', Validators.required],
         nationalId: ['', [Validators.required]],
+        phone1: [''],
+        phone2: [''],
         address: [''],
         governorate: [''],
         occupation: [''],

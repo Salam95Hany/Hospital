@@ -234,6 +234,12 @@ export class AdmissionCreateComponent implements OnInit {
       genitalExamination: null,
       dREVaginalExamination: null,
       urineAnalysis: null,
+      urinePusCells: null,
+      urineRBCs: null,
+      urineCrystals: null,
+      urineAlbumin: null,
+      urineSugar: null,
+      urineOthers: null,
       cultureAndSensitivity: null,
       serumCreatinine: null,
       hemoglobin: null,
@@ -299,6 +305,12 @@ export class AdmissionCreateComponent implements OnInit {
       genitalExamination: item.genitalExamination ?? null,
       dREVaginalExamination: item.dreVaginalExamination ?? null,
       urineAnalysis: item.urineAnalysis ?? null,
+      urinePusCells: item.urinePusCells ?? null,
+      urineRBCs: item.urineRBCs ?? null,
+      urineCrystals: item.urineCrystals ?? null,
+      urineAlbumin: item.urineAlbumin ?? null,
+      urineSugar: item.urineSugar ?? null,
+      urineOthers: item.urineOthers ?? null,
       cultureAndSensitivity: item.cultureAndSensitivity ?? null,
       serumCreatinine: item.serumCreatinine ?? null,
       hemoglobin: item.hemoglobin ?? null,
@@ -381,15 +393,7 @@ export class AdmissionCreateComponent implements OnInit {
     if (!isValid)
       return;
 
-    if (this.selectedValue != 'Select Urine Analysis') {
-      if (this.UrineInputValue) {
-        const urineAnalysisValue = this.selectedValue + ';' + this.UrineInputValue;
-        this.ItemForm.patchValue({ urineAnalysis: urineAnalysisValue });
-      } else {
-        this.toaster.error('Please enter value for urine analysis');
-        return;
-      }
-    }
+    // No dropdown; urine fields are bound directly to dedicated properties
 
     if (this.AdmissionId)
       this.ItemForm.patchValue({ admissionId: this.AdmissionId });
@@ -405,7 +409,14 @@ export class AdmissionCreateComponent implements OnInit {
 
 
     const formData = new FormData();
-    this.formService.buildFormData(formData, this.ItemForm.value);
+    const { pSATotal, pSAFree, pSARatio, ...rest } = this.ItemForm.value;
+    const payload = {
+      ...rest,
+      psaTotal: pSATotal,
+      psaFree: pSAFree,
+      psaRatio: pSARatio
+    };
+    this.formService.buildFormData(formData, payload);
     this.BtnDisabled = true;
     if (!this.AdmissionId) {
       this.adminService.AddNewAdmission(formData).subscribe(data => {
@@ -443,15 +454,7 @@ export class AdmissionCreateComponent implements OnInit {
     if (!isValid)
       return null;
 
-    if (this.selectedValue != 'Select Urine Analysis') {
-      if (this.UrineInputValue) {
-        const urineAnalysisValue = this.selectedValue + ';' + this.UrineInputValue;
-        this.ItemForm.patchValue({ urineAnalysis: urineAnalysisValue });
-      } else {
-        this.toaster.error('Please enter value for urine analysis');
-        return null;
-      }
-    }
+    // No dropdown; urine fields are bound directly to dedicated properties
 
     if (this.AdmissionId)
       this.ItemForm.patchValue({ admissionId: this.AdmissionId });

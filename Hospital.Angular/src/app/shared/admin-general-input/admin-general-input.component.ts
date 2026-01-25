@@ -26,6 +26,7 @@ export class AdminGeneralInputComponent {
   @Input() allowCopy: boolean = true;
   @Input() allowCut: boolean = true;
   @Input() disabled: boolean = false;
+  @Input() suffix: string = '';
 
   private _valueBind: any = '';
   isUsingFormControl = false;
