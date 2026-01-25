@@ -9,7 +9,7 @@ import { PatientService } from '../../../services/patient.service';
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { NgbDropdownModule, NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminSliderImageComponent } from "../../../shared/admin-slider-image/admin-slider-image.component";
 import { AdminUploadFileComponent } from "../../../shared/admin-upload-file/admin-upload-file.component";
@@ -21,7 +21,7 @@ import { AdminDropDownMultiSelectComponent } from '../../../shared/admin-drop-do
   selector: 'app-admission-create',
   standalone: true,
   imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule, AdminSliderImageComponent, AdminUploadFileComponent,
-    NgbDropdownModule, NgFor, FormsModule, NgClass, NgIf,AdminDropDownMultiSelectComponent
+    NgbDropdownModule, FormsModule, NgClass, NgIf,AdminDropDownMultiSelectComponent
   ],
   templateUrl: './admission-create.component.html',
   styleUrl: './admission-create.component.css',

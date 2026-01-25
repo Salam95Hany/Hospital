@@ -1123,7 +1123,6 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     try {
       for (const [k, v] of (formData as any).entries()) {
         const isFile = typeof File !== 'undefined' && v instanceof File;
-        console.log(k, isFile ? `File(${(v as File).name})` : v);
       }
     } catch { }
     this.BtnDisabled = true;
