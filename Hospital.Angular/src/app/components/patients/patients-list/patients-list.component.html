@@ -39,9 +39,9 @@
                     <td>{{ patient.createdBy }}</td>
                     <td>{{ patient.updatedBy }}</td>
                     <td class="actions-cell" appRole [roles]="['SupperAdmin', 'Admin']">
-                        <button class="btn btn-sm btn-info" title="View" (click)="openPatientInfo(patient.id)">
+                        <!-- <button class="btn btn-sm btn-info" title="View" (click)="openPatientInfo(patient.id)">
               <i class="fas fa-eye"></i>
-            </button>
+            </button> -->
 
                         <button class="btn btn-sm btn-warning" title="Edit" (click)="OpenPatentCreateModal(PatientCreateModal,patient.id)">
               <i class="fas fa-edit"></i>
