@@ -118,6 +118,7 @@ export class SurgicalInterventionCreateComponent {
   formErrors = {
     interventionDate: '',
     theater: '',
+    mainSurgeon: '',
     postOpDay0_1: '',
     postOpDay2_5: '',
     postOpDayOver5: '',
@@ -165,7 +166,7 @@ export class SurgicalInterventionCreateComponent {
       admissionId: 0,
       interventionDate: [null, [Validators.required]],
       theater: [null, [Validators.required]],
-      mainSurgeon: [null],
+      mainSurgeon: [null, [Validators.required]],
       assistants: [null],
       resident: [null],
       otherSurgeons: [null],

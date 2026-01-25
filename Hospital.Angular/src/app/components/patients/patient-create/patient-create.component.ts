@@ -250,6 +250,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     course: '',
     interventionDate: '',
     theater: '',
+    mainSurgeon: '',
     nationalId: '',
     name: '',
     age: '',
@@ -807,9 +808,9 @@ export class PatientCreateComponent implements OnInit, OnChanges {
 
   createSurgicalInterventionFormGroup(): FormGroup {
     return this.fb.group({
-      interventionDate: [null],
+      interventionDate: [null, [Validators.required]],
       theater: [null],
-      mainSurgeon: [null],
+      mainSurgeon: [null, [Validators.required]],
       assistants: [null],
       resident: [null],
       otherSurgeons: [null],
