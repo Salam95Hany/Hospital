@@ -7,7 +7,6 @@ import { AdminFilterComponent } from "../../../shared/admin-filter/admin-filter.
 import { FollowupCreateComponent } from "../followup-create/followup-create.component";
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { AdminService } from '../../../services/admin.service';
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
@@ -15,15 +14,13 @@ import { ToastrService } from 'ngx-toastr';
 import { FilterModel } from '../../../models/FilterModel';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
-import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 
 @Component({
   selector: 'app-followup-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule,
-    AdminGeneralInputComponent, FollowupCreateComponent, AdminSliderImageComponent,RoleCheckerDirective],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, FollowupCreateComponent,RoleCheckerDirective],
   templateUrl: './followup-list.component.html',
   styleUrl: './followup-list.component.css',
   providers: [DatePipe]

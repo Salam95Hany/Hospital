@@ -14,88 +14,46 @@
     <div [ngClass]="{'step-content form-card': !PatientMode}" data-step="1" style="display: block;">
         <form [formGroup]="ItemForm" autocomplete="off">
             <div class="row g-3">
-                <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-2">
+                <app-admin-general-input [type]="'date'" [placeholder]="'Date of Intervention'" [label]="'Date of Intervention'" formControlName="interventionDate" [error]="formErrors.interventionDate" class="col-md-4">
                 </app-admin-general-input>
 
-                <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-1">
+                <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-4">
                 </app-admin-drop-down>
 
-                <app-admin-drop-down [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" [(ngModel)]="mainSurgeonSelectorValue" [ngModelOptions]="{standalone: true}" [disabled]="DetailsMode" (valueChanged)="OnMainSurgeonChange($event)" [error]="formErrors.mainSurgeon"
-                    class="col-md-2">
-                    <div class="selected-items-container">
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedMainSurgeon; let i = index">
-                                <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedMainSurgeon(selected.id)" *ngIf="!DetailsMode">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                <span class="chip-label me-2">{{selected.name}}</span>
-                            </div>
-                        </div>
-                    </div>
+                <app-admin-drop-down-multi-select [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" [error]="formErrors.mainSurgeon" class="col-md-4">
+                </app-admin-drop-down-multi-select>
+
+                <app-admin-drop-down-multi-select [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" formControlName="assistants" [showSearch]="true" class="col-md-4">
+                </app-admin-drop-down-multi-select>
+
+                <app-admin-drop-down-multi-select [data]="ResidentDoctors" [placeholder]="'Select Resident'" [label]="'Resident'" formControlName="resident" [showSearch]="true" class="col-md-4">
+                </app-admin-drop-down-multi-select>
+
+                <app-admin-drop-down-multi-select [data]="SupervisorDoctors" [placeholder]="'Select Off-Field Supervisor'" [label]="'Off-Field Supervisor'" [showSearch]="true" formControlName="offFieldSupervisor" class="col-md-4">
+                </app-admin-drop-down-multi-select>
+
+                <app-admin-drop-down [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-4">
                 </app-admin-drop-down>
 
-                <app-admin-drop-down [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" [(ngModel)]="assistantSelectorValue" [ngModelOptions]="{standalone: true}" [disabled]="DetailsMode" (valueChanged)="OnAssistantChange($event)" class="col-md-2">
-                    <div class="selected-items-container">
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedAssistants; let i = index">
-                                <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedAssistant(selected.id)" *ngIf="!DetailsMode">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                <span class="chip-label me-2">{{selected.name}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </app-admin-drop-down>
-
-                <app-admin-drop-down [data]="ResidentDoctors" [placeholder]="'Select Resident'" [label]="'Resident'" [(ngModel)]="residentSelectorValue" [ngModelOptions]="{standalone: true}" [disabled]="DetailsMode" (valueChanged)="OnResidentChange($event)" class="col-md-2">
-                    <div class="selected-items-container">
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedResident; let i = index">
-                                <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedResident(selected.id)" *ngIf="!DetailsMode">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                <span class="chip-label me-2">{{selected.name}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </app-admin-drop-down>
-
-                <app-admin-drop-down [data]="SupervisorDoctors" [placeholder]="'Select Off-Field Supervisor'" [label]="'Off-Field Supervisor'" [(ngModel)]="supervisorSelectorValue" [ngModelOptions]="{standalone: true}" [disabled]="DetailsMode" (valueChanged)="OnSupervisorChange($event)"
-                    class="col-md-2">
-                    <div class="selected-items-container">
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                            <div class="selected-item-chip chip-info" *ngFor="let selected of SelectedSupervisor; let i = index">
-                                <button class="chip-remove-btn" type="button" aria-label="Remove" (click)="RemoveSelectedSupervisor(selected.id)" *ngIf="!DetailsMode">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                <span class="chip-label me-2">{{selected.name}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </app-admin-drop-down>
-
-                <app-admin-drop-down [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-2">
-                </app-admin-drop-down>
-
-                <app-admin-general-input [type]="'text'" [placeholder]="'Intervention'" [label]="'Intervention'" formControlName="intervention" class="col-md-6">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Intervention'" [label]="'Intervention'" formControlName="intervention" class="col-md-4">
                 </app-admin-general-input>
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Details of Intervention'" [label]="'Details of Intervention'" formControlName="interventionDetails" class="col-md-12">
                 </app-admin-general-input>
 
-                <app-admin-drop-down [data]="tubesFixed" [placeholder]="'Select Tubes Fixed'" [label]="'Tubes Fixed'" formControlName="tubesFixed" class="col-md-6">
-                </app-admin-drop-down>
+                <app-admin-drop-down-multi-select [data]="tubesFixed" [placeholder]="'Select Tubes Fixed'" [label]="'Tubes Fixed'" formControlName="tubesFixed" class="col-md-4">
+                </app-admin-drop-down-multi-select>
 
-                <app-admin-drop-down [data]="categories" [placeholder]="'Select Category'" [label]="'Category'" formControlName="category" class="col-md-2">
-                </app-admin-drop-down>
+                <app-admin-drop-down-multi-select [data]="categories" [placeholder]="'Select Category'" [label]="'Category'" formControlName="category" class="col-md-4">
+                </app-admin-drop-down-multi-select>
 
-                <app-admin-drop-down [data]="approaches" [placeholder]="'Select Approach'" [label]="'Approach'" formControlName="approach" class="col-md-2">
-                </app-admin-drop-down>
+                <app-admin-drop-down-multi-select [data]="approaches" [placeholder]="'Select Approach'" [label]="'Approach'" formControlName="approach" class="col-md-4">
+                </app-admin-drop-down-multi-select>
 
-                <app-admin-drop-down [data]="organs" [placeholder]="'Select Organ'" [label]="'Organ'" formControlName="organ" class="col-md-2">
-                </app-admin-drop-down>
+                <app-admin-drop-down-multi-select [data]="organs" [placeholder]="'Select Organ'" [label]="'Organ'" formControlName="organ" class="col-md-4">
+                </app-admin-drop-down-multi-select>
 
-                <app-admin-drop-down [data]="intraOpCourses" [placeholder]="'Select Intra-operative Course'" [label]="'Intra-operative Course'" formControlName="intraOperativeCourse" class="col-md-2">
+                <app-admin-drop-down [data]="intraOpCourses" [placeholder]="'Select Intra-operative Course'" [label]="'Intra-operative Course'" formControlName="intraOperativeCourse" class="col-md-4">
                 </app-admin-drop-down>
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Blood Transfusion (Units)'" [allowNumbersOnly]="true" [allowPaste]="false" [label]="'Blood Transfusion (Units)'" formControlName="bloodTransfusionUnits" class="col-md-2">
@@ -108,19 +66,19 @@
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Intra-op Adverse Events'" [label]="'Intra-op Adverse Events'" formControlName="intraOpAdverseEvents" class="col-md-12">
                 </app-admin-general-input>
 
-                <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" [error]="formErrors.postOpDay0_1" class="col-md-6">
+                <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 0-1)'" [label]="'Post-op Course (Day 0-1)'" formControlName="postOpDay0_1" [error]="formErrors.postOpDay0_1" class="col-md-4">
                 </app-admin-drop-down>
 
-                <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" [error]="formErrors.postOpDay2_5" class="col-md-6">
+                <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day 2-5)'" [label]="'Post-op Course (Day 2-5)'" formControlName="postOpDay2_5" [error]="formErrors.postOpDay2_5" class="col-md-4">
                 </app-admin-drop-down>
 
-                <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" [error]="formErrors.postOpDayOver5" class="col-md-6">
+                <app-admin-drop-down [data]="postOpCourses" [placeholder]="'Select Post-op Course (Day >5)'" [label]="'Post-op Course (Day >5)'" formControlName="postOpDayOver5" [error]="formErrors.postOpDayOver5" class="col-md-4">
                 </app-admin-drop-down>
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Post-op Adverse Events'" [label]="'Post-op Adverse Events'" formControlName="postOpAdverseEvents" class="col-md-12">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" formControlName="dischargeDate" class="col-md-6">
+                <app-admin-general-input [type]="'date'" [placeholder]="'Discharge Date'" [label]="'Discharge Date'" formControlName="dischargeDate" class="col-md-4">
                 </app-admin-general-input>
 
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Final Diagnosis'" [label]="'Final Diagnosis'" formControlName="finalDiagnosis" class="col-md-12">
@@ -129,13 +87,13 @@
                 <app-admin-general-input [type]="'textarea'" [placeholder]="'Discharge Instructions'" [label]="'Discharge Instructions'" formControlName="dischargeInstructions" [error]="formErrors.dischargeInstructions" class="col-md-12">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" [error]="formErrors.followUpDoctor" class="col-md-6">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor'" [label]="'Follow-up Doctor'" formControlName="followUpDoctor" [error]="formErrors.followUpDoctor" class="col-md-4">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" [error]="formErrors.followUpDoctorPhone" class="col-md-6">
+                <app-admin-general-input [type]="'text'" [placeholder]="'Follow-up Doctor Phone'" [label]="'Follow-up Doctor Phone'" formControlName="followUpDoctorPhone" [error]="formErrors.followUpDoctorPhone" class="col-md-4">
                 </app-admin-general-input>
 
-                <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" [error]="formErrors.followUpAppointment" class="col-md-6">
+                <app-admin-general-input [type]="'date'" [placeholder]="'Follow-up Appointment'" [label]="'Follow-up Appointment'" formControlName="followUpAppointment" [error]="formErrors.followUpAppointment" class="col-md-4">
                 </app-admin-general-input>
 
                 <app-admin-upload-file (FilesChenged)="OnFileChange($event)" *ngIf="!DetailsMode"></app-admin-upload-file>

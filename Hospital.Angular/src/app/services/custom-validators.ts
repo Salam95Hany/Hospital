@@ -42,7 +42,6 @@ export class CustomValidators extends Validators {
 
     static dateGreaterThanToday(specificDate: Date, message: string): ValidatorFn {
     return (control: AbstractControl) => {
-        debugger;
       if (control.value) {
         const inputDate = new Date(control.value);
         specificDate.setHours(0, 0, 0, 0);
@@ -57,7 +56,6 @@ export class CustomValidators extends Validators {
 
   static dateLessThanToday(specificDate: Date, message: string): ValidatorFn {
     return (control: AbstractControl) => {
-        debugger;
       if (control.value) {
         const inputDate = new Date(control.value);
         specificDate.setHours(0, 0, 0, 0);
