@@ -366,14 +366,26 @@ namespace Hospital.Services.PatientsService
                 },
                 new()
                 {
-                    CategoryDisplayName = "NationalId",
-                    CategoryName = "NationalId",
+                    CategoryDisplayName = "Address",
+                    CategoryName = "Address",
                     FilterType = "SearchText"
                 },
                 new()
                 {
-                    CategoryDisplayName = "Phone",
-                    CategoryName = "Phone",
+                    CategoryDisplayName = "Phone 1",
+                    CategoryName = "Phone 1",
+                    FilterType = "SearchText"
+                },
+                new()
+                {
+                    CategoryDisplayName = "Phone 2",
+                    CategoryName = "Phone 2",
+                    FilterType = "SearchText"
+                },
+                new()
+                {
+                    CategoryDisplayName = "National Id",
+                    CategoryName = "National Id",
                     FilterType = "SearchText"
                 },
                 new()
