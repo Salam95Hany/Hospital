@@ -60,10 +60,24 @@ export class AdmissionListComponent {
       filterType: "DateRange"
     },
     {
-      categoryDisplayName: "Discharge Date",
-      categoryName: "Discharge Date",
+      categoryDisplayName: "Schedule Date",
+      categoryName: "Schedule Date",
       filterType: "DateRange"
-    }
+    },
+    {
+      categoryDisplayName: "BMI",
+      categoryName: "BMIText",
+      filterType: "SearchText"
+    },{
+      categoryDisplayName: "Comorbidities",
+      categoryName: "ComorText",
+      filterType: "SearchText"
+    },
+    // {
+    //   categoryDisplayName: "Discharge Date",
+    //   categoryName: "Discharge Date",
+    //   filterType: "DateRange"
+    // }
   ];
   ReportModel: SearchReportModel = {
       reportType: '',
