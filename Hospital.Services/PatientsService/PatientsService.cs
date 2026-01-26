@@ -3,6 +3,7 @@ using Hospital.Entities.Common;
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Contracts.Requests;
 using Hospital.Entities.Models;
+using Hospital.Entities.Specifications.FollowUps;
 using Hospital.Entities.Specifications.Patients;
 using Hospital.Entities.Specifications.SearchAutoComplete;
 using Hospital.Interfaces;
@@ -342,31 +343,62 @@ namespace Hospital.Services.PatientsService
             }).ToList();
 
             return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);
-
-
         }
-        //public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientsBasicInfoFilter(CancellationToken cancellationToken = default)
-        //{
-        //    var data = await _unitOfWork.Repository<Patient>().GetAllAsQueryable().Include(x => x.CreatedBy).Select(x => new Patient
-        //    {
-        //        InsertUser = x.InsertUser,
-        //        CreatedBy = new AdminUser { UserName = x.CreatedBy.UserName }
-        //    }).ToListAsync();
 
-        //    var filterRequests = new List<FilterRequest<Patient>>
-        //    {
-        //        new()
-        //        {
-        //            CategoryName = "Patient Code",
-        //            Source = data,
-        //            ItemIdSelector = x => x.InternalNumber,
-        //            ItemKeySelector = x => x.InternalNumber ?? ""
-        //        }
-        //    };
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientFilters()
+        {
+            var FinalFilters = new List<FilterModel>();
+            var PatientData = await _unitOfWork.Repository<Patient>().GetAllAsQueryable().ToListAsync();
 
-        //    var results = await filterRequests.GenerateManyAsync(cancellationToken);
-        //    return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, results);
-        //}
+            var FilterRequests = new List<FilterRequest<Patient>>
+            {
+                new()
+                {
+                    CategoryDisplayName = "Name",
+                    CategoryName = "Name",
+                    FilterType = "SearchText"
+                },
+                new()
+                {
+                    CategoryDisplayName = "Age",
+                    CategoryName = "Age",
+                    FilterType = "SearchText"
+                },
+                new()
+                {
+                    CategoryDisplayName = "NationalId",
+                    CategoryName = "NationalId",
+                    FilterType = "SearchText"
+                },
+                new()
+                {
+                    CategoryDisplayName = "Phone",
+                    CategoryName = "Phone",
+                    FilterType = "SearchText"
+                },
+                new()
+                {
+                    CategoryDisplayName = "Gender",
+                    CategoryName = "Gender",
+                    FilterType = "Checkbox",
+                    Source = PatientData,
+                    ItemIdSelector = x => x.Gender,
+                    ItemKeySelector = x => x.Gender
+                },
+                new()
+                {
+                    CategoryDisplayName = "Governorate",
+                    CategoryName = "Governorate",
+                    FilterType = "Checkbox",
+                    Source = PatientData,
+                    ItemIdSelector = x => x.Governorate,
+                    ItemKeySelector = x => x.Governorate
+                }
+            };
+
+            var Filters = await FilterRequests.GenerateManyAsync();
+            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Filters);
+        }
         public async Task<ApiResponseModel<string>> UpdatePatientFull(Patient Model, CancellationToken cancellationToken = default)
         {
             using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);

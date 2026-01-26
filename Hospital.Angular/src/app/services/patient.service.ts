@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponseModel } from '../models/ApiResponseModel';
 import { PagingFilterModel } from '../models/PagingFilterModel';
 import { environment } from '../../environments/environment';
+import { FilterModel } from '../models/FilterModel';
 
 export interface PaginationParams {
   page: number;
@@ -41,6 +42,10 @@ export class PatientService {
   // New method to get basic patient info
   getAllPatientsBasicInfo(PagingFilter: PagingFilterModel): Observable<any> {
     return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}Patients/GetAllPatientsBasicInfo`, PagingFilter);
+  }
+
+  GetAllPatientFilters(): Observable<any> {
+    return this.http.get<ApiResponseModel<FilterModel[]>>(`${this.apiUrl}Patients/GetAllPatientFilters`);
   }
 
   // GetAllPatientsBasicInfoFilter(PagingFilter: PagingFilterModel) {

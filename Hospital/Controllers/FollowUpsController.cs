@@ -25,6 +25,13 @@ namespace Hospital.Controllers
             return results;
         }
 
+        [HttpGet("GetAllFollowUpFilters")]
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int AdmissionId)
+        {
+            var results = await _followUpsService.GetAllFollowUpFilters(AdmissionId);
+            return results;
+        }
+
         [HttpGet("GetFollowUpById")]
         public async Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId)
         {

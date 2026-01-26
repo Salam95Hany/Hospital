@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { ApiResponseModel } from '../models/ApiResponseModel';
 import { ActionTypes } from '../models/UploadFileModel';
 import { PagingFilterModel } from '../models/PagingFilterModel';
+import { FilterModel } from '../models/FilterModel';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,10 @@ export class AdminService {
     return this.http.post<ApiResponseModel<any>>(this.Url + 'SurgicalInterventions/GetAllSurgicalIntervention?AdmissionId=' + AdmissionId, PagingFilter);
   }
 
+  GetAllSurgicalInterventionFilters(AdmissionId: number) {
+    return this.http.get<ApiResponseModel<FilterModel[]>>(this.Url + 'SurgicalInterventions/GetAllSurgicalInterventionFilters?AdmissionId=' + AdmissionId);
+  }
+
   GetSurgicalInterventionById(SurgicalInterventionId: number) {
     return this.http.get<ApiResponseModel<any>>(this.Url + 'SurgicalInterventions/GetSurgicalInterventionById?SurgicalInterventionId=' + SurgicalInterventionId);
   }
@@ -61,6 +66,10 @@ export class AdminService {
 
   GetAllFollowUpData(PagingFilter: PagingFilterModel, AdmissionId: number) {
     return this.http.post<ApiResponseModel<any>>(this.Url + 'FollowUps/GetAllFollowUpData?AdmissionId=' + AdmissionId, PagingFilter);
+  }
+
+  GetAllFollowUpFilters(AdmissionId: number) {
+    return this.http.get<ApiResponseModel<any>>(this.Url + 'FollowUps/GetAllFollowUpFilters?AdmissionId=' + AdmissionId);
   }
 
   GetFollowUpById(FollowUpId: number) {

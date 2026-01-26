@@ -12,6 +12,7 @@ namespace Hospital.Interfaces
     public interface ISurgicalInterventionsService
     {
         Task<ApiResponseModel<List<SurgicalInterventionDto>>> GetAllSurgicalIntervention(PagingFilterModel PagingFilter, int AdmissionId);
+        Task<ApiResponseModel<List<FilterModel>>> GetAllSurgicalInterventionFilters(int AdmissionId);
         Task<ApiResponseModel<SurgicalIntervention>> GetSurgicalInterventionById(int SurgicalInterventionId);
         Task<ApiResponseModel<string>> AddNewSurgicalIntervention(SurgicalIntervention Model);
         Task<ApiResponseModel<string>> UpdateSurgicalIntervention(SurgicalIntervention Model);
