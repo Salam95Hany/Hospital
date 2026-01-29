@@ -13,6 +13,7 @@ namespace Hospital.Interfaces.IPatients
     public interface IPatientsService
     {
         Task<ApiResponseModel<List<PatientListDto>>> GetAllPatientsBasicInfoAsync(PagingFilterModel PagingFilter, CancellationToken cancellationToken = default);
+        Task<ApiResponseModel<List<FilterModel>>> GetAllPatientFilters();
         Task<ApiResponseModel<string>> AddNewPatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default);
         Task<ApiResponseModel<string>> DeletePatientWithAllData(int patientId, CancellationToken cancellationToken = default);
         Task<ApiResponseModel<string>> SoftDeletePatientWithAllData(int patientId, CancellationToken cancellationToken = default);

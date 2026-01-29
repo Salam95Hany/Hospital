@@ -26,7 +26,7 @@
         </div>
 
         <!-- CHECKBOX FILTER -->
-        <div *ngIf="filter.filterType === 'Checkbox'" class="filter-button" ngbDropdown display="dynamic" [autoClose]="'outside'">
+        <div *ngIf="filter.filterType === 'Checkbox'" class="filter-button" ngbDropdown #dd="ngbDropdown" display="dynamic" [autoClose]="'outside'">
             <button class="btn main-filter-button d-flex align-items-center gap-2" ngbDropdownToggle>
                 <i class="fas fa-filter"></i>
                 <span class="navbar-brand m-0">{{filter.categoryDisplayName}}</span>
@@ -45,7 +45,7 @@
                 <div class="min-width-230 max-height-180 px-2 py-2 overflow-auto bg-white">
                     <div class="d-flex align-items-center justify-content-between cursor-pointer" *ngFor="let fItem of filter.filterItems | searchArry: filter.searchText:['itemKey']; let x = index">
                         <div class="d-flex align-items-center">
-                            <input class="form-check-input" type="checkbox" [(ngModel)]="fItem.isChecked" (change)="updateFilters(filter)" id="{{filter.categoryName}}_{{fItem.itemKey}}_{{x}}">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="fItem.isChecked" (change)="updateFilters(filter);dd.close()" id="{{filter.categoryName}}_{{fItem.itemKey}}_{{x}}">
                             <label class="form-check-label cursor-pointer filter-content me-2" for="{{filter.categoryName}}_{{fItem.itemKey}}_{{x}}">
                                 <span>{{fItem.itemKey}}</span>
                             </label>
@@ -68,7 +68,7 @@
             <ng-container *ngIf="selected.from; else normalFilter">
                 {{selected.from}} - {{selected.to}}
             </ng-container>
-            <ng-template #normalFilter>{{selected.itemId}}</ng-template>
+            <ng-template #normalFilter>{{selected.itemKey ? selected.itemKey : selected.itemId}}</ng-template>
         </span>
         <i class="fas fa-times-circle font-small-3 px-02 cursor-pointer me-1" (click)="removeSelectedFilter(selected, i)"></i>
     </div>

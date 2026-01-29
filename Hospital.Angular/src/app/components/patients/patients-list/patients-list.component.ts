@@ -38,48 +38,7 @@ export class PatientsListComponent implements OnInit {
     currentpage: 1,
     pagesize: 20
   };
-  FilterList: FilterModel[] = [
-    // {
-    //   categoryDisplayName: "Code",
-    //   categoryName: "SearchText",
-    //   filterType: "SearchText"
-    // },
-    {
-      categoryDisplayName: "Address",
-      categoryName: "Address Text",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "Name",
-      categoryName: "Name",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "Age",
-      categoryName: "Age",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "Gender",
-      categoryName: "Gender",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "National ID",
-      categoryName: "National ID",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "Phone 1",
-      categoryName: "Phone 1",
-      filterType: "SearchText"
-    },
-    {
-      categoryDisplayName: "Phone 2",
-      categoryName: "Phone 2",
-      filterType: "SearchText"
-    }
-  ];
+  FilterList: FilterModel[] = [];
 
   PatientId: any;
   @ViewChild('PatientCreateModal', { read: TemplateRef }) PatientCreateModalRef!: TemplateRef<any>;
@@ -101,6 +60,7 @@ export class PatientsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPatients();
+    this.GetAllPatientFilters();
     this.canManage = this.authService.isInRole(['SupperAdmin', 'Admin']);
     //this.GetAllPatientsBasicInfoFilter();
   }
@@ -110,6 +70,12 @@ export class PatientsListComponent implements OnInit {
       this.patients = response.results;
       this.TotalCount = response.totalCount;
       this.filteredPatients = this.patients;
+    });
+  }
+
+  GetAllPatientFilters(): void {
+    this.patientService.GetAllPatientFilters().subscribe(response => {
+      this.FilterList = response.results;
     });
   }
 
@@ -183,6 +149,7 @@ export class PatientsListComponent implements OnInit {
         next: () => {
           this.toastr.success('Patient deleted successfully!', 'Success');
           this.loadPatients();
+          this.GetAllPatientFilters();
           //this.GetAllPatientsBasicInfoFilter();
         },
         error: (error) => {
@@ -233,7 +200,8 @@ export class PatientsListComponent implements OnInit {
     });
   }
   RefreshData(item: boolean) {
-  this.loadPatients();
+    this.loadPatients();
+    this.GetAllPatientFilters();
   }
 
 }

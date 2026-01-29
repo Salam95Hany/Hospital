@@ -63,13 +63,7 @@ export class SurgicalInterventionListComponent implements OnInit {
     currentpage: 1,
     pagesize: 1000
   };
-  FilterList: FilterModel[] = [
-    {
-      categoryDisplayName: "Intervention Date",
-      categoryName: "Intervention Date",
-      filterType: "DateRange"
-    }
-  ];
+  FilterList: FilterModel[] = [];
   ReportModel: SearchReportModel = {
     reportType: '',
     queryString: []
@@ -112,6 +106,14 @@ export class SurgicalInterventionListComponent implements OnInit {
     this.adminService.GetAllSurgicalIntervention(this.PagingFilter, this.AdmissionId).subscribe(response => {
       this.SurgicalInterventions = response.results;
       this.TotalCount = response.totalCount;
+    });
+  }
+
+  GetAllSurgicalInterventionFilters() {
+    this.adminService.GetAllSurgicalInterventionFilters(this.AdmissionId).subscribe(response => {
+      this.FilterList = response.results;
+      console.log(this.FilterList);
+      
     });
   }
 
@@ -222,6 +224,7 @@ export class SurgicalInterventionListComponent implements OnInit {
 
   RefreshData(item: boolean) {
     this.GetAllSurgicalIntervention();
+    this.GetAllSurgicalInterventionFilters();
   }
 
   onPatientSelected(item: any) {
@@ -240,6 +243,7 @@ export class SurgicalInterventionListComponent implements OnInit {
 
     if (this.AdmissionId && this.PatientId) {
       this.GetAllSurgicalIntervention();
+      this.GetAllSurgicalInterventionFilters();
     }
   }
 

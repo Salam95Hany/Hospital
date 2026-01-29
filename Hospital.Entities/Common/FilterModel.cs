@@ -16,6 +16,7 @@ namespace Hospital.Entities.Common
         public string? From { get; set; }
         public string? To { get; set; }
         public string? FilterType { get; set; }
+        public int DisplayOrder { get; set; }
         public List<FilterModel> FilterItems { get; set; } = [];
     }
 }

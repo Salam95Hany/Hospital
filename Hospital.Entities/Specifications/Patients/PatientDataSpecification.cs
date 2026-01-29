@@ -9,36 +9,43 @@ using System.Threading.Tasks;
 
 namespace Hospital.Entities.Specifications.Patients
 {
-    public class PatientDataSpecification:BaseSpecification<Patient>
+    public class PatientDataSpecification : BaseSpecification<Patient>
     {
-        public PatientDataSpecification(PagingFilterModel PagingFilter, bool applyPaging = true) :base(i => i.IsDeleted == false)
+        public PatientDataSpecification(PagingFilterModel PagingFilter, bool applyPaging = true) : base(i => i.IsDeleted == false)
         {
 
-            var searchText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "SearchText")?.ItemId;
-            var addressText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Address Text")?.ItemId;
-            var GenderText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Gender")?.ItemId;
-            var NameText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Name")?.ItemId;
-            var AgeText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Age")?.ItemId;
-            var Phone1Text = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Phone 1")?.ItemId;
-            var Phone2Text = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Phone 2")?.ItemId;
-            var NationalText = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "National ID")?.ItemId;
+            var NameSearch = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Name")?.ItemId;
+            var AgeSearch = int.TryParse(PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Age")?.ItemId, out var age) ? age : 0;
+            var AddressSearch = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Address")?.ItemId;
+            var NationalIdSearch = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "NationalId")?.ItemId;
+            var Phone1Search = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Phone 1")?.ItemId;
+            var Phone2Search = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "Phone 2")?.ItemId;
+            var Gender = PagingFilter.FilterList.Where(f => f.CategoryName == "Gender").Select(i => i.ItemId).ToList();
+            var Governorate = PagingFilter.FilterList.Where(f => f.CategoryName == "Governorate").Select(i => i.ItemId).ToList();
 
-            if (!string.IsNullOrEmpty(searchText))
-                AddCriteria(fc => fc.InternalNumber.Contains(searchText));
-            if (!string.IsNullOrEmpty(addressText))
-                AddCriteria(fc => fc.Governorate.Contains(addressText));
-            if (!string.IsNullOrEmpty(GenderText))
-                AddCriteria(fc => fc.Gender.Contains(GenderText));
-            if (!string.IsNullOrEmpty(NameText))
-                AddCriteria(fc => fc.Name.Contains(NameText));
-            if (!string.IsNullOrEmpty(AgeText))
-                AddCriteria(fc => fc.Age.ToString().Contains(AgeText));
-            if (!string.IsNullOrEmpty(Phone1Text))
-                AddCriteria(fc => fc.Phone1.Contains(Phone1Text));
-            if (!string.IsNullOrEmpty(Phone2Text))
-                AddCriteria(fc => fc.Phone2.Contains(Phone2Text));
-            if (!string.IsNullOrEmpty(NationalText))
-                AddCriteria(fc => fc.NationalId.Contains(NationalText));
+            if (!string.IsNullOrEmpty(NameSearch))
+                AddCriteria(fc => fc.Name.Contains(NameSearch));
+
+            if (AgeSearch > 0)
+                AddCriteria(fc => fc.Age == AgeSearch);
+
+            if (!string.IsNullOrEmpty(NationalIdSearch))
+                AddCriteria(fc => fc.NationalId.Contains(NationalIdSearch));
+
+            if (!string.IsNullOrEmpty(Phone1Search))
+                AddCriteria(fc => fc.Phone1.Contains(Phone1Search));
+
+            if (!string.IsNullOrEmpty(Phone2Search))
+                AddCriteria(fc => fc.Phone2.Contains(Phone2Search));
+
+            if (!string.IsNullOrEmpty(AddressSearch))
+                AddCriteria(fc => fc.Address.Contains(AddressSearch));
+
+            if (Gender.Any())
+                AddCriteria(fc => Gender.Contains(fc.Gender));
+
+            if (Governorate.Any())
+                AddCriteria(fc => Governorate.Contains(fc.Governorate));
 
             AddInclude(fc => fc.CreatedBy);
 

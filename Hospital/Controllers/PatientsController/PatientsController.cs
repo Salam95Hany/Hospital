@@ -33,6 +33,12 @@ namespace Hospital.Controllers.PatientsController
             return await _PatientsService.GetAllPatientsBasicInfoAsync(PagingFilter, cancellationToken);
         }
 
+        [HttpGet("GetAllPatientFilters")]
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientFilters()
+        {
+            return await _PatientsService.GetAllPatientFilters();
+        }
+
         //[HttpGet("GetAllPatientsBasicInfoFilter")]
         //public async Task<ApiResponseModel<List<FilterModel>>> GetAllPatientsBasicInfoFilter()
         //{

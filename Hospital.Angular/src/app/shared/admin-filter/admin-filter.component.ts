@@ -69,6 +69,7 @@ export class AdminFilterComponent implements OnChanges {
         case 'SearchText':
         case 'Day':
         case 'Month':
+          debugger;
           if (filter.itemId && filter.itemId.trim() !== '') {
             updatedFilters.push({
               categoryName: filter.categoryName,

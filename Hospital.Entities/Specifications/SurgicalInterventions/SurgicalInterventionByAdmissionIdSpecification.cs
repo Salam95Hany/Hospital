@@ -9,7 +9,7 @@ namespace Hospital.Entities.Specifications.SurgicalInterventions
 {
     public class SurgicalInterventionByAdmissionIdSpecification : BaseSpecification<SurgicalIntervention>
     {
-        public SurgicalInterventionByAdmissionIdSpecification(int AdmissionId) : base(x => x.AdmissionId == AdmissionId)
+        public SurgicalInterventionByAdmissionIdSpecification(int AdmissionId) : base(x => x.AdmissionId == AdmissionId && x.IsDeleted == false)
         {
         }
     }

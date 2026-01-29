@@ -12,13 +12,10 @@ namespace Hospital.Entities.Specifications.FollowUps
     {
         public FollowUpDataSpecification(PagingFilterModel PagingFilter,int AdmissionId, bool applyPaging = true) : base(i => i.AdmissionId == AdmissionId && i.IsDeleted == false)
         {
-            var FollowUpDateFrom = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "FollowUp Date")?.From;
-            var FollowUpDateTo = PagingFilter.FilterList.FirstOrDefault(f => f.CategoryName == "FollowUp Date")?.To;
+            var PatientsRemarks = PagingFilter.FilterList.Where(f => f.CategoryName == "Patient’s remarks").Select(f => f.ItemId).ToList();
 
-            if (FollowUpDateFrom != null && FollowUpDateTo != null)
-            {
-                AddCriteria(fc => fc.FollowUpDate >= DateTime.Parse(FollowUpDateFrom) && fc.FollowUpDate <= DateTime.Parse(FollowUpDateTo));
-            }
+            if (PatientsRemarks.Any())
+                AddCriteria(fc => PatientsRemarks.Contains(fc.PatientRemarksStatus));
 
             AddInclude("Admission.Patient");
             AddInclude(i => i.CreatedBy);

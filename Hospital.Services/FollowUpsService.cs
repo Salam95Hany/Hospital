@@ -6,6 +6,7 @@ using Hospital.Entities.Specifications.SurgicalInterventions;
 using Hospital.Interfaces;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Hospital.Services
@@ -40,6 +41,29 @@ namespace Hospital.Services
             }).ToList();
 
             return ApiResponseModel<List<FollowUpDto>>.Success(GenericErrors.GetSuccess, Data, TotalCount);
+        }
+
+        public async Task<ApiResponseModel<List<FilterModel>>> GetAllFollowUpFilters(int AdmissionId)
+        {
+            var FinalFilters = new List<FilterModel>();
+            var Spec = new FollowupByAdmissionIdSpecification(AdmissionId);
+            var FollowUpData = await _unitOfWork.Repository<FollowUp>().GetAllAsQueryableAsync(Spec);
+
+            var FilterRequests = new List<FilterRequest<FollowUp>>
+            {
+                new()
+                {
+                    CategoryDisplayName = "Patient’s remarks",
+                    CategoryName = "Patient’s remarks",
+                    FilterType = "Checkbox",
+                    Source = FollowUpData,
+                    ItemIdSelector = x => x.PatientRemarksStatus,
+                    ItemKeySelector = x => x.PatientRemarksStatus
+                }
+            };
+
+            var Filters = await FilterRequests.GenerateManyAsync();
+            return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Filters);
         }
 
         public async Task<ApiResponseModel<FollowUp>> GetFollowUpById(int FollowUpId)

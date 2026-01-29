@@ -20,7 +20,7 @@ import { RoleCheckerDirective } from '../../../directives/role-checker.directive
   selector: 'app-followup-list',
   standalone: true,
   imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
-    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, FollowupCreateComponent,RoleCheckerDirective],
+    AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, FollowupCreateComponent, RoleCheckerDirective],
   templateUrl: './followup-list.component.html',
   styleUrl: './followup-list.component.css',
   providers: [DatePipe]
@@ -43,18 +43,7 @@ export class FollowupListComponent {
     currentpage: 1,
     pagesize: 10
   };
-  FilterList: FilterModel[] = [
-    // {
-    //   categoryDisplayName: "Name",
-    //   categoryName: "SearchText",
-    //   filterType: "SearchText"
-    // },
-    {
-      categoryDisplayName: "FollowUp Date",
-      categoryName: "FollowUp Date",
-      filterType: "DateRange"
-    }
-  ];
+  FilterList: FilterModel[] = [];
 
   constructor(private adminService: AdminService, private formService: FormService, private fb: FormBuilder, private authService: AuthService,
     private toaster: ToastrService, private datePipe: DatePipe, private modalService: NgbModal) { }
@@ -67,6 +56,14 @@ export class FollowupListComponent {
       this.adminService.GetAllFollowUpData(this.PagingFilter, this.AdmissionId).subscribe(response => {
         this.FollowUps = response.results;
         this.TotalCount = response.totalCount;
+      });
+    }
+  }
+
+  GetAllFollowUpFilters(): void {
+    if (this.AdmissionId) {
+      this.adminService.GetAllFollowUpFilters(this.AdmissionId).subscribe(response => {
+        this.FilterList = response.results;
       });
     }
   }
@@ -100,6 +97,7 @@ export class FollowupListComponent {
     this.AdmissionId = item?.id;
     if (this.AdmissionId) {
       this.GetAllFollowUpData();
+      this.GetAllFollowUpFilters();
     } else {
       this.AdmissionId = null;
       this.FollowUps = [];
@@ -178,6 +176,7 @@ export class FollowupListComponent {
 
   RefreshData(item: boolean) {
     this.GetAllFollowUpData();
+    this.GetAllFollowUpFilters();
   }
 
   DeleteItem() {
@@ -187,6 +186,7 @@ export class FollowupListComponent {
       if (res.isSuccess) {
         this.toaster.success(res.message);
         this.GetAllFollowUpData();
+        this.GetAllFollowUpFilters();
         this.modalService.dismissAll();
       } else
         this.toaster.error(res.message);
