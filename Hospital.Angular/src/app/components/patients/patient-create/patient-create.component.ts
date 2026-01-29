@@ -1040,15 +1040,14 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   }
 
   savePatient(): void {
-    this.integrateSurgicalFromChild();
     this.patientForm = this.formService.TrimFormInputValue(this.patientForm);
-
-    // Mark all form groups as touched to trigger validation
     this.markFormGroupTouched(this.patientForm.get('patient') as FormGroup);
-    this.markFormGroupTouched(this.admission);
-    this.markFormGroupTouched(this.surgicalIntervention);
-
-    // Attach files to their respective step objects with API-ready shape
+    const patientGroup = this.patientForm.get('patient') as FormGroup;
+    const patientValid = patientGroup.valid;
+    if (!patientValid) {
+      this.showValidationErrors();
+      return;
+    }
     const setModel = (group: FormGroup, model: UploadFileModel, actionType: ActionTypes) => {
       if ((model?.files?.length || 0) > 0 || (model?.deletedFiles?.length || 0) > 0) {
         group.get('fileModel').setValue(this.toApiFileModel(model, actionType));
@@ -1056,75 +1055,21 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         group.get('fileModel').setValue(null);
       }
     };
-    setModel(this.patientForm.get('patient') as FormGroup, this.patientFiles, ActionTypes.Patient);
-    setModel(this.admission, this.admissionFiles, ActionTypes.Admission);
-    setModel(this.surgicalIntervention, this.surgicalFiles, ActionTypes.SurgicalIntervention);
-
-    // Sync role form controls to CSV of IDs from chip selections
-    const mainIds = this.SelectedMainSurgeon.map(a => a.id).join(',');
-    const assistantsIds = this.SelectedAssistants.map(a => a.id).join(',');
-    const residentIds = this.SelectedResident.map(a => a.id).join(',');
-    const supervisorIds = this.SelectedSupervisor.map(a => a.id).join(',');
-    this.surgicalIntervention.get('mainSurgeon')?.setValue(mainIds || null);
-    this.surgicalIntervention.get('assistants')?.setValue(assistantsIds || null);
-    this.surgicalIntervention.get('resident')?.setValue(residentIds || null);
-    this.surgicalIntervention.get('offFieldSupervisor')?.setValue(supervisorIds || null);
-
-    // Build doctorId CSV from unique IDs across all role selections
-    const uniqueIds = new Set<number>();
-    this.SelectedMainSurgeon.forEach(d => uniqueIds.add(d.id));
-    this.SelectedAssistants.forEach(d => uniqueIds.add(d.id));
-    this.SelectedResident.forEach(d => uniqueIds.add(d.id));
-    this.SelectedSupervisor.forEach(d => uniqueIds.add(d.id));
-    const docList = Array.from(uniqueIds).join(',');
-    this.surgicalIntervention.get('doctorId')?.setValue(docList || null);
-
-    const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
-    const admissionValid = this.admission.valid;
-    const interventionValid = this.surgicalIntervention.valid;
-
-    if (!patientValid || !admissionValid || !interventionValid) {
-      // Show validation errors for individual fields
-      this.showValidationErrors();
-      return;
-    }
-    // Build PascalCase payload with per-step FileModel for correct binding
-    const patientGroup = this.patientForm.get('patient') as FormGroup;
+    setModel(patientGroup, this.patientFiles, ActionTypes.Patient);
     const { fileModel: _pFileModel, ...patientData } = (patientGroup?.value) || {};
-    const { fileModel: _aFileModel, ...admissionData } = (this.admission?.value) || {};
-    const { fileModel: _sFileModel, ...surgicalData } = (this.surgicalIntervention?.value) || {};
-
     const apiPayload: any = {
       Patient: {
         ...patientData,
         InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
         FileModel: patientGroup?.get('fileModel')?.value || null,
-      },
-      Admission: {
-        ...admissionData,
-        InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
-        FileModel: this.admission?.get('fileModel')?.value || null,
-      },
-      SurgicalIntervention: {
-        ...surgicalData,
-        InsertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
-        FileModel: this.surgicalIntervention?.get('fileModel')?.value || null,
       }
     };
-
     if (this.isEditMode && this.patientId) {
       apiPayload.PatientId = this.patientId;
       apiPayload.Patient = { ...(apiPayload.Patient || {}), patientId: this.patientId };
     }
-
     const formData = new FormData();
     this.formService.buildFormData(formData, apiPayload);
-    // Debug: log FormData keys to verify binding paths
-    try {
-      for (const [k, v] of (formData as any).entries()) {
-        const isFile = typeof File !== 'undefined' && v instanceof File;
-      }
-    } catch { }
     this.BtnDisabled = true;
     if (this.isEditMode && this.patientId) {
       this.patientService.updatePatientFull(formData).subscribe(() => {

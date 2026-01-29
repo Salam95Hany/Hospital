@@ -41,18 +41,18 @@ namespace Hospital.Services.PatientsService
                 var patientId = await AddNewPatient(Model.Patient, internalNumber);
 
                 // Step 2: Save Admission with PatientId
-                int? admissionId = null;
-                if (Model.Admission != null)
-                {
-                    admissionId = await AddNewAdmission(Model.Admission, patientId);
-                }
+                //int? admissionId = null;
+                //if (Model.Admission != null)
+                //{
+                //    admissionId = await AddNewAdmission(Model.Admission, patientId);
+                //}
 
-                // Step 3: Save Surgical Intervention with AdmissionId (if admission exists)
-                int? surgicalInterventionId = null;
-                if (Model.SurgicalIntervention != null && admissionId.HasValue)
-                {
-                    surgicalInterventionId = await AddNewSurgicalIntervention(Model.SurgicalIntervention, admissionId.Value);
-                }
+                //// Step 3: Save Surgical Intervention with AdmissionId (if admission exists)
+                //int? surgicalInterventionId = null;
+                //if (Model.SurgicalIntervention != null && admissionId.HasValue)
+                //{
+                //    surgicalInterventionId = await AddNewSurgicalIntervention(Model.SurgicalIntervention, admissionId.Value);
+                //}
 
                 await transaction.CommitAsync(cancellationToken);
 

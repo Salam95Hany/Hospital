@@ -16,23 +16,12 @@
         </ng-template>
     </div>
 
-    <!-- Steps Progress Bar -->
-    <div class="steps-container" *ngIf="!isReadOnly">
-        <div class="steps-progress">
-            <div class="progress-bar" [style.width.%]="((currentStep - 1) / (steps.length - 1)) * 100"></div>
-        </div>
-        <div class="steps-list">
-            <div *ngFor="let step of steps; let i = index" class="step-item" [class.active]="currentStep === i + 1" [class.completed]="step.isCompleted">
-                <div class="step-number">{{ i + 1 }}</div>
-                <div class="step-title">{{ step.title }}</div>
-            </div>
-        </div>
-    </div>
+    <!-- Single-step: Patient Information only -->
 
     <!-- Form Steps -->
     <form [formGroup]="patientForm" (ngSubmit)="savePatient()">
-        <!-- Step 1: Patient Information -->
-        <div *ngIf="isReadOnly || currentStep === 1" class="step-content" formGroupName="patient">
+        <!-- Patient Information -->
+        <div class="step-content" formGroupName="patient">
             <h3 class="step-heading"><i class="fas fa-user text-primary"></i> Patient Information</h3>
             <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
                 <div class="row g-3">
@@ -54,40 +43,13 @@
             </div>
         </div>
 
-        <!-- Step 2: Admission Details -->
-        <div *ngIf="isReadOnly || currentStep === 2" class="step-content" formGroupName="admission">
-            <h3 class="step-heading"><i class="fas fa-procedures text-primary"></i> Admission Details</h3>
-            <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
-                <app-admission-create [PatientId]="patientId" [DetailsMode]="isReadOnly" [PatientMode]="true" (RefreshData)="RefreshData.emit($event)"></app-admission-create>
-            </div>
-        </div>
-
-
-        <!-- Step 3: Surgical Intervention -->
-        <div *ngIf="isReadOnly ? hasSurgicalDetails : currentStep === 3" class="step-content" formGroupName="surgicalIntervention">
-            <h3 class="step-heading"><i class="fas fa-user-md text-primary"></i> Surgical Intervention</h3>
-            <div class="step-content-inner" [attr.tabindex]="isReadOnly ? -1 : null">
-                <app-surgical-intervention-create [AdmissionId]="null" [SurgicalInterventionId]="null" [DetailsMode]="isReadOnly" [PatientMode]="true" [DoctorsData]="DoctorsData" (RefreshData)="RefreshData.emit($event)"></app-surgical-intervention-create>
-            </div>
-        </div>
+        <!-- Removed steps: Admission and Surgical sections are not shown in create -->
     </form>
 
-    <!-- Navigation Buttons -->
+    <!-- Save only -->
     <div class="form-navigation" *ngIf="!isReadOnly">
-        <button *ngIf="currentStep > 1" class="btn btn-outline-primary" (click)="prevStep()">
-      <i class="fas fa-arrow-left"></i> Previous
-    </button>
-
-        <button *ngIf="currentStep < steps.length" class="btn btn-primary" (click)="nextStep()">
-      Next <i class="fas fa-arrow-right"></i>
-    </button>
-
-        <!-- <button *ngIf="currentStep === steps.length && isEditMode && patientId" class="btn btn-danger" (click)="deletePatient()">
-      <i class="fas fa-trash"></i> Delete
-    </button> -->
-
-        <button *ngIf="currentStep === steps.length" class="btn btn-success" (click)="savePatient()" [disabled]="BtnDisabled">
-      <i class="fas fa-save"></i> Save
-    </button>
+        <button class="btn btn-success" (click)="savePatient()" [disabled]="BtnDisabled">
+            <i class="fas fa-save"></i> Save
+        </button>
     </div>
 </div>

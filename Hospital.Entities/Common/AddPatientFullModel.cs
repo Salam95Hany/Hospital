@@ -10,8 +10,8 @@ namespace Hospital.Entities.Common
     public class AddPatientFullModel
     {
         public Patient Patient { get; set; }
-        public Admission Admission { get; set; }
-        public SurgicalIntervention? SurgicalIntervention { get; set; }
-        public FollowUp? FollowUp { get; set; }
+        //public Admission Admission { get; set; }
+        //public SurgicalIntervention? SurgicalIntervention { get; set; }
+        //public FollowUp? FollowUp { get; set; }
     }
 }
