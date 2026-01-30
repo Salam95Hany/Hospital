@@ -29,7 +29,7 @@ import { AuthService } from '../../../auth/auth.service';
 export class PatientsListComponent implements OnInit {
   patients: PatientsList[] = [];
   filteredPatients: PatientsList[] = [];
-  isFilter = false;
+  isFilter = true;
   BtnDisabled = false;
   TotalCount = 0;
   CurrentPage = 1;

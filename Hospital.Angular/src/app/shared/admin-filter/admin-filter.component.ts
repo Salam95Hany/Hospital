@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FilterModel } from '../../models/FilterModel';
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { SearchArryPipe } from '../../pipes/search-arry.pipe';
@@ -9,7 +9,7 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
 @Component({
   selector: 'app-admin-filter',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, NgbDropdownModule, SearchArryPipe, NgxDaterangepickerMd],
+  imports: [NgIf, NgFor, FormsModule, NgbDropdownModule, SearchArryPipe, NgxDaterangepickerMd, NgClass],
   templateUrl: './admin-filter.component.html',
   styleUrl: './admin-filter.component.css',
   providers: [
@@ -31,45 +31,45 @@ import { NgxDaterangepickerMd, LocaleService, LOCALE_CONFIG } from 'ngx-daterang
 export class AdminFilterComponent implements OnChanges {
   @Input() FilterList: FilterModel[] = [];
   @Input() ReloadFilter = false;
+  @Input() Page = '';
   @Output() FilterChecked = new EventEmitter<FilterModel[]>();
   SelectedFilter: FilterModel[] = [];
 
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.reCheckFilters();
     if (changes['ReloadFilter'] && this.ReloadFilter) {
       this.removeAllFilters();
     }
   }
 
   updateFilters(filter?: FilterModel, range?: any) {
+    if (!filter) return;
+
     let updatedFilters = [...this.SelectedFilter];
 
     if (filter?.filterType === 'Checkbox') {
-      updatedFilters = updatedFilters.filter(f => f.filterType !== 'Checkbox');
+      updatedFilters = updatedFilters.filter(f => f.categoryName !== filter.categoryName);
 
-      const checkedItems = this.FilterList
-        .filter(f => f.filterType === 'Checkbox')
-        .flatMap(f => f.filterItems!.filter(x => x.isChecked)
-          .map(x => ({
-            ...x,
-            categoryName: f.categoryName,
-            categoryDisplayName: f.categoryDisplayName,
-            filterType: 'Checkbox'
-          }))
-        );
+      const checkedItems = filter.filterItems!.filter(x => x.isChecked).map(x => ({
+        ...x,
+        categoryName: filter.categoryName,
+        categoryDisplayName: filter.categoryDisplayName,
+        isChecked: x.isChecked,
+        filterType: 'Checkbox'
+      }));
 
       updatedFilters.push(...checkedItems);
     }
 
-    else if (filter) {
+    else {
       updatedFilters = updatedFilters.filter(f => f.categoryName !== filter.categoryName);
 
       switch (filter.filterType) {
         case 'SearchText':
         case 'Day':
         case 'Month':
-          debugger;
           if (filter.itemId && filter.itemId.trim() !== '') {
             updatedFilters.push({
               categoryName: filter.categoryName,
@@ -126,5 +126,16 @@ export class AdminFilterComponent implements OnChanges {
       if (f.filterItems) f.filterItems.forEach(i => i.isChecked = false);
     });
     this.FilterChecked.emit(this.SelectedFilter);
+  }
+
+  reCheckFilters() {
+    this.FilterList.forEach(f => {
+      if (f.filterType === 'Checkbox' && f.filterItems) {
+        f.filterItems.forEach(item => {
+          const isChecked = this.SelectedFilter.find(sf => sf.itemId === item.itemId && sf.categoryName === f.categoryName);
+          item.isChecked = isChecked ? true : false;
+        });
+      }
+    });
   }
 }

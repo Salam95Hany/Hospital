@@ -72,6 +72,7 @@ namespace Hospital.DI
             services.AddScoped<IAttachmentsService, AttachmentsService>();
             services.AddScoped<IDoctorsService, DoctorsService>();
             services.AddScoped<IReportsDataService, ReportsDataService>();
+            services.AddScoped<IPatientSearchService, PatientSearchService>();
 
 
 

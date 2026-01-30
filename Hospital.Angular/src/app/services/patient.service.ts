@@ -185,4 +185,12 @@ export class PatientService {
     const params = new HttpParams().set('hospitalFileNumber', hospitalFileNumber ?? '');
     return this.http.get<Admission[]>(`${this.apiUrl}Patients/GetHospitalFileNumber`, { params });
   }
+
+  GetPatientSearchData(PagingFilter:PagingFilterModel) {
+    return this.http.post<any>(`${this.apiUrl}PatientSearch/GetPatientSearchData`, PagingFilter);
+  }
+
+  GetPatientSearchFilters(FilterList:FilterModel[]) {
+    return this.http.post<any>(`${this.apiUrl}PatientSearch/GetPatientSearchFilters`, FilterList);
+  }
 }

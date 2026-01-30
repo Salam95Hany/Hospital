@@ -2,7 +2,8 @@
     <ng-container *ngFor="let filter of FilterList">
         <!-- TEXT FILTER -->
         <div *ngIf="filter.filterType === 'SearchText'" class="position-relative">
-            <input type="text" [(ngModel)]="filter.itemId" (keyup.enter)="updateFilters(filter)" class="form-control border width-250" [placeholder]="'Search By ' + (filter.categoryDisplayName) + '...'" />
+            <input type="text" [(ngModel)]="filter.itemId" (keyup.enter)="updateFilters(filter)" class="form-control border" [ngClass]="{'width-250': Page == '', 'width-420': Page == 'PatientsSearch'}" [placeholder]="'Search By ' + (filter.categoryDisplayName) + '...'"
+            />
             <i class="fas fa-search search-icon-input" (click)="updateFilters(filter)"></i>
         </div>
 

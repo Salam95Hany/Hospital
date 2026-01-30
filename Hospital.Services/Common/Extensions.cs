@@ -60,7 +60,9 @@ namespace Hospital.Services.Common
                 .Select(group => new FilterModel
                 {
                     CategoryName = group.Key.CategoryName,
-                    DisplayOrder = group.FirstOrDefault().Field<int>("DisplayOrder"),
+                    DisplayOrder = dt.Columns.Contains("DisplayOrder") ? group.FirstOrDefault()?.Field<int?>("DisplayOrder") : null,
+                    CategoryDisplayName = dt.Columns.Contains("CategoryDisplayName") ? group.FirstOrDefault()?.Field<string>("CategoryDisplayName") : null,
+                    FilterType = dt.Columns.Contains("FilterType") ? group.FirstOrDefault()?.Field<string>("FilterType") : null,
                     FilterItems = group.Select(s => new FilterModel
                     {
                         CategoryName = s.Field<string>("CategoryName"),
@@ -80,7 +82,7 @@ namespace Hospital.Services.Common
                 {
                     CategoryName = group.Key,
                     CategoryDisplayName = group.FirstOrDefault().CategoryDisplayName,
-                    DisplayOrder= group.FirstOrDefault().DisplayOrder,
+                    DisplayOrder = group.FirstOrDefault().DisplayOrder,
                     FilterType = group?.FirstOrDefault()?.FilterType,
                     FilterItems = group.Select(f => new FilterModel
                     {
@@ -98,7 +100,9 @@ namespace Hospital.Services.Common
             var simpleList = filterList.Select(i => new
             {
                 CategoryName = i.CategoryName,
-                ItemId = i.ItemId
+                ItemId = i.ItemId,
+                FromDate = i.From,
+                ToDate = i.To
             }).ToList();
 
             return simpleList.ToDataTable();

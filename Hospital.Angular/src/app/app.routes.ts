@@ -12,6 +12,7 @@ import { authGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { DoctorsComponent } from './components/doctors/doctors.component';
+import { PatientSearchComponent } from './components/patients/patient-search/patient-search.component';
 
 export const routes: Routes = [
   { path: '', component: LoginPageComponent },
@@ -85,6 +86,12 @@ export const routes: Routes = [
       {
         path: 'user-profile',
         component: UserProfileComponent,
+        canActivate: [authGuard],
+        data: { roles: ["SupperAdmin", "Admin", "ReadOnly"] },
+      },
+      {
+        path: 'patients-search',
+        component: PatientSearchComponent,
         canActivate: [authGuard],
         data: { roles: ["SupperAdmin", "Admin", "ReadOnly"] },
       },

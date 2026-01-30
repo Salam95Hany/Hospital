@@ -1,0 +1,53 @@
+<div class="patients-container">
+    <div class="patients-header">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <button class="btn btn-sm btn-success download-btn-file me-1" (click)="DownloadExcelFile()">
+                <i class="fas fa-download"></i>
+                <span class="me-1">Export</span>
+            </button>
+            <button class="btn btn-primary add-patient-btn" (click)="isFilter = !isFilter" [attr.aria-expanded]="!isFilter">
+                <i class="fas fa-filter"></i> {{ isFilter ? 'Show' : 'Hide' }} Filters
+            </button>
+        </div>
+        <div>
+            <app-admin-pagination (pageChanged)="OnPageChange($event)" [currentPage]="PagingFilter.currentpage" [pageSize]="PagingFilter.pagesize" [totalPages]="0" [totalCount]="TotalCount"></app-admin-pagination>
+        </div>
+    </div>
+    <div class="px-3 py-2 bg-light border-bottom" #collapse="ngbCollapse" [(ngbCollapse)]="isFilter">
+        <app-admin-filter [FilterList]="FilterList" [Page]="'PatientsSearch'" (FilterChecked)="OnFilterChecked($event)"></app-admin-filter>
+    </div>
+    <div class="patients-table-container">
+        <table class="table patients-table">
+            <thead>
+                <tr>
+                    <th>Patient Code</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Governorate</th>
+                    <th>Gender</th>
+                    <th>Created By</th>
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let patient of Patients">
+                    <td>{{ patient.internalNumber }}</td>
+                    <td>{{ patient.name }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.governorate }}</td>
+                    <td>{{ patient.gender }}</td>
+                    <td>{{ patient.createdBy }}</td>
+                    <td>{{ patient.createdDate }}</td>
+                </tr>
+                <tr *ngIf="Patients.length == 0">
+                    <td [attr.colspan]="7" class="text-center">
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h6>No patients found</h6>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
