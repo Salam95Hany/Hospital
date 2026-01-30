@@ -37,7 +37,8 @@ namespace Hospital.Services
                 ExistFileName = i.ExistFileName,
                 FileName = i.FileName,
                 FileUrl = Path.Combine(ApiLocalUrl, ActionType.ToString(), i.FileName),
-                FileSize = i.FileSize
+                FileSize = i.FileSize,
+                MediaType = i.MediaType
             }).ToList();
 
             return ApiResponseModel<List<Attachment>>.Success(GenericErrors.GetSuccess, Results);
@@ -55,6 +56,15 @@ namespace Hospital.Services
                         var FileName = await _manageFileService.UploadFile(newFile.File, Model.ActionType.ToString());
                         if (FileName.IsSuccess)
                         {
+                            var MediaType = string.Empty;
+                            if (newFile.File.ContentType.StartsWith("image/"))
+                            {
+                                MediaType = "Image";
+                            }
+                            else if (newFile.File.ContentType.StartsWith("video/"))
+                            {
+                                MediaType = "Video";
+                            }
                             var AttachmentObj = new Attachment
                             {
                                 ActionId = Model.ActionId.Value,
@@ -62,6 +72,7 @@ namespace Hospital.Services
                                 FileName = FileName.Results,
                                 ExistFileName = newFile.ExistFileName,
                                 FileSize = newFile.FileSize,
+                                MediaType = MediaType,
                                 InsertUser = Model.InsertUser,
                                 InsertDate = DateTime.UtcNow
                             };

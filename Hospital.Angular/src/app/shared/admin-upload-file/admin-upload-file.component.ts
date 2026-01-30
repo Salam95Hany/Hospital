@@ -24,7 +24,8 @@ export class AdminUploadFileComponent implements OnInit {
   };
   isDragOver = false;
   allowedExtensions = [
-    '.jpg', '.JPG', '.png', '.PNG', '.bmp', '.jpeg', '.JPEG', '.jfif', '.webp'
+    '.jpg', '.JPG', '.png', '.PNG', '.bmp', '.jpeg', '.JPEG', '.jfif', '.webp', '.mp4',
+    '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm', '.m4v', '.3gp', '.3g2', '.ts', '.mts', '.m2ts', '.ogv'
   ];
 
   constructor(private authService: AuthService, private adminService: AdminService, private toastr: ToastrService) {
@@ -62,6 +63,8 @@ export class AdminUploadFileComponent implements OnInit {
   }
 
   handleFiles(files: File[]) {
+    const maxImageSize = 5 * 1024 * 1024;   // 5 MB
+    const maxVideoSize = 20 * 1024 * 1024;  // 20 MB
     files.forEach(i => {
       const extension = '.' + i.name.split('.').pop()?.toLowerCase();
 
@@ -69,11 +72,33 @@ export class AdminUploadFileComponent implements OnInit {
         this.toastr.error(`This file type is not allowed: ${i.name}`);
         return;
       }
+      let mediaType = '';
+      if (i.type.startsWith('image/')) {
+        mediaType = 'image';
+
+        if (i.size > maxImageSize) {
+          this.toastr.error(`Image size must be less than or equal 5 MB : ${i.name}`);
+          return;
+        }
+
+      } else if (i.type.startsWith('video/')) {
+        mediaType = 'video';
+
+        if (i.size > maxVideoSize) {
+          this.toastr.error(`Video size must be less than or equal 20 MB : ${i.name}`);
+          return;
+        }
+
+      } else {
+        this.toastr.error(`Unsupported file type: ${i.name}`);
+        return;
+      }
       let obj: FilesModel = {
         attachmentId: null,
         existFileName: i.name,
         fileName: i.name,
         fileSize: this.formatFileSize(i.size),
+        mediaType: '',
         file: i
       };
 

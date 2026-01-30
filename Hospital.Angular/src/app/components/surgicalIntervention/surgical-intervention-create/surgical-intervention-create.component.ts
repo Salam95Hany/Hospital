@@ -278,6 +278,7 @@ export class SurgicalInterventionCreateComponent {
             existFileName: i.existFileName,
             fileUrl: i.fileUrl,
             fileSize: i.fileSize,
+            mediaType: i.mediaType,
             file: null
           }
         });

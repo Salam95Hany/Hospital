@@ -1,4 +1,4 @@
-import { DOCUMENT, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
@@ -6,25 +6,28 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-admin-slider-image',
   standalone: true,
-  imports: [NgIf, NgFor],
+  imports: [NgIf, NgFor, NgSwitch, NgSwitchCase],
   templateUrl: './admin-slider-image.component.html',
   styleUrl: './admin-slider-image.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AdminSliderImageComponent {
   @Input() Images: any[] = [];
-  @Input() disabled: boolean = false;
+  @Input() DetailsMode: boolean = false;
   @Output() RefreshImage = new EventEmitter<boolean>();
-  selectedImage = null;
+  selectedMedia = null;
 
-  constructor(private adminService: AdminService, private toaster: ToastrService) { }
+  constructor(private adminService: AdminService, private toaster: ToastrService) {
+    console.log(this.Images);
 
-  openImage(url: string) {
-    this.selectedImage = url;
+  }
+
+  openImage(url: string, type: string) {
+    this.selectedMedia = { url, type };
   }
 
   closeImage() {
-    this.selectedImage = null;
+    this.selectedMedia = null;
   }
 
   DownloadFile(item: any) {
