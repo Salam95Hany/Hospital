@@ -40,5 +40,14 @@ namespace Hospital.Services.PatientsService
             var Filters = dt.ToGroupedFilters();
             return ApiResponseModel<List<FilterModel>>.Success(GenericErrors.GetSuccess, Filters);
         }
+
+        public async Task<ApiResponseModel<DataTable>> GetExportPatientSearchData(List<FilterModel> FilterList)
+        {
+            var FilterDt = FilterList.ToDataTableFromFilterModel();
+            var Params = new SqlParameter[1];
+            Params[0] = new SqlParameter("@FilterList", FilterDt);
+            var dt = await _sQLHelper.ExecuteDataTableAsync("dbo.SP_GetExportPatientSearchData", Params);
+            return ApiResponseModel<DataTable>.Success(GenericErrors.GetSuccess, dt);
+        }
     }
 }

@@ -38,7 +38,7 @@ export class AdminFilterComponent implements OnChanges {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.reCheckFilters();
+    this.restoreSelectedValues();
     if (changes['ReloadFilter'] && this.ReloadFilter) {
       this.removeAllFilters();
     }
@@ -70,6 +70,7 @@ export class AdminFilterComponent implements OnChanges {
         case 'SearchText':
         case 'Day':
         case 'Month':
+
           if (filter.itemId && filter.itemId.trim() !== '') {
             updatedFilters.push({
               categoryName: filter.categoryName,
@@ -128,12 +129,24 @@ export class AdminFilterComponent implements OnChanges {
     this.FilterChecked.emit(this.SelectedFilter);
   }
 
-  reCheckFilters() {
+  restoreSelectedValues() {
     this.FilterList.forEach(f => {
+      const selected = this.SelectedFilter.find(sf => sf.categoryName === f.categoryName);
+
+      if (!selected) return;
+
+      if (f.filterType === 'SearchText' || f.filterType === 'Day' || f.filterType === 'Month') {
+        f.itemId = selected.itemId;
+      }
+      if (f.filterType === 'DateRange') {
+        f.rangeValue = {
+          startDate: selected.from,
+          endDate: selected.to
+        };
+      }
       if (f.filterType === 'Checkbox' && f.filterItems) {
         f.filterItems.forEach(item => {
-          const isChecked = this.SelectedFilter.find(sf => sf.itemId === item.itemId && sf.categoryName === f.categoryName);
-          item.isChecked = isChecked ? true : false;
+          item.isChecked = this.SelectedFilter.some(sf => sf.itemId === item.itemId);
         });
       }
     });
