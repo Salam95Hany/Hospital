@@ -351,6 +351,18 @@ namespace Hospital.Services
                 await _unitOfWork.Repository<SurgicalIntervention>().AddAsync(surgicalIntervention);
                 await _unitOfWork.CompleteAsync();
 
+                if (Model.DischargeDate.HasValue)
+                {
+                    var admission = await _unitOfWork.Repository<Admission>().GetByIdAsync(Model.AdmissionId);
+                    if (admission != null)
+                    {
+                        admission.DischargeDate = Model.DischargeDate;
+                        admission.UpdateUser = Model.InsertUser;
+                        admission.UpdateDate = DateTime.UtcNow;
+                        await _unitOfWork.CompleteAsync();
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(Model.DoctorId))
                 {
                     var SurgicalDoctors = new List<SurgicalDoctor>();
