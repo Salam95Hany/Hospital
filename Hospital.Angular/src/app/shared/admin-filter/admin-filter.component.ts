@@ -34,11 +34,17 @@ export class AdminFilterComponent implements OnChanges {
   @Input() Page = '';
   @Output() FilterChecked = new EventEmitter<FilterModel[]>();
   SelectedFilter: FilterModel[] = [];
-
+  OriginalFilterCache: FilterModel[] = [];
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (this.OriginalFilterCache.length === 0 && this.FilterList.length > 0) {
+      this.OriginalFilterCache = JSON.parse(JSON.stringify(this.FilterList));
+    }
+
+    this.mergeFiltersWithCache();
     this.restoreSelectedValues();
+
     if (changes['ReloadFilter'] && this.ReloadFilter) {
       this.removeAllFilters();
     }
@@ -150,5 +156,31 @@ export class AdminFilterComponent implements OnChanges {
         });
       }
     });
+  }
+
+  mergeFiltersWithCache() {
+    this.OriginalFilterCache.forEach(cachedFilter => {
+      if (cachedFilter.filterType === 'Checkbox' && cachedFilter.filterItems) {
+        cachedFilter.filterItems.forEach(item => {
+          item.itemValue = '0';
+        });
+      }
+    });
+
+    this.FilterList.forEach(newFilter => {
+      const cachedFilter = this.OriginalFilterCache.find(f => f.categoryName === newFilter.categoryName);
+      if (!cachedFilter) return;
+
+      if (cachedFilter.filterType === 'Checkbox' && cachedFilter.filterItems) {
+        newFilter.filterItems?.forEach(newItem => {
+          const cachedItem = cachedFilter.filterItems!.find(ci => ci.itemId === newItem.itemId);
+          if (cachedItem) {
+            cachedItem.itemValue = newItem.itemValue;
+          }
+        });
+      }
+    });
+
+    this.FilterList = JSON.parse(JSON.stringify(this.OriginalFilterCache));
   }
 }
