@@ -1,5 +1,6 @@
 ﻿using Hospital.Entities.Common;
 using Hospital.Services.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace Hospital.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AttachmentsController : ControllerBase
     {
         private readonly Interfaces.IAttachmentsService _attachmentsService;

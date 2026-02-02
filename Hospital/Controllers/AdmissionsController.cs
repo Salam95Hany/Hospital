@@ -2,6 +2,7 @@
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Models;
 using Hospital.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace Hospital.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AdmissionsController : ControllerBase
     {
         private readonly IAdmissionsService _admissionsService;

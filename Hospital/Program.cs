@@ -32,6 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(DependencyInjection.GetCorsPolicyName());
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseStaticFiles();

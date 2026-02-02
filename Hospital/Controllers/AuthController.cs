@@ -2,6 +2,7 @@
 using Hospital.Entities.Common;
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Interfaces.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -20,6 +21,7 @@ namespace Hospital.Controllers
 
         [HttpGet]
         [Route("GetAllUsers")]
+        [Authorize]
         public async Task<ApiResponseModel<List<UserWithRolesDto>>> GetAllUsers()
         {
             var results = await _authService.GetAllUsers();
@@ -28,6 +30,7 @@ namespace Hospital.Controllers
 
         [HttpGet]
         [Route("GetUserInfoById")]
+        [Authorize]
         public async Task<ApiResponseModel<UserWithRolesDto>> GetUserInfoById(string UserId)
         {
             var results = await _authService.GetUserInfoById(UserId);
@@ -52,6 +55,7 @@ namespace Hospital.Controllers
 
         [HttpPost]
         [Route("CreateUser")]
+        [Authorize]
         public async Task<ApiResponseModel<string>> CreateUser(AddUserModel model)
         {
             var results = await _authService.CreateUser(model);
@@ -60,6 +64,7 @@ namespace Hospital.Controllers
 
         [HttpPost]
         [Route("EditUser")]
+        [Authorize]
         public async Task<ApiResponseModel<string>> EditUser(AddUserModel model)
         {
             var results = await _authService.EditUser(model);
@@ -67,6 +72,7 @@ namespace Hospital.Controllers
         }
         [HttpGet]
         [Route("GetUserById")]
+        [Authorize]
         public async Task<ApiResponseModel<AdminUser>> GetUserById(string DocId)
         {
             var results = await _authService.GetUserById(DocId);
@@ -75,6 +81,7 @@ namespace Hospital.Controllers
 
         [HttpGet]
         [Route("DeleteUser")]
+        [Authorize]
         public async Task<ApiResponseModel<string>> DeleteUser(string UserId)
         {
             var results = await _authService.DeleteUser(UserId);
@@ -83,6 +90,7 @@ namespace Hospital.Controllers
 
         [HttpPost]
         [Route("EditUserProfile")]
+        [Authorize]
         public async Task<ApiResponseModel<string>> EditUserProfile(AddUserModel model)
         {
             var results = await _authService.EditUserProfile(model);
@@ -91,6 +99,7 @@ namespace Hospital.Controllers
 
         [HttpPost]
         [Route("ChangeUserPassword")]
+        [Authorize]
         public async Task<ApiResponseModel<string>> ChangeUserPassword(AddUserModel model)
         {
             var results = await _authService.ChangeUserPassword(model);

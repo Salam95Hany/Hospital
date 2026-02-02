@@ -1,5 +1,6 @@
 ﻿using Hospital.Entities.Common;
 using Hospital.Interfaces.IPatients;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -8,6 +9,7 @@ namespace Hospital.Controllers.PatientsController
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PatientSearchController : ControllerBase
     {
         private readonly IPatientSearchService _patientSearchService;

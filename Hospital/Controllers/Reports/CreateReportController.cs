@@ -2,12 +2,14 @@
 using Hospital.Reports.Interface;
 using Hospital.Reports.Model;
 using Hospital.Services.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.Controllers.Reports
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CreateReportController : ControllerBase
     {
         private readonly IReportGeneratorFactory _factory;

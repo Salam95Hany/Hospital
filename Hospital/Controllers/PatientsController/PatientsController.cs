@@ -4,6 +4,7 @@ using Hospital.Entities.Contracts.Requests;
 using Hospital.Entities.Models;
 using Hospital.Interfaces.IPatients;
 using Hospital.Services.PatientsService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace Hospital.Controllers.PatientsController
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PatientsController : ControllerBase
     {
         private readonly IPatientsService _PatientsService;

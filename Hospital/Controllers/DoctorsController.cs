@@ -1,12 +1,14 @@
 ﻿using Hospital.Entities.Common;
 using Hospital.Entities.Models;
 using Hospital.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DoctorsController : ControllerBase
     {
         private readonly IDoctorsService _doctorsService;
