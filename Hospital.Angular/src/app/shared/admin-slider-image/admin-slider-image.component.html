@@ -14,10 +14,13 @@
             <ng-container *ngIf="item.fileUrl">
                 <div class="khairy-box h-100">
                     <div class="kahiry-img">
-                        <img [src]="item.fileUrl" (click)="openImage(item.fileUrl)" loading="lazy" alt="khairy-images" class="img-fluid rounded shadow-sm" />
+                        <ng-container [ngSwitch]="item.mediaType">
+                            <img *ngSwitchCase="'Image'" [src]="item.fileUrl" (click)="openImage(item.fileUrl, 'Image')" loading="lazy" alt="media" class="img-fluid rounded shadow-sm" />
+                            <video *ngSwitchCase="'Video'" [src]="item.fileUrl" controls (click)="openImage(item.fileUrl, 'Video')" class="img-fluid rounded shadow-sm"></video>
+                        </ng-container>
                     </div>
-                    <div class="image-actions" *ngIf="!disabled">
-                        <button class="btn-action btn-download" (click)="DownloadFile(item)" title="Download">
+                    <div class="image-actions">
+                        <button class="btn-action btn-download" (click)="DownloadFile(item)" title="Download" *ngIf="!DetailsMode">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -26,7 +29,7 @@
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
                             </svg>
                         </button>
-                        <button class="btn-action btn-delete" (click)="DeleteFile(item)" title="Delete">
+                        <button class="btn-action btn-delete" (click)="DeleteFile(item)" title="Delete" *ngIf="!DetailsMode">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -38,6 +41,14 @@
                                 <line x1="14" y1="11" x2="14" y2="17"></line>
                             </svg>
                         </button>
+                        <button class="btn-action btn-video" *ngIf="item.mediaType == 'Video'" title="Video" (click)="openImage(item.fileUrl, 'Video')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </ng-container>
@@ -46,6 +57,7 @@
     </swiper-container>
 </div>
 
-<div class="image-viewer" *ngIf="selectedImage" (click)="closeImage()">
-    <img [src]="selectedImage" class="viewer-img" alt="preview" />
+<div class="image-viewer" *ngIf="selectedMedia" (click)="closeImage()">
+    <img *ngIf="selectedMedia.type === 'Image'" [src]="selectedMedia.url" class="viewer-img" alt="preview" />
+    <video *ngIf="selectedMedia.type === 'Video'" [src]="selectedMedia.url" controls autoplay class="viewer-img"></video>
 </div>

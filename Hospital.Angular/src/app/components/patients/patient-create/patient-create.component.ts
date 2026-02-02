@@ -1,12 +1,11 @@
- import { Component, EventEmitter, OnInit, Output, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../services/patient.service';
-import { Admission, Patient, PatientData, SurgicalIntervention } from '../../../models/patient.model';
+import { PatientData } from '../../../models/patient.model';
 import { FormService } from '../../../services/form.service';
 import { AuthService } from '../../../auth/auth.service';
-import { CustomValidators, RegexType } from '../../../services/custom-validators';
 import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { AdminDropDownComponent } from '../../../shared/admin-drop-down/admin-drop-down.component';
 import { ToastrService } from 'ngx-toastr';
@@ -18,8 +17,8 @@ import { AdminUploadFileComponent } from '../../../shared/admin-upload-file/admi
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
- import { AdmissionCreateComponent } from '../../admission/admission-create/admission-create.component';
- import { SurgicalInterventionCreateComponent } from '../../surgicalIntervention/surgical-intervention-create/surgical-intervention-create.component';
+import { AdmissionCreateComponent } from '../../admission/admission-create/admission-create.component';
+import { SurgicalInterventionCreateComponent } from '../../surgicalIntervention/surgical-intervention-create/surgical-intervention-create.component';
 
 @Component({
   selector: 'app-patient-create',
@@ -27,8 +26,7 @@ import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [CommonModule, FormsModule,
     ReactiveFormsModule,
     AdminGeneralInputComponent,
-    AdminDropDownComponent, AdminSliderImageComponent, AdminUploadFileComponent, NgbDropdownModule,
-    AdmissionCreateComponent, SurgicalInterventionCreateComponent],
+    AdminDropDownComponent, AdminSliderImageComponent, AdminUploadFileComponent, NgbDropdownModule],
   templateUrl: './patient-create.component.html',
   styleUrls: ['./patient-create.component.css'],
   providers: [DatePipe]
@@ -365,11 +363,11 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         birthDate: [null],
         age: ['', Validators.required],
         gender: ['', Validators.required],
-            nationalId: ['', [Validators.pattern(/^\d{14}$/)]],
+        nationalId: ['', [Validators.pattern(/^\d{14}$/)]],
         address: null,
         governorate: [''],
-            phone1: null,
-            phone2: null,
+        phone1: null,
+        phone2: null,
         occupation: null,
         maritalStatus: [''],
         childrenCount: null,
@@ -434,6 +432,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
               existFileName: i.existFileName,
               fileUrl: i.fileUrl,
               fileSize: i.fileSize,
+              mediaType: i.mediaType,
               file: null
             }
           });
@@ -1324,4 +1323,4 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     }
   }
 }
-  
+

@@ -12,5 +12,6 @@ namespace Hospital.Interfaces.IPatients
     {
         Task<ApiResponseModel<DataTable>> GetPatientSearchData(PagingFilterModel PagingFilter);
         Task<ApiResponseModel<List<FilterModel>>> GetPatientSearchFilters(List<FilterModel> FilterList);
+        Task<ApiResponseModel<DataTable>> GetExportPatientSearchData(List<FilterModel> FilterList);
     }
 }

@@ -20,7 +20,7 @@
                 <app-admin-drop-down [data]="theatres" [placeholder]="'Select Theater'" [error]="formErrors.theater" [label]="'Theater'" formControlName="theater" class="col-md-4">
                 </app-admin-drop-down>
 
-                <app-admin-drop-down-multi-select [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" formControlName="mainSurgeon" [error]="formErrors.mainSurgeon" class="col-md-4">
+                <app-admin-drop-down-multi-select [data]="MainSurgeonDoctors" [placeholder]="'Select Main Surgeon'" [label]="'Main Surgeon'" [showSearch]="true" formControlName="mainSurgeon" [error]="formErrors.mainSurgeon" class="col-md-4">
                 </app-admin-drop-down-multi-select>
 
                 <app-admin-drop-down-multi-select [data]="AssistantDoctors" [placeholder]="'Select Assistant'" [label]="'Assistants'" formControlName="assistants" [showSearch]="true" class="col-md-4">
@@ -32,8 +32,8 @@
                 <app-admin-drop-down-multi-select [data]="SupervisorDoctors" [placeholder]="'Select Off-Field Supervisor'" [label]="'Off-Field Supervisor'" [showSearch]="true" formControlName="offFieldSupervisor" class="col-md-4">
                 </app-admin-drop-down-multi-select>
 
-                <app-admin-drop-down [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-4">
-                </app-admin-drop-down>
+                <app-admin-drop-down-multi-select [data]="anaesthesias" [placeholder]="'Select Anesthesia'" [label]="'Anesthesia'" formControlName="anesthesia" class="col-md-4">
+                </app-admin-drop-down-multi-select>
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Intervention'" [label]="'Intervention'" formControlName="intervention" class="col-md-12">
                 </app-admin-general-input>
@@ -98,7 +98,7 @@
 
                 <app-admin-upload-file (FilesChenged)="OnFileChange($event)" *ngIf="!DetailsMode"></app-admin-upload-file>
 
-                <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles" [DetailsMode]="DetailsMode"></app-admin-slider-image>
             </div>
         </form>
     </div>

@@ -142,6 +142,7 @@ export class FollowupCreateComponent {
             existFileName: i.existFileName,
             fileUrl: i.fileUrl,
             fileSize: i.fileSize,
+            mediaType: i.mediaType,
             file: null
           }
         });

@@ -21,7 +21,7 @@ import { AdminDropDownMultiSelectComponent } from '../../../shared/admin-drop-do
   selector: 'app-admission-create',
   standalone: true,
   imports: [AdminGeneralInputComponent, AdminDropDownComponent, ReactiveFormsModule, NgbModule, AdminSliderImageComponent, AdminUploadFileComponent,
-    NgbDropdownModule, FormsModule, NgClass, NgIf,AdminDropDownMultiSelectComponent
+    NgbDropdownModule, FormsModule, NgClass, NgIf, AdminDropDownMultiSelectComponent
   ],
   templateUrl: './admission-create.component.html',
   styleUrl: './admission-create.component.css',
@@ -101,10 +101,20 @@ export class AdmissionCreateComponent implements OnInit {
     if (this.AdmissionId) {
       this.GetAdmissionById();
       this.GetFilesByActionId();
+      this.removeDateValidationForEdit();
     }
     if (this.DetailsMode) {
       this.ItemForm.disable();
-    }}
+    }
+  }
+
+  removeDateValidationForEdit() {
+    this.ItemForm.get('admissionDate')?.setValidators([Validators.required]);
+    this.ItemForm.get('scheduledDate')?.clearValidators();
+
+    this.ItemForm.get('admissionDate')?.updateValueAndValidity();
+    this.ItemForm.get('scheduledDate')?.updateValueAndValidity();
+  }
 
   private setupHospitalFileNumberValidation(): void {
     const ctrl = this.ItemForm.get('hospitalFileNumber');
@@ -358,6 +368,7 @@ export class AdmissionCreateComponent implements OnInit {
             existFileName: i.existFileName,
             fileUrl: i.fileUrl,
             fileSize: i.fileSize,
+            mediaType: i.mediaType,
             file: null
           }
         });

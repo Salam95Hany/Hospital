@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Hospital.Interfaces\Hospital.Interfaces.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ExcelTemplate\" />
-  </ItemGroup>
-
 </Project>

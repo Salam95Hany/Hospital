@@ -17,6 +17,7 @@ namespace Hospital.Entities.Models
         public string FileName { get; set; }
         public string ExistFileName { get; set; }
         public string FileSize { get; set; }
+        public string MediaType { get; set; }
         public string InsertUser { get; set; }
         public DateTime InsertDate { get; set; }
 

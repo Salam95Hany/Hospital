@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.Services.Common
 {
-    public class ManageFileService: IManageFileService
+    public class ManageFileService : IManageFileService
     {
         private readonly string _webRootPath;
         public ManageFileService(IOptions<AppPaths> options)
@@ -32,7 +32,8 @@ namespace Hospital.Services.Common
             var FileName = Guid.NewGuid().ToString() + "_" + File.FileName;
 
             string extension = Path.GetExtension(File.FileName);
-            var supportedTypes = new[] { ".jpg", ".JPG", ".png", ".PNG", ".bmp", ".jpeg", ".JPEG", ".jfif", ".webp" };
+            var supportedTypes = new[] { ".jpg", ".JPG", ".png", ".PNG", ".bmp", ".jpeg", ".JPEG", ".jfif", ".webp",".mp4",
+                ".avi",".mov",".mkv",".wmv",".flv",".webm",".m4v",".3gp",".3g2",".ts",".mts",".m2ts",".ogv" };
             if (!supportedTypes.Contains(extension))
             {
                 return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);

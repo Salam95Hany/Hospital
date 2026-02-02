@@ -21,7 +21,7 @@
 
         <!-- DATE RANGE FILTER -->
         <div *ngIf="filter.filterType === 'DateRange'" class="date-picker-flex">
-            <input type="text" ngxDaterangepickerMd [(ngModel)]="filter.itemId" (datesUpdated)="updateFilters(filter, $event)" [locale]="{ applyLabel: 'Apply', format: 'YYYY-MM-DD' }" [autoApply]="true" autocomplete="off" [placeholder]="filter.categoryDisplayName"
+            <input type="text" ngxDaterangepickerMd [(ngModel)]="filter.rangeValue" (datesUpdated)="updateFilters(filter, $event)" [locale]="{ applyLabel: 'Apply', format: 'YYYY-MM-DD' }" [autoApply]="true" autocomplete="off" [placeholder]="filter.categoryDisplayName"
                 class="date-range-input" />
             <i class="fa fa-calendar calendar-icon"></i>
         </div>

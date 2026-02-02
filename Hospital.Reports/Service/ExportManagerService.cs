@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.Reports.Service
 {
-    public class ExportManagerService: IExportManagerService
+    public class ExportManagerService : IExportManagerService
     {
         private readonly IWebHostEnvironment _environment;
         public ExportManagerService(IWebHostEnvironment environment)
@@ -33,16 +33,13 @@ namespace Hospital.Reports.Service
             int startrow = 5;
             try
             {
-                var columnsToRemove = data.Columns.Cast<DataColumn>().Where(col => !exportTemplateBase.Header.ListHeaders.Select(x => x.NameEn).Contains(col.ColumnName)).ToList();
-                columnsToRemove.ForEach(col => data.Columns.Remove(col));
                 var temp = new FileInfo(Path.Combine(hostingEnvironment.WebRootPath, @"Template\", "UrologyTemplate.xlsx"));
                 ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
                 using (var package = new ExcelPackage(new FileInfo(fullPath), temp))
                 {
                     var sheet = package.Workbook.Worksheets["Sheet1"];
                     var worksheet = package.Workbook.Worksheets.Add("RightToLeft");
-                    exportTemplateBase.Header.TblHeaders = data.Columns.Cast<DataColumn>().Select(e => e.ColumnName).ToList();
-                    WriteHeader(sheet, exportTemplateBase.Header);
+                    WriteHeader(sheet, data.Columns.Cast<DataColumn>().Select(e => e.ColumnName).ToList());
                     for (var i = 0; i < data.Rows.Count; ++i)
                     {
                         WriteRow(sheet, data.Rows[i].ItemArray, startrow);
@@ -81,27 +78,25 @@ namespace Hospital.Reports.Service
         private void SetTemplateValues(ref ExcelWorksheet worksheet, Dictionary<string, string> substitutionValue)
         {
             var TimeCell = worksheet.Cells[2, 10];
-            TimeCell.Value = "تاريخ التحميل : " + DateTime.Now.ToString("dddd d MMMM , yyyy", new CultureInfo("ar-AE"));
+            TimeCell.Value = "Exported At : " + DateTime.Now.ToString("dddd d MMMM , yyyy");
             var ByCell = worksheet.Cells[3, 10];
-            ByCell.Value = "اسم المستخدم : " + substitutionValue["UserName"];
+            ByCell.Value = "Exported By : " + substitutionValue["UserName"];
             var IsValidSheetName = substitutionValue.TryGetValue("SheetName", out string sheetName);
             worksheet.Name = IsValidSheetName && !string.IsNullOrEmpty(sheetName) ? sheetName : "Sheet1";
         }
 
-        private void WriteHeader(ExcelWorksheet worksheet, ExportHeaders Headers)
+        private void WriteHeader(ExcelWorksheet worksheet, IList<string> headers)
         {
             try
             {
-                for (var i = 0; i < Headers.TblHeaders.Count; i++)
+                for (var i = 0; i < headers.Count; i++)
                 {
-                    var headerName = Headers.TblHeaders[i];
-                    var header = Headers.ListHeaders.FirstOrDefault(i => i.NameEn == headerName);
-                    var headerValue = header.NameAr;
+                    var headerValue = headers[i];
                     var headerCell = worksheet.Cells[4, i + 1];
                     headerCell.Value = headerValue;
                     headerCell.AutoFitColumns(20);
                 }
-                ExcelRange cells = worksheet.Cells[4, 1, 4, Headers.TblHeaders.Count];
+                ExcelRange cells = worksheet.Cells[4, 1, 4, headers.Count];
             }
             catch (Exception ex)
             {
@@ -111,12 +106,12 @@ namespace Hospital.Reports.Service
 
         public string GetDownloadUrl(string FileName)
         {
-            string URL = Path.Combine(_environment.WebRootPath, "ExportFiles", FileName);
+            string URL = Path.Combine(_environment.WebRootPath, "Reports", FileName);
             return URL;
         }
         private string GetLocalPath(string fileTitle, string extension)
         {
-            string WEBurl = Path.Combine(_environment.WebRootPath, @"ExportFiles\", $"{fileTitle}_{DateTime.Now:yyyyMMddHHmmssfff}{extension}");
+            string WEBurl = Path.Combine(_environment.WebRootPath, @"Reports\", $"{fileTitle}_{DateTime.Now:yyyyMMddHHmmssfff}{extension}");
             return WEBurl;
         }
 

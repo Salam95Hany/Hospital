@@ -34,11 +34,17 @@ export class AdminFilterComponent implements OnChanges {
   @Input() Page = '';
   @Output() FilterChecked = new EventEmitter<FilterModel[]>();
   SelectedFilter: FilterModel[] = [];
-
+  OriginalFilterCache: FilterModel[] = [];
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.reCheckFilters();
+    if (this.OriginalFilterCache.length === 0 && this.FilterList.length > 0) {
+      this.OriginalFilterCache = JSON.parse(JSON.stringify(this.FilterList));
+    }
+
+    this.mergeFiltersWithCache();
+    this.restoreSelectedValues();
+
     if (changes['ReloadFilter'] && this.ReloadFilter) {
       this.removeAllFilters();
     }
@@ -70,6 +76,7 @@ export class AdminFilterComponent implements OnChanges {
         case 'SearchText':
         case 'Day':
         case 'Month':
+
           if (filter.itemId && filter.itemId.trim() !== '') {
             updatedFilters.push({
               categoryName: filter.categoryName,
@@ -128,14 +135,52 @@ export class AdminFilterComponent implements OnChanges {
     this.FilterChecked.emit(this.SelectedFilter);
   }
 
-  reCheckFilters() {
+  restoreSelectedValues() {
     this.FilterList.forEach(f => {
+      const selected = this.SelectedFilter.find(sf => sf.categoryName === f.categoryName);
+
+      if (!selected) return;
+
+      if (f.filterType === 'SearchText' || f.filterType === 'Day' || f.filterType === 'Month') {
+        f.itemId = selected.itemId;
+      }
+      if (f.filterType === 'DateRange') {
+        f.rangeValue = {
+          startDate: selected.from,
+          endDate: selected.to
+        };
+      }
       if (f.filterType === 'Checkbox' && f.filterItems) {
         f.filterItems.forEach(item => {
-          const isChecked = this.SelectedFilter.find(sf => sf.itemId === item.itemId && sf.categoryName === f.categoryName);
-          item.isChecked = isChecked ? true : false;
+          item.isChecked = this.SelectedFilter.some(sf => sf.itemId === item.itemId);
         });
       }
     });
+  }
+
+  mergeFiltersWithCache() {
+    this.OriginalFilterCache.forEach(cachedFilter => {
+      if (cachedFilter.filterType === 'Checkbox' && cachedFilter.filterItems) {
+        cachedFilter.filterItems.forEach(item => {
+          item.itemValue = '0';
+        });
+      }
+    });
+
+    this.FilterList.forEach(newFilter => {
+      const cachedFilter = this.OriginalFilterCache.find(f => f.categoryName === newFilter.categoryName);
+      if (!cachedFilter) return;
+
+      if (cachedFilter.filterType === 'Checkbox' && cachedFilter.filterItems) {
+        newFilter.filterItems?.forEach(newItem => {
+          const cachedItem = cachedFilter.filterItems!.find(ci => ci.itemId === newItem.itemId);
+          if (cachedItem) {
+            cachedItem.itemValue = newItem.itemValue;
+          }
+        });
+      }
+    });
+
+    this.FilterList = JSON.parse(JSON.stringify(this.OriginalFilterCache));
   }
 }

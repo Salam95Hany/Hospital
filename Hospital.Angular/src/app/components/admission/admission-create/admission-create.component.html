@@ -157,7 +157,7 @@
 
                 <app-admin-upload-file (FilesChenged)="OnFileChange($event)" *ngIf="!DetailsMode"></app-admin-upload-file>
 
-                <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
+                <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles" [DetailsMode]="DetailsMode"></app-admin-slider-image>
             </div>
         </form>
     </div>

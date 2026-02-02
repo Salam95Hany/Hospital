@@ -10,6 +10,7 @@ namespace Hospital.Reports.Model
     {
         InterventionReport,
         DischargeSummary,
-        PresentationForm
+        PresentationForm,
+        PatientSearchExcel
     }
 }

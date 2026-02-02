@@ -24,5 +24,6 @@ export interface FilesModel {
     fileName: string;
     existFileName: string;
     fileSize: string;
+    mediaType: string;
     file: File;
 }
