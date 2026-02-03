@@ -25,7 +25,7 @@
                     <th>Governorate</th>
                     <th>Gender</th>
                     <th>CreatedBy</th>
-                    <th>UpdatedBy</th>
+                    <th>Added Date</th>
                     <th appRole [roles]="['SupperAdmin', 'Admin']">Actions</th>
                 </tr>
             </thead>
@@ -37,7 +37,7 @@
                     <td>{{ patient.governorate }}</td>
                     <td>{{ patient.gender }}</td>
                     <td>{{ patient.createdBy }}</td>
-                    <td>{{ patient.updatedBy }}</td>
+                    <td>{{ patient.addedDate | date}}</td>
                     <td class="actions-cell" appRole [roles]="['SupperAdmin', 'Admin']">
                         <!-- <button class="btn btn-sm btn-info" title="View" (click)="openPatientInfo(patient.id)">
               <i class="fas fa-eye"></i>

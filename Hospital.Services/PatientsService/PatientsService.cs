@@ -339,7 +339,7 @@ namespace Hospital.Services.PatientsService
                 Governorate = p.Governorate,
                 Gender = p.Gender,
                 CreatedBy = p.CreatedBy?.UserName,
-                UpdatedBy = p.UpdatedBy?.UserName
+                AddedDate = p.InsertDate
             }).ToList();
 
             return ApiResponseModel<List<PatientListDto>>.Success(GenericErrors.GetSuccess, Results, TotalCount);
