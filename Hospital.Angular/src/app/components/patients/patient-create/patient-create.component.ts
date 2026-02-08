@@ -250,6 +250,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     theater: '',
     mainSurgeon: '',
     nationalId: '',
+    phone1: '',
+    phone2: '',
     name: '',
     age: '',
     gender: '',
@@ -366,8 +368,8 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         nationalId: ['', [Validators.pattern(/^\d{14}$/)]],
         address: null,
         governorate: [''],
-        phone1: null,
-        phone2: null,
+        phone1: ['', [Validators.pattern(/^01\d{9}$/)]],
+        phone2: ['', [Validators.pattern(/^01\d{9}$/)]],
         occupation: null,
         maritalStatus: [''],
         childrenCount: null,
@@ -962,18 +964,21 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     Object.keys(currentFormGroup.controls).forEach(key => {
       const control = currentFormGroup.get(key);
       if (control && control.errors && control.touched) {
-        this.formErrors[key] = this.getErrorMessage(control.errors);
+        this.formErrors[key] = this.getErrorMessage(control.errors, key);
       } else {
         delete this.formErrors[key];
       }
     });
   }
 
-  getErrorMessage(errors: any): string {
+  getErrorMessage(errors: any, key: string = ''): string {
     if (errors.required) {
       return 'This field is required';
     }
     if (errors.pattern || errors.minlength || errors.maxlength) {
+      if (key === 'phone1' || key === 'phone2') {
+        return 'Must be 11 digits and start with 01';
+      }
       return 'Must be 14 digits';
     }
     return '';

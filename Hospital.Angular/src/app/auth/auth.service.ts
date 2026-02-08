@@ -30,6 +30,10 @@ export class AuthService {
     return this.UserModel?.userName;
   }
 
+  updateUser(user: any) {
+    this._userModel = user;
+  }
+
   AdminLogin(model: any) {
     return this.http.post<ApiResponseModel<any>>(this.apiURL + 'Auth/AdminLogin', model);
   }

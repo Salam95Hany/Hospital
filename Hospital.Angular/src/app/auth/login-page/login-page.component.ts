@@ -31,6 +31,7 @@ export class LoginPageComponent {
       if (data.isSuccess) {
         this.toaster.success(data.message);
         localStorage.setItem('UserModel', JSON.stringify(data.results));
+        this.authService.updateUser(data.results);
         this.router.navigate(['/admin/dashboard']);
       } else {
         this.toaster.error(data.message);
