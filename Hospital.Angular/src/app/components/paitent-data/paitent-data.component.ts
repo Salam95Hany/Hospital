@@ -50,6 +50,8 @@ patientData: PatientData = new PatientData();
   formErrors = {
     nationalId: '',
     name: '',
+    phone1: '',
+    phone2: '',
   };
   form: FormGroup<any>;
   // patientDataOnly: import("d:/mine/Hospital/Hospital.Angular/src/app/models/patient.model").Patient;
@@ -85,8 +87,8 @@ patientData: PatientData = new PatientData();
         age: ['', Validators.required],
         gender: ['', Validators.required],
         nationalId: ['', [Validators.required]],
-        phone1: [''],
-        phone2: [''],
+        phone1: ['', [Validators.pattern(/^01\d{9}$/)]],
+        phone2: ['', [Validators.pattern(/^01\d{9}$/)]],
         address: [''],
         governorate: [''],
         occupation: [''],
@@ -178,16 +180,21 @@ get patient(): FormGroup {
     Object.keys(currentFormGroup.controls).forEach(key => {
       const control = currentFormGroup.get(key);
       if (control && control.errors && control.touched) {
-        this.formErrors[key] = this.getErrorMessage(control.errors);
+        this.formErrors[key] = this.getErrorMessage(control.errors, key);
       } else {
         delete this.formErrors[key];
       }
     });
   }
 
-  getErrorMessage(errors: any): string {
+  getErrorMessage(errors: any, key: string = ''): string {
     if (errors.required) {
       return 'This field is required';
+    }
+    if (errors.pattern) {
+      if (key === 'phone1' || key === 'phone2') {
+        return 'Must be 11 digits and start with 01';
+      }
     }
     return '';
   }
