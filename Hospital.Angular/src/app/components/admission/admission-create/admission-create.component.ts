@@ -352,8 +352,12 @@ export class AdmissionCreateComponent implements OnInit {
 
   GetAdmissionById() {
     this.adminService.GetAdmissionById(this.AdmissionId).subscribe(res => {
-      if (res.results)
+      if (res.results){
         this.FillEditForm(res.results);
+          this.ItemForm.get('admissionDate')?.setValidators([Validators.required, CustomValidators.dateLessThanToday(new Date(res?.results?.admissionDate), 'Admission date must be after or equal selected date')]);
+          this.ItemForm.get('admissionDate')?.updateValueAndValidity();
+      }
+        
     })
   }
 
