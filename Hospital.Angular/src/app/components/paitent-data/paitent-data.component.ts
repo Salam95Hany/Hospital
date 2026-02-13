@@ -36,10 +36,33 @@ patientData: PatientData = new PatientData();
   @Output() RefreshData = new EventEmitter<boolean>();
   
   governorates = [
-    { id: 'Cairo', name: 'Cairo' }, { id: 'Giza', name: 'Giza' }, { id: 'Alexandria', name: 'Alexandria' }, { id: 'Dakahlia', name: 'Dakahlia' }, { id: 'Red Sea', name: 'Red Sea' }, { id: 'Beheira', name: 'Beheira' }, { id: 'Fayoum', name: 'Fayoum' },
-    { id: 'Gharbia', name: 'Gharbia' }, { id: 'Ismailia', name: 'Ismailia' }, { id: 'Menofia', name: 'Menofia' }, { id: 'Minya', name: 'Minya' }, { id: 'Qalyubia', name: 'Qalyubia' }, { id: 'New Valley', name: 'New Valley' }, { id: 'Suez', name: 'Suez' },
-    { id: 'Aswan', name: 'Aswan' }, { id: 'Assiut', name: 'Assiut' }, { id: 'Beni Suef', name: 'Beni Suef' }, { id: 'Port Said', name: 'Port Said' }, { id: 'Damietta', name: 'Damietta' }, { id: 'Sharkia', name: 'Sharkia' }, { id: 'Sohag', name: 'Sohag' },
-    { id: 'Kafr El Sheikh', name: 'Kafr El Sheikh' }, { id: 'Luxor', name: 'Luxor' }, { id: 'Qena', name: 'Qena' }, { id: 'North Sinai', name: 'North Sinai' }, { id: 'South Sinai', name: 'South Sinai' }, { id: 'Matrouh', name: 'Matrouh' }
+    { id: 'Alexandria', name: 'Alexandria' },
+    { id: 'Aswan', name: 'Aswan' },
+    { id: 'Assiut', name: 'Assiut' },
+    { id: 'Beheira', name: 'Beheira' },
+    { id: 'Beni Suef', name: 'Beni Suef' },
+    { id: 'Cairo', name: 'Cairo' },
+    { id: 'Dakahlia', name: 'Dakahlia' },
+    { id: 'Damietta', name: 'Damietta' },
+    { id: 'Fayoum', name: 'Fayoum' },
+    { id: 'Gharbia', name: 'Gharbia' },
+    { id: 'Giza', name: 'Giza' },
+    { id: 'Ismailia', name: 'Ismailia' },
+    { id: 'Kafr El Sheikh', name: 'Kafr El Sheikh' },
+    { id: 'Luxor', name: 'Luxor' },
+    { id: 'Matrouh', name: 'Matrouh' },
+    { id: 'Minya', name: 'Minya' },
+    { id: 'Menofia', name: 'Menofia' },
+    { id: 'New Valley', name: 'New Valley' },
+    { id: 'North Sinai', name: 'North Sinai' },
+    { id: 'Port Said', name: 'Port Said' },
+    { id: 'Qalyubia', name: 'Qalyubia' },
+    { id: 'Qena', name: 'Qena' },
+    { id: 'Red Sea', name: 'Red Sea' },
+    { id: 'Sharkia', name: 'Sharkia' },
+    { id: 'Sohag', name: 'Sohag' },
+    { id: 'South Sinai', name: 'South Sinai' },
+    { id: 'Suez', name: 'Suez' }
   ];
   maritalStatuses = [
     { id: 'Single', name: 'Single' }, { id: 'Married', name: 'Married' }, { id: 'Divorced', name: 'Divorced' }, { id: 'Widowed', name: 'Widowed' }, { id: 'Child', name: 'Child' }
