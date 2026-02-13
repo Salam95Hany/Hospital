@@ -96,7 +96,7 @@ export class AdmissionCreateComponent implements OnInit {
     if (!this.AdmissionId) {
       this.setupHospitalFileNumberValidation();
     }
-    this.setupDurationBinding();
+    //this.setupDurationBinding();
     this.setupPsaRatioBinding();
     if (this.AdmissionId) {
       this.GetAdmissionById();
@@ -162,33 +162,33 @@ export class AdmissionCreateComponent implements OnInit {
       });
   }
 
-  private setupDurationBinding(): void {
-    const admissionCtrl = this.ItemForm.get('admissionDate');
-    const dischargeCtrl = this.ItemForm.get('dischargeDate');
-    if (!admissionCtrl || !dischargeCtrl) return;
+  // private setupDurationBinding(): void {
+  //   const admissionCtrl = this.ItemForm.get('admissionDate');
+  //   const dischargeCtrl = this.ItemForm.get('dischargeDate');
+  //   if (!admissionCtrl || !dischargeCtrl) return;
 
-    const updateDuration = () => {
-      const admissionDate = admissionCtrl.value;
-      const dischargeDate = dischargeCtrl.value;
-      if (admissionDate && dischargeDate) {
-        const admission = new Date(admissionDate);
-        const discharge = new Date(dischargeDate);
-        if (discharge >= admission) {
-          const diffMs = discharge.getTime() - admission.getTime();
-          const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-          this.ItemForm.get('duration')?.setValue(`${days} days`, { emitEvent: false });
-        } else {
-          this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
-        }
-      } else {
-        this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
-      }
-    };
+  //   const updateDuration = () => {
+  //     const admissionDate = admissionCtrl.value;
+  //     const dischargeDate = dischargeCtrl.value;
+  //     if (admissionDate && dischargeDate) {
+  //       const admission = new Date(admissionDate);
+  //       const discharge = new Date(dischargeDate);
+  //       if (discharge >= admission) {
+  //         const diffMs = discharge.getTime() - admission.getTime();
+  //         const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  //         this.ItemForm.get('duration')?.setValue(`${days} days`, { emitEvent: false });
+  //       } else {
+  //         this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
+  //       }
+  //     } else {
+  //       this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
+  //     }
+  //   };
 
-    admissionCtrl.valueChanges.subscribe(() => updateDuration());
-    dischargeCtrl.valueChanges.subscribe(() => updateDuration());
-    updateDuration();
-  }
+  //   admissionCtrl.valueChanges.subscribe(() => updateDuration());
+  //   dischargeCtrl.valueChanges.subscribe(() => updateDuration());
+  //   updateDuration();
+  // }
 
   private setupPsaRatioBinding(): void {
     const freeCtrl = this.ItemForm.get('pSAFree');
