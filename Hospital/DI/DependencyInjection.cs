@@ -93,7 +93,7 @@ namespace Hospital.DI
             QuestPDF.Settings.License = LicenseType.Community;
             services.AddScoped<IReportGeneratorFactory, ReportGeneratorFactory>();
             services.AddScoped<IExportManagerService, ExportManagerService>();
-            services.AddScoped<IPDFHelper, PDFHelper>();
+            services.AddSingleton<IPDFHelper, PDFHelper>();
 
 
             #endregion

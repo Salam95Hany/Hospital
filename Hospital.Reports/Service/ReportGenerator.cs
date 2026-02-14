@@ -17,11 +17,11 @@ namespace Hospital.Reports.Service
             _pDFHelper = pDFHelper;
         }
 
-        public string Build(object Model)
+        public async Task<string> Build(object Model)
         {
             try
             {
-                var html = _razorEngine.CompileRenderAsync($"{ReportType.ToString()}.cshtml", Model).GetAwaiter().GetResult();
+                var html = await _razorEngine.CompileRenderAsync(ReportType.ToString(), Model);
                 var FilePath = _pDFHelper.SaveHTMLResult(html);
                 return FilePath;
             }

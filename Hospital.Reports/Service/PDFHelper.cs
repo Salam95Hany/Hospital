@@ -33,7 +33,7 @@ namespace Hospital.Reports.Service
         {
             try
             {
-                HTMLContent = ClearAngularAttrFromHTML(HTMLContent);
+                //HTMLContent = ClearAngularAttrFromHTML(HTMLContent);
                 var FolderPath = System.IO.Path.Combine(_environment.WebRootPath, "Reports");
 
                 if (!Directory.Exists(FolderPath))
@@ -87,9 +87,8 @@ namespace Hospital.Reports.Service
                         </body>
                         </html>";
                 HTMLContent = html.Replace("{HTMLContent}", HTMLContent);
-                string tempFile = System.IO.Path.GetTempFileName();
                 WriterProperties writerProperties = new WriterProperties().SetFullCompressionMode(true);
-                using (FileStream pdfStream = new FileStream(tempFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (FileStream pdfStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
                 using (PdfWriter writer = new PdfWriter(pdfStream, writerProperties))
                 using (PdfDocument pdfDocument = new PdfDocument(writer))
                 {
@@ -103,13 +102,6 @@ namespace Hospital.Reports.Service
                     document.SetMargins(0, 0, 0, 0);
                     document.Close();
                 }
-                using (PdfReader reader = new PdfReader(tempFile))
-                using (PdfWriter finalWriter = new PdfWriter(outputPath))
-                using (PdfDocument finalPdfDocument = new PdfDocument(reader, finalWriter))
-                {
-                    finalPdfDocument.Close();
-                }
-                File.Delete(tempFile);
             }
             catch (Exception ex)
             {

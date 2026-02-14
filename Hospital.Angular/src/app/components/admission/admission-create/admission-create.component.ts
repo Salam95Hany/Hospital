@@ -80,10 +80,8 @@ export class AdmissionCreateComponent implements OnInit {
     chiefComplaint: '',
     hPI: '',
     provisionalDiagnosis: '',
-    hospitalBranch: '',
     admissionDate: '',
-    dischargeDate: '',
-    scheduledDate: ''
+    dischargeDate: ''
   };
 
 
@@ -96,24 +94,15 @@ export class AdmissionCreateComponent implements OnInit {
     if (!this.AdmissionId) {
       this.setupHospitalFileNumberValidation();
     }
-    //this.setupDurationBinding();
+
     this.setupPsaRatioBinding();
     if (this.AdmissionId) {
       this.GetAdmissionById();
       this.GetFilesByActionId();
-      this.removeDateValidationForEdit();
     }
     if (this.DetailsMode) {
       this.ItemForm.disable();
     }
-  }
-
-  removeDateValidationForEdit() {
-    this.ItemForm.get('admissionDate')?.setValidators([Validators.required]);
-    this.ItemForm.get('scheduledDate')?.clearValidators();
-
-    this.ItemForm.get('admissionDate')?.updateValueAndValidity();
-    this.ItemForm.get('scheduledDate')?.updateValueAndValidity();
   }
 
   private setupHospitalFileNumberValidation(): void {
@@ -162,34 +151,6 @@ export class AdmissionCreateComponent implements OnInit {
       });
   }
 
-  // private setupDurationBinding(): void {
-  //   const admissionCtrl = this.ItemForm.get('admissionDate');
-  //   const dischargeCtrl = this.ItemForm.get('dischargeDate');
-  //   if (!admissionCtrl || !dischargeCtrl) return;
-
-  //   const updateDuration = () => {
-  //     const admissionDate = admissionCtrl.value;
-  //     const dischargeDate = dischargeCtrl.value;
-  //     if (admissionDate && dischargeDate) {
-  //       const admission = new Date(admissionDate);
-  //       const discharge = new Date(dischargeDate);
-  //       if (discharge >= admission) {
-  //         const diffMs = discharge.getTime() - admission.getTime();
-  //         const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-  //         this.ItemForm.get('duration')?.setValue(`${days} days`, { emitEvent: false });
-  //       } else {
-  //         this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
-  //       }
-  //     } else {
-  //       this.ItemForm.get('duration')?.setValue(null, { emitEvent: false });
-  //     }
-  //   };
-
-  //   admissionCtrl.valueChanges.subscribe(() => updateDuration());
-  //   dischargeCtrl.valueChanges.subscribe(() => updateDuration());
-  //   updateDuration();
-  // }
-
   private setupPsaRatioBinding(): void {
     const freeCtrl = this.ItemForm.get('pSAFree');
     const totalCtrl = this.ItemForm.get('pSATotal');
@@ -223,10 +184,10 @@ export class AdmissionCreateComponent implements OnInit {
     this.ItemForm = this.fb.group({
       admissionId: 0,
       patientId: 0,
-      hospitalFileNumber: ['', [Validators.required]],
-      admissionDate: ['', [Validators.required, CustomValidators.dateLessThanToday(new Date(), 'Admission date must be after or equal today')]],
-      dischargeDate: ['', [CustomValidators.dateLessThanToday(new Date(), 'Discharge date must be after or equal today')]],
-      hospitalBranch: ['', [Validators.required]],
+      hospitalFileNumber: [''],
+      admissionDate: ['', [Validators.required]],
+      dischargeDate: ['', [Validators.required]],
+      hospitalBranch: [''],
       chiefComplaint: ['', [Validators.required]],
       duration: null,
       course: null,
@@ -273,11 +234,9 @@ export class AdmissionCreateComponent implements OnInit {
       otherImaging: null,
       provisionalDiagnosis: ['', [Validators.required]],
       medicalDecision: null,
-      scheduledDate: ['', [CustomValidators.dateLessThanToday(new Date(), 'Scheduled date must be after or equal today')]],
+      scheduledDate: [''],
       insertUser: null,
       fileModel: null
-    }, {
-      validators: [CustomValidators.endDateGreaterThanStartDate('admissionDate', 'dischargeDate', 'Discharge date must be after admission date')],
     });
 
     this.ItemForm.valueChanges.subscribe((data) => {
@@ -352,13 +311,9 @@ export class AdmissionCreateComponent implements OnInit {
 
   GetAdmissionById() {
     this.adminService.GetAdmissionById(this.AdmissionId).subscribe(res => {
-      if (res.results){
+      if (res.results)
         this.FillEditForm(res.results);
-          this.ItemForm.get('admissionDate')?.setValidators([Validators.required, CustomValidators.dateLessThanToday(new Date(res?.results?.admissionDate), 'Admission date must be after or equal selected date')]);
-          this.ItemForm.get('admissionDate')?.updateValueAndValidity();
-      }
-        
-    })
+    });
   }
 
   GetFilesByActionId() {
@@ -460,7 +415,6 @@ export class AdmissionCreateComponent implements OnInit {
 
   OnUrineAnalysisSelect(item: any) {
     this.selectedValue = item.id;
-    // this.ItemForm.patchValue({ urineAnalysis: this.selectedValue + (this.UrineInputValue ? ' : ' + this.UrineInputValue : '') });
   }
 
   GetOutputData(): FormGroup<any> {

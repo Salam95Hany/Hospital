@@ -39,7 +39,7 @@ namespace Hospital.Reports.PdfTemplate
                     ImageSrc = Path.Combine(_environment.WebRootPath, "Template", "Logo.png")
                 };
 
-                var FullPath = this.Build(Data);
+                var FullPath = await this.Build(Data);
                 return FullPath;
             }
             else

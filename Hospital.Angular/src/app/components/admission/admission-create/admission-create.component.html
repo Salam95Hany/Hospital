@@ -14,7 +14,7 @@
     <div [ngClass]="{'step-content form-card': !PatientMode}" data-step="1" style="display: block;">
         <form [formGroup]="ItemForm" autocomplete="off">
             <div class="row g-3">
-                <app-admin-drop-down [data]="Branches" [placeholder]="'Select Hospital Branch'" [label]="'Hospital Branch'" class="col-md-4" formControlName="hospitalBranch" [error]="formErrors.hospitalBranch"></app-admin-drop-down>
+                <app-admin-drop-down [data]="Branches" [placeholder]="'Select Hospital Branch'" [label]="'Hospital Branch'" class="col-md-4" formControlName="hospitalBranch"></app-admin-drop-down>
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Chief Complaint'" [label]="'Chief Complaint'" class="col-md-4" formControlName="chiefComplaint" [error]="formErrors.chiefComplaint"></app-admin-general-input>
 
@@ -147,7 +147,7 @@
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Medical Decision'" [label]="'Medical Decision'" class="col-md-4" formControlName="medicalDecision"></app-admin-general-input>
 
-                <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date'" [label]="'Scheduled Date'" class="col-md-4" formControlName="scheduledDate" [error]="formErrors.scheduledDate"></app-admin-general-input>
+                <app-admin-general-input [type]="'date'" [placeholder]="'Scheduled Date'" [label]="'Scheduled Date'" class="col-md-4" formControlName="scheduledDate"></app-admin-general-input>
 
                 <app-admin-general-input [type]="'text'" [placeholder]="'Hospital File Number'" [label]="'Hospital File Number'" class="col-md-4" formControlName="hospitalFileNumber" [error]="formErrors.hospitalFileNumber"></app-admin-general-input>
 
