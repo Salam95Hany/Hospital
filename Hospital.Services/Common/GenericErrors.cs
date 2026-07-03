@@ -62,5 +62,7 @@ namespace Hospital.Services.Common
         public static Error ChangeStatusSuccess = new("Status changed successfully");
 
         public static Error AdmissionExist = new("This patient already has an admission on this date");
+
+        public static Error EditingExpired = new("Editing period has expired.");
     }
 }

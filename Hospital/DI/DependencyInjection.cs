@@ -64,6 +64,7 @@ namespace Hospital.DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISQLHelper, SQLHelper>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<IManageFileService, ManageFileService>();
             services.AddScoped<IPatientsService, PatientsService>();
             services.AddScoped<IAdmissionsService, AdmissionsService>();
@@ -73,9 +74,7 @@ namespace Hospital.DI
             services.AddScoped<IDoctorsService, DoctorsService>();
             services.AddScoped<IReportsDataService, ReportsDataService>();
             services.AddScoped<IPatientSearchService, PatientSearchService>();
-
-
-
+            
             #region ReportsDI
 
             services.AddSingleton<IRazorLightEngine>(serviceProvider =>

@@ -51,7 +51,7 @@
                         <button class="btn btn-sm btn-info" (click)="OpenSurgicalDetailsModal(SurgicalDetailsModal,item.surgicalInterventionId)">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning" (click)="OpenSurgicalCreateModal(SurgicalCreateModal,item.surgicalInterventionId)" appRole [roles]="['SupperAdmin', 'Admin']">
+                        <button class="btn btn-sm btn-warning" (click)="OpenSurgicalCreateModal(SurgicalCreateModal,item.surgicalInterventionId)" appEditExpire [appEditExpire]="item.createdDate" appRole [roles]="['SupperAdmin', 'Admin']">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-danger me-1" (click)="openDeleteItemModal(deleteItemModal,item.surgicalInterventionId)" appRole [roles]="['SupperAdmin', 'Admin']">

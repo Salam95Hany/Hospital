@@ -17,7 +17,7 @@
                     <app-admin-general-input class="col-md-6" type="number" label="Age" placeholder="Enter age" formControlName="age"></app-admin-general-input>
                     <app-admin-drop-down class="col-md-6" label="Gender" [data]="[{id:'Male', name:'Male'}, {id:'Female', name:'Female'}]" placeholder="Select Gender" formControlName="gender"></app-admin-drop-down>
                     <app-admin-general-input class="col-md-6" label="National ID" placeholder="Enter National ID" formControlName="nationalId" [error]="formErrors.nationalId"></app-admin-general-input>
-                    
+
                     <app-admin-general-input class="col-md-6" label="Phone 2" placeholder="Enter Phone 2" formControlName="phone2" [error]="formErrors.phone2"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" label="Phone 1" placeholder="Enter Phone 1" formControlName="phone1" [error]="formErrors.phone1"></app-admin-general-input>
                     <app-admin-general-input class="col-md-6" label="Address" placeholder="Enter address" formControlName="address"></app-admin-general-input>
@@ -25,6 +25,7 @@
                     <app-admin-general-input class="col-md-6" label="Occupation" placeholder="Enter occupation" formControlName="occupation"></app-admin-general-input>
                     <app-admin-drop-down class="col-md-6" label="Marital Status" [data]="maritalStatuses" placeholder="Select Marital Status" formControlName="maritalStatus"></app-admin-drop-down>
                     <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
+                    <app-admin-general-input class="col-md-6" label="Archives" placeholder="Enter Archives" formControlName="archives"></app-admin-general-input>
                     <app-admin-upload-file (FilesChenged)="OnFileChange($event)"></app-admin-upload-file>
                     <app-admin-slider-image (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
                 </div>

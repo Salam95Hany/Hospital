@@ -9,21 +9,20 @@ import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterModel } from '../../../models/FilterModel';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService } from '../../../services/admin.service';
-import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { SurgicalInterventionCreateComponent } from '../surgical-intervention-create/surgical-intervention-create.component';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
-import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 import { DoctorService } from '../../../services/doctor.service';
 import { DownloadFileService } from '../../../services/download-file.service';
 import { SearchReportModel } from '../../../models/SearchReportModel';
 import { NgxLoadingModule } from 'ngx-loading';
+import { EditExpireDirective } from '../../../directives/edit-expire.directive';
 
 @Component({
   selector: 'app-surgical-intervention-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent,
+  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, SurgicalInterventionCreateComponent, EditExpireDirective,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, RoleCheckerDirective, NgxLoadingModule],
   templateUrl: './surgical-intervention-list.component.html',
   styleUrl: './surgical-intervention-list.component.css',
@@ -113,7 +112,7 @@ export class SurgicalInterventionListComponent implements OnInit {
     this.adminService.GetAllSurgicalInterventionFilters(this.AdmissionId).subscribe(response => {
       this.FilterList = response.results;
       console.log(this.FilterList);
-      
+
     });
   }
 

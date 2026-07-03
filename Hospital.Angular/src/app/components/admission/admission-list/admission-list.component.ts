@@ -10,20 +10,19 @@ import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterModel } from '../../../models/FilterModel';
 import { AdminService } from '../../../services/admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { AdminGeneralInputComponent } from '../../../shared/admin-general-input/admin-general-input.component';
 import { AdmissionCreateComponent } from "../admission-create/admission-create.component";
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
-import { AdminSliderImageComponent } from '../../../shared/admin-slider-image/admin-slider-image.component';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 import { SearchReportModel } from '../../../models/SearchReportModel';
 import { NgxLoadingModule } from "ngx-loading";
 import { DownloadFileService } from '../../../services/download-file.service';
+import { EditExpireDirective } from '../../../directives/edit-expire.directive';
 
 @Component({
   selector: 'app-admission-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, RoleCheckerDirective,
+  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule, RoleCheckerDirective,EditExpireDirective,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, AdmissionCreateComponent, NgxLoadingModule],
   templateUrl: './admission-list.component.html',
   styleUrl: './admission-list.component.css',

@@ -30,6 +30,10 @@ export class AuthService {
     return this.UserModel?.userName;
   }
 
+  get isSuperAdmin(): boolean {
+    return this.UserModel?.role === 'SupperAdmin';
+  }
+
   updateUser(user: any) {
     this._userModel = user;
   }

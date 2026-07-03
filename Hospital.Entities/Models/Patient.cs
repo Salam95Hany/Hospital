@@ -15,7 +15,7 @@ namespace Hospital.Entities.Models
         public int PatientId { get; set; }
         public string? Name { get; set; }
         public DateTime? BirthDate { get; set; }
-        public int? Age { get; set; }
+        public double? Age { get; set; }
         public string? Gender { get; set; }
         public string? Phone1 { get; set; }
         public string? Phone2 { get; set; }
@@ -26,6 +26,7 @@ namespace Hospital.Entities.Models
         public string? MaritalStatus { get; set; }
         public string? ChildrenCount { get; set; }
         public string? InternalNumber { get; set; }
+        public string? Archives { get; set; }
         [NotMapped]
         public UploadFileModel? FileModel { get; set; }
 

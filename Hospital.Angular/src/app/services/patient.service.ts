@@ -32,11 +32,11 @@ export class PatientService {
   constructor(private http: HttpClient) { }
 
   // New method to add a full patient record
-  AddNewPatientFull(patientData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}Patients/AddNewPatientFull`, patientData);
+  AddNewPatientFull(patientData: any): Observable<ApiResponseModel<any>> {
+    return this.http.post<ApiResponseModel<any>>(`${this.apiUrl}Patients/AddNewPatientFull`, patientData);
   }
-  updatePatientFull(patientData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}Patients/UpdatePatientFull`, patientData);
+  updatePatientFull(patientData: any): Observable<ApiResponseModel<any>> {
+    return this.http.put<ApiResponseModel<any>>(`${this.apiUrl}Patients/UpdatePatientFull`, patientData);
   }
 
   // New method to get basic patient info

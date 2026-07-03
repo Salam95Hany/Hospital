@@ -2,17 +2,13 @@
 using Hospital.Interfaces.Auth;
 using Hospital.Interfaces.Common;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Hospital.Services.Auth
 {
-    public class JwtProvider: IJwtProvider
+    public class JwtProvider : IJwtProvider
     {
         private readonly IAppSettings _appSettings;
         public JwtProvider(IAppSettings appSettings)
@@ -20,14 +16,15 @@ namespace Hospital.Services.Auth
             _appSettings = appSettings;
         }
 
-        public (string token, int expiresIn) GenerateToken(AdminUser user)
+        public (string token, int expiresIn) GenerateToken(AdminUser user, string RoleName)
         {
             Claim[] claims = [
             new(JwtRegisteredClaimNames.Sub, user.Id),
             new(JwtRegisteredClaimNames.Email, user.Email!),
             new(JwtRegisteredClaimNames.GivenName, user.UserName),
             new(JwtRegisteredClaimNames.FamilyName, user.UserName),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(ClaimTypes.Role, RoleName)
             ];
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Jwt.Key));

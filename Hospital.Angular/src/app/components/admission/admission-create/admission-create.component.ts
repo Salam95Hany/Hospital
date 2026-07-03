@@ -235,6 +235,7 @@ export class AdmissionCreateComponent implements OnInit {
       provisionalDiagnosis: ['', [Validators.required]],
       medicalDecision: null,
       scheduledDate: [''],
+      specialHabits: null,
       insertUser: null,
       fileModel: null
     });
@@ -304,6 +305,7 @@ export class AdmissionCreateComponent implements OnInit {
       provisionalDiagnosis: item.provisionalDiagnosis ?? null,
       medicalDecision: item.medicalDecision ?? null,
       scheduledDate: this.datePipe.transform(item.scheduledDate, 'yyyy-MM-dd') ?? '',
+      specialHabits: item.specialHabits ?? null,
       fileModel: null,
       insertUser: null
     });

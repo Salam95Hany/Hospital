@@ -90,6 +90,7 @@ namespace Hospital.Entities.Models
         public string? MedicalDecision { get; set; }
         public string? ImagingResult { get; set; }
         public DateTime? ScheduledDate { get; set; }
+        public string? SpecialHabits { get; set; }
 
         [NotMapped]
         public UploadFileModel? FileModel { get; set; }

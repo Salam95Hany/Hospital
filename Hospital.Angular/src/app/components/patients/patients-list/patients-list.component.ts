@@ -16,12 +16,13 @@ import { PatientCreateComponent } from '../patient-create/patient-create.compone
 import { AdminFilterComponent } from '../../../shared/admin-filter/admin-filter.component';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
 import { AuthService } from '../../../auth/auth.service';
+import { EditExpireDirective } from '../../../directives/edit-expire.directive';
 
 @Component({
   selector: 'app-patients-list',
   standalone: true,
   imports: [CommonModule, FormsModule, AdminPaginationComponent, NgbModule, PaitentDataComponent, AdminFilterComponent, PatientCreateComponent,
-    RoleCheckerDirective
+    RoleCheckerDirective,EditExpireDirective
   ],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']

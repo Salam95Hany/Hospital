@@ -107,7 +107,7 @@ namespace Hospital.Services.Auth
                 Address = data.Address,
                 PhoneNumber = data.PhoneNumber,
                 IsActive = data.IsActive,
-                LoginFullDate = DateTime.UtcNow.ToString("dddd d MMMM , yyyy") +" - "+ DateTime.UtcNow.ToString("hh:mm:ss tt"),
+                LoginFullDate = DateTime.UtcNow.ToString("dddd d MMMM , yyyy") + " - " + DateTime.UtcNow.ToString("hh:mm:ss tt"),
                 Role = data.RoleName
             };
 
@@ -123,10 +123,9 @@ namespace Hospital.Services.Auth
 
             if (result.Succeeded)
             {
-                var (token, expiresIn) = _jwtProvider.GenerateToken(user);
-
                 var roles = await _userManager.GetRolesAsync(user);
                 var roleNme = roles.FirstOrDefault();
+                var (token, expiresIn) = _jwtProvider.GenerateToken(user, roleNme);
                 user.IsActive = true;
                 user.LoginDate = DateTime.UtcNow;
                 await _userManager.UpdateAsync(user);

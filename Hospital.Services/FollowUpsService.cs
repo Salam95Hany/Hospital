@@ -2,11 +2,10 @@
 using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Models;
 using Hospital.Entities.Specifications.FollowUps;
-using Hospital.Entities.Specifications.SurgicalInterventions;
 using Hospital.Interfaces;
+using Hospital.Interfaces.Auth;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Hospital.Services
@@ -15,10 +14,12 @@ namespace Hospital.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAttachmentsService _attachmentsService;
-        public FollowUpsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService)
+        private readonly IAuthorizationService _authorizationService;
+        public FollowUpsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService, IAuthorizationService authorizationService)
         {
             _unitOfWork = unitOfWork;
             _attachmentsService = attachmentsService;
+            _authorizationService = authorizationService;
         }
 
         public async Task<ApiResponseModel<List<FollowUpDto>>> GetAllFollowUpData(PagingFilterModel PagingFilter, int AdmissionId)
@@ -127,6 +128,9 @@ namespace Hospital.Services
 
                 if (Entity == null)
                     return ApiResponseModel<string>.Failure(GenericErrors.NotFound);
+
+                if (!_authorizationService.CanEdit(Entity.InsertDate.Value))
+                    return ApiResponseModel<string>.Failure(GenericErrors.EditingExpired);
 
                 Entity.FollowUpDate = Model.FollowUpDate;
                 Entity.PatientRemarksStatus = Model.PatientRemarksStatus;

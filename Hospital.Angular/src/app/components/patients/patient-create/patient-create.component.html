@@ -37,6 +37,7 @@
                     <app-admin-general-input class="col-md-6" label="Occupation" placeholder="Enter occupation" formControlName="occupation"></app-admin-general-input>
                     <app-admin-drop-down class="col-md-6" label="Marital Status" [data]="maritalStatuses" placeholder="Select Marital Status" formControlName="maritalStatus"></app-admin-drop-down>
                     <app-admin-general-input class="col-md-6" label="Number of Children" placeholder="Enter number of children" formControlName="childrenCount"></app-admin-general-input>
+                    <app-admin-general-input class="col-md-6" label="Archives" placeholder="Enter Archives" formControlName="archives"></app-admin-general-input>
                     <app-admin-upload-file *ngIf="!isReadOnly" (FilesChenged)="OnFileChange($event)" [ImportedFiles]="ImportedFiles"></app-admin-upload-file>
                     <app-admin-slider-image *ngIf="!isReadOnly" (RefreshImage)="RefreshImageData($event)" [Images]="ImportedFiles"></app-admin-slider-image>
                 </div>

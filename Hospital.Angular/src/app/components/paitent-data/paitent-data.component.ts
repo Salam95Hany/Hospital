@@ -21,20 +21,20 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [CommonModule, FormsModule,
     ReactiveFormsModule,
     AdminGeneralInputComponent,
-    AdminDropDownComponent,AdminSliderImageComponent, AdminUploadFileComponent],
+    AdminDropDownComponent, AdminSliderImageComponent, AdminUploadFileComponent],
   templateUrl: './paitent-data.component.html',
   styleUrls: ['./paitent-data.component.css'],
   providers: [DatePipe]
 })
 export class PaitentDataComponent implements OnInit {
-patientData: PatientData = new PatientData();
+  patientData: PatientData = new PatientData();
   patientForm: FormGroup;
   currentStep: number = 1;
   SelectedFile: UploadFileModel;
   ImportedFiles: FilesModel[] = [];
   @Input() PatientId: any;
   @Output() RefreshData = new EventEmitter<boolean>();
-  
+
   governorates = [
     { id: 'Alexandria', name: 'Alexandria' },
     { id: 'Aswan', name: 'Aswan' },
@@ -69,7 +69,7 @@ patientData: PatientData = new PatientData();
   ];
   isEditMode: boolean = false;
 
-  
+
   formErrors = {
     nationalId: '',
     name: '',
@@ -118,6 +118,7 @@ patientData: PatientData = new PatientData();
         maritalStatus: [''],
         childrenCount: [''],
         internalNumber: [''],
+        archives: [''],
         fileModel: null
       }),
     });
@@ -158,14 +159,14 @@ patientData: PatientData = new PatientData();
     this.patientForm.get('patient').valueChanges.subscribe(() => {
       this.clearErrorsForFormGroup(this.patientForm.get('patient') as FormGroup);
     });
-}
-get patient(): FormGroup {
+  }
+  get patient(): FormGroup {
     return this.patientForm.get('patient') as FormGroup;
   }
   validateCurrentStep(): boolean {
     const currentFormGroup = this.getCurrentStepFormGroup();
     if (!currentFormGroup) return false;
-    
+
     this.markFormGroupTouched(currentFormGroup);
     return currentFormGroup.valid;
   }
@@ -241,64 +242,68 @@ get patient(): FormGroup {
       }
     });
   }
- updatePatient(): void {
-  this.patientForm = this.formService.TrimFormInputValue(this.patientForm);
-  this.markFormGroupTouched(this.patientForm.get('patient') as FormGroup);
+  updatePatient(): void {
+    this.patientForm = this.formService.TrimFormInputValue(this.patientForm);
+    this.markFormGroupTouched(this.patientForm.get('patient') as FormGroup);
 
-  const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
-  if (!patientValid) {
-    this.showValidationErrors();
-    return;
-  }
-
-  if (this.PatientId)
-    this.patientForm.patchValue({ patientId: this.PatientId });
-
-  const patientGroup = this.patientForm.get('patient') as FormGroup;
-  const original = this.loadedPatientFull || {};
-   if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0)
-    this.patientForm.patchValue({ fileModel: this.SelectedFile });
-  let payload: any;
-  
-  if (this.PatientId) {
-    payload = {
-      ...(original.patient || {}),
-      ...(patientGroup?.value || {}),
-      insertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
-      fileModel: this.SelectedFile || null
-    };
-  } else {
-    const base = patientGroup ? patientGroup.value : this.patientForm.value;
-    payload = {
-      ...base,
-      insertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? ''
-    };
-  }
-
-  
-
-  const formData = new FormData();
-  this.formService.buildFormData(formData, payload);
-  const request$ = this.PatientId
-    ? this.patientService.updatePatientFull(formData)
-    : this.patientService.AddNewPatientFull(formData);
-
-  request$.subscribe({
-    next: () => {
-      this.toastr.success(
-        this.PatientId ? 'Patient updated successfully!' : 'Patient created successfully!',
-        'Success'
-      );
-      this.router.navigate(['/admin/patients']);
-      this.modalService.dismissAll();
-      this.RefreshData.emit(true);
-    },
-    error: (error) => {
-      console.error('Error saving patient:', error);
-      this.toastr.error('Failed to save patient', 'Error');
+    const patientValid = (this.patientForm.get('patient') as FormGroup).valid;
+    if (!patientValid) {
+      this.showValidationErrors();
+      return;
     }
-  });
-}
+
+    if (this.PatientId)
+      this.patientForm.patchValue({ patientId: this.PatientId });
+
+    const patientGroup = this.patientForm.get('patient') as FormGroup;
+    const original = this.loadedPatientFull || {};
+    if (this.SelectedFile?.files?.length > 0 || this.SelectedFile?.deletedFiles?.length > 0)
+      this.patientForm.patchValue({ fileModel: this.SelectedFile });
+    let payload: any;
+
+    if (this.PatientId) {
+      payload = {
+        ...(original.patient || {}),
+        ...(patientGroup?.value || {}),
+        insertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? '',
+        fileModel: this.SelectedFile || null
+      };
+    } else {
+      const base = patientGroup ? patientGroup.value : this.patientForm.value;
+      payload = {
+        ...base,
+        insertUser: this.authService.userId ?? this.authService.UserModel?.userName ?? ''
+      };
+    }
+
+
+
+    const formData = new FormData();
+    this.formService.buildFormData(formData, payload);
+    const request$ = this.PatientId
+      ? this.patientService.updatePatientFull(formData)
+      : this.patientService.AddNewPatientFull(formData);
+
+    request$.subscribe({
+      next: (data) => {
+        if (data.isSuccess) {
+          this.toastr.success(
+            this.PatientId ? 'Patient updated successfully!' : 'Patient created successfully!',
+            'Success'
+          );
+          this.router.navigate(['/admin/patients']);
+          this.modalService.dismissAll();
+          this.RefreshData.emit(true);
+        } else
+          this.toastr.error(data.message);
+
+      },
+      error: (error) => {
+        console.error('Error saving patient:', error);
+        this.toastr.error('Failed to save patient', 'Error');
+      }
+    });
+  }
 
 
   getPatientDataById(): any {
@@ -322,7 +327,7 @@ get patient(): FormGroup {
           }
         }
       }, err => {
-       
+
       });
     }
   }
@@ -330,9 +335,9 @@ get patient(): FormGroup {
   getPatientDataLastById(): any {
     if (this.PatientId) {
       this.patientService.getPatientLastDetailsById(this.PatientId).subscribe(res => {
-        
+
       }, err => {
-       
+
       });
     }
   }
@@ -344,53 +349,53 @@ get patient(): FormGroup {
     this.modalService.dismissAll();
   }
 
- buildFormData(formData: FormData, data: any, parentKey: string | null = null) {
-  if (data === null || data === undefined) return;
+  buildFormData(formData: FormData, data: any, parentKey: string | null = null) {
+    if (data === null || data === undefined) return;
 
-  if (data instanceof File) {
-    formData.append(parentKey!, data);
-  }
-  else if (Array.isArray(data)) {
-    data.forEach((item, index) => {
-      const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
-      this.buildFormData(formData, item, key);
-    });
-  }
-  else if (typeof data === 'object' && !(data instanceof Date)) {
-    Object.keys(data).forEach(key => {
-      const value = data[key];
-      if (value === null || value === undefined) return;
+    if (data instanceof File) {
+      formData.append(parentKey!, data);
+    }
+    else if (Array.isArray(data)) {
+      data.forEach((item, index) => {
+        const key = parentKey ? `${parentKey}[${index}]` : `${index}`;
+        this.buildFormData(formData, item, key);
+      });
+    }
+    else if (typeof data === 'object' && !(data instanceof Date)) {
+      Object.keys(data).forEach(key => {
+        const value = data[key];
+        if (value === null || value === undefined) return;
 
-      const fullKey = parentKey ? `${parentKey}.${key}` : key;
+        const fullKey = parentKey ? `${parentKey}.${key}` : key;
 
-      // SPECIAL HANDLING FOR FILEMODEL
-      if (key === 'fileModel' && value && typeof value === 'object') {
-        // Handle files array
-        if (value.files && Array.isArray(value.files)) {
-          value.files.forEach((file: File, index: number) => {
-            // Append files with proper field names
-            formData.append('fileModel.insertUser', "123");
-            formData.append('fileModel.files', file); // Single field
-            formData.append(`fileModel.files[${index}]`, file); // Array format
-          });
+        // SPECIAL HANDLING FOR FILEMODEL
+        if (key === 'fileModel' && value && typeof value === 'object') {
+          // Handle files array
+          if (value.files && Array.isArray(value.files)) {
+            value.files.forEach((file: File, index: number) => {
+              // Append files with proper field names
+              formData.append('fileModel.insertUser', "123");
+              formData.append('fileModel.files', file); // Single field
+              formData.append(`fileModel.files[${index}]`, file); // Array format
+            });
+          }
+          // Handle deleted files
+          if (value.deletedFiles && Array.isArray(value.deletedFiles)) {
+            formData.append('fileModel.deletedFiles', JSON.stringify(value.deletedFiles));
+          }
         }
-        // Handle deleted files
-        if (value.deletedFiles && Array.isArray(value.deletedFiles)) {
-          formData.append('fileModel.deletedFiles', JSON.stringify(value.deletedFiles));
+        else if (key.toLowerCase().includes('file') && value instanceof File) {
+          formData.append(fullKey, value);
         }
-      } 
-      else if (key.toLowerCase().includes('file') && value instanceof File) {
-        formData.append(fullKey, value);
+        else {
+          this.buildFormData(formData, value, fullKey);
+        }
+      });
+    }
+    else {
+      if (data !== '') {
+        formData.append(parentKey!, data.toString());
       }
-      else {
-        this.buildFormData(formData, value, fullKey);
-      }
-    });
-  }
-  else {
-    if (data !== '') {
-      formData.append(parentKey!, data.toString());
     }
   }
-}
 }

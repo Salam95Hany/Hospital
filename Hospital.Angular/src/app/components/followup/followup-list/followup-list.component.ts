@@ -15,11 +15,12 @@ import { FilterModel } from '../../../models/FilterModel';
 import { PagingFilterModel } from '../../../models/PagingFilterModel';
 import { ActionTypes, FilesModel } from '../../../models/UploadFileModel';
 import { RoleCheckerDirective } from '../../../directives/role-checker.directive';
+import { EditExpireDirective } from '../../../directives/edit-expire.directive';
 
 @Component({
   selector: 'app-followup-list',
   standalone: true,
-  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,
+  imports: [NgIf, NgFor, FormsModule, SearchAutocompleteComponent, CommonModule,EditExpireDirective,
     AdminPaginationComponent, AdminBreadcrumbComponent, AdminFilterComponent, NgbModule, FollowupCreateComponent, RoleCheckerDirective],
   templateUrl: './followup-list.component.html',
   styleUrl: './followup-list.component.css',

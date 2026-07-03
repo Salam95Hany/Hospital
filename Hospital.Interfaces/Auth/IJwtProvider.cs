@@ -9,7 +9,7 @@ namespace Hospital.Interfaces.Auth
 {
     public interface IJwtProvider
     {
-        (string token, int expiresIn) GenerateToken(AdminUser user);
+        (string token, int expiresIn) GenerateToken(AdminUser user, string RoleName);
         string? ValidateToken(string token);
     }
 }

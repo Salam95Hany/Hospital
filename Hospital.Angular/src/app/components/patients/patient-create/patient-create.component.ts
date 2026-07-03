@@ -374,6 +374,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
         maritalStatus: [''],
         childrenCount: null,
         internalNumber: 1,
+        archives: null,
         fileModel: null
       }),
       admission: this.createAdmissionFormGroup(),
@@ -730,6 +731,7 @@ export class PatientCreateComponent implements OnInit, OnChanges {
   private calculateAge(dateValue: any): number | null {
     if (!dateValue) return null;
     let birth: Date;
+
     if (typeof dateValue === 'string') {
       if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) {
         const [dd, mm, yyyy] = dateValue.split('/');
@@ -740,14 +742,12 @@ export class PatientCreateComponent implements OnInit, OnChanges {
     } else {
       birth = new Date(dateValue);
     }
+
     if (isNaN(birth.getTime())) return null;
     const today = new Date();
-    let age = today.getFullYear() - birth.getFullYear();
-    const m = today.getMonth() - birth.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-    return age >= 0 ? age : 0;
+    const diffMs = today.getTime() - birth.getTime();
+    const age = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+    return age >= 0 ? Number(age.toFixed(1)) : 0;
   }
 
   createAdmissionFormGroup(): FormGroup {

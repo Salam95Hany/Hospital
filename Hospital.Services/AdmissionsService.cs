@@ -3,12 +3,11 @@ using Hospital.Entities.Contracts.DTOs;
 using Hospital.Entities.Models;
 using Hospital.Entities.Specifications.Admissions;
 using Hospital.Entities.Specifications.FollowUps;
-using Hospital.Entities.Specifications.Patients;
 using Hospital.Entities.Specifications.SurgicalInterventions;
 using Hospital.Interfaces;
+using Hospital.Interfaces.Auth;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
-using System.Threading;
 
 namespace Hospital.Services
 {
@@ -16,10 +15,12 @@ namespace Hospital.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAttachmentsService _attachmentsService;
-        public AdmissionsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService)
+        private readonly IAuthorizationService _authorizationService;
+        public AdmissionsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService, IAuthorizationService authorizationService)
         {
             _unitOfWork = unitOfWork;
             _attachmentsService = attachmentsService;
+            _authorizationService = authorizationService;
         }
 
         public async Task<ApiResponseModel<List<AdmissionDto>>> GetAllAdmissionData(PagingFilterModel PagingFilter, int PatientId)
@@ -90,7 +91,6 @@ namespace Hospital.Services
                     UrineAlbumin = Model.UrineAlbumin,
                     UrineSugar = Model.UrineSugar,
                     UrineOthers = Model.UrineOthers,
-
                     CultureAndSensitivity = Model.CultureAndSensitivity,
                     SerumCreatinine = Model.SerumCreatinine,
                     Hemoglobin = Model.Hemoglobin,
@@ -115,6 +115,7 @@ namespace Hospital.Services
                     ProvisionalDiagnosis = Model.ProvisionalDiagnosis,
                     MedicalDecision = Model.MedicalDecision,
                     ScheduledDate = Model.ScheduledDate,
+                    SpecialHabits = Model.SpecialHabits,
                     IsDeleted = false,
                     InsertUser = Model.InsertUser,
                     InsertDate = DateTime.UtcNow
@@ -148,11 +149,14 @@ namespace Hospital.Services
                 if (Entity == null)
                     return ApiResponseModel<string>.Failure(GenericErrors.NotFound);
 
+                if (!_authorizationService.CanEdit(Entity.InsertDate.Value))
+                    return ApiResponseModel<string>.Failure(GenericErrors.EditingExpired);
+
                 var OldAdmissionDate = Entity.AdmissionDate;
                 bool isDateChanged = OldAdmissionDate.HasValue && Model.AdmissionDate.HasValue && OldAdmissionDate.Value.Date != Model.AdmissionDate.Value.Date;
                 if (isDateChanged)
                 {
-                    var admissionExists = await _unitOfWork.Repository<Admission>().CountAsync(i => i.PatientId == Model.PatientId && i.AdmissionId != Model.AdmissionId && i.AdmissionDate.HasValue 
+                    var admissionExists = await _unitOfWork.Repository<Admission>().CountAsync(i => i.PatientId == Model.PatientId && i.AdmissionId != Model.AdmissionId && i.AdmissionDate.HasValue
                     && Model.AdmissionDate.HasValue && i.AdmissionDate.Value.Date == Model.AdmissionDate.Value.Date);
 
                     if (admissionExists > 0)
@@ -211,6 +215,7 @@ namespace Hospital.Services
                 Entity.ProvisionalDiagnosis = Model.ProvisionalDiagnosis;
                 Entity.MedicalDecision = Model.MedicalDecision;
                 Entity.ScheduledDate = Model.ScheduledDate;
+                Entity.SpecialHabits = Model.SpecialHabits;
                 Entity.UpdateUser = Model.InsertUser;
                 Entity.UpdateDate = DateTime.UtcNow;
 

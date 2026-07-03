@@ -7,6 +7,7 @@ using Hospital.Entities.Specifications.FollowUps;
 using Hospital.Entities.Specifications.Patients;
 using Hospital.Entities.Specifications.SearchAutoComplete;
 using Hospital.Interfaces;
+using Hospital.Interfaces.Auth;
 using Hospital.Interfaces.IPatients;
 using Hospital.Interfaces.Repositories;
 using Hospital.Services.Common;
@@ -20,6 +21,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static iText.IO.Util.IntHashtable;
 
 namespace Hospital.Services.PatientsService
 {
@@ -27,10 +29,12 @@ namespace Hospital.Services.PatientsService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAttachmentsService _attachmentsService;
-        public PatientsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService)
+        private readonly IAuthorizationService _authorizationService;
+        public PatientsService(IUnitOfWork unitOfWork, IAttachmentsService attachmentsService, IAuthorizationService authorizationService)
         {
             _unitOfWork = unitOfWork;
             _attachmentsService = attachmentsService;
+            _authorizationService = authorizationService;
         }
         public async Task<ApiResponseModel<string>> AddNewPatientFull(AddPatientFullModel Model, CancellationToken cancellationToken = default)
         {
@@ -114,6 +118,7 @@ namespace Hospital.Services.PatientsService
                 MaritalStatus = patientModel.MaritalStatus,
                 ChildrenCount = patientModel.ChildrenCount,
                 InternalNumber = internalNumber,
+                Archives = patientModel.Archives,
                 InsertUser = patientModel.InsertUser,
                 InsertDate = DateTime.UtcNow,
                 IsDeleted = false
@@ -416,9 +421,11 @@ namespace Hospital.Services.PatientsService
             using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
-
+                var existingPatient = await _unitOfWork.Repository<Patient>().GetByIdAsync(Model.PatientId);
                 // Step 1: Update Patient
-                await UpdatePatient(Model);
+                await UpdatePatient(Model, existingPatient);
+                if (!_authorizationService.CanEdit(existingPatient.InsertDate.Value))
+                    return ApiResponseModel<string>.Failure(GenericErrors.EditingExpired);
 
                 // Step 2: Update or Create Admission
 
@@ -441,11 +448,8 @@ namespace Hospital.Services.PatientsService
                 return ApiResponseModel<string>.Failure(GenericErrors.TransFailed);
             }
         }
-        private async Task UpdatePatient(Patient patientModel)
+        private async Task UpdatePatient(Patient patientModel, Patient existingPatient)
         {
-            var existingPatient = await _unitOfWork.Repository<Patient>()
-                .GetByIdAsync(patientModel.PatientId);
-
             if (existingPatient == null)
                 throw new ArgumentException("Patient not found");
 
@@ -462,6 +466,7 @@ namespace Hospital.Services.PatientsService
             existingPatient.Occupation = patientModel.Occupation;
             existingPatient.MaritalStatus = patientModel.MaritalStatus;
             existingPatient.ChildrenCount = patientModel.ChildrenCount;
+            existingPatient.Archives = patientModel.Archives;
             existingPatient.UpdateUser = patientModel.InsertUser;
             existingPatient.UpdateDate = DateTime.UtcNow;
 
