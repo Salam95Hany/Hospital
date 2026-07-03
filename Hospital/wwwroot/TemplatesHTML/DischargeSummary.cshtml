@@ -240,7 +240,7 @@
                 <tr>
                     <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("FinalDiagnosis"))>
                         <span style="font-size:12px;">Final Diagnosis:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("FinalDiagnosis")</span>
+                        <span style="font-size:12px;">@_Model.GetHtmlDataFieldValue("FinalDiagnosis")</span>
                     </td>
                 </tr>
             </table>
@@ -253,7 +253,7 @@
                 <tr>
                     <td style="padding-right:5px;" height="315" valign="top" dir="rtl">
                         <span style="font-size:12px;">نصائح ما بعد الخروج:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("DischargeInstructions")</span>
+                        <span style="font-size:12px;">@_Model.GetHtmlDataFieldValue("DischargeInstructions")</span>
                     </td>
                 </tr>
             </table>

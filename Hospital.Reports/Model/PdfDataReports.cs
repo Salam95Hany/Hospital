@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using Microsoft.AspNetCore.Html;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +24,22 @@ namespace Hospital.Reports.Model
                 return date.ToString("yyyy-MM-dd");
 
             return value;
+        }
+
+        public IHtmlContent GetHtmlDataFieldValue(string key)
+        {
+            if (!Data.ContainsKey(key) || string.IsNullOrWhiteSpace(Data[key]))
+                return new HtmlString(string.Empty);
+
+            var value = Data[key];
+
+            if (DateTime.TryParse(value, out DateTime date))
+                return new HtmlString(date.ToString("yyyy-MM-dd"));
+
+            value = WebUtility.HtmlEncode(value);
+            value = value.Replace("\r\n", "<br/>").Replace("\n", "<br/>").Replace("\r", "<br/>");
+
+            return new HtmlString(value);
         }
 
         public string GetTdDirectionStyle(string text)

@@ -45,13 +45,12 @@ export class FormService {
 
   TrimFormInputValue(ItemForm: FormGroup) {
     Object.keys(ItemForm.value).forEach(key => {
-      if (typeof (ItemForm.value[key]) == 'string') {
-        ItemForm.get(key).setValue(ItemForm.value[key]?.trim())
-        ItemForm.get(key).setValue(ItemForm.value[key].replace(/\s+/g, ' '))
-      }
-    });
+    if (typeof ItemForm.value[key] === 'string') {
+      ItemForm.get(key)?.setValue(ItemForm.value[key].trim());
+    }
+  });
 
-    return ItemForm;
+  return ItemForm;
   }
 
 
