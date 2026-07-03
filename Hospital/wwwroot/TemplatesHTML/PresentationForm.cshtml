@@ -4,701 +4,715 @@
     PdfDataReports _Model = Model;
 }
 
+<style>
+    .page {
+        page-break-after: always;
+        break-after: page;
+        width: 100%;
+    }
 
-<table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:'Cairo Regular';font-size:14px;">
-    <tr>
-        <td>
-            <table width="100%" style="font-family:'Cairo Black';font-size:20px;">
-                <tr>
-                    <td width="40%" align="center">
-                        Al-Azhar<br /> Urology Department
-                    </td>
-                    <td width="20%" align="center">
-                        <img src="@_Model.ImageSrc" style="height:100px;width:100px;" />
-                    </td>
-                    <td width="40%" align="center" style="font-weight:700">
-                        Patients' Database<br /> Presentation Form
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="25%"></td>
-                    <td width="25%">
-                        <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">الاسم:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Name")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="25%"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="50%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">الرقم القومي:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("NationalId")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="10%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">النوع:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Gender")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="10%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">السن:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Age")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="30%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">تاريخ الميلاد:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("BirthDate")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="25%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">محافظة اإلقامة:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Governorate")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="75%" colspan="3" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">محل الإقامة</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Address")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="10%"></td>
-                    <td width="20%">
-                        <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">تلفون 2:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Phone1")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="25%"></td>
-                    <td width="20%">
-                        <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">تلفون 1:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Phone2")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="10%"></td>
-                </tr>
+        .page:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+</style>
 
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">الأبناء:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("ChildrenCount")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">الحالة االجتماعية:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("MaritalStatus")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="40%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">العمل:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Occupation")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="10%"></td>
-                    <td width="20%">
-                        <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">رقم ملف المستشفى:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("HospitalFileNumber")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="25%"></td>
-                    <td width="25%">
-                        <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
-                            <tr>
-                                <td style="padding-right:5px;" dir="rtl">
-                                    <span style="font-size:12px;">الرقم الداخلي:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("InternalNumber")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="10%"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("ChiefComplaint"))>
-                                    <span style="font-size:12px;">C/O</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("ChiefComplaint")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="25%">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("Duration"))>
-                                    <span style="font-size:12px;">Duration:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Duration")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="25%"></td>
-                    <td width="25%">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("Course"))>
-                                    <span style="font-size:12px;">Course:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Course")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:200px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("HPI")) valign="top">
-                                    <span style="font-size:12px;">HPI:</span>
-                                    <span style="font-size:12px;">@_Model.GetHtmlDataFieldValue("HPI")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:100px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("Comorbidities")) valign="top">
-                                    <span style="font-size:12px;">Current comorbidities:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Comorbidities")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:100px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("CurrentMedications")) valign="top">
-                                    <span style="font-size:12px;">Current medications:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("CurrentMedications")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:200px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("PastHistory")) valign="top">
-                                    <span style="font-size:12px;">Past history:</span>
-                                    <span style="font-size:12px;">@_Model.GetHtmlDataFieldValue("PastHistory")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:80px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("FamilyHistory")) valign="top">
-                                    <span style="font-size:12px;">Family history:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("FamilyHistory")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+<div class="page">
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:'Cairo Regular';font-size:14px;">
+        <tr>
+            <td>
+                <table width="100%" style="font-family:'Cairo Black';font-size:20px;">
+                    <tr>
+                        <td width="40%" align="center">
+                            Al-Azhar<br /> Urology Department
+                        </td>
+                        <td width="20%" align="center">
+                            <img src="@_Model.ImageSrc" style="height:100px;width:100px;" />
+                        </td>
+                        <td width="40%" align="center" style="font-weight:700">
+                            Patients' Database<br /> Presentation Form
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="25%"></td>
+                        <td width="25%">
+                            <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">الاسم:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Name")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="25%"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="50%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">الرقم القومي:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("NationalId")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="10%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">النوع:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Gender")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="10%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">السن:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Age")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="30%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">تاريخ الميلاد:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("BirthDate")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="25%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">محافظة اإلقامة:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Governorate")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="75%" colspan="3" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">محل الإقامة</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Address")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10%"></td>
+                        <td width="20%">
+                            <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">تلفون 2:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Phone1")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="25%"></td>
+                        <td width="20%">
+                            <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">تلفون 1:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Phone2")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="10%"></td>
+                    </tr>
 
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">الأبناء:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("ChildrenCount")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">الحالة االجتماعية:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("MaritalStatus")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="40%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">العمل:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Occupation")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10%"></td>
+                        <td width="20%">
+                            <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">رقم ملف المستشفى:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("HospitalFileNumber")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="25%"></td>
+                        <td width="25%">
+                            <table width="100%" style="border:1px solid #000;height:35px;background:#F5DEB3;">
+                                <tr>
+                                    <td style="padding-right:5px;" dir="rtl">
+                                        <span style="font-size:12px;">الرقم الداخلي:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("InternalNumber")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="10%"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("ChiefComplaint"))>
+                                        <span style="font-size:12px;">C/O</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("ChiefComplaint")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="25%">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("Duration"))>
+                                        <span style="font-size:12px;">Duration:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Duration")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="25%"></td>
+                        <td width="25%">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("Course"))>
+                                        <span style="font-size:12px;">Course:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Course")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:200px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("HPI")) valign="top">
+                                        <span style="font-size:12px;">HPI:</span>
+                                        <span style="font-size:12px;">@_Model.GetHtmlDataFieldValue("HPI")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:100px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("Comorbidities")) valign="top">
+                                        <span style="font-size:12px;">Current comorbidities:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Comorbidities")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:100px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("CurrentMedications")) valign="top">
+                                        <span style="font-size:12px;">Current medications:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("CurrentMedications")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:200px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("PastHistory")) valign="top">
+                                        <span style="font-size:12px;">Past history:</span>
+                                        <span style="font-size:12px;">@_Model.GetHtmlDataFieldValue("PastHistory")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:80px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("FamilyHistory")) valign="top">
+                                        <span style="font-size:12px;">Family history:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("FamilyHistory")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
 <!-- ================= Page 2 ================= -->
-
-<table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:'Cairo Regular';font-size:14px;">
-    <tr>
-        <td>
-            <table width="100%" style="font-family:'Cairo Black';font-size:20px;">
-                <tr>
-                    <td width="40%" align="center">
-                        Al-Azhar<br /> Urology Department
-                    </td>
-                    <td width="20%" align="center">
-                        <img src="@_Model.ImageSrc" style="height:100px;width:100px;" />
-                    </td>
-                    <td width="40%" align="center" style="font-weight:700">
-                        Patients' Database<br /> Presentation Form
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-left:5px;">
-                                    <span style="font-size:12px;">BMI:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("BMI")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-left:5px;">
-                                    <span style="font-size:12px;">Temp:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Temperature")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="20%"></td>
-                    <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-left:5px;">
-                                    <span style="font-size:12px;">Pulse:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("Pulse")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("BloodPressure"))>
-                                    <span style="font-size:12px;">BP:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("BloodPressure")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:80px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("GeneralExamination")) valign="top">
-                                    <span style="font-size:12px;">General Examination:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("GeneralExamination")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:100px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("AbdominalExamination")) valign="top">
-                                    <span style="font-size:12px;">Abdominal Examination:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("AbdominalExamination")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:80px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("GenitalExamination")) valign="top">
-                                    <span style="font-size:12px;">Genital Examination:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("GenitalExamination")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:100px;">
-                            <tr>
-                                <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("DREVaginalExamination")) valign="top">
-                                    <span style="font-size:12px;">DRE/Vaginal Examination:</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("DREVaginalExamination")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
-                <tr>
-                    <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Hgb:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Hemoglobin")</span>
-                    </td>
-                    <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">PT, PTT, INR:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("PT_PTT_INR")</span>
-                    </td>
-                    <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">C & S:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("CultureAndSensitivity")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">TLC:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("TotalLeukocyteCount")</span>
-                    </td>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Liver enzymes:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("LiverEnzymes")</span>
-                    </td>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">S.Creatinine:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("SerumCreatinine")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Platelets:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Platelets")</span>
-                    </td>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Blood sugar:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("FastingBloodSugar")</span>
-                    </td>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">PSA:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("PSATotal")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Others:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("OtherLabResults")</span>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
-                <tr>
-                    <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">PUT:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("PUT")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">US:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Ultrasound")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">TRUS:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("TRUS")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">CT:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("CT")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">MRI:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("MRI")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Isotope studies:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("IsotopeStudies")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Others:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("OtherImaging")</span>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:35px;">
-                            <tr>
-                                <td style="padding-left:5px;">
-                                    <span style="font-size:12px;">Provisional Diagnosis</span>
-                                    <span style="font-size:12px;">@_Model.GetDataFieldValue("ProvisionalDiagnosis")</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
-                        <table width="100%" style="border:1px solid #000;height:100px;">
-                            <tr>
-                                <td style="padding-left:5px;" valign="top">
-                                    <span style="font-size:12px;">Decision, date & signature: </span>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-
+<div class="page">
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:'Cairo Regular';font-size:14px;">
+        <tr>
+            <td>
+                <table width="100%" style="font-family:'Cairo Black';font-size:20px;">
+                    <tr>
+                        <td width="40%" align="center">
+                            Al-Azhar<br /> Urology Department
+                        </td>
+                        <td width="20%" align="center">
+                            <img src="@_Model.ImageSrc" style="height:100px;width:100px;" />
+                        </td>
+                        <td width="40%" align="center" style="font-weight:700">
+                            Patients' Database<br /> Presentation Form
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-left:5px;">
+                                        <span style="font-size:12px;">BMI:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("BMI")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-left:5px;">
+                                        <span style="font-size:12px;">Temp:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Temperature")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="20%"></td>
+                        <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-left:5px;">
+                                        <span style="font-size:12px;">Pulse:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("Pulse")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="20%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("BloodPressure"))>
+                                        <span style="font-size:12px;">BP:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("BloodPressure")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:80px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("GeneralExamination")) valign="top">
+                                        <span style="font-size:12px;">General Examination:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("GeneralExamination")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:100px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("AbdominalExamination")) valign="top">
+                                        <span style="font-size:12px;">Abdominal Examination:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("AbdominalExamination")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:80px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("GenitalExamination")) valign="top">
+                                        <span style="font-size:12px;">Genital Examination:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("GenitalExamination")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:100px;">
+                                <tr>
+                                    <td @_Model.GetTdDirectionStyle(@_Model.GetDataFieldValue("DREVaginalExamination")) valign="top">
+                                        <span style="font-size:12px;">DRE/Vaginal Examination:</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("DREVaginalExamination")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                    <tr>
+                        <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Hgb:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("Hemoglobin")</span>
+                        </td>
+                        <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">PT, PTT, INR:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("PT_PTT_INR")</span>
+                        </td>
+                        <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">C & S:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("CultureAndSensitivity")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">TLC:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("TotalLeukocyteCount")</span>
+                        </td>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Liver enzymes:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("LiverEnzymes")</span>
+                        </td>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">S.Creatinine:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("SerumCreatinine")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Platelets:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("Platelets")</span>
+                        </td>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Blood sugar:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("FastingBloodSugar")</span>
+                        </td>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">PSA:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("PSATotal")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Others:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("OtherLabResults")</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                    <tr>
+                        <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Pus Cells:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("UrinePusCells")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">RBCs:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineRBCs")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Crystals:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineCrystals")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Albumin:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineAlbumin")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Sugar:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineSugar")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Others:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineOthers")</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:35px;">
+                                <tr>
+                                    <td style="padding-left:5px;">
+                                        <span style="font-size:12px;">Provisional Diagnosis</span>
+                                        <span style="font-size:12px;">@_Model.GetDataFieldValue("ProvisionalDiagnosis")</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
 <!-- ================= Page 3 ================= -->
-
-<table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:'Cairo Regular';font-size:14px;">
-    <tr>
-        <td>
-            <table width="100%" style="font-family:'Cairo Black';font-size:20px;">
-                <tr>
-                    <td width="40%" align="center">
-                        Al-Azhar<br /> Urology Department
-                    </td>
-                    <td width="20%" align="center">
-                        <img src="@_Model.ImageSrc" style="height:100px;width:100px;" />
-                    </td>
-                    <td width="40%" align="center" style="font-weight:700">
-                        Patients' Database<br /> Presentation Form
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:2px;">
-            <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
-                <tr>
-                    <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Pus Cells:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("UrinePusCells")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">RBCs:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineRBCs")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Crystals:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineCrystals")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Albumin:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineAlbumin")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Sugar:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineSugar")</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
-                        <span style="font-size:12px;">Others:</span>
-                        <span style="font-size:12px;">@_Model.GetDataFieldValue("UrineOthers")</span>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+<div class="page">
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:'Cairo Regular';font-size:14px;">
+        <tr>
+            <td>
+                <table width="100%" style="font-family:'Cairo Black';font-size:20px;">
+                    <tr>
+                        <td width="40%" align="center">
+                            Al-Azhar<br /> Urology Department
+                        </td>
+                        <td width="20%" align="center">
+                            <img src="@_Model.ImageSrc" style="height:100px;width:100px;" />
+                        </td>
+                        <td width="40%" align="center" style="font-weight:700">
+                            Patients' Database<br /> Presentation Form
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                    <tr>
+                        <td width="33.33%" style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">PUT:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("PUT")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">US:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("Ultrasound")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">TRUS:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("TRUS")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">CT:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("CT")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">MRI:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("MRI")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Isotope studies:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("IsotopeStudies")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #000;height:35px;padding-left:5px;font-size:12px;">
+                            <span style="font-size:12px;">Others:</span>
+                            <span style="font-size:12px;">@_Model.GetDataFieldValue("OtherImaging")</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:2px;">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%" style="padding-left:2.5px; padding-right:2.5px;">
+                            <table width="100%" style="border:1px solid #000;height:100px;">
+                                <tr>
+                                    <td style="padding-left:5px;" valign="top">
+                                        <span style="font-size:12px;">Decision, date & signature: </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
